@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Круглий баклажановий калькулятор</title>
+<style>
+  :root{
+    /* Баклажановий — колір основи */
+    --aubergine-1:#3a1440;
+    --aubergine-2:#26082c;
+    --aubergine-3:#140316;
+    --grout:#1c0620;            /* «шов» між кнопками */
+    --cream:#f7e9f2;            /* колір цифр */
+    --gold:#ffe6c2;             /* колір знаків */
+
+    --w:88px;                   /* ширина трикутника */
+    --h:77px;                   /* висота трикутника */
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  html,body{height:100%}
+  body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(120% 120% at 30% 10%, #2a0e30 0%, #12040f 55%, #060207 100%);
+    font-family:"Arial Narrow","Helvetica Neue",Arial,sans-serif;
+    padding:24px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ── Кругле тіло калькулятора ── */
+  .calc{
+    position:relative;
+    width:500px;
+    height:500px;
+    border-radius:50%;
+    padding:34px 22px 30px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    /* Баклажанова оксамитова основа */
+    background:
+      radial-gradient(70% 60% at 50% 20%, rgba(150,60,150,.28), rgba(150,60,150,0) 60%),
+      radial-gradient(120% 120% at 50% 115%, #10030f 0%, rgba(16,3,15,0) 55%),
+      radial-gradient(100% 100% at 50% 40%, var(--aubergine-1) 0%, var(--aubergine-2) 60%, var(--aubergine-3) 100%);
+    box-shadow:
+      0 40px 80px rgba(0,0,0,.65),
+      0 6px 24px rgba(0,0,0,.5),
+      inset 0 2px 6px rgba(255,190,235,.18),
+      inset 0 -18px 40px rgba(0,0,0,.55);
+    border:1px solid rgba(255,200,240,.10);
+  }
+  /* тонкий обідок-безель */
+  .calc::before{
+    content:"";
+    position:absolute;
+    inset:12px;
+    border-radius:50%;
+    border:1px solid rgba(255,200,240,.08);
+    pointer-events:none;
+  }
+
+  /* ── Дисплей ── */
+  .screen{
+    width:78%;
+    margin-bottom:14px;
+    padding:12px 18px 10px;
+    border-radius:22px;
+    text-align:right;
+    background:
+      linear-gradient(180deg, rgba(10,2,12,.92), rgba(30,8,34,.92));
+    box-shadow:
+      inset 0 2px 10px rgba(0,0,0,.8),
+      inset 0 -1px 0 rgba(255,190,235,.10),
+      0 1px 0 rgba(255,190,235,.06);
+    overflow:hidden;
+  }
+  .screen .expr{
+    min-height:18px;
+    font-size:15px;
+    letter-spacing:-.5px;
+    color:rgba(247,233,242,.45);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .screen .out{
+    font-size:38px;
+    font-weight:700;
+    letter-spacing:-2px;             /* «стиснуті» цифри */
+    color:var(--cream);
+    text-shadow:0 1px 0 rgba(0,0,0,.6), 0 0 14px rgba(210,120,200,.25);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    line-height:1.05;
+  }
+
+  /* ── Мозаїка трикутників ── */
+  .pad{display:flex;flex-direction:column;align-items:center}
+  .row{display:flex;justify-content:center}
+  .row + .row{margin-top:6px}          /* горизонтальний шов між рядами */
+
+  .tri{
+    position:relative;
+    width:var(--w);
+    height:var(--h);
+    border:0;
+    background:transparent;
+    cursor:pointer;
+    padding:0;
+    filter:drop-shadow(0 4px 5px rgba(0,0,0,.45));
+    transition:transform .07s ease, filter .07s ease;
+  }
+  /* трикутники «наїжджають» один на одного на пів-ширини й переплітаються */
+  .row .tri + .tri{margin-left:calc(var(--w) / -2)}
+
+  /* дивляться вгору (парні цифри) */
+  .tri.up{clip-path:polygon(50% 5%, 96% 95%, 4% 95%)}
+  /* дивляться вниз (непарні цифри) */
+  .tri.down{clip-path:polygon(4% 5%, 96% 5%, 50% 95%)}
+
+  /* Оксамитова поверхня кнопок */
+  .tri::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    clip-path:inherit;
+  }
+  /* Оксамит для ЦИФР — фіолетовий плюш */
+  .tri.digit::after{
+    background:
+      radial-gradient(80% 55% at 50% 15%, rgba(255,190,230,.32), rgba(255,190,230,0) 55%),
+      radial-gradient(120% 120% at 50% 125%, rgba(0,0,0,.6), rgba(0,0,0,0) 60%),
+      linear-gradient(180deg, #833a70 0%, #5a2650 45%, #3c1838 100%);
+  }
+  /* Оксамит для ЗНАКІВ — теплий золотисто-винний плюш */
+  .tri.op::after{
+    background:
+      radial-gradient(80% 55% at 50% 15%, rgba(255,232,200,.4), rgba(255,232,200,0) 55%),
+      radial-gradient(120% 120% at 50% 125%, rgba(20,4,0,.6), rgba(20,4,0,0) 60%),
+      linear-gradient(180deg, #b9793b 0%, #8a4f24 48%, #532c13 100%);
+  }
+  /* Кнопка «=» — найяскравіша */
+  .tri.equal::after{
+    background:
+      radial-gradient(80% 55% at 50% 15%, rgba(255,244,220,.55), rgba(255,244,220,0) 55%),
+      radial-gradient(120% 120% at 50% 125%, rgba(30,6,0,.55), rgba(30,6,0,0) 60%),
+      linear-gradient(180deg, #e0a24a 0%, #b06e2a 50%, #7a4415 100%);
+  }
+
+  /* Підпис кнопки */
+  .tri .lbl{
+    position:absolute;
+    left:0;right:0;
+    z-index:2;
+    text-align:center;
+    font-weight:700;
+    font-size:22px;
+    letter-spacing:-1.5px;            /* «стиснуті» знаки/цифри */
+    pointer-events:none;
+    text-shadow:0 1px 1px rgba(0,0,0,.55);
+  }
+  .tri.digit .lbl{color:var(--cream)}
+  .tri.op .lbl,.tri.equal .lbl{color:var(--gold)}
+  /* центр ваги трикутника різний — тому підпис зсунуто */
+  .tri.up   .lbl{top:52%}
+  .tri.down .lbl{top:14%}
+
+  .tri:hover{filter:drop-shadow(0 6px 8px rgba(0,0,0,.5)) brightness(1.08)}
+  .tri:active{transform:translateY(2px) scale(.96);filter:drop-shadow(0 2px 3px rgba(0,0,0,.5)) brightness(.94)}
+  .tri.flash::after{filter:brightness(1.35)}
+
+  @media(max-width:540px){
+    :root{--w:60px;--h:53px}
+    .calc{width:380px;height:380px;padding:24px 14px}
+    .screen .out{font-size:30px}
+    .tri .lbl{font-size:17px}
+  }
+</style>
+</head>
+<body>
+  <div class="calc" role="application" aria-label="Круглий баклажановий калькулятор">
+    <div class="screen">
+      <div class="expr" id="expr">&nbsp;</div>
+      <div class="out"  id="out">0</div>
+    </div>
+    <div class="pad" id="pad"></div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* Розкладка кнопок.
+     Кожен рядок — п'ять трикутників, орієнтація чергується: вгору,вниз,вгору,вниз,вгору.
+     Правило: ПАРНІ цифри дивляться ВГОРУ, НЕПАРНІ — ВНИЗ. Знаки відрізняються КОЛЬОРОМ. */
+  const LAYOUT = [
+    ["0","1","2","3","4"],
+    ["6","5","8","7","⌫"],
+    ["C","9","÷","×","+"],
+    ["−","=",".","%","±"]
+  ];
+
+  const OPS = new Set(["÷","×","−","+","%","±","C","⌫","="]);
+
+  const pad = document.getElementById("pad");
+  LAYOUT.forEach(row=>{
+    const r = document.createElement("div");
+    r.className = "row";
+    row.forEach((key,i)=>{
+      const dir = (i % 2 === 0) ? "up" : "down";
+      const isDigit = /[0-9]/.test(key) || key === ".";
+
+      // Перевірка правила парності для цифр
+      if(/[0-9]/.test(key)){
+        const wantUp = (Number(key) % 2 === 0);
+        if((wantUp && dir!=="up") || (!wantUp && dir!=="down")){
+          console.warn("Порушено правило парності для",key);
+        }
+      }
+
+      const b = document.createElement("button");
+      b.className = "tri " + dir + " " + (isDigit ? "digit" : "op") + (key==="=" ? " equal" : "");
+      b.dataset.key = key;
+      b.setAttribute("aria-label", key);
+      const s = document.createElement("span");
+      s.className = "lbl";
+      s.textContent = key;
+      b.appendChild(s);
+      r.appendChild(b);
+    });
+    pad.appendChild(r);
+  });
+
+  /* ── Логіка калькулятора ── */
+  const outEl  = document.getElementById("out");
+  const exprEl = document.getElementById("expr");
+
+  let current = "0";   // те, що набирається
+  let stored  = null;  // збережений операнд
+  let op      = null;  // очікувана дія
+  let fresh   = true;  // наступна цифра починає нове число
+
+  const SYM = {"÷":"÷","×":"×","−":"−","+":"+"};
+
+  function fmt(n){
+    if(!isFinite(n)) return "Помилка";
+    let s = Number(n.toPrecision(12)).toString();
+    return s;
+  }
+
+  function render(){
+    outEl.textContent = current;
+    let e = "";
+    if(stored !== null && op) e = fmt(stored) + " " + op + " ";
+    exprEl.innerHTML = e ? e : "&nbsp;";
+  }
+
+  function inputDigit(d){
+    if(fresh){ current = (d==="0") ? "0" : d; fresh=false; }
+    else{
+      if(current === "0" && d !== ".") current = d;
+      else current += d;
+    }
+  }
+  function inputDot(){
+    if(fresh){ current="0."; fresh=false; return; }
+    if(!current.includes(".")) current += ".";
+  }
+  function compute(a,b,o){
+    a=parseFloat(a); b=parseFloat(b);
+    switch(o){
+      case "+": return a+b;
+      case "−": return a-b;
+      case "×": return a*b;
+      case "÷": return b===0 ? NaN : a/b;
+    }
+    return b;
+  }
+  function setOp(o){
+    if(op && !fresh){
+      const res = compute(stored, current, op);
+      stored = res; current = fmt(res);
+    }else{
+      stored = parseFloat(current);
+    }
+    op = o; fresh = true;
+  }
+  function equals(){
+    if(op === null) return;
+    const res = compute(stored, current, op);
+    exprEl.textContent = fmt(stored) + " " + op + " " + current + " =";
+    current = fmt(res);
+    stored = null; op = null; fresh = true;
+    outEl.textContent = current;
+  }
+  function clearAll(){ current="0"; stored=null; op=null; fresh=true; }
+  function backspace(){
+    if(fresh) return;
+    current = current.length>1 ? current.slice(0,-1) : "0";
+    if(current==="-"||current==="") current="0";
+  }
+  function percent(){
+    let v = parseFloat(current)/100;
+    if(stored!==null && op) v = parseFloat(stored) * (parseFloat(current)/100);
+    current = fmt(v); fresh=true;
+  }
+  function negate(){
+    if(current==="0") return;
+    current = current.startsWith("-") ? current.slice(1) : "-"+current;
+  }
+
+  function handle(key){
+    if(/[0-9]/.test(key)) inputDigit(key);
+    else if(key===".") inputDot();
+    else if(SYM[key]) setOp(key);
+    else if(key==="=") { equals(); return; }
+    else if(key==="C") clearAll();
+    else if(key==="⌫") backspace();
+    else if(key==="%") percent();
+    else if(key==="±") negate();
+    render();
+  }
+
+  pad.addEventListener("click", e=>{
+    const b = e.target.closest(".tri");
+    if(!b) return;
+    b.classList.add("flash");
+    setTimeout(()=>b.classList.remove("flash"),90);
+    handle(b.dataset.key);
+  });
+
+  /* Підтримка клавіатури */
+  const KEYMAP = {"/":"÷","*":"×","-":"−","+":"+",".":".","%":"%",
+                  "Enter":"=","=":"=","Backspace":"⌫","Escape":"C","c":"C","C":"C"};
+  window.addEventListener("keydown", e=>{
+    let k = e.key;
+    if(/[0-9]/.test(k)){ handle(k); flashKey(k); e.preventDefault(); return; }
+    if(KEYMAP[k]){ handle(KEYMAP[k]); flashKey(KEYMAP[k]); e.preventDefault(); }
+  });
+  function flashKey(key){
+    const b = pad.querySelector('.tri[data-key="'+CSS.escape(key)+'"]');
+    if(!b) return;
+    b.classList.add("flash");
+    setTimeout(()=>b.classList.remove("flash"),90);
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
