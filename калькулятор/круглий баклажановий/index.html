@@ -38,6 +38,8 @@
     position:relative;
     width:500px;
     height:500px;
+    max-width:92vw;
+    max-height:92vw;
     border-radius:50%;
     padding:34px 22px 30px;
     display:flex;
@@ -183,6 +185,58 @@
     .screen .out{font-size:30px}
     .tri .lbl{font-size:17px}
   }
+
+  /* ── Котик, що ходить по колу ── */
+  .cat{
+    position:absolute;
+    top:0;left:0;
+    z-index:6;
+    pointer-events:none;
+    filter:drop-shadow(0 5px 6px rgba(0,0,0,.5));
+    will-change:transform;
+  }
+  .cat-inner{
+    position:relative;
+    width:92px;height:92px;
+    transform:translate(-50%,-50%);
+  }
+  .cat svg{width:92px;height:92px;display:block;overflow:visible}
+  .cat-bob{transform-origin:50% 92%;animation:catBob .5s ease-in-out infinite}
+  .cat-inner.celebrate .cat-bob{animation:none}
+
+  @keyframes catBob{
+    0%,100%{transform:translateY(0) rotate(-2.5deg)}
+    50%    {transform:translateY(-4px) rotate(2.5deg)}
+  }
+
+  .cat-tail{transform-box:fill-box;transform-origin:12% 88%;animation:tailSway 1.3s ease-in-out infinite}
+  @keyframes tailSway{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}}
+
+  .cat-arm{transform-box:fill-box;transform-origin:50% 96%;animation:pawIdle 2.4s ease-in-out infinite}
+  @keyframes pawIdle{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(6deg)}}
+
+  /* Святкування: розвернутися (оберт) і махати лапкою */
+  .cat-inner.celebrate{animation:catSpin .66s ease-in-out}
+  @keyframes catSpin{
+    0%  {transform:translate(-50%,-50%) rotate(0)     scale(1)}
+    45% {transform:translate(-50%,-72%) rotate(200deg) scale(1.1)}
+    100%{transform:translate(-50%,-50%) rotate(360deg) scale(1)}
+  }
+  .cat-inner.celebrate .cat-arm{animation:pawWave .32s ease-in-out .52s 5}
+  @keyframes pawWave{0%,100%{transform:rotate(-22deg)}50%{transform:rotate(24deg)}}
+
+  .eyes-happy{opacity:0}
+  .cat-inner.celebrate .eyes-open{opacity:0}
+  .cat-inner.celebrate .eyes-happy{opacity:1}
+
+  .cat-spark{opacity:0}
+  .cat-inner.celebrate .cat-spark{animation:catSpark 1.5s ease-in-out .45s 1}
+  @keyframes catSpark{0%,100%{opacity:0;transform:scale(.4)}30%,70%{opacity:1;transform:scale(1)}}
+
+  @media(prefers-reduced-motion:reduce){
+    .cat-bob,.cat-tail,.cat-arm{animation:none}
+    .cat-inner.celebrate{animation:none}
+  }
 </style>
 </head>
 <body>
@@ -192,6 +246,82 @@
       <div class="out"  id="out">0</div>
     </div>
     <div class="pad" id="pad"></div>
+
+    <!-- Котик, що ходить по колу -->
+    <div class="cat" id="cat" aria-hidden="true">
+      <div class="cat-inner" id="catInner">
+        <div class="cat-bob">
+          <svg viewBox="0 0 100 100">
+            <!-- тінь -->
+            <ellipse cx="50" cy="93" rx="20" ry="4" fill="rgba(0,0,0,.22)"/>
+
+            <!-- хвіст -->
+            <path class="cat-tail" d="M68 80 q24 4 22 -20 q-2 -13 -11 -11 q7 4 5 13 q-2 11 -18 9 z" fill="#c7cad6"/>
+
+            <!-- тіло + ніжки -->
+            <ellipse cx="50" cy="74" rx="23" ry="19" fill="#edeef3"/>
+            <ellipse cx="30" cy="74" rx="6" ry="8" fill="#edeef3"/>
+            <ellipse cx="41" cy="90" rx="8" ry="5.5" fill="#edeef3"/>
+            <ellipse cx="59" cy="90" rx="8" ry="5.5" fill="#edeef3"/>
+            <ellipse cx="41" cy="91" rx="3" ry="1.8" fill="#ff9bb3"/>
+            <ellipse cx="59" cy="91" rx="3" ry="1.8" fill="#ff9bb3"/>
+
+            <!-- голова -->
+            <path d="M25 30 L29 7 L46 24 Z" fill="#c7cad6"/>
+            <path d="M75 30 L71 7 L54 24 Z" fill="#c7cad6"/>
+            <path d="M30 26 L32 14 L41 24 Z" fill="#ff9bb3"/>
+            <path d="M70 26 L68 14 L59 24 Z" fill="#ff9bb3"/>
+            <ellipse cx="50" cy="40" rx="30" ry="27" fill="#edeef3"/>
+            <path d="M21 36 a30 27 0 0 1 58 0 q-29 -15 -58 0 z" fill="#c7cad6" opacity=".85"/>
+
+            <!-- очі (відкриті) -->
+            <g class="eyes-open">
+              <ellipse cx="39" cy="43" rx="4.5" ry="6" fill="#2c2740"/>
+              <ellipse cx="61" cy="43" rx="4.5" ry="6" fill="#2c2740"/>
+              <circle cx="40.6" cy="41" r="1.4" fill="#fff"/>
+              <circle cx="62.6" cy="41" r="1.4" fill="#fff"/>
+            </g>
+            <!-- очі (щасливі) -->
+            <g class="eyes-happy" fill="none" stroke="#2c2740" stroke-width="2.4" stroke-linecap="round">
+              <path d="M34 45 q5 -6 10 0"/>
+              <path d="M56 45 q5 -6 10 0"/>
+            </g>
+
+            <!-- рожеві щічки -->
+            <ellipse cx="29" cy="50" rx="7" ry="4.5" fill="#ff9bb3" opacity=".8"/>
+            <ellipse cx="71" cy="50" rx="7" ry="4.5" fill="#ff9bb3" opacity=".8"/>
+
+            <!-- носик + ротик -->
+            <path d="M46.5 48 L53.5 48 L50 52 Z" fill="#ff7fa3"/>
+            <path d="M50 52 q-3 4 -6.5 1.5 M50 52 q3 4 6.5 1.5" fill="none" stroke="#c99" stroke-width="1.4" stroke-linecap="round"/>
+
+            <!-- вусики -->
+            <g stroke="#c7cad6" stroke-width="1.2" stroke-linecap="round">
+              <path d="M27 50 L13 47"/><path d="M27 54 L13 56"/>
+              <path d="M73 50 L87 47"/><path d="M73 54 L87 56"/>
+            </g>
+
+            <!-- нашийник + золотий дзвіночок -->
+            <path d="M33 61 q17 11 34 0" fill="none" stroke="#b06e2a" stroke-width="3"/>
+            <circle cx="50" cy="66" r="4.2" fill="#f0c14b" stroke="#b8892b" stroke-width="1"/>
+            <circle cx="50" cy="67" r="1" fill="#7a4415"/>
+
+            <!-- лапка, що махає -->
+            <g class="cat-arm">
+              <rect x="76" y="38" width="9" height="30" rx="4.5" fill="#edeef3"/>
+              <circle cx="80.5" cy="36" r="6.5" fill="#edeef3"/>
+              <ellipse cx="80.5" cy="35" rx="2.6" ry="1.7" fill="#ff9bb3"/>
+            </g>
+
+            <!-- іскорки -->
+            <g class="cat-spark" fill="#ffe6c2">
+              <path d="M11 20 l1.6 4.2 4.2 1.6 -4.2 1.6 -1.6 4.2 -1.6 -4.2 -4.2 -1.6 4.2 -1.6 z"/>
+              <path d="M88 15 l1.2 3.2 3.2 1.2 -3.2 1.2 -1.2 3.2 -1.2 -3.2 -3.2 -1.2 3.2 -1.2 z"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
   </div>
 
 <script>
@@ -300,6 +430,7 @@
     current = fmt(res);
     stored = null; op = null; fresh = true;
     outEl.textContent = current;
+    if(isFinite(res)) catCelebrate();   // котик радіє правильній відповіді
   }
   function clearAll(){ current="0"; stored=null; op=null; fresh=true; }
   function backspace(){
@@ -350,6 +481,55 @@
     if(!b) return;
     b.classList.add("flash");
     setTimeout(()=>b.classList.remove("flash"),90);
+  }
+
+  /* ── Котик, що ходить по колу ── */
+  const calcEl  = document.querySelector(".calc");
+  const cat     = document.getElementById("cat");
+  const catInner= document.getElementById("catInner");
+  const TAU = Math.PI*2;
+  let angle = 0;                 // 0 = вгорі, рух за годинниковою стрілкою
+  let lastT = 0;
+  let paused = false;
+  const SPEED = TAU / 16000;     // повний оберт за 16 секунд
+
+  function faceFor(a){ return Math.cos(a) < 0 ? "scaleX(-1)" : "scaleX(1)"; }
+
+  function catFrame(t){
+    if(!lastT) lastT = t;
+    const dt = t - lastT; lastT = t;
+    if(!paused){
+      angle += SPEED * dt;
+      if(angle > TAU) angle -= TAU;
+    }
+    const R  = calcEl.clientWidth/2 - 20;   // ходить по обідку кола
+    const cx = calcEl.clientWidth/2;
+    const cy = calcEl.clientHeight/2;
+    const x  = cx + R * Math.sin(angle);
+    const y  = cy - R * Math.cos(angle);
+    cat.style.transform = "translate(" + x + "px," + y + "px)";
+    if(!paused){
+      catInner.style.transform = "translate(-50%,-50%) " + faceFor(angle);
+    }
+    requestAnimationFrame(catFrame);
+  }
+  requestAnimationFrame(catFrame);
+
+  let celebrateTimer = null;
+  function catCelebrate(){
+    paused = true;
+    // повернутися лицем до центру кола
+    const faceCenter = Math.sin(angle) > 0 ? "scaleX(-1)" : "scaleX(1)";
+    catInner.classList.remove("celebrate");
+    void catInner.offsetWidth;                 // перезапуск анімації
+    catInner.style.transform = "translate(-50%,-50%) " + faceCenter;
+    catInner.classList.add("celebrate");
+    clearTimeout(celebrateTimer);
+    celebrateTimer = setTimeout(function(){
+      catInner.classList.remove("celebrate");
+      lastT = 0;                               // без стрибка часу
+      paused = false;
+    }, 2050);
   }
 
   render();
