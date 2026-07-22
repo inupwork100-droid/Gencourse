@@ -186,56 +186,56 @@
     .tri .lbl{font-size:17px}
   }
 
-  /* ── Котик, що ходить по колу ── */
+  /* ── Котик у чорному мультстилі ── */
   .cat{
+    --cat-ink:#141019;
+    --cat-face:#f6ecf3;
+    --cat-cheek:#ff9bb3;
     position:absolute;
     top:0;left:0;
     z-index:6;
     pointer-events:none;
-    filter:drop-shadow(0 5px 6px rgba(0,0,0,.5));
+    /* світлий контур, щоб чорний котик читався на темному фоні */
+    filter:
+      drop-shadow(0 0 1px var(--cat-face))
+      drop-shadow(0 0 2px rgba(246,236,243,.7))
+      drop-shadow(0 5px 6px rgba(0,0,0,.55));
     will-change:transform;
   }
-  .cat-inner{
-    position:relative;
-    width:92px;height:92px;
-    transform:translate(-50%,-50%);
-  }
-  .cat svg{width:92px;height:92px;display:block;overflow:visible}
-  .cat-bob{transform-origin:50% 92%;animation:catBob .5s ease-in-out infinite}
-  .cat-inner.celebrate .cat-bob{animation:none}
+  .cat-inner{position:relative;width:108px;height:108px;transform:translate(-50%,-50%)}
+  .pose{position:absolute;inset:0;opacity:0;visibility:hidden}
+  .pose.on{opacity:1;visibility:visible}
+  .pose svg{width:108px;height:108px;display:block;overflow:visible}
 
-  @keyframes catBob{
-    0%,100%{transform:translateY(0) rotate(-2.5deg)}
-    50%    {transform:translateY(-4px) rotate(2.5deg)}
-  }
+  /* ходить — похитування + крок + хвіст */
+  .pose-walk.on{transform-origin:50% 86%;animation:catWalk .42s ease-in-out infinite}
+  @keyframes catWalk{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-4px) rotate(3deg)}}
+  .pose-walk .w-paw{transform-box:fill-box;transform-origin:64% 8%;animation:catStep .42s ease-in-out infinite}
+  @keyframes catStep{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(16deg)}}
+  .pose-walk .w-tail{transform-box:fill-box;transform-origin:20% 92%;animation:catTail 1.2s ease-in-out infinite}
+  .pose-sit .s-tail,.pose-wave .s-tail{transform-box:fill-box;transform-origin:14% 88%;animation:catTail 1.5s ease-in-out infinite}
+  @keyframes catTail{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(13deg)}}
 
-  .cat-tail{transform-box:fill-box;transform-origin:12% 88%;animation:tailSway 1.3s ease-in-out infinite}
-  @keyframes tailSway{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}}
+  /* сидить — легке «дихання» */
+  .pose-sit.on{transform-origin:50% 92%;animation:catBreath 2.6s ease-in-out infinite}
+  @keyframes catBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
 
-  .cat-arm{transform-box:fill-box;transform-origin:50% 96%;animation:pawIdle 2.4s ease-in-out infinite}
-  @keyframes pawIdle{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(6deg)}}
+  /* махає лапкою */
+  .pose-wave.on .wave-arm{transform-box:fill-box;transform-origin:58% 92%;animation:catWave .32s ease-in-out infinite}
+  @keyframes catWave{0%,100%{transform:rotate(-24deg)}50%{transform:rotate(20deg)}}
+  .pose-wave.on .marks{animation:catMarks .7s ease-in-out infinite}
+  @keyframes catMarks{0%,100%{opacity:.2}50%{opacity:1}}
 
-  /* Святкування: розвернутися (оберт) і махати лапкою */
-  .cat-inner.celebrate{animation:catSpin .66s ease-in-out}
-  @keyframes catSpin{
-    0%  {transform:translate(-50%,-50%) rotate(0)     scale(1)}
-    45% {transform:translate(-50%,-72%) rotate(200deg) scale(1.1)}
-    100%{transform:translate(-50%,-50%) rotate(360deg) scale(1)}
-  }
-  .cat-inner.celebrate .cat-arm{animation:pawWave .32s ease-in-out .52s 5}
-  @keyframes pawWave{0%,100%{transform:rotate(-22deg)}50%{transform:rotate(24deg)}}
-
-  .eyes-happy{opacity:0}
-  .cat-inner.celebrate .eyes-open{opacity:0}
-  .cat-inner.celebrate .eyes-happy{opacity:1}
-
-  .cat-spark{opacity:0}
-  .cat-inner.celebrate .cat-spark{animation:catSpark 1.5s ease-in-out .45s 1}
-  @keyframes catSpark{0%,100%{opacity:0;transform:scale(.4)}30%,70%{opacity:1;transform:scale(1)}}
+  /* визирає збоку */
+  .pose-peek.on{animation:catPeekIn .5s ease-out both}
+  @keyframes catPeekIn{0%{transform:translateX(16px) scale(.9);opacity:0}100%{transform:translateX(0) scale(1);opacity:1}}
+  .pose-peek .peek-paw{transform-box:fill-box;transform-origin:50% 100%;animation:catPeekTap 1.3s ease-in-out infinite}
+  @keyframes catPeekTap{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 
   @media(prefers-reduced-motion:reduce){
-    .cat-bob,.cat-tail,.cat-arm{animation:none}
-    .cat-inner.celebrate{animation:none}
+    .pose-walk.on,.pose-sit.on,.pose-walk .w-paw,.pose-walk .w-tail,
+    .pose-sit .s-tail,.pose-wave .s-tail,.pose-wave.on .wave-arm,
+    .pose-wave.on .marks,.pose-peek.on,.pose-peek .peek-paw{animation:none}
   }
 </style>
 </head>
@@ -247,79 +247,128 @@
     </div>
     <div class="pad" id="pad"></div>
 
-    <!-- Котик, що ходить по колу -->
+    <!-- Котик у чорному стилі: визирає / ходить / сидить / махає -->
     <div class="cat" id="cat" aria-hidden="true">
       <div class="cat-inner" id="catInner">
-        <div class="cat-bob">
-          <svg viewBox="0 0 100 100">
-            <!-- тінь -->
-            <ellipse cx="50" cy="93" rx="20" ry="4" fill="rgba(0,0,0,.22)"/>
 
-            <!-- хвіст -->
-            <path class="cat-tail" d="M68 80 q24 4 22 -20 q-2 -13 -11 -11 q7 4 5 13 q-2 11 -18 9 z" fill="#c7cad6"/>
-
-            <!-- тіло + ніжки -->
-            <ellipse cx="50" cy="74" rx="23" ry="19" fill="#edeef3"/>
-            <ellipse cx="30" cy="74" rx="6" ry="8" fill="#edeef3"/>
-            <ellipse cx="41" cy="90" rx="8" ry="5.5" fill="#edeef3"/>
-            <ellipse cx="59" cy="90" rx="8" ry="5.5" fill="#edeef3"/>
-            <ellipse cx="41" cy="91" rx="3" ry="1.8" fill="#ff9bb3"/>
-            <ellipse cx="59" cy="91" rx="3" ry="1.8" fill="#ff9bb3"/>
-
-            <!-- голова -->
-            <path d="M25 30 L29 7 L46 24 Z" fill="#c7cad6"/>
-            <path d="M75 30 L71 7 L54 24 Z" fill="#c7cad6"/>
-            <path d="M30 26 L32 14 L41 24 Z" fill="#ff9bb3"/>
-            <path d="M70 26 L68 14 L59 24 Z" fill="#ff9bb3"/>
-            <ellipse cx="50" cy="40" rx="30" ry="27" fill="#edeef3"/>
-            <path d="M21 36 a30 27 0 0 1 58 0 q-29 -15 -58 0 z" fill="#c7cad6" opacity=".85"/>
-
-            <!-- очі (відкриті) -->
-            <g class="eyes-open">
-              <ellipse cx="39" cy="43" rx="4.5" ry="6" fill="#2c2740"/>
-              <ellipse cx="61" cy="43" rx="4.5" ry="6" fill="#2c2740"/>
-              <circle cx="40.6" cy="41" r="1.4" fill="#fff"/>
-              <circle cx="62.6" cy="41" r="1.4" fill="#fff"/>
+        <!-- ВИЗИРАЄ ЗБОКУ (на старті) -->
+        <div class="pose pose-peek" id="posePeek">
+          <svg viewBox="0 0 108 108">
+            <g fill="var(--cat-ink)">
+              <path d="M22 40 L26 8 L48 32 Z"/>
+              <path d="M66 36 L62 10 L46 30 Z"/>
+              <ellipse cx="44" cy="48" rx="26" ry="25"/>
+              <path d="M58 60 q22 4 22 32 l-32 0 q-4 -22 10 -32 z"/>
+              <g class="peek-paw"><ellipse cx="34" cy="82" rx="9" ry="7"/></g>
             </g>
-            <!-- очі (щасливі) -->
-            <g class="eyes-happy" fill="none" stroke="#2c2740" stroke-width="2.4" stroke-linecap="round">
-              <path d="M34 45 q5 -6 10 0"/>
-              <path d="M56 45 q5 -6 10 0"/>
+            <path d="M27 34 L30 18 L40 30 Z" fill="var(--cat-cheek)" opacity=".5"/>
+            <g fill="var(--cat-face)"><ellipse cx="36" cy="48" rx="6.5" ry="8"/><ellipse cx="56" cy="48" rx="6" ry="7.5"/></g>
+            <g fill="var(--cat-ink)"><ellipse cx="33.5" cy="49" rx="3.2" ry="4.6"/><ellipse cx="53.5" cy="49" rx="3" ry="4.4"/></g>
+            <g fill="var(--cat-face)"><circle cx="35" cy="46.5" r="1.3"/><circle cx="55" cy="46.5" r="1.3"/></g>
+            <ellipse cx="28" cy="57" rx="6" ry="4" fill="var(--cat-cheek)"/>
+            <path d="M43 55 L49 55 L46 58 Z" fill="var(--cat-face)"/>
+            <g stroke="var(--cat-face)" stroke-width="1.2" opacity=".6" fill="none">
+              <path d="M31 79 l0 6"/><path d="M35 79 l0 6"/>
             </g>
-
-            <!-- рожеві щічки -->
-            <ellipse cx="29" cy="50" rx="7" ry="4.5" fill="#ff9bb3" opacity=".8"/>
-            <ellipse cx="71" cy="50" rx="7" ry="4.5" fill="#ff9bb3" opacity=".8"/>
-
-            <!-- носик + ротик -->
-            <path d="M46.5 48 L53.5 48 L50 52 Z" fill="#ff7fa3"/>
-            <path d="M50 52 q-3 4 -6.5 1.5 M50 52 q3 4 6.5 1.5" fill="none" stroke="#c99" stroke-width="1.4" stroke-linecap="round"/>
-
-            <!-- вусики -->
-            <g stroke="#c7cad6" stroke-width="1.2" stroke-linecap="round">
-              <path d="M27 50 L13 47"/><path d="M27 54 L13 56"/>
-              <path d="M73 50 L87 47"/><path d="M73 54 L87 56"/>
-            </g>
-
-            <!-- нашийник + золотий дзвіночок -->
-            <path d="M33 61 q17 11 34 0" fill="none" stroke="#b06e2a" stroke-width="3"/>
-            <circle cx="50" cy="66" r="4.2" fill="#f0c14b" stroke="#b8892b" stroke-width="1"/>
-            <circle cx="50" cy="67" r="1" fill="#7a4415"/>
-
-            <!-- лапка, що махає -->
-            <g class="cat-arm">
-              <rect x="76" y="38" width="9" height="30" rx="4.5" fill="#edeef3"/>
-              <circle cx="80.5" cy="36" r="6.5" fill="#edeef3"/>
-              <ellipse cx="80.5" cy="35" rx="2.6" ry="1.7" fill="#ff9bb3"/>
-            </g>
-
-            <!-- іскорки -->
-            <g class="cat-spark" fill="#ffe6c2">
-              <path d="M11 20 l1.6 4.2 4.2 1.6 -4.2 1.6 -1.6 4.2 -1.6 -4.2 -4.2 -1.6 4.2 -1.6 z"/>
-              <path d="M88 15 l1.2 3.2 3.2 1.2 -3.2 1.2 -1.2 3.2 -1.2 -3.2 -3.2 -1.2 3.2 -1.2 z"/>
+            <g stroke="var(--cat-face)" stroke-width="1.3" stroke-linecap="round" opacity=".85">
+              <path d="M24 53 L10 50"/><path d="M24 57 L10 59"/>
             </g>
           </svg>
         </div>
+
+        <!-- ХОДИТЬ -->
+        <div class="pose pose-walk" id="poseWalk">
+          <svg viewBox="0 0 108 108">
+            <g fill="var(--cat-ink)">
+              <path class="w-tail" d="M76 66 q6 -22 -8 -30 q-8 -4 -6 4 q10 -1 8 10 q-2 12 4 18 z"/>
+              <ellipse cx="58" cy="70" rx="24" ry="16" transform="rotate(-8 58 70)"/>
+              <ellipse cx="52" cy="90" rx="7" ry="5.5"/>
+              <ellipse cx="70" cy="86" rx="7" ry="5.5"/>
+              <path d="M28 34 L30 10 L48 28 Z"/>
+              <path d="M64 30 L60 8 L46 26 Z"/>
+              <ellipse cx="44" cy="42" rx="22" ry="20"/>
+              <g class="w-paw"><path d="M40 66 q-11 4 -15 15 q-2 5 4 5 q4 -9 13 -12 z"/></g>
+            </g>
+            <path d="M33 28 L35 15 L44 25 Z" fill="var(--cat-cheek)" opacity=".5"/>
+            <g fill="none" stroke="var(--cat-face)" stroke-width="2.6" stroke-linecap="round">
+              <path d="M33 41 q5 -6 10 0"/>
+              <path d="M49 41 q5 -6 10 0"/>
+            </g>
+            <ellipse cx="32" cy="49" rx="5.5" ry="3.6" fill="var(--cat-cheek)"/>
+            <ellipse cx="58" cy="49" rx="5.5" ry="3.6" fill="var(--cat-cheek)"/>
+            <path d="M42 48 L50 48 L46 52 Z" fill="var(--cat-face)"/>
+            <path d="M46 52 q-3 3 -6 1 M46 52 q3 3 6 1" fill="none" stroke="var(--cat-face)" stroke-width="1.3" stroke-linecap="round"/>
+            <g class="marks" stroke="var(--cat-face)" stroke-width="2.4" stroke-linecap="round" opacity=".85">
+              <path d="M13 33 l-6 -3"/><path d="M12 41 l-7 0"/><path d="M13 49 l-6 3"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- СИДИТЬ -->
+        <div class="pose pose-sit" id="poseSit">
+          <svg viewBox="0 0 108 108">
+            <g fill="var(--cat-ink)">
+              <path class="s-tail" d="M76 78 q24 0 22 -22 q-3 -10 -10 -7 q7 3 5 11 q-3 12 -19 10 z"/>
+              <path d="M28 38 L32 8 L54 32 Z"/>
+              <path d="M80 38 L76 8 L54 32 Z"/>
+              <ellipse cx="54" cy="44" rx="26" ry="24"/>
+              <ellipse cx="54" cy="76" rx="24" ry="20"/>
+              <ellipse cx="42" cy="92" rx="8" ry="6"/>
+              <ellipse cx="66" cy="92" rx="8" ry="6"/>
+            </g>
+            <path d="M34 32 L37 17 L46 28 Z" fill="var(--cat-cheek)" opacity=".5"/>
+            <path d="M74 32 L71 17 L62 28 Z" fill="var(--cat-cheek)" opacity=".5"/>
+            <g fill="var(--cat-face)"><ellipse cx="44" cy="46" rx="6" ry="7.6"/><ellipse cx="64" cy="46" rx="6" ry="7.6"/></g>
+            <g fill="var(--cat-ink)"><ellipse cx="45" cy="47" rx="3" ry="4.4"/><ellipse cx="65" cy="47" rx="3" ry="4.4"/></g>
+            <g fill="var(--cat-face)"><circle cx="46.4" cy="44.4" r="1.3"/><circle cx="66.4" cy="44.4" r="1.3"/></g>
+            <ellipse cx="36" cy="54" rx="6.2" ry="4" fill="var(--cat-cheek)"/>
+            <ellipse cx="72" cy="54" rx="6.2" ry="4" fill="var(--cat-cheek)"/>
+            <path d="M51 54 L57 54 L54 57 Z" fill="var(--cat-face)"/>
+            <path d="M54 57 q-3 3 -6 1 M54 57 q3 3 6 1" fill="none" stroke="var(--cat-face)" stroke-width="1.4" stroke-linecap="round"/>
+            <g stroke="var(--cat-face)" stroke-width="1.3" stroke-linecap="round" opacity=".85">
+              <path d="M32 52 L17 49"/><path d="M32 56 L17 58"/>
+              <path d="M76 52 L91 49"/><path d="M76 56 L91 58"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- МАХАЄ ЛАПКОЮ (правильна відповідь) -->
+        <div class="pose pose-wave" id="poseWave">
+          <svg viewBox="0 0 108 108">
+            <g fill="var(--cat-ink)">
+              <path class="s-tail" d="M80 82 q22 -2 18 -22 q-3 -10 -10 -6 q7 4 4 12 q-4 11 -18 8 z"/>
+              <path d="M30 40 L34 10 L56 34 Z"/>
+              <path d="M82 40 L78 10 L56 34 Z"/>
+              <ellipse cx="56" cy="46" rx="25" ry="23"/>
+              <ellipse cx="56" cy="78" rx="23" ry="19"/>
+              <ellipse cx="46" cy="93" rx="7.5" ry="5.5"/>
+              <ellipse cx="66" cy="93" rx="7.5" ry="5.5"/>
+              <g class="wave-arm">
+                <path d="M40 64 q-14 -6 -18 -26 q-1 -6 5 -5 q2 16 16 22 z"/>
+                <circle cx="24" cy="30" r="7"/>
+              </g>
+            </g>
+            <path d="M37 34 L40 19 L49 30 Z" fill="var(--cat-cheek)" opacity=".5"/>
+            <path d="M75 34 L72 19 L63 30 Z" fill="var(--cat-cheek)" opacity=".5"/>
+            <g fill="none" stroke="var(--cat-face)" stroke-width="2.8" stroke-linecap="round">
+              <path d="M45 49 q5 -7 11 0"/>
+              <path d="M59 49 q5 -7 11 0"/>
+            </g>
+            <ellipse cx="42" cy="57" rx="6" ry="4" fill="var(--cat-cheek)"/>
+            <ellipse cx="72" cy="57" rx="6" ry="4" fill="var(--cat-cheek)"/>
+            <path d="M53 56 L59 56 L56 59 Z" fill="var(--cat-face)"/>
+            <path d="M56 59 q-3 4 -7 1.5 M56 59 q3 4 7 1.5" fill="none" stroke="var(--cat-face)" stroke-width="1.5" stroke-linecap="round"/>
+            <g stroke="var(--cat-face)" stroke-width="1.3" stroke-linecap="round" opacity=".85">
+              <path d="M78 55 L92 52"/><path d="M78 59 L92 61"/>
+            </g>
+            <g class="marks" stroke="var(--cat-face)" stroke-width="2.6" stroke-linecap="round">
+              <path d="M42 12 L42 4"/>
+              <path d="M26 15 q-4 4 -2 9"/>
+              <path d="M18 21 q-5 5 -3 11"/>
+            </g>
+          </svg>
+        </div>
+
       </div>
     </div>
   </div>
@@ -483,54 +532,77 @@
     setTimeout(()=>b.classList.remove("flash"),90);
   }
 
-  /* ── Котик, що ходить по колу ── */
+  /* ── Котик: визирає → ходить ↔ сидить, махає на «=» ── */
   const calcEl  = document.querySelector(".calc");
   const cat     = document.getElementById("cat");
   const catInner= document.getElementById("catInner");
+  const poses = {
+    peek: document.getElementById("posePeek"),
+    walk: document.getElementById("poseWalk"),
+    sit:  document.getElementById("poseSit"),
+    wave: document.getElementById("poseWave")
+  };
   const TAU = Math.PI*2;
-  let angle = 0;                 // 0 = вгорі, рух за годинниковою стрілкою
+  let angle = Math.PI/2;         // 0 = вгорі; π/2 = правий бік
   let lastT = 0;
-  let paused = false;
-  const SPEED = TAU / 16000;     // повний оберт за 16 секунд
+  let orbiting = false;          // рух по колу лише коли «ходить»
+  let timer = null;
 
-  function faceFor(a){ return Math.cos(a) < 0 ? "scaleX(-1)" : "scaleX(1)"; }
+  function showPose(name){
+    for(const k in poses) poses[k].classList.toggle("on", k===name);
+  }
+  // під час ходьби дивиться в бік руху; у спокої — до центру кола
+  function faceWalk(a){   return Math.cos(a) < 0 ? "scaleX(-1)" : "scaleX(1)"; }
+  function faceCenter(a){ return Math.sin(a) > 0 ? "scaleX(-1)" : "scaleX(1)"; }
 
-  function catFrame(t){
+  function place(){
+    const R  = calcEl.clientWidth/2 - 14;
+    const cx = calcEl.clientWidth/2, cy = calcEl.clientHeight/2;
+    cat.style.transform = "translate(" + (cx + R*Math.sin(angle)) + "px," + (cy - R*Math.cos(angle)) + "px)";
+  }
+
+  function frame(t){
     if(!lastT) lastT = t;
     const dt = t - lastT; lastT = t;
-    if(!paused){
-      angle += SPEED * dt;
+    if(orbiting){
+      angle += (TAU/17000) * dt;
       if(angle > TAU) angle -= TAU;
+      place();
+      catInner.style.transform = "translate(-50%,-50%) " + faceWalk(angle);
     }
-    const R  = calcEl.clientWidth/2 - 20;   // ходить по обідку кола
-    const cx = calcEl.clientWidth/2;
-    const cy = calcEl.clientHeight/2;
-    const x  = cx + R * Math.sin(angle);
-    const y  = cy - R * Math.cos(angle);
-    cat.style.transform = "translate(" + x + "px," + y + "px)";
-    if(!paused){
-      catInner.style.transform = "translate(-50%,-50%) " + faceFor(angle);
-    }
-    requestAnimationFrame(catFrame);
+    requestAnimationFrame(frame);
   }
-  requestAnimationFrame(catFrame);
+  requestAnimationFrame(frame);
 
-  let celebrateTimer = null;
-  function catCelebrate(){
-    paused = true;
-    // повернутися лицем до центру кола
-    const faceCenter = Math.sin(angle) > 0 ? "scaleX(-1)" : "scaleX(1)";
-    catInner.classList.remove("celebrate");
-    void catInner.offsetWidth;                 // перезапуск анімації
-    catInner.style.transform = "translate(-50%,-50%) " + faceCenter;
-    catInner.classList.add("celebrate");
-    clearTimeout(celebrateTimer);
-    celebrateTimer = setTimeout(function(){
-      catInner.classList.remove("celebrate");
-      lastT = 0;                               // без стрибка часу
-      paused = false;
-    }, 2050);
+  const rand = (a,b)=> a + Math.random()*(b-a);
+
+  function goPeek(){
+    orbiting = false;
+    angle = Math.PI/2;                                  // правий бік калькулятора
+    place();
+    catInner.style.transform = "translate(-50%,-50%) scaleX(1)";  // малюнок вже дивиться до центру
+    showPose("peek");
+    clearTimeout(timer); timer = setTimeout(goWalk, 2800);
   }
+  function goWalk(){
+    orbiting = true;
+    showPose("walk");
+    clearTimeout(timer); timer = setTimeout(goSit, rand(4200, 7000));
+  }
+  function goSit(){
+    orbiting = false;
+    catInner.style.transform = "translate(-50%,-50%) " + faceCenter(angle);
+    showPose("sit");
+    clearTimeout(timer); timer = setTimeout(goWalk, rand(2600, 4600));
+  }
+  function catCelebrate(){                               // виклик при правильній відповіді
+    orbiting = false;
+    catInner.style.transform = "translate(-50%,-50%) " + faceCenter(angle);
+    showPose("wave");
+    clearTimeout(timer); timer = setTimeout(goWalk, 2300);
+  }
+
+  goPeek();
 
   render();
 })();
