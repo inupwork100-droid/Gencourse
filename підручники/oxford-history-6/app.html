@@ -1,0 +1,772 @@
+<title>Vikings Reader</title>
+<meta name="theme-color" content="#16324f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Bree+Serif&display=swap">
+<style>
+/* Layout: one reading column styled like the textbook page (peach paper, red headings),
+   framed by navy "sea" chrome: sticky top bar with language mode, fixed bottom player with live subtitle. */
+:root {
+  --sea: #16324f;          /* navy chrome, from the book cover */
+  --sea-ink: #f4f7fb;
+  --paper: #fbe9dc;        /* the textbook's peach page */
+  --paper-2: #f6dccb;
+  --ground: #e9eef4;
+  --ink: #2a2320;
+  --muted: #6e625b;
+  --red: #c8372d;          /* book heading red */
+  --banner: #c8372d;
+  --now: #ffd23f;          /* the word being spoken */
+  --now-ink: #2a2320;
+  --done: #1f6f8b;         /* text already read */
+  --ua: #5a4a8a;           /* Ukrainian translation */
+  --ua-soft: #efe9fb;
+  --green: #3f8f3a;
+  --lime: #8fd14f;         /* салатовий: word card and tooltip */
+  --lime-soft: #e4f6d0;
+  --pink: #c0336b;
+  --line: #e2c9b8;
+  --surface: #ffffff;
+  --shadow: 0 10px 30px rgba(22,50,79,.18);
+  --f-display: "Bree Serif", Georgia, "Times New Roman", serif;
+  --f-body: "Andika", "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sea: #0d1d2e; --sea-ink: #e6edf5;
+    --paper: #23201f; --paper-2: #2c2826; --ground: #151a20;
+    --ink: #efe6df; --muted: #b3a69c; --red: #ff7a6b;
+    --now: #ffd23f; --now-ink: #1b1715; --done: #7cc6e0;
+    --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae; --lime: #9be05c; --lime-soft: #2c3d21;
+    --line: #3d3532; --banner: #9e2f27; --surface: #2a2624; --shadow: 0 10px 30px rgba(0,0,0,.5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --sea: #0d1d2e; --sea-ink: #e6edf5;
+  --paper: #23201f; --paper-2: #2c2826; --ground: #151a20;
+  --ink: #efe6df; --muted: #b3a69c; --red: #ff7a6b;
+  --now: #ffd23f; --now-ink: #1b1715; --done: #7cc6e0;
+  --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae; --lime: #9be05c; --lime-soft: #2c3d21;
+  --line: #3d3532; --banner: #9e2f27; --surface: #2a2624; --shadow: 0 10px 30px rgba(0,0,0,.5);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { background: var(--ground); color: var(--ink); }
+body { font-family: var(--f-body); font-size: 18px; line-height: 1.6; -webkit-tap-highlight-color: transparent; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid var(--now); outline-offset: 2px; }
+
+/* top bar */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--sea); color: var(--sea-ink);
+  padding: 10px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.top .cover { width: 34px; height: 46px; border-radius: 3px; object-fit: cover; flex: none; box-shadow: 0 2px 6px rgba(0,0,0,.35); }
+.top .t { min-width: 0; flex: 1 1 160px; line-height: 1.2; }
+.top .t b { display: block; font-family: var(--f-display); font-weight: 400; font-size: 17px; }
+.top .t span { font-size: 13px; opacity: .75; }
+.seg { display: inline-flex; background: rgba(255,255,255,.12); border-radius: 999px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: transparent; color: var(--sea-ink); padding: 6px 12px; border-radius: 999px; font-size: 14px; font-weight: 700; letter-spacing: .02em; }
+.seg button[aria-pressed="true"] { background: var(--sea-ink); color: var(--sea); }
+.iconbtn { border: 0; background: rgba(255,255,255,.12); color: var(--sea-ink); width: 40px; height: 40px; border-radius: 50%;
+  display: inline-grid; place-items: center; position: relative; flex: none; }
+.iconbtn svg { width: 20px; height: 20px; }
+.badge { position: absolute; top: -3px; right: -3px; background: var(--now); color: var(--now-ink); font-size: 11px; font-weight: 700;
+  min-width: 18px; height: 18px; border-radius: 9px; display: grid; place-items: center; padding: 0 4px; }
+
+/* the page */
+.wrap { padding-inline: 16px; padding-block: 16px 210px; }
+.page { max-width: 720px; margin: 0 auto; background: var(--paper); border-radius: 6px 14px 14px 6px; box-shadow: var(--shadow);
+  padding: 22px 22px 28px; position: relative; overflow: hidden; }
+.page::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 10px;
+  background: linear-gradient(90deg, rgba(0,0,0,.08), transparent); }
+.banner { background: var(--banner); color: #fff; margin: -22px -22px 18px; padding: 16px 22px 14px; }
+.banner .unit { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; opacity: .85; }
+.banner h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(26px, 6vw, 34px); line-height: 1.15; margin: 2px 0 0; text-wrap: balance; }
+.banner h1 .w.done { color: #fff; text-decoration: underline 2px rgba(255,255,255,.6); text-underline-offset: 4px; }
+.banner .uah1 { font-size: 16px; opacity: .9; margin-top: 4px; }
+.pagemark { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin: 26px 0 10px; }
+.pagemark::after { content: ""; flex: 1; border-top: 1px dashed var(--line); }
+.pagemark b { background: var(--red); color: #fff; border-radius: 4px; padding: 0 7px; letter-spacing: 0; }
+
+.blk { position: relative; margin: 0 0 16px; max-width: 65ch; }
+.blk.lead { font-weight: 700; }
+h2.blk { font-family: var(--f-display); font-weight: 400; color: var(--red); font-size: 24px; line-height: 1.25; margin: 24px 0 6px; text-wrap: balance; }
+.blk .ua-tog { position: absolute; right: -6px; top: -2px; border: 1px solid var(--line); background: var(--paper-2); color: var(--ua);
+  font-size: 12px; font-weight: 700; border-radius: 999px; padding: 1px 8px; opacity: .85; }
+p.blk { padding-right: 40px; }
+
+.s { border-radius: 4px; transition: background-color .2s; }
+.s.cur { background: color-mix(in srgb, var(--now) 22%, transparent); }
+.w { touch-action: manipulation; border-radius: 4px; cursor: pointer; padding: 0 1px; margin: 0 -1px; transition: background-color .12s, color .12s; }
+.w:hover { background: color-mix(in srgb, var(--ua) 14%, transparent); }
+.w.done { color: var(--done); }
+.w.now { background: var(--now); color: var(--now-ink); box-shadow: 0 0 0 2px var(--now); }
+.w.saved { text-decoration: underline dotted var(--ua) 2px; text-underline-offset: 4px; }
+.w.picked { background: var(--ua); color: #fff; }
+strong .w, .w.key { font-weight: 700; }
+
+.ua { display: block; font-weight: 400; color: var(--ua); background: var(--ua-soft); border-radius: 8px; padding: 8px 12px; margin-top: 8px; font-size: 16px; line-height: 1.5; }
+.ua .us.cur { background: color-mix(in srgb, var(--now) 40%, transparent); border-radius: 3px; }
+h2 .ua { font-family: var(--f-body); font-size: 15px; }
+body.mode-ua .en { display: none; }
+body.mode-ua .ua { background: transparent; padding: 0; margin: 0; color: var(--ink); font-size: inherit; }
+body.mode-ua h2 .ua { font-family: var(--f-display); color: var(--red); font-size: inherit; }
+body.mode-ua .ua-tog { display: none; }
+body.mode-ua .banner .ua { color: #fff; }
+
+figure.blk { margin: 18px 0; max-width: none; }
+figure img { display: block; width: 100%; border-radius: 6px; border: 3px solid var(--surface); box-shadow: 0 2px 10px rgba(0,0,0,.12); }
+figcaption { font-size: 16px; margin-top: 8px; color: var(--ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 14px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; flex: none; }
+.legend .lt { font-weight: 700; width: 100%; color: var(--ink); }
+
+.gloss { background: var(--surface); border-radius: 10px; overflow: hidden; margin: 20px 0; max-width: 420px; }
+.gloss h3, .box h3 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: 19px; color: #fff; padding: 6px 14px; }
+.gloss h3 { background: #237a8a; }
+.gloss ul { list-style: none; margin: 0; padding: 8px; display: flex; flex-wrap: wrap; gap: 8px; }
+.gloss li button { border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 4px 12px; font-weight: 700; font-size: 16px; }
+
+.box { border-radius: 12px; border: 3px solid; background: var(--surface); margin: 20px 0; overflow: hidden; max-width: none; }
+.box.activities { border-color: var(--green); } .box.activities h3 { background: var(--green); }
+.box.challenge { border-color: var(--red); } .box.challenge h3 { background: var(--red); }
+.box.know { border-color: var(--pink); } .box.know h3 { background: var(--pink); }
+body.mode-ua .box h3 .en, body.mode-ua .gloss h3 .en { display: none; }
+.box h3 .h3ua { font-family: var(--f-body); font-size: 14px; opacity: .9; margin-left: 8px; }
+body.mode-ua .box h3 .h3ua { font-family: var(--f-display); font-size: inherit; margin: 0; opacity: 1; }
+.box .items { padding: 10px 14px 12px; display: grid; gap: 8px; }
+.item { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 6px; padding-right: 40px; position: relative; }
+.item.sub { padding-left: 22px; }
+.item .n { font-weight: 700; color: var(--muted); }
+.item .ua-tog { position: absolute; right: 0; top: 0; }
+.item .ua { grid-column: 2; }
+
+/* player */
+.player { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: var(--sea); color: var(--sea-ink);
+  padding: 8px 16px calc(10px + env(safe-area-inset-bottom, 0px)); box-shadow: 0 -6px 20px rgba(0,0,0,.2); }
+.player .in { max-width: 720px; margin: 0 auto; display: grid; gap: 8px; }
+.sub { min-height: 1.5em; font-size: 15px; line-height: 1.4; color: #d9cff9; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.sub[hidden] { display: none; }
+.ctrl { display: flex; align-items: center; gap: 10px; }
+.ctrl .grow { flex: 1; }
+.play { width: 56px; height: 56px; border-radius: 50%; border: 0; background: var(--now); color: var(--now-ink); display: grid; place-items: center; flex: none; }
+.play svg { width: 26px; height: 26px; }
+.chip { border: 1px solid rgba(255,255,255,.3); background: transparent; color: var(--sea-ink); border-radius: 999px; padding: 6px 12px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.chip[aria-pressed="true"] { background: rgba(255,255,255,.18); }
+.progress { height: 4px; background: rgba(255,255,255,.15); border-radius: 2px; overflow: hidden; }
+.progress i { display: block; height: 100%; width: 0; background: var(--now); transition: width .3s; }
+
+/* sheet (word card / selection / saved words / settings) */
+.scrim { position: fixed; inset: 0; background: rgba(10,20,30,.35); z-index: 40; }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: var(--surface); color: var(--ink);
+  border: 3px solid var(--lime); border-bottom: 0;
+  border-radius: 18px 18px 0 0; box-shadow: var(--shadow); max-height: 78%; overflow: auto;
+  padding: 10px 18px calc(18px + env(safe-area-inset-bottom, 0px)); }
+.sheet .in { max-width: 680px; margin: 0 auto; display: grid; gap: 12px; }
+.grab { width: 44px; height: 5px; border-radius: 3px; background: var(--lime); margin: 0 auto 4px; }
+.sheet .head { display: flex; align-items: center; gap: 10px; }
+.sheet .word { font-family: var(--f-display); font-size: 30px; line-height: 1.1; min-width: 0; overflow-wrap: anywhere; }
+.sheet .tr { font-size: 22px; font-weight: 700; color: var(--ua); }
+.sheet .hint { font-size: 15px; color: var(--muted); }
+.sheet .lbl { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+.card { background: var(--lime-soft); border-radius: 12px; padding: 10px 12px; }
+.card .ua { margin-top: 6px; }
+.phr { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.phr b { min-width: 0; }
+.phr span { color: var(--ua); font-weight: 700; text-align: right; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-size: 15px; background: var(--lime-soft); display: inline-flex; align-items: center; gap: 6px; }
+.btn.primary { background: var(--sea); color: var(--sea-ink); }
+.btn svg { width: 18px; height: 18px; }
+.sayw { border: 0; background: var(--sea); color: var(--sea-ink); width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; flex: none; }
+.sayw svg { width: 22px; height: 22px; }
+a.ext { color: var(--ua); font-weight: 700; }
+.glist { display: grid; gap: 4px; }
+.glist div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 10px; font-size: 16px; border-bottom: 1px dashed var(--line); padding: 4px 0; }
+.glist div span { color: var(--ua); }
+.saved-list { display: grid; gap: 6px; }
+.saved-row { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 10px; align-items: center; background: var(--lime-soft); border-radius: 10px; padding: 6px 10px; }
+.saved-row .sayw { width: 36px; height: 36px; }
+.saved-row b { display: block; }
+.saved-row small { color: var(--ua); font-size: 15px; }
+.saved-row .x { border: 0; background: transparent; color: var(--muted); font-size: 22px; padding: 0 6px; }
+.quiz { text-align: center; display: grid; gap: 10px; }
+.quiz .q { font-family: var(--f-display); font-size: 34px; }
+.quiz .a { font-size: 22px; color: var(--ua); font-weight: 700; min-height: 1.5em; }
+.empty { color: var(--muted); }
+label.row { display: grid; gap: 4px; font-size: 15px; }
+select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); width: 100%; }
+/* double-tap tooltip: short translation above the word */
+.pop { position: absolute; z-index: 35; background: var(--surface); color: var(--ink); border: 3px solid var(--lime);
+  border-radius: 12px; padding: 4px 12px; font-size: 17px; font-weight: 700; line-height: 1.3; white-space: nowrap;
+  max-width: calc(100vw - 32px); overflow: hidden; text-overflow: ellipsis; box-shadow: 0 6px 16px rgba(0,0,0,.18);
+  transform: translate(-50%, -100%); pointer-events: none; }
+.pop::after { content: ""; position: absolute; left: var(--tip, 50%); bottom: -9px; width: 12px; height: 12px; margin-left: -6px;
+  background: var(--surface); border-right: 3px solid var(--lime); border-bottom: 3px solid var(--lime); transform: rotate(45deg); }
+.pop.below { transform: translate(-50%, 0); }
+.pop.below::after { bottom: auto; top: -9px; transform: rotate(225deg); }
+.w.popped { background: var(--lime-soft); box-shadow: 0 0 0 2px var(--lime); }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 170px; background: var(--ink); color: var(--paper); padding: 8px 16px; border-radius: 999px; z-index: 60; font-size: 15px; }
+.nosupport { background: var(--ua-soft); color: var(--ua); border-radius: 10px; padding: 10px 12px; font-size: 15px; margin-bottom: 14px; }
+
+@media (max-width: 480px) {
+  body { font-size: 17px; }
+  .page { padding: 18px 16px 24px; border-radius: 6px; }
+  .banner { margin: -18px -16px 16px; padding: 14px 16px 12px; }
+  .seg button { padding: 6px 10px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+
+<header class="top">
+  <img class="cover" src="{{IMG_cover}}" alt="Обкладинка підручника">
+  <div class="t"><b>Oxford Primary History 6</b><span id="topSub">Урок 1.1 · с. 6–7</span></div>
+  <div class="seg" role="group" aria-label="Мова тексту">
+    <button id="m-en" aria-pressed="true" title="Тільки англійський текст">EN</button>
+    <button id="m-both" aria-pressed="false" title="Англійський текст і переклад під кожним абзацом">EN+UA</button>
+    <button id="m-ua" aria-pressed="false" title="Весь текст українською">UA</button>
+  </div>
+  <button class="iconbtn" id="openSaved" aria-label="Мої слова" title="Мої слова">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+    <span class="badge" id="savedCount" hidden>0</span>
+  </button>
+  <button class="iconbtn" id="openSettings" aria-label="Налаштування голосу" title="Голос і швидкість">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
+  </button>
+</header>
+
+<main class="wrap">
+  <div id="nosupport" class="nosupport" hidden>Цей браузер не вміє озвучувати текст. Переклад слів і речень працює. Для звуку відкрий сторінку в Safari або Chrome.</div>
+  <article class="page" id="book"></article>
+</main>
+
+<div class="player">
+  <div class="in">
+    <div class="progress"><i id="prog"></i></div>
+    <div class="sub" id="subtitle">Натисни ▶, щоб слухати. Торкнись будь-якого слова — побачиш переклад.</div>
+    <div class="ctrl">
+      <button class="iconbtn" id="prev" aria-label="Попереднє речення" title="Попереднє речення">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg>
+      </button>
+      <button class="play" id="play" aria-label="Слухати">
+        <svg id="icPlay" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>
+        <svg id="icPause" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+      </button>
+      <button class="iconbtn" id="next" aria-label="Наступне речення" title="Наступне речення">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg>
+      </button>
+      <span class="grow"></span>
+      <button class="chip" id="speed" title="Швидкість читання">0.8×</button>
+      <button class="chip" id="subTog" aria-pressed="true" title="Показувати переклад речення, яке звучить">UA ↓</button>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<section class="sheet" id="sheet" hidden aria-live="polite"><div class="in" id="sheetIn"></div></section>
+<div class="toast" id="toast" hidden></div>
+<div class="pop" id="pop" role="status" hidden></div>
+
+<script>{{LESSON_JS}}</script>
+<script>{{DICT_JS}}</script>
+<script>
+(() => {
+"use strict";
+const L = window.LESSON, D = window.DICT;
+const IMG = { map: "{{IMG_map}}", raid: "{{IMG_raid}}" };
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("vk:" + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem("vk:" + k, JSON.stringify(v)); } catch (e) {} }
+};
+const SVG = {
+  speak: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>',
+  star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>'
+};
+
+/* ---------- words: how a few tokens should sound ---------- */
+const SAY = { "ce": "C E", "1100": "eleven hundred", "700": "seven hundred" };
+const WORD_RE = /[A-Za-z0-9]+(?:['’][A-Za-z]+)?/g;
+
+/* ---------- build sentence model + DOM ---------- */
+const sentences = [];   // {en, ua, words:[{t, el}], el, uaEl, speech, starts:[]}
+
+function tokenSpans(text, opts = {}) {
+  // returns {html, words:[{t, bold}]} ; *x* marks bold
+  let bold = false, html = "", words = [], i = 0;
+  const parts = text.split("*");
+  parts.forEach((part, pi) => {
+    bold = pi % 2 === 1;
+    let last = 0;
+    part.replace(WORD_RE, (m, off) => {
+      html += esc(part.slice(last, off));
+      const wi = words.length;
+      words.push({ t: m, bold });
+      html += `<span class="w${bold ? " key" : ""}" data-wi="${wi}">${esc(m)}</span>`;
+      last = off + m.length;
+    });
+    html += esc(part.slice(last));
+  });
+  return { html, words };
+}
+
+function makeSentence(pair) {
+  const si = sentences.length;
+  const { html, words } = tokenSpans(pair[0]);
+  // speech string with a map from speech offsets to word index
+  let speech = "", starts = [];
+  const plain = pair[0].replace(/\*/g, "");
+  let last = 0, wi = 0;
+  plain.replace(WORD_RE, (m, off) => {
+    speech += plain.slice(last, off);
+    starts.push(speech.length);
+    speech += SAY[m.toLowerCase()] || m;
+    last = off + m.length; wi++;
+  });
+  speech += plain.slice(last);
+  sentences.push({ en: plain, ua: pair[1], words, speech, starts, el: null, uaEl: null });
+  return { si, html: `<span class="s" data-si="${si}">${html}</span>` };
+}
+
+function uaHtml(sis) {
+  return `<span class="ua">${sis.map(si => `<span class="us" data-si="${si}">${esc(sentences[si].ua)}</span>`).join(" ")}</span>`;
+}
+
+function renderSentences(list) {
+  const made = list.map(makeSentence);
+  return { en: `<span class="en">${made.map(m => m.html).join(" ")}</span>`, sis: made.map(m => m.si) };
+}
+
+const book = $("#book");
+let out = "";
+{
+  const t = renderSentences([L.title]);
+  out += `<div class="banner"><div class="unit">${esc(L.unit)} · pages ${esc(L.pages)}</div><h1>${t.en}${uaHtml(t.sis).replace('class="ua"', 'class="ua uah1"')}</h1></div>`;
+}
+const paraBlocks = []; // elements that can show a UA paragraph
+let curPage = null;
+L.blocks.forEach((b, bi) => {
+  if (b.page && b.page !== curPage) {
+    curPage = b.page;
+    out += `<div class="pagemark">Page <b>${b.page}</b></div>`;
+  }
+  if (b.type === "lead" || b.type === "p") {
+    const r = renderSentences(b.s);
+    out += `<p class="blk ${b.type}" data-bi="${bi}">${r.en}<button class="ua-tog" data-tog aria-label="Переклад абзацу">UA</button>${uaHtml(r.sis)}</p>`;
+  } else if (b.type === "h2") {
+    const r = renderSentences(b.s);
+    out += `<h2 class="blk" data-bi="${bi}">${r.en}${uaHtml(r.sis)}</h2>`;
+  } else if (b.type === "img") {
+    const r = renderSentences(b.s);
+    let legend = "";
+    if (b.legend) {
+      legend = `<div class="legend"><span class="lt">Viking settlements · Viking raids</span>` +
+        b.legend.map(l => `<span><i style="background:${l[0]}"></i><span class="lg" title="${esc(l[2])}">${tokenSpans(l[1]).html}</span></span>`).join("") + `</div>`;
+    }
+    out += `<figure class="blk" data-bi="${bi}"><img src="${IMG[b.src]}" alt="${esc(b.alt)}" loading="lazy"><figcaption>${r.en}${uaHtml(r.sis)}</figcaption>${legend}</figure>`;
+  } else if (b.type === "glossary") {
+    out += `<div class="gloss blk"><h3><span class="en">${esc(b.title[0])}</span> <span class="h3ua">${esc(b.title[1])}</span></h3><ul>` +
+      b.words.map(w => `<li><button data-gloss="${esc(w[0])}">${esc(w[0])}</button></li>`).join("") + `</ul></div>`;
+  } else if (b.type === "box") {
+    out += `<div class="box blk ${b.kind}"><h3><span class="en">${esc(b.title[0])}</span><span class="h3ua">${esc(b.title[1])}</span></h3><div class="items">` +
+      b.items.map(it => {
+        const r = renderSentences(it.s);
+        return `<div class="item${it.sub ? " sub" : ""}"><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div><button class="ua-tog" data-tog aria-label="Переклад">UA</button></div>`;
+      }).join("") + `</div></div>`;
+  }
+});
+book.innerHTML = out;
+document.querySelectorAll(".s").forEach(el => {
+  const s = sentences[+el.dataset.si];
+  s.el = el; s.wordEls = [...el.querySelectorAll(".w")];
+});
+document.querySelectorAll(".us").forEach(el => { sentences[+el.dataset.si].uaEl = el; });
+
+// glossary definitions into the dictionary lookup
+const GLOSS = {};
+L.blocks.filter(b => b.type === "glossary").forEach(b => b.words.forEach(w => GLOSS[w[0]] = w[1]));
+
+/* ---------- translation display mode ---------- */
+let mode = store.get("mode", "en");
+const shownParas = new Set();
+function applyMode() {
+  document.body.classList.toggle("mode-ua", mode === "ua");
+  ["en", "both", "ua"].forEach(m => $("#m-" + m).setAttribute("aria-pressed", String(m === mode)));
+  document.querySelectorAll(".ua").forEach(el => {
+    const holder = el.closest("[data-bi], .item, .banner");
+    const forced = holder && shownParas.has(holder);
+    el.hidden = !(mode !== "en" || forced);
+  });
+  document.querySelectorAll("[data-tog]").forEach(b => {
+    const holder = b.closest("[data-bi], .item");
+    b.setAttribute("aria-pressed", String(shownParas.has(holder)));
+    b.textContent = shownParas.has(holder) && mode === "en" ? "×" : "UA";
+  });
+  store.set("mode", mode);
+}
+["en", "both", "ua"].forEach(m => $("#m-" + m).addEventListener("click", () => { mode = m; applyMode(); }));
+book.addEventListener("click", e => {
+  const tog = e.target.closest("[data-tog]");
+  if (!tog) return;
+  e.stopPropagation();
+  const holder = tog.closest("[data-bi], .item");
+  if (mode !== "en") { mode = "en"; shownParas.clear(); shownParas.add(holder); }
+  else if (shownParas.has(holder)) shownParas.delete(holder); else shownParas.add(holder);
+  applyMode();
+});
+
+/* ---------- speech ---------- */
+const synth = window.speechSynthesis;
+const canSpeak = !!(synth && window.SpeechSynthesisUtterance);
+if (!canSpeak) $("#nosupport").hidden = false;
+let voices = [], voice = null;
+const RATES = [0.6, 0.7, 0.8, 0.9, 1];
+let rate = store.get("rate", 0.8);
+function pickVoices() {
+  if (!canSpeak) return;
+  voices = synth.getVoices().filter(v => /^en/i.test(v.lang));
+  const want = store.get("voice", null);
+  const score = v => (v.name === want ? 100 : 0) + (/en[-_]GB/i.test(v.lang) ? 20 : 0) +
+    (/(Daniel|Kate|Serena|Martha|Arthur|Google UK|Libby|Sonia|Ryan|Natural|Enhanced|Premium)/i.test(v.name) ? 8 : 0) + (v.localService ? 1 : 0);
+  voice = voices.slice().sort((a, b) => score(b) - score(a))[0] || null;
+}
+if (canSpeak) { pickVoices(); synth.addEventListener?.("voiceschanged", pickVoices); synth.onvoiceschanged = pickVoices; }
+
+let cur = Math.min(store.get("pos", 0), sentences.length - 1);   // sentence index
+let curWord = 0;
+let playing = false, token = 0, timer = null;
+
+function setPlayingUI() {
+  $("#icPlay").hidden = playing; $("#icPause").hidden = !playing;
+  $("#play").setAttribute("aria-label", playing ? "Пауза" : "Слухати");
+}
+function clearMarks() {
+  document.querySelectorAll(".w.now").forEach(e => e.classList.remove("now"));
+  document.querySelectorAll(".s.cur, .us.cur").forEach(e => e.classList.remove("cur"));
+}
+function markDone(upto, uptoWord) {
+  // everything before sentence `upto` (and words before uptoWord in it) is "read"
+  sentences.forEach((s, i) => s.wordEls.forEach((w, wi) => w.classList.toggle("done", i < upto || (i === upto && wi < uptoWord))));
+}
+function showSentence(i, w) {
+  clearMarks();
+  const s = sentences[i]; if (!s) return;
+  s.el.classList.add("cur"); s.uaEl && s.uaEl.classList.add("cur");
+  const we = s.wordEls[w]; if (we) we.classList.add("now");
+  markDone(i, w);
+  $("#subtitle").textContent = s.ua;
+  $("#prog").style.width = ((i + (s.words.length ? w / s.words.length : 0)) / sentences.length * 100).toFixed(1) + "%";
+}
+function scrollIntoViewIfNeeded(el) {
+  if (!el) return;
+  const r = el.getBoundingClientRect(), top = 90, bottom = innerHeight - 200;
+  if (r.top < top || r.bottom > bottom) el.scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+}
+function setWord(w) {
+  const s = sentences[cur];
+  if (w === curWord && s.wordEls[w]?.classList.contains("now")) return;
+  curWord = Math.max(0, Math.min(w, s.words.length - 1));
+  showSentence(cur, curWord);
+  const el = mode === "ua" ? s.uaEl : s.wordEls[curWord];
+  scrollIntoViewIfNeeded(el);
+}
+
+function speakSentence(i, fromWord = 0) {
+  if (!canSpeak) return;
+  const my = ++token;
+  synth.cancel();
+  clearTimeout(timer);
+  cur = i; curWord = fromWord; store.set("pos", cur);
+  const s = sentences[i];
+  const off = s.starts[fromWord] || 0;
+  const u = new SpeechSynthesisUtterance(s.speech.slice(off));
+  u.lang = voice ? voice.lang : "en-GB"; if (voice) u.voice = voice;
+  u.rate = rate; u.pitch = 1;
+  let gotBoundary = false;
+  setWord(fromWord);
+  // Fallback: some voices never send word boundaries — move the highlight by estimate.
+  const estimate = (wi) => {
+    if (my !== token || gotBoundary || wi >= s.words.length) return;
+    setWord(wi);
+    const len = (SAY[s.words[wi].t.toLowerCase()] || s.words[wi].t).length + 1;
+    timer = setTimeout(() => estimate(wi + 1), (len * 72 + 70) / rate);
+  };
+  u.onstart = () => { if (my !== token) return; timer = setTimeout(() => { if (!gotBoundary) estimate(fromWord); }, 350); };
+  u.onboundary = e => {
+    if (my !== token || (e.name && e.name !== "word")) return;
+    gotBoundary = true; clearTimeout(timer);
+    const ci = e.charIndex + off;
+    let w = 0; while (w + 1 < s.starts.length && s.starts[w + 1] <= ci) w++;
+    setWord(w);
+  };
+  u.onend = () => {
+    if (my !== token) return;
+    clearTimeout(timer);
+    if (!playing) return;
+    if (i + 1 < sentences.length) setTimeout(() => { if (my === token && playing) speakSentence(i + 1, 0); }, 280);
+    else { playing = false; setPlayingUI(); markDone(sentences.length, 0); clearMarks(); $("#subtitle").textContent = "Кінець уроку. Молодець!"; cur = 0; store.set("pos", 0); }
+  };
+  u.onerror = e => { if (my === token && e.error !== "interrupted" && e.error !== "canceled") { playing = false; setPlayingUI(); } };
+  synth.speak(u);
+}
+function play(fromWord) { if (!canSpeak) return toast("Озвучення недоступне в цьому браузері"); playing = true; setPlayingUI(); speakSentence(cur, fromWord ?? curWord); }
+function pause() { playing = false; token++; clearTimeout(timer); if (canSpeak) synth.cancel(); setPlayingUI(); }
+$("#play").addEventListener("click", () => playing ? pause() : play());
+$("#prev").addEventListener("click", () => { const was = playing; pause(); cur = Math.max(0, curWord > 1 ? cur : cur - 1); curWord = 0; showSentence(cur, 0); scrollIntoViewIfNeeded(sentences[cur].el); if (was) play(0); });
+$("#next").addEventListener("click", () => { const was = playing; pause(); cur = Math.min(sentences.length - 1, cur + 1); curWord = 0; showSentence(cur, 0); scrollIntoViewIfNeeded(sentences[cur].el); if (was) play(0); });
+
+function sayOnce(text) {
+  if (!canSpeak) return toast("Озвучення недоступне в цьому браузері");
+  if (playing) pause();
+  token++; synth.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = voice ? voice.lang : "en-GB"; if (voice) u.voice = voice; u.rate = Math.min(rate, 0.85);
+  synth.speak(u);
+}
+
+$("#speed").textContent = rate + "×";
+$("#speed").addEventListener("click", () => {
+  rate = RATES[(RATES.indexOf(rate) + 1) % RATES.length] || 0.8;
+  $("#speed").textContent = rate + "×"; store.set("rate", rate);
+  if (playing) speakSentence(cur, curWord);
+});
+let subOn = store.get("sub", true);
+function applySub() { $("#subtitle").hidden = !subOn; $("#subTog").setAttribute("aria-pressed", String(subOn)); store.set("sub", subOn); }
+$("#subTog").addEventListener("click", () => { subOn = !subOn; applySub(); });
+
+/* ---------- dictionary lookup ---------- */
+function lookup(word) {
+  const k = word.toLowerCase().replace(/’/g, "'");
+  if (D[k]) return D[k];
+  const tries = [k.replace(/'s$/, ""), k.replace(/s$/, ""), k.replace(/es$/, ""), k.replace(/ed$/, ""), k.replace(/ing$/, "")];
+  for (const t of tries) if (D[t]) return D[t];
+  return null;
+}
+const PHRASES = L.phrases.map(p => ({ en: p[0], ua: p[1], toks: (p[0].match(WORD_RE) || []).map(t => t.toLowerCase()) }));
+function phrasesAt(s, wi) {
+  const toks = s.words.map(w => w.t.toLowerCase());
+  const found = [];
+  PHRASES.forEach(p => {
+    for (let start = Math.max(0, wi - p.toks.length + 1); start <= wi; start++) {
+      if (p.toks.every((t, j) => toks[start + j] === t)) { found.push(p); break; }
+    }
+  });
+  // keep the longest when one phrase sits inside another
+  return found.filter(p => !found.some(q => q !== p && q.en.length > p.en.length && q.en.toLowerCase().includes(p.en.toLowerCase())));
+}
+const gtLink = t => `https://translate.google.com/?sl=en&tl=uk&op=translate&text=${encodeURIComponent(t)}`;
+
+/* ---------- saved words ---------- */
+let saved = store.get("saved", []);
+function isSaved(w) { return saved.some(x => x.w === w.toLowerCase()); }
+function refreshSaved() {
+  const set = new Set(saved.map(x => x.w));
+  document.querySelectorAll(".w").forEach(el => el.classList.toggle("saved", set.has(el.textContent.toLowerCase())));
+  const c = $("#savedCount"); c.hidden = !saved.length; c.textContent = saved.length;
+  store.set("saved", saved);
+}
+function toggleSave(word, tr) {
+  const w = word.toLowerCase();
+  if (isSaved(w)) saved = saved.filter(x => x.w !== w);
+  else saved.push({ w, tr });
+  refreshSaved();
+}
+
+/* ---------- sheet ---------- */
+const sheet = $("#sheet"), scrim = $("#scrim"), sheetIn = $("#sheetIn");
+let onClose = null;
+function openSheet(html, after) {
+  sheetIn.innerHTML = '<div class="grab"></div>' + html;
+  sheet.hidden = false; scrim.hidden = false; sheet.scrollTop = 0;
+  after && after(sheetIn);
+}
+function closeSheet() {
+  sheet.hidden = true; scrim.hidden = true;
+  document.querySelectorAll(".w.picked").forEach(e => e.classList.remove("picked"));
+  onClose && onClose(); onClose = null;
+}
+scrim.addEventListener("click", closeSheet);
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeSheet();
+  if (e.key === " " && e.target === document.body) { e.preventDefault(); playing ? pause() : play(); }
+});
+let toastT;
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 1800); }
+
+function wordCard(word, opts) {
+  const entry = lookup(word);
+  const gloss = GLOSS[word.toLowerCase()];
+  const tr = entry ? entry[0] : (gloss || "");
+  let h = `<div class="head"><button class="sayw" data-say="${esc(word)}" aria-label="Вимовити слово">${SVG.speak}</button><div style="min-width:0"><div class="word">${esc(word)}</div></div></div>`;
+  h += tr ? `<div><div class="tr">${esc(tr)}</div>${entry && entry[1] ? `<div class="hint">${esc(entry[1])}</div>` : ""}${gloss && entry ? `<div class="hint">Слово з глосарію: ${esc(gloss)}</div>` : ""}</div>`
+          : `<div class="hint">Цього слова немає в словнику уроку. <a class="ext" href="${gtLink(word)}" target="_blank" rel="noopener">Перекласти в Google</a></div>`;
+  if (opts && opts.phrases && opts.phrases.length) {
+    h += `<div class="card"><div class="lbl">Словосполучення</div>${opts.phrases.map(p => `<div class="phr"><b>${esc(p.en)}</b><span>${esc(p.ua)}</span></div>`).join("")}</div>`;
+  }
+  if (opts && opts.si != null) {
+    const s = sentences[opts.si];
+    h += `<div class="card"><div class="lbl">Речення</div><div>${esc(s.en)}</div><span class="ua">${esc(s.ua)}</span></div>`;
+  }
+  h += `<div class="btns">`;
+  if (opts && opts.si != null) {
+    h += `<button class="btn" data-say-s="${opts.si}">${SVG.speak} Речення</button><button class="btn primary" data-from="${opts.si}:${opts.wi}">${SVG.play} Читати звідси</button>`;
+  }
+  h += `<button class="btn" data-save="${esc(word)}" data-tr="${esc(tr)}">${SVG.star} <span>${isSaved(word) ? "Прибрати зі слів" : "Запам'ятати"}</span></button></div>`;
+  return h;
+}
+
+sheetIn.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.say != null) sayOnce(b.dataset.say);
+  else if (b.dataset.saySel != null) sayOnce(b.dataset.saySel);
+  else if (b.dataset.sayS != null) sayOnce(sentences[+b.dataset.sayS].speech);
+  else if (b.dataset.from) { const [si, wi] = b.dataset.from.split(":").map(Number); closeSheet(); cur = si; play(wi); }
+  else if (b.dataset.save != null) { toggleSave(b.dataset.save, b.dataset.tr); b.querySelector("span").textContent = isSaved(b.dataset.save) ? "Прибрати зі слів" : "Запам'ятати"; toast(isSaved(b.dataset.save) ? "Додано в «Мої слова»" : "Прибрано"); }
+  else if (b.dataset.del != null) { saved = saved.filter(x => x.w !== b.dataset.del); refreshSaved(); openSaved(); }
+  else if (b.id === "quizBtn") startQuiz();
+  else if (b.id === "closeSheet") closeSheet();
+});
+
+// one tap on a word → card with details; quick double tap → small tooltip with the translation only
+function openWord(wEl) {
+  const sel = getSelection(); if (sel && !sel.isCollapsed && sel.toString().trim().length > 1) return;
+  const wasPlaying = playing; if (playing) pause();
+  const sEl = wEl.closest(".s");
+  wEl.classList.add("picked");
+  if (sEl) {
+    const si = +sEl.dataset.si, wi = +wEl.dataset.wi;
+    if (wasPlaying) { cur = si; curWord = wi; }
+    openSheet(wordCard(wEl.textContent, { si, wi, phrases: phrasesAt(sentences[si], wi) }));
+  } else {
+    openSheet(wordCard(wEl.textContent));
+  }
+  sayOnce(wEl.textContent);
+}
+function shortTr(word) {
+  const e = lookup(word);
+  const t = e ? e[0] : (GLOSS[word.toLowerCase()] || "немає в словнику");
+  // first meaning only, without notes in brackets: "відомий, знаменитий" → "відомий"
+  const first = t.split(";")[0].replace(/\([^)]*\)/g, "").trim();
+  return (first || t).split(",")[0].trim() || t;
+}
+const pop = $("#pop");
+let popT, poppedEl = null;
+function hidePop() { pop.hidden = true; clearTimeout(popT); poppedEl && poppedEl.classList.remove("popped"); poppedEl = null; }
+function showPop(wEl) {
+  hidePop();
+  try { getSelection().removeAllRanges(); } catch (e) {}
+  poppedEl = wEl; wEl.classList.add("popped");
+  pop.textContent = shortTr(wEl.textContent);
+  pop.hidden = false; pop.classList.remove("below");
+  const r = wEl.getBoundingClientRect(), pw = pop.offsetWidth;
+  const cx = r.left + r.width / 2;
+  const left = Math.max(16 + pw / 2, Math.min(innerWidth - 16 - pw / 2, cx));
+  pop.style.setProperty("--tip", (50 + (cx - left) / pw * 100).toFixed(1) + "%");
+  let top = r.top + scrollY - 12;
+  if (r.top - pop.offsetHeight - 12 < 80) { pop.classList.add("below"); top = r.bottom + scrollY + 12; }
+  pop.style.left = left + "px"; pop.style.top = top + "px";
+  popT = setTimeout(hidePop, 4000);
+}
+addEventListener("scroll", () => { if (!pop.hidden) hidePop(); }, { passive: true });
+
+let tapT = null, tapEl = null;
+book.addEventListener("click", e => {
+  const gl = e.target.closest("[data-gloss]");
+  if (gl) { const w = gl.dataset.gloss; openSheet(wordCard(w)); sayOnce(w); return; }
+  const wEl = e.target.closest(".w");
+  if (!wEl) { hidePop(); return; }
+  if (tapT && tapEl === wEl) {            // second tap on the same word → tooltip
+    clearTimeout(tapT); tapT = null; tapEl = null;
+    showPop(wEl);
+    return;
+  }
+  clearTimeout(tapT); hidePop();
+  tapEl = wEl;
+  tapT = setTimeout(() => { tapT = null; tapEl = null; openWord(wEl); }, 300);
+});
+book.addEventListener("dblclick", e => { if (e.target.closest(".w")) e.preventDefault(); });
+
+// select several words with a finger/mouse → translation of the selection
+let selT;
+document.addEventListener("selectionchange", () => {
+  clearTimeout(selT);
+  selT = setTimeout(() => {
+    const sel = getSelection();
+    if (!sel || sel.isCollapsed || !sheet.hidden) return;
+    const text = sel.toString().replace(/\s+/g, " ").trim();
+    if (text.split(" ").length < 2) return;
+    const range = sel.getRangeAt(0);
+    if (!book.contains(range.commonAncestorContainer)) return;
+    const sis = sentences.map((s, i) => range.intersectsNode(s.el) ? i : -1).filter(i => i >= 0);
+    showSelection(text, sis);
+  }, 700);
+});
+function showSelection(text, sis) {
+  if (playing) pause();
+  const words = [...new Set((text.match(WORD_RE) || []).map(w => w.toLowerCase()))];
+  const lowered = text.toLowerCase();
+  const phr = PHRASES.filter(p => lowered.includes(p.en.toLowerCase()));
+  let h = `<div class="head"><button class="sayw" data-say-sel="${esc(text)}" aria-label="Вимовити виділене">${SVG.speak}</button><div class="word" style="font-size:22px">${esc(text)}</div></div>`;
+  const whole = sis.length && sis.every(i => lowered.includes(sentences[i].en.toLowerCase().slice(0, -1)));
+  if (sis.length) h += `<div class="card"><div class="lbl">${whole ? "Переклад" : "Переклад речення"}</div>${sis.map(i => `<div>${esc(sentences[i].ua)}</div>`).join("")}</div>`;
+  if (phr.length) h += `<div class="card"><div class="lbl">Словосполучення</div>${phr.map(p => `<div class="phr"><b>${esc(p.en)}</b><span>${esc(p.ua)}</span></div>`).join("")}</div>`;
+  h += `<div><div class="lbl">Слово за словом</div><div class="glist">${words.filter(w => !["the", "a", "an"].includes(w)).map(w => { const e = lookup(w); return `<div><b>${esc(w)}</b><span>${esc(e ? e[0] : "—")}</span></div>`; }).join("")}</div></div>`;
+  h += `<div class="btns">${sis.length ? `<button class="btn primary" data-from="${sis[0]}:0">${SVG.play} Читати звідси</button>` : ""}<a class="btn" href="${gtLink(text)}" target="_blank" rel="noopener">Google Перекладач</a></div>`;
+  openSheet(h);
+  onClose = () => { try { getSelection().removeAllRanges(); } catch (e) {} };
+}
+
+/* ---------- saved words sheet + quiz ---------- */
+function openSaved() {
+  let h = `<div class="head"><div class="word" style="font-size:24px">Мої слова</div></div>`;
+  if (!saved.length) h += `<p class="empty">Тут з'являться слова, які ти запам'ятаєш. Торкнись слова в тексті й натисни «Запам'ятати».</p>`;
+  else {
+    h += `<div class="saved-list">${saved.map(x => `<div class="saved-row"><button class="sayw" data-say="${esc(x.w)}" aria-label="Вимовити">${SVG.speak}</button><div style="min-width:0"><b>${esc(x.w)}</b><small>${esc(x.tr || "")}</small></div><button class="x" data-del="${esc(x.w)}" aria-label="Прибрати">×</button></div>`).join("")}</div>`;
+    h += `<div class="btns"><button class="btn primary" id="quizBtn">Перевір себе</button></div>`;
+  }
+  openSheet(h);
+}
+$("#openSaved").addEventListener("click", openSaved);
+function startQuiz() {
+  const list = saved.slice().sort(() => Math.random() - .5);
+  let i = 0;
+  const step = () => {
+    if (i >= list.length) { openSheet(`<div class="quiz"><div class="q">Готово!</div><p>Ти повторила ${list.length} ${list.length === 1 ? "слово" : "слів"}.</p><div class="btns" style="justify-content:center"><button class="btn primary" id="quizBtn">Ще раз</button><button class="btn" id="closeSheet">Закрити</button></div></div>`); return; }
+    const x = list[i];
+    openSheet(`<div class="quiz"><div class="lbl">${i + 1} / ${list.length} · Що це означає?</div><div class="q">${esc(x.w)}</div><div class="a" id="qa"></div><div class="btns" style="justify-content:center"><button class="btn" data-say="${esc(x.w)}">${SVG.speak} Слухати</button><button class="btn primary" id="qShow">Показати переклад</button></div></div>`, el => {
+      sayOnce(x.w);
+      $("#qShow", el).addEventListener("click", ev => {
+        if (!$("#qa", el).textContent) { $("#qa", el).textContent = x.tr; ev.currentTarget.textContent = "Далі"; }
+        else { i++; step(); }
+      });
+    });
+  };
+  step();
+}
+
+/* ---------- settings sheet ---------- */
+$("#openSettings").addEventListener("click", () => {
+  pickVoices();
+  const opts = voices.map(v => `<option value="${esc(v.name)}"${voice && v.name === voice.name ? " selected" : ""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("");
+  openSheet(`<div class="head"><div class="word" style="font-size:24px">Голос і швидкість</div></div>
+    ${canSpeak ? `<label class="row" for="voiceSel">Англійський голос (найкраще — британський, en-GB)<select id="voiceSel">${opts || "<option>Голоси ще завантажуються…</option>"}</select></label>` : `<p class="empty">Цей браузер не підтримує озвучення.</p>`}
+    <label class="row" for="rateSel">Швидкість читання<select id="rateSel">${RATES.map(r => `<option value="${r}"${r === rate ? " selected" : ""}>${r}× ${r <= .7 ? "— повільно" : r === 1 ? "— звичайна" : ""}</option>`).join("")}</select></label>
+    <div class="btns"><button class="btn" data-say="The Vikings were great explorers.">${SVG.speak} Прослухати голос</button><button class="btn" id="resetPos">Почати урок спочатку</button></div>
+    <p class="hint">Порада: на iPhone кращі голоси можна завантажити в Параметри → Універсальний доступ → Усний контент → Голоси → English (UK).</p>`, el => {
+    const vs = $("#voiceSel", el);
+    vs && vs.addEventListener("change", () => { voice = voices.find(v => v.name === vs.value) || voice; store.set("voice", voice && voice.name); });
+    $("#rateSel", el).addEventListener("change", ev => { rate = +ev.target.value; $("#speed").textContent = rate + "×"; store.set("rate", rate); });
+    $("#resetPos", el).addEventListener("click", () => { pause(); cur = 0; curWord = 0; store.set("pos", 0); markDone(0, 0); clearMarks(); closeSheet(); scrollTo({ top: 0 }); });
+  });
+});
+
+/* ---------- start ---------- */
+applyMode(); applySub(); refreshSaved(); setPlayingUI();
+if (cur > 0) { showSentence(cur, 0); $("#subtitle").textContent = "Продовжимо з того місця, де зупинилися. Натисни ▶."; }
+})();
+</script>
