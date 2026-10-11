@@ -260,7 +260,7 @@ const DOW_FULL = ['понеділок','вівторок','середа','чет
 const DOW_ACC = ['понеділок','вівторок','середу','четвер','пʼятницю','суботу','неділю'];
 const DOW_SHORT = ['Пн','Вт','Ср','Чт','Пт','Сб','Нд'];
 const DEFAULT_PROFILES = {
-  donia: { name: 'Донька', emoji: '🦊', order: 1,
+  donia: { name: 'Кіра', emoji: '🦊', order: 0,
     habits: [
       { id: 'h1', name: 'Зарядка зранку', icon: '🤸' },
       { id: 'h2', name: 'Читання 20 хвилин', icon: '📚' },
@@ -273,7 +273,7 @@ const DEFAULT_PROFILES = {
       { id: 's3', name: 'Українська література' }, { id: 's4', name: 'Англійська мова' },
       { id: 's5', name: 'Історія' }, { id: 's6', name: 'Природознавство' },
     ] },
-  mama: { name: 'Мама', emoji: '🌻', order: 0,
+  mama: { name: 'Мама', emoji: '🌻', order: 1,
     habits: [
       { id: 'h1', name: 'Випити 2 л води', icon: '💧' },
       { id: 'h2', name: 'Прогулянка', icon: '🚶‍♀️' },
@@ -578,7 +578,7 @@ function banners() {
 }
 
 function viewNoProfiles() {
-  return `<div class="card empty"><b>Ще немає профілів</b>Створи профілі для себе й доньки, щоб почати вести щоденник.<div style="margin-top:14px"><button class="btn" data-act="create-defaults">Створити «Мама» і «Донька»</button></div></div>`;
+  return `<div class="card empty"><b>Ще немає профілів</b>Створи профілі для себе й доньки, щоб почати вести щоденник.<div style="margin-top:14px"><button class="btn" data-act="create-defaults">Створити «Кіра» і «Мама»</button></div></div>`;
 }
 
 function dateLabel(d) {
@@ -927,7 +927,7 @@ document.addEventListener('click', e => {
     case 'open-day': S.date = el.dataset.d; setView('day'); return;
     case 'create-defaults':
       Object.entries(DEFAULT_PROFILES).forEach(([k, v]) => saveProfile(k, JSON.parse(JSON.stringify(v))));
-      S.pid = 'mama'; Store.watchDays('mama'); break;
+      S.pid = 'donia'; Store.watchDays('donia'); break;
     case 'add-profile': {
       const k = uid('p'), n = sortedPids().length;
       saveProfile(k, { name: 'Новий профіль', emoji: '🙂', order: n, habits: [], subjects: [] });

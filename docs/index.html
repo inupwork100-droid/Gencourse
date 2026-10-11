@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f2f4fa">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Зростання">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-size:14px} img{max-width:100%} [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<title>Щоденник зростання</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: one narrow phone column, sticky profile header, cards per section, fixed bottom tab bar. */
+:root {
+  --bg: #f2f4fa;
+  --surface: #ffffff;
+  --surface-2: #f7f8fc;
+  --ink: #1a2140;
+  --muted: #646d8c;
+  --line: #e0e4f0;
+  --accent: #3550d6;
+  --accent-ink: #ffffff;
+  --accent-soft: #e6eaff;
+  --m1: #d9455f;
+  --m2: #ef7d2d;
+  --m3: #e9b024;
+  --m4: #84bf3c;
+  --m5: #2aa876;
+  --empty: #d5dae8;
+  --good: #1f9a6a;
+  --bad: #d23f58;
+  --shadow: 0 1px 2px rgba(26,33,64,.06), 0 6px 20px rgba(26,33,64,.06);
+  --f-display: "Unbounded", "Manrope", system-ui, sans-serif;
+  --f-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r: 18px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1222; --surface: #171c31; --surface-2: #1d2340; --ink: #e8ebf8; --muted: #9ba3c2;
+    --line: #2a3152; --accent: #8396ff; --accent-ink: #0e1222; --accent-soft: #252d58;
+    --m1: #f0607a; --m2: #f59248; --m3: #f2c341; --m4: #9dd457; --m5: #3cc28d; --empty: #2e3556;
+    --good: #45c992; --bad: #f2667f; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1222; --surface: #171c31; --surface-2: #1d2340; --ink: #e8ebf8; --muted: #9ba3c2;
+  --line: #2a3152; --accent: #8396ff; --accent-ink: #0e1222; --accent-soft: #252d58;
+  --m1: #f0607a; --m2: #f59248; --m3: #f2c341; --m4: #9dd457; --m5: #3cc28d; --empty: #2e3556;
+  --good: #45c992; --bad: #f2667f; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.45; -webkit-tap-highlight-color: transparent; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 560px; margin: 0 auto; padding-inline: 16px; padding-block: 0 110px; }
+
+/* header */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 12px 10px; display: flex; align-items: center; gap: 10px; }
+.brand { font-family: var(--f-display); font-weight: 700; font-size: 15px; letter-spacing: -.01em; margin-right: auto; white-space: nowrap; }
+.profiles { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.pchip { display: flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 12px 5px 6px; font-weight: 700; font-size: 14px; white-space: nowrap; }
+.pchip .av { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); font-size: 15px; }
+.pchip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.pchip[aria-pressed="true"] .av { background: rgba(255,255,255,.25); }
+
+.banner { background: var(--accent-soft); border-radius: 14px; padding: 10px 12px; font-size: 13px; display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
+.banner p { margin: 0; flex: 1; min-width: 0; }
+
+/* cards */
+.stack { display: grid; gap: 14px; }
+.card { background: var(--surface); border-radius: var(--r); padding: 16px; box-shadow: var(--shadow); min-width: 0; }
+.card h2 { font-family: var(--f-display); font-weight: 500; font-size: 15px; margin: 0; letter-spacing: -.01em; text-wrap: balance; }
+.card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+.meta { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.eyebrow { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* date nav */
+.datenav { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.datenav .label { flex: 1; text-align: center; min-width: 0; }
+.datenav .label b { display: block; font-family: var(--f-display); font-weight: 700; font-size: 19px; letter-spacing: -.02em; text-wrap: balance; }
+.datenav .label span { color: var(--muted); font-size: 13px; }
+.iconbtn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; flex: none; }
+.iconbtn:disabled { opacity: .35; cursor: default; }
+.iconbtn svg { width: 18px; height: 18px; }
+.linkbtn { border: 0; background: none; color: var(--accent); font-weight: 700; font-size: 13px; padding: 4px 6px; }
+
+/* mood */
+.moods { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.mood { border: 0; background: none; display: grid; justify-items: center; gap: 4px; padding: 4px 0; border-radius: 14px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.mood .face { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; font-size: 26px; background: var(--surface-2); border: 2px solid transparent; transition: transform .15s; }
+.mood[aria-pressed="true"] { color: var(--ink); }
+.mood[aria-pressed="true"] .face { border-color: var(--mc); background: color-mix(in srgb, var(--mc) 22%, var(--surface)); transform: scale(1.08); }
+textarea.note { width: 100%; margin-top: 12px; border: 1px solid var(--line); background: var(--surface-2); border-radius: 12px; padding: 10px 12px; resize: vertical; min-height: 64px; }
+
+/* habits */
+.habits { display: grid; gap: 8px; }
+.habit { display: flex; align-items: center; gap: 12px; width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 10px 12px; text-align: left; }
+.habit .ic { font-size: 22px; width: 28px; text-align: center; }
+.habit .nm { flex: 1; font-weight: 600; min-width: 0; }
+.habit .chk { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; color: transparent; flex: none; }
+.habit[aria-pressed="true"] { background: color-mix(in srgb, var(--good) 10%, var(--surface)); border-color: color-mix(in srgb, var(--good) 40%, var(--line)); }
+.habit[aria-pressed="true"] .chk { background: var(--good); border-color: var(--good); color: #fff; }
+.habit[aria-pressed="true"] .nm { text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--good) 60%, transparent); }
+.progress { height: 8px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.progress i { display: block; height: 100%; border-radius: 99px; background: var(--good); }
+
+/* homework */
+.hw { display: grid; gap: 10px; }
+.hwrow { display: grid; gap: 6px; }
+.hwrow .nm { font-weight: 600; font-size: 14px; }
+.seg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; background: var(--surface-2); padding: 3px; border-radius: 12px; }
+.seg button { border: 0; background: none; border-radius: 9px; padding: 7px 2px; font-size: 12px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--sc, var(--ink)); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+
+/* grades */
+.gradelist { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.gpill { display: inline-flex; align-items: center; gap: 8px; border-radius: 12px; padding: 6px 6px 6px 10px; background: var(--surface-2); font-size: 13px; font-weight: 600; }
+.gpill .gv { min-width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-weight: 800; color: #fff; background: var(--gc); font-variant-numeric: tabular-nums; }
+.gpill .x { border: 0; background: none; color: var(--muted); padding: 2px 6px; font-size: 16px; line-height: 1; }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 12px; font-weight: 700; color: var(--muted); }
+select, input[type="text"] { width: 100%; border: 1px solid var(--line); background: var(--surface-2); border-radius: 12px; padding: 10px 12px; }
+.gradegrid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+.gradegrid button { border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 9px 0; font-weight: 800; font-variant-numeric: tabular-nums; }
+.gradegrid button:hover { border-color: var(--gc); }
+.gradegrid button:active { background: var(--gc); color: #fff; }
+.scale-note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+/* tabs (segmented) */
+.tabs { display: flex; gap: 4px; background: var(--surface); padding: 4px; border-radius: 14px; box-shadow: var(--shadow); }
+.tabs button { flex: 1; border: 0; background: none; padding: 9px 4px; border-radius: 10px; font-weight: 700; font-size: 13px; color: var(--muted); }
+.tabs button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 700; white-space: nowrap; }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+
+/* stat tiles */
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.tile { background: var(--surface); border-radius: 16px; padding: 12px 14px; box-shadow: var(--shadow); min-width: 0; }
+.tile .v { font-family: var(--f-display); font-weight: 700; font-size: 24px; letter-spacing: -.02em; font-variant-numeric: tabular-nums; display: flex; align-items: baseline; gap: 6px; }
+.tile .v small { font-family: var(--f-body); font-size: 13px; font-weight: 700; }
+.tile .k { font-size: 12px; font-weight: 700; color: var(--muted); }
+.up { color: var(--good); } .down { color: var(--bad); } .flat { color: var(--muted); }
+
+/* charts */
+svg.chart { width: 100%; height: auto; display: block; overflow: visible; }
+svg.chart text { fill: var(--muted); font-family: var(--f-body); font-size: 10px; font-variant-numeric: tabular-nums; }
+.insight { margin: 10px 0 0; font-size: 14px; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: var(--muted); margin-top: 8px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+
+/* rows (habit stats, subject stats) */
+.rows { display: grid; gap: 12px; }
+.srow { display: grid; grid-template-columns: 28px 1fr auto; gap: 4px 10px; align-items: center; }
+.srow .ic { font-size: 20px; grid-row: span 2; text-align: center; }
+.srow .nm { font-weight: 700; font-size: 14px; min-width: 0; overflow-wrap: anywhere; }
+.srow .num { font-weight: 800; font-variant-numeric: tabular-nums; font-size: 14px; text-align: right; }
+.srow .bar { grid-column: 2; }
+.srow .tr { font-size: 12px; font-weight: 800; text-align: right; white-space: nowrap; }
+.dots { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 4px; }
+.dots i { width: 9px; height: 9px; border-radius: 3px; background: var(--empty); }
+.dots i.on { background: var(--good); }
+.dots i.na { background: transparent; border: 1px dashed var(--empty); }
+.subj { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); width: 100%; border-left: 0; border-right: 0; border-bottom: 0; background: none; text-align: left; }
+.subj:first-child { border-top: 0; }
+.subj .nm { font-weight: 700; font-size: 14px; min-width: 0; }
+.subj .nm small { display: block; color: var(--muted); font-weight: 500; font-size: 12px; }
+.avgbadge { min-width: 44px; padding: 5px 8px; border-radius: 10px; text-align: center; font-weight: 800; color: #fff; background: var(--gc); font-variant-numeric: tabular-nums; }
+.subj[aria-pressed="true"] { background: var(--surface-2); margin-inline: -8px; padding-inline: 8px; width: calc(100% + 16px); border-radius: 12px; }
+
+/* stacked bar */
+.stackbar { display: flex; height: 14px; border-radius: 99px; overflow: hidden; background: var(--surface-2); }
+.stackbar i { display: block; height: 100%; }
+
+/* calendar */
+.cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal .dh { text-align: center; font-size: 11px; font-weight: 800; color: var(--muted); padding-bottom: 4px; }
+.cal button { aspect-ratio: 1; max-width: 100%; border: 0; border-radius: 12px; background: var(--surface-2); display: grid; place-items: center; align-content: center; gap: 1px; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; position: relative; padding: 0; }
+.cal button .e { font-size: 16px; line-height: 1; }
+.cal button.has { background: color-mix(in srgb, var(--mc) 28%, var(--surface)); }
+.cal button.today { outline: 2px solid var(--accent); outline-offset: -2px; }
+.cal button:disabled { opacity: .35; cursor: default; }
+.cal button .hb { position: absolute; left: 22%; right: 22%; bottom: 5px; height: 3px; border-radius: 2px; background: var(--empty); overflow: hidden; }
+.cal button .hb i { display: block; height: 100%; background: var(--good); }
+
+/* settings */
+.list { display: grid; gap: 8px; }
+.editrow { display: flex; gap: 8px; align-items: center; }
+.editrow input.emo { width: 52px; flex: none; text-align: center; font-size: 18px; padding: 8px 4px; }
+.editrow input.nm { flex: 1; min-width: 0; }
+.btn { border: 0; border-radius: 12px; padding: 10px 14px; font-weight: 800; background: var(--accent); color: var(--accent-ink); white-space: nowrap; }
+.btn.ghost { background: var(--surface-2); color: var(--ink); }
+.btn.danger { background: color-mix(in srgb, var(--bad) 14%, var(--surface)); color: var(--bad); }
+.btn:disabled { opacity: .5; cursor: default; }
+.del { border: 0; background: var(--surface-2); color: var(--muted); border-radius: 10px; width: 38px; height: 38px; flex: none; font-size: 16px; }
+.del.armed { background: var(--bad); color: #fff; width: auto; padding: 0 10px; font-size: 13px; font-weight: 800; }
+.row-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+textarea.json { width: 100%; min-height: 110px; border: 1px solid var(--line); background: var(--surface-2); border-radius: 12px; padding: 10px; font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
+.help { font-size: 13px; color: var(--muted); margin: 0; }
+
+.empty { text-align: center; color: var(--muted); padding: 18px 8px; font-size: 14px; }
+.empty b { display: block; color: var(--ink); font-family: var(--f-display); font-weight: 500; font-size: 16px; margin-bottom: 4px; }
+
+/* bottom nav */
+.nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)); background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); }
+.nav div { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.nav button { border: 0; background: none; display: grid; justify-items: center; gap: 2px; padding: 6px 0; border-radius: 12px; font-size: 11px; font-weight: 700; color: var(--muted); }
+.nav button svg { width: 22px; height: 22px; }
+.nav button[aria-current="page"] { color: var(--accent); background: var(--accent-soft); }
+
+.toast { position: fixed; left: 50%; bottom: calc(86px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; z-index: 20; max-width: calc(100% - 32px); text-align: center; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Щоденник</div>
+    <div class="profiles" id="profiles"></div>
+  </header>
+  <main id="main">
+    <div class="card empty"><b>Завантаження…</b>Відкриваю щоденник</div>
+  </main>
+</div>
+
+<nav class="nav" aria-label="Розділи">
+  <div>
+    <button data-view="day" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>
+      День</button>
+    <button data-view="stats">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+      Статистика</button>
+    <button data-view="cal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></svg>
+      Календар</button>
+    <button data-view="more">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      Налаштування</button>
+  </div>
+</nav>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------- constants ---------- */
+const MOODS = {
+  5: { label: 'супер', e: '😄', c: 'var(--m5)' },
+  4: { label: 'добре', e: '🙂', c: 'var(--m4)' },
+  3: { label: 'так собі', e: '😐', c: 'var(--m3)' },
+  2: { label: 'погано', e: '🙁', c: 'var(--m2)' },
+  1: { label: 'жахливо', e: '😣', c: 'var(--m1)' },
+};
+const HW = [
+  { k: 'done', label: 'Зроблено', c: 'var(--good)' },
+  { k: 'part', label: 'Частково', c: 'var(--m3)' },
+  { k: 'miss', label: 'Не зроблено', c: 'var(--bad)' },
+  { k: 'none', label: 'Не задали', c: 'var(--muted)' },
+];
+const MONTH_NOM = ['січень','лютий','березень','квітень','травень','червень','липень','серпень','вересень','жовтень','листопад','грудень'];
+const MONTH_GEN = ['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
+const DOW_FULL = ['понеділок','вівторок','середа','четвер','пʼятниця','субота','неділя'];
+const DOW_ACC = ['понеділок','вівторок','середу','четвер','пʼятницю','суботу','неділю'];
+const DOW_SHORT = ['Пн','Вт','Ср','Чт','Пт','Сб','Нд'];
+const DEFAULT_PROFILES = {
+  donia: { name: 'Кіра', emoji: '🦊', order: 0,
+    habits: [
+      { id: 'h1', name: 'Зарядка зранку', icon: '🤸' },
+      { id: 'h2', name: 'Читання 20 хвилин', icon: '📚' },
+      { id: 'h3', name: 'Прибрати в кімнаті', icon: '🧹' },
+      { id: 'h4', name: 'Почистити зуби двічі', icon: '🪥' },
+      { id: 'h5', name: 'Без телефону до уроків', icon: '📵' },
+    ],
+    subjects: [
+      { id: 's1', name: 'Математика' }, { id: 's2', name: 'Українська мова' },
+      { id: 's3', name: 'Українська література' }, { id: 's4', name: 'Англійська мова' },
+      { id: 's5', name: 'Історія' }, { id: 's6', name: 'Природознавство' },
+    ] },
+  mama: { name: 'Мама', emoji: '🌻', order: 1,
+    habits: [
+      { id: 'h1', name: 'Випити 2 л води', icon: '💧' },
+      { id: 'h2', name: 'Прогулянка', icon: '🚶‍♀️' },
+      { id: 'h3', name: 'Читання', icon: '📖' },
+      { id: 'h4', name: 'Лягти до 23:00', icon: '🌙' },
+    ],
+    subjects: [] },
+};
+
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const pad = n => String(n).padStart(2, '0');
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const parse = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (s, n) => { const d = parse(s); d.setDate(d.getDate() + n); return iso(d); };
+const today = () => iso(new Date());
+const dow = s => (parse(s).getDay() + 6) % 7;
+const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const fmt1 = n => (Math.round(n * 10) / 10).toLocaleString('uk-UA', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const gradeColor = v => v >= 10 ? 'var(--m5)' : v >= 7 ? 'var(--m4)' : v >= 4 ? 'var(--m2)' : 'var(--m1)';
+const gradeBand = v => v >= 10 ? 'високий' : v >= 7 ? 'достатній' : v >= 4 ? 'середній' : 'початковий';
+const moodColor = v => MOODS[Math.max(1, Math.min(5, Math.round(v)))].c;
+const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* storage blocked */ } };
+const emptyDay = () => ({ mood: null, note: '', habits: {}, hw: {}, grades: [] });
+const isEmptyDay = d => !d.mood && !(d.note || '').trim() && !Object.values(d.habits || {}).some(Boolean)
+  && !Object.keys(d.hw || {}).length && !(d.grades || []).length;
+
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 3200);
+}
+
+/* ---------- state ---------- */
+const prefs = (() => { try { return JSON.parse(lsGet('shchodennyk-prefs')) || {}; } catch (e) { return {}; } })();
+const S = {
+  profiles: {}, profilesReady: false,
+  days: {},            // pid -> { date: data }
+  pid: prefs.pid || null,
+  view: prefs.view || 'day',
+  date: today(),
+  period: prefs.period || 'week',
+  anchor: today(),
+  calMonth: today().slice(0, 7),
+  subject: null,
+  gradeSubject: null,
+  readOnly: false,
+  armed: null,
+  showJson: false,
+};
+const savePrefs = () => lsSet('shchodennyk-prefs', JSON.stringify({ pid: S.pid, view: S.view, period: S.period }));
+
+/* ---------- storage: claude db when available, otherwise this browser ---------- */
+const LS_DATA = 'shchodennyk-data-v1';
+const Store = {
+  mode: 'loading', db: null, unsubDays: null, local: null,
+  pending: new Map(), writing: new Set(), timer: null,
+
+  async init() {
+    let db = null;
+    try { db = window.claude && window.claude.use ? await window.claude.use('db') : null; } catch (e) { db = null; }
+    if (db) {
+      this.mode = 'db'; this.db = db;
+      db.collection('profiles').onSnapshot(snap => {
+        const p = {};
+        snap.docs.forEach(d => { p[d.id] = d.data(); });
+        for (const [path, data] of this.pending) {
+          const m = path.match(/^profiles\/([^/]+)$/);
+          if (m) { if (data) p[m[1]] = data; else delete p[m[1]]; }
+        }
+        onProfiles(p, !snap.metadata.fromCache || snap.size > 0);
+      }, err => toast('Не вдалося завантажити профілі: ' + err.message));
+    } else {
+      this.mode = 'local';
+      let data = null;
+      try { data = JSON.parse(lsGet(LS_DATA)); } catch (e) { data = null; }
+      this.local = data && data.profiles ? data : { profiles: JSON.parse(JSON.stringify(DEFAULT_PROFILES)), days: {} };
+      this.persistLocal();
+      onProfiles(this.local.profiles, true);
+    }
+  },
+  persistLocal() { lsSet(LS_DATA, JSON.stringify(this.local)); },
+
+  watchDays(pid) {
+    if (this.unsubDays) { this.unsubDays(); this.unsubDays = null; }
+    if (!pid) return;
+    if (this.mode === 'db') {
+      this.unsubDays = this.db.collection(`profiles/${pid}/days`).onSnapshot(snap => {
+        const days = {};
+        snap.docs.forEach(d => { days[d.id] = d.data(); });
+        const prefix = `profiles/${pid}/days/`;
+        for (const [path, data] of this.pending) {
+          if (path.startsWith(prefix)) { const k = path.slice(prefix.length); if (data) days[k] = data; else delete days[k]; }
+        }
+        onDays(pid, days);
+      }, err => toast('Не вдалося завантажити записи: ' + err.message));
+    } else {
+      onDays(pid, this.local.days[pid] || {});
+    }
+  },
+
+  write(path, data) {
+    if (this.mode === 'local') {
+      const parts = path.split('/');
+      if (parts.length === 2) { if (data) this.local.profiles[parts[1]] = data; else delete this.local.profiles[parts[1]]; }
+      else {
+        const pid = parts[1], date = parts[3];
+        this.local.days[pid] = this.local.days[pid] || {};
+        if (data) this.local.days[pid][date] = data; else delete this.local.days[pid][date];
+      }
+      this.persistLocal();
+      return;
+    }
+    this.pending.set(path, data);
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => this.flush(), 450);
+  },
+  async flush() {
+    for (const [path, data] of [...this.pending]) {
+      if (this.writing.has(path)) continue;
+      this.pending.delete(path);
+      this.writing.add(path);
+      try {
+        const ref = this.db.doc(path);
+        if (data) await ref.set(data); else await ref.delete();
+      } catch (e) {
+        if (e && e.code === 'unavailable') {
+          if (!this.pending.has(path)) this.pending.set(path, data);
+        } else if (e && e.code === 'invalid_argument') {
+          S.readOnly = true; render();
+          toast('Немає дозволу зберігати. Попроси власника дати тобі доступ «Contributor».');
+        } else if (e && e.code === 'quota_exceeded') {
+          toast('Сховище заповнене: ' + e.message);
+        } else {
+          toast('Не вдалося зберегти: ' + (e && e.message || 'помилка'));
+        }
+      } finally {
+        this.writing.delete(path);
+      }
+    }
+    if (this.pending.size) { clearTimeout(this.timer); this.timer = setTimeout(() => this.flush(), 800 + Math.random() * 600); }
+  },
+  async allDays(pid) {
+    if (this.mode === 'local') return this.local.days[pid] || {};
+    const snap = await this.db.collection(`profiles/${pid}/days`).get();
+    const out = {}; snap.docs.forEach(d => { out[d.id] = d.data(); }); return out;
+  },
+};
+document.addEventListener('visibilitychange', () => { if (document.hidden && Store.mode === 'db' && Store.pending.size) Store.flush(); });
+
+function onProfiles(p, definitive) {
+  S.profiles = p;
+  S.profilesReady = definitive;
+  const ids = sortedPids();
+  if (!S.pid || !p[S.pid]) {
+    const next = ids[0] || null;
+    if (next !== S.pid) { S.pid = next; Store.watchDays(S.pid); }
+  } else if (!Store.unsubDays && Store.mode === 'db') {
+    Store.watchDays(S.pid);
+  } else if (Store.mode === 'local' && !S.days[S.pid]) {
+    Store.watchDays(S.pid);
+  }
+  render();
+}
+function onDays(pid, days) {
+  S.days[pid] = days;
+  if (pid === S.pid) render();
+}
+const sortedPids = () => Object.keys(S.profiles).sort((a, b) => (S.profiles[a].order ?? 9) - (S.profiles[b].order ?? 9) || a.localeCompare(b));
+const prof = () => S.profiles[S.pid];
+const daysOf = () => S.days[S.pid] || {};
+const getDay = date => Object.assign(emptyDay(), JSON.parse(JSON.stringify(daysOf()[date] || {})));
+
+function saveDay(date, day) {
+  if (S.readOnly) { toast('Режим перегляду: змінювати записи не можна.'); return; }
+  delete day.example;
+  const days = S.days[S.pid] = Object.assign({}, daysOf());
+  if (isEmptyDay(day)) { delete days[date]; Store.write(`profiles/${S.pid}/days/${date}`, null); }
+  else { days[date] = day; Store.write(`profiles/${S.pid}/days/${date}`, day); }
+}
+function saveProfile(pid, data) {
+  if (S.readOnly) { toast('Режим перегляду: змінювати не можна.'); return; }
+  S.profiles = Object.assign({}, S.profiles);
+  if (data) S.profiles[pid] = data; else delete S.profiles[pid];
+  Store.write(`profiles/${pid}`, data);
+}
+
+/* ---------- periods ---------- */
+function range(period, anchor) {
+  const a = parse(anchor), y = a.getFullYear(), m = a.getMonth();
+  let start, end, label;
+  if (period === 'week') {
+    start = addDays(anchor, -dow(anchor)); end = addDays(start, 6);
+    const s = parse(start), e = parse(end);
+    label = s.getMonth() === e.getMonth()
+      ? `${s.getDate()}–${e.getDate()} ${MONTH_GEN[e.getMonth()]}`
+      : `${s.getDate()} ${MONTH_GEN[s.getMonth()]} – ${e.getDate()} ${MONTH_GEN[e.getMonth()]}`;
+  } else if (period === 'month') {
+    start = iso(new Date(y, m, 1)); end = iso(new Date(y, m + 1, 0));
+    label = `${cap(MONTH_NOM[m])} ${y}`;
+  } else {
+    start = iso(new Date(y, m - 2, 1)); end = iso(new Date(y, m + 1, 0));
+    const s = parse(start);
+    label = `${cap(MONTH_NOM[s.getMonth()])} – ${MONTH_NOM[m]} ${y}`;
+  }
+  return { start, end, label };
+}
+function shiftAnchor(period, anchor, dir) {
+  if (period === 'week') return addDays(anchor, 7 * dir);
+  const a = parse(anchor), step = period === 'month' ? 1 : 3;
+  return iso(new Date(a.getFullYear(), a.getMonth() + step * dir, 1));
+}
+function dates(start, end) { const out = []; for (let d = start; d <= end; d = addDays(d, 1)) out.push(d); return out; }
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+/* ---------- aggregation ---------- */
+function summarize(start, end) {
+  const p = prof(), all = daysOf(), t = today();
+  const ds = dates(start, end);
+  const logged = ds.filter(d => all[d]);
+  const moods = logged.map(d => all[d].mood).filter(Boolean);
+  const habit = {};
+  (p.habits || []).forEach(h => { habit[h.id] = { done: 0 }; });
+  let habitDone = 0, habitTotal = 0;
+  logged.forEach(d => (p.habits || []).forEach(h => {
+    habitTotal++; if (all[d].habits && all[d].habits[h.id]) { habitDone++; habit[h.id].done++; }
+  }));
+  const hw = { done: 0, part: 0, miss: 0 }, hwSubj = {};
+  const grades = {};
+  (p.subjects || []).forEach(s => { hwSubj[s.id] = { done: 0, part: 0, miss: 0 }; grades[s.id] = []; });
+  logged.forEach(d => {
+    const day = all[d];
+    Object.entries(day.hw || {}).forEach(([sid, st]) => {
+      if (st in hw) { hw[st]++; if (hwSubj[sid]) hwSubj[sid][st]++; }
+    });
+    (day.grades || []).forEach(g => { if (grades[g.s]) grades[g.s].push({ d, v: g.v }); });
+  });
+  const hwTotal = hw.done + hw.part + hw.miss;
+  const allGrades = Object.values(grades).flat();
+  return {
+    ds, logged, past: ds.filter(d => d <= t).length,
+    moodAvg: moods.length ? moods.reduce((a, b) => a + b, 0) / moods.length : null,
+    moodCount: moods.length,
+    habit, habitPct: habitTotal ? habitDone / habitTotal : null,
+    hw, hwSubj, hwTotal, hwPct: hwTotal ? (hw.done + hw.part * 0.5) / hwTotal : null,
+    grades, gradeAvg: allGrades.length ? allGrades.reduce((a, g) => a + g.v, 0) / allGrades.length : null,
+    gradeCount: allGrades.length,
+  };
+}
+const avg = arr => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null;
+function trend(cur, prev, unit, digits) {
+  if (cur == null || prev == null) return '<span class="flat">—</span>';
+  const diff = cur - prev;
+  const shown = unit === '%' ? Math.round(diff * 100) : Math.round(diff * 10) / 10;
+  if (Math.abs(shown) < (unit === '%' ? 1 : 0.1)) return '<span class="flat">≈ так само</span>';
+  const cls = diff > 0 ? 'up' : 'down', arrow = diff > 0 ? '↑' : '↓';
+  const val = unit === '%' ? `${Math.abs(shown)}%` : fmt1(Math.abs(shown));
+  return `<span class="${cls}">${arrow} ${val}</span>`;
+}
+function streak(date) {
+  const all = daysOf(); let n = 0, d = all[date] ? date : addDays(date, -1);
+  while (all[d]) { n++; d = addDays(d, -1); }
+  return n;
+}
+
+/* ---------- views ---------- */
+const ICON_L = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
+const ICON_R = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+
+function render() {
+  const active = document.activeElement;
+  if (active && active.closest && active.closest('#main') && active.matches('input[type="text"], textarea')) { S.deferred = true; return; }
+  S.deferred = false;
+  renderProfiles();
+  document.querySelectorAll('.nav button').forEach(b => {
+    if (b.dataset.view === S.view) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
+  const main = $('#main');
+  if (!S.pid || !prof()) {
+    main.innerHTML = S.profilesReady ? viewNoProfiles() : '<div class="card empty"><b>Завантаження…</b>Відкриваю щоденник</div>';
+    return;
+  }
+  const v = { day: viewDay, stats: viewStats, cal: viewCal, more: viewMore }[S.view] || viewDay;
+  main.innerHTML = banners() + v();
+}
+
+function renderProfiles() {
+  $('#profiles').innerHTML = sortedPids().map(id => {
+    const p = S.profiles[id];
+    return `<button class="pchip" data-act="pick-profile" data-id="${esc(id)}" aria-pressed="${id === S.pid}"><span class="av">${esc(p.emoji || '🙂')}</span>${esc(p.name)}</button>`;
+  }).join('');
+}
+
+function banners() {
+  let out = '';
+  const ex = Object.values(daysOf()).some(d => d.example);
+  if (ex) out += `<div class="banner"><p>Тут поки приклад даних за кілька тижнів, щоб було видно графіки. Коли почнете записувати свої дні, приберіть його.</p><button class="btn ghost" data-act="clear-examples">${S.armed === 'examples' ? 'Точно прибрати?' : 'Прибрати приклад'}</button></div>`;
+  if (S.readOnly) out += `<div class="banner"><p>Режим перегляду: записи видно, але змінювати їх не можна.</p></div>`;
+  return out;
+}
+
+function viewNoProfiles() {
+  return `<div class="card empty"><b>Ще немає профілів</b>Створи профілі для себе й доньки, щоб почати вести щоденник.<div style="margin-top:14px"><button class="btn" data-act="create-defaults">Створити «Кіра» і «Мама»</button></div></div>`;
+}
+
+function dateLabel(d) {
+  const x = parse(d), t = today();
+  const rel = d === t ? 'Сьогодні' : d === addDays(t, -1) ? 'Вчора' : cap(DOW_FULL[dow(d)]);
+  return { big: rel, small: `${d === t || d === addDays(t, -1) ? DOW_FULL[dow(d)] + ', ' : ''}${x.getDate()} ${MONTH_GEN[x.getMonth()]} ${x.getFullYear()}` };
+}
+
+function viewDay() {
+  const p = prof(), d = S.date, day = getDay(d), lab = dateLabel(d), t = today();
+  const habits = p.habits || [], done = habits.filter(h => day.habits[h.id]).length;
+  let html = `<div class="datenav">
+    <button class="iconbtn" data-act="day-shift" data-n="-1" aria-label="Попередній день">${ICON_L}</button>
+    <div class="label"><b>${lab.big}</b><span>${lab.small}</span>${d !== t ? ` · <button class="linkbtn" data-act="day-today">до сьогодні</button>` : ''}</div>
+    <button class="iconbtn" data-act="day-shift" data-n="1" aria-label="Наступний день" ${d >= t ? 'disabled' : ''}>${ICON_R}</button>
+  </div><div class="stack">`;
+
+  html += `<section class="card"><div class="card-head"><h2>Який був настрій?</h2>${day.mood ? `<span class="meta">${MOODS[day.mood].label}</span>` : ''}</div>
+    <div class="moods">${[5, 4, 3, 2, 1].map(v => `<button class="mood" style="--mc:${MOODS[v].c}" data-act="mood" data-v="${v}" aria-pressed="${day.mood === v}"><span class="face">${MOODS[v].e}</span>${MOODS[v].label}</button>`).join('')}</div>
+    <textarea class="note" id="note" placeholder="Що сьогодні було? Що порадувало чи засмутило?" rows="2">${esc(day.note)}</textarea>
+  </section>`;
+
+  html += `<section class="card"><div class="card-head"><h2>Звички</h2><span class="meta">${done} з ${habits.length}</span></div>`;
+  if (habits.length) {
+    html += `<div class="progress" style="margin-bottom:12px"><i style="width:${habits.length ? done / habits.length * 100 : 0}%"></i></div><div class="habits">` +
+      habits.map(h => `<button class="habit" data-act="habit" data-id="${esc(h.id)}" aria-pressed="${!!day.habits[h.id]}"><span class="ic">${esc(h.icon || '⭐')}</span><span class="nm">${esc(h.name)}</span><span class="chk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span></button>`).join('') + '</div>';
+  } else html += `<p class="help">Звичок ще немає. Додай їх у розділі «Налаштування».</p>`;
+  html += '</section>';
+
+  const subs = p.subjects || [];
+  if (subs.length) {
+    const set = subs.filter(s => day.hw[s.id] && day.hw[s.id] !== 'none').length;
+    html += `<section class="card"><div class="card-head"><h2>Домашні завдання</h2><span class="meta">${set ? `${subs.filter(s => day.hw[s.id] === 'done').length} з ${set} зроблено` : 'познач кожен предмет'}</span></div><div class="hw">` +
+      subs.map(s => `<div class="hwrow"><div class="nm">${esc(s.name)}</div><div class="seg" role="group" aria-label="${esc(s.name)}">${HW.map(o => `<button style="--sc:${o.c}" data-act="hw" data-id="${esc(s.id)}" data-k="${o.k}" aria-pressed="${day.hw[s.id] === o.k}">${o.label}</button>`).join('')}</div></div>`).join('') +
+      '</div></section>';
+
+    const sel = S.subject && subs.find(s => s.id === S.subject) ? S.subject : subs[0].id;
+    html += `<section class="card"><div class="card-head"><h2>Оцінки</h2><span class="meta">шкала 1–12</span></div>`;
+    if (day.grades.length) {
+      html += '<div class="gradelist">' + day.grades.map((g, i) => {
+        const s = subs.find(x => x.id === g.s);
+        return `<span class="gpill" style="--gc:${gradeColor(g.v)}"><span class="gv">${g.v}</span>${esc(s ? s.name : 'Предмет')}<button class="x" data-act="grade-del" data-i="${i}" aria-label="Видалити оцінку">×</button></span>`;
+      }).join('') + '</div>';
+    }
+    html += `<div class="field"><label for="gsub">Предмет</label><select id="gsub" data-act="grade-subject">${subs.map(s => `<option value="${esc(s.id)}" ${s.id === sel ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select></div>
+      <div class="gradegrid">${Array.from({ length: 12 }, (_, i) => i + 1).map(v => `<button style="--gc:${gradeColor(v)}" data-act="grade-add" data-v="${v}">${v}</button>`).join('')}</div>
+      <p class="scale-note">Натисни бал, щоб додати оцінку. 1–3 початковий · 4–6 середній · 7–9 достатній · 10–12 високий рівень</p>
+    </section>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+/* ---------- charts ---------- */
+const W = 340;
+function moodChart(ds) {
+  const all = daysOf(), H = 130, top = 8, bottom = 22, left = 4, right = 4;
+  const n = ds.length, slot = (W - left - right) / n, bw = Math.max(2, Math.min(28, slot * 0.68));
+  const ih = H - top - bottom;
+  let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Настрій по днях">`;
+  [1, 3, 5].forEach(v => { const y = top + ih - (v / 5) * ih; s += `<line x1="${left}" x2="${W - right}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-dasharray="${v === 3 ? '3 3' : '0'}" stroke-width="1"/>`; });
+  ds.forEach((d, i) => {
+    const x = left + i * slot + (slot - bw) / 2, m = all[d] && all[d].mood;
+    if (m) {
+      const h = (m / 5) * ih;
+      s += `<rect x="${x.toFixed(1)}" y="${(top + ih - h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="${Math.min(6, bw / 2).toFixed(1)}" fill="${MOODS[m].c}"><title>${d}: ${MOODS[m].label}</title></rect>`;
+    } else {
+      s += `<rect x="${x.toFixed(1)}" y="${(top + ih - 3).toFixed(1)}" width="${bw.toFixed(1)}" height="3" rx="1.5" fill="var(--empty)"/>`;
+    }
+    const lab = xLabel(ds, i);
+    if (lab) s += `<text x="${(left + i * slot + slot / 2).toFixed(1)}" y="${H - 6}" text-anchor="middle">${lab}</text>`;
+  });
+  return s + '</svg>';
+}
+function xLabel(ds, i) {
+  const n = ds.length, d = parse(ds[i]);
+  if (n <= 7) return DOW_SHORT[dow(ds[i])];
+  if (n <= 31) return (d.getDate() === 1 || d.getDate() % 5 === 0) && d.getDate() !== 30 ? d.getDate() : '';
+  return d.getDate() === 1 ? MONTH_NOM[d.getMonth()].slice(0, 3) : '';
+}
+function weekdayChart(byDow) {
+  const H = 120, top = 16, bottom = 20, ih = H - top - bottom, slot = W / 7, bw = 26;
+  const vals = byDow.map(avg);
+  const have = vals.filter(v => v != null);
+  const best = have.length > 1 ? Math.max(...have) : null, worst = have.length > 1 ? Math.min(...have) : null;
+  let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Середній настрій за днями тижня">`;
+  vals.forEach((v, i) => {
+    const x = i * slot + (slot - bw) / 2;
+    if (v != null) {
+      const h = (v / 5) * ih;
+      s += `<rect x="${x.toFixed(1)}" y="${(top + ih - h).toFixed(1)}" width="${bw}" height="${h.toFixed(1)}" rx="7" fill="${moodColor(v)}" opacity="${v === best || v === worst ? 1 : .55}"/>`;
+      s += `<text x="${(x + bw / 2).toFixed(1)}" y="${(top + ih - h - 4).toFixed(1)}" text-anchor="middle" style="font-weight:800;fill:var(--ink)">${fmt1(v)}</text>`;
+    } else {
+      s += `<rect x="${x.toFixed(1)}" y="${top + ih - 3}" width="${bw}" height="3" rx="1.5" fill="var(--empty)"/>`;
+    }
+    s += `<text x="${(x + bw / 2).toFixed(1)}" y="${H - 5}" text-anchor="middle" style="${v === best && best !== worst ? 'font-weight:800;fill:var(--good)' : v === worst && best !== worst ? 'font-weight:800;fill:var(--bad)' : ''}">${DOW_SHORT[i]}</text>`;
+  });
+  return { svg: s + '</svg>', vals, best, worst };
+}
+function gradeChart(points, ds) {
+  const H = 170, top = 10, bottom = 22, left = 22, right = 8, ih = H - top - bottom, iw = W - left - right;
+  const n = ds.length, idx = {}; ds.forEach((d, i) => { idx[d] = i; });
+  const X = i => left + (n === 1 ? iw / 2 : (i + 0.5) * (iw / n));
+  const Y = v => top + ih - ((v - 1) / 11) * ih;
+  let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Оцінки з предмета">`;
+  [[1, 3.5, 'var(--m1)'], [3.5, 6.5, 'var(--m2)'], [6.5, 9.5, 'var(--m4)'], [9.5, 12, 'var(--m5)']].forEach(([a, b, c]) => {
+    s += `<rect x="${left}" y="${Y(b).toFixed(1)}" width="${iw}" height="${(Y(a) - Y(b)).toFixed(1)}" fill="${c}" opacity=".08"/>`;
+  });
+  [1, 4, 7, 10, 12].forEach(v => { s += `<text x="${left - 6}" y="${(Y(v) + 3).toFixed(1)}" text-anchor="end">${v}</text>`; });
+  ds.forEach((d, i) => { const lab = xLabel(ds, i); if (lab) s += `<text x="${X(i).toFixed(1)}" y="${H - 6}" text-anchor="middle">${lab}</text>`; });
+  const pts = points.filter(p => idx[p.d] != null).sort((a, b) => a.d.localeCompare(b.d));
+  if (pts.length) {
+    const a = avg(pts.map(p => p.v));
+    s += `<line x1="${left}" x2="${W - right}" y1="${Y(a).toFixed(1)}" y2="${Y(a).toFixed(1)}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"/>`;
+    s += `<text x="${W - right}" y="${(Y(a) - 5).toFixed(1)}" text-anchor="end" style="fill:var(--accent);font-weight:800">середня ${fmt1(a)}</text>`;
+    if (pts.length > 1) s += `<polyline fill="none" stroke="var(--muted)" stroke-opacity=".5" stroke-width="1.5" points="${pts.map(p => `${X(idx[p.d]).toFixed(1)},${Y(p.v).toFixed(1)}`).join(' ')}"/>`;
+    pts.forEach((p, k) => {
+      const last = k === pts.length - 1;
+      s += `<circle cx="${X(idx[p.d]).toFixed(1)}" cy="${Y(p.v).toFixed(1)}" r="${last ? 6 : 4.5}" fill="${gradeColor(p.v)}" stroke="var(--surface)" stroke-width="2"><title>${p.d}: ${p.v}</title></circle>`;
+    });
+  }
+  return s + '</svg>';
+}
+
+function viewStats() {
+  const p = prof(), r = range(S.period, S.anchor);
+  const pr = range(S.period, shiftAnchor(S.period, S.anchor, -1));
+  const cur = summarize(r.start, r.end), prev = summarize(pr.start, pr.end);
+  const t = today(), all = daysOf();
+  const nextDisabled = r.end >= t;
+  const prevName = { week: 'минулим тижнем', month: 'минулим місяцем', quarter: 'попередніми 3 місяцями' }[S.period];
+
+  let html = `<div class="stack">
+    <div class="tabs" role="group" aria-label="Період">${[['week', 'Тиждень'], ['month', 'Місяць'], ['quarter', '3 місяці']].map(([k, l]) => `<button data-act="period" data-k="${k}" aria-pressed="${S.period === k}">${l}</button>`).join('')}</div>
+    <div class="datenav" style="margin:0">
+      <button class="iconbtn" data-act="period-shift" data-n="-1" aria-label="Попередній період">${ICON_L}</button>
+      <div class="label"><b>${r.label}</b><span>${cur.logged.length} ${plural(cur.logged.length, 'день', 'дні', 'днів')} із записами</span></div>
+      <button class="iconbtn" data-act="period-shift" data-n="1" aria-label="Наступний період" ${nextDisabled ? 'disabled' : ''}>${ICON_R}</button>
+    </div>`;
+
+  // tiles
+  html += `<div class="tiles">
+    <div class="tile"><div class="k">Середній настрій</div><div class="v">${cur.moodAvg != null ? `${MOODS[Math.round(cur.moodAvg)].e} ${fmt1(cur.moodAvg)}` : '—'}</div><div class="meta">${trend(cur.moodAvg, prev.moodAvg)} · з 5</div></div>
+    <div class="tile"><div class="k">Звички виконано</div><div class="v">${cur.habitPct != null ? Math.round(cur.habitPct * 100) + '%' : '—'}</div><div class="meta">${trend(cur.habitPct, prev.habitPct, '%')}</div></div>
+    ${(p.subjects || []).length ? `
+    <div class="tile"><div class="k">Домашка зроблена</div><div class="v">${cur.hwPct != null ? Math.round(cur.hwPct * 100) + '%' : '—'}</div><div class="meta">${trend(cur.hwPct, prev.hwPct, '%')}</div></div>
+    <div class="tile"><div class="k">Середня оцінка</div><div class="v">${cur.gradeAvg != null ? fmt1(cur.gradeAvg) : '—'}</div><div class="meta">${trend(cur.gradeAvg, prev.gradeAvg)} · ${cur.gradeCount} ${plural(cur.gradeCount, 'оцінка', 'оцінки', 'оцінок')}</div></div>` : `
+    <div class="tile"><div class="k">Серія записів</div><div class="v">${streak(t)}</div><div class="meta">${plural(streak(t), 'день', 'дні', 'днів')} поспіль</div></div>
+    <div class="tile"><div class="k">Днів із записами</div><div class="v">${cur.logged.length}</div><div class="meta">із ${cur.past}</div></div>`}
+  </div>
+  <p class="meta" style="margin:-4px 2px 0">Стрілки показують зміну порівняно з ${prevName}.</p>`;
+
+  // mood
+  const byDow = [[], [], [], [], [], [], []];
+  cur.logged.forEach(d => { if (all[d].mood) byDow[dow(d)].push(all[d].mood); });
+  const counts = [5, 4, 3, 2, 1].map(v => cur.logged.filter(d => all[d].mood === v).length);
+  html += `<section class="card"><div class="card-head"><h2>Настрій по днях</h2><span class="meta">${cur.moodCount ? `середній ${fmt1(cur.moodAvg)}` : ''}</span></div>
+    ${moodChart(cur.ds)}
+    <div class="legend">${[5, 4, 3, 2, 1].map((v, i) => `<span><i style="background:${MOODS[v].c}"></i>${MOODS[v].label} · ${counts[i]}</span>`).join('')}</div>
+  </section>`;
+
+  if (S.period !== 'week' || cur.moodCount >= 3) {
+    const wc = weekdayChart(byDow);
+    let insight = 'Запиши настрій хоча б за кілька різних днів тижня, і тут зʼявиться, які дні кращі.';
+    if (wc.best != null && wc.best !== wc.worst) {
+      const bi = wc.vals.indexOf(wc.best), wi = wc.vals.indexOf(wc.worst);
+      insight = `Найкращий настрій зазвичай у <b class="up">${DOW_ACC[bi]}</b>, а найважче у <b class="down">${DOW_ACC[wi]}</b>.`;
+    }
+    html += `<section class="card"><div class="card-head"><h2>Настрій за днями тижня</h2></div>${wc.svg}<p class="insight">${insight}</p></section>`;
+  }
+
+  // habits
+  const habits = p.habits || [];
+  if (habits.length) {
+    const dots = S.period === 'quarter' ? null : cur.ds;
+    html += `<section class="card"><div class="card-head"><h2>Звички: що прокачалось</h2><span class="meta">${cur.logged.length ? `з ${cur.logged.length} ${plural(cur.logged.length, 'дня', 'днів', 'днів')}` : ''}</span></div><div class="rows">` +
+      habits.map(h => {
+        const n = cur.habit[h.id] ? cur.habit[h.id].done : 0;
+        const pct = cur.logged.length ? n / cur.logged.length : null;
+        const pp = prev.logged.length ? (prev.habit[h.id] ? prev.habit[h.id].done : 0) / prev.logged.length : null;
+        return `<div class="srow"><span class="ic">${esc(h.icon || '⭐')}</span><span class="nm">${esc(h.name)}</span><span class="num">${pct != null ? Math.round(pct * 100) + '%' : '—'}</span>
+          <div class="bar"><div class="progress"><i style="width:${(pct || 0) * 100}%"></i></div>${dots ? `<div class="dots">${dots.map(d => `<i class="${!all[d] ? 'na' : all[d].habits && all[d].habits[h.id] ? 'on' : ''}" title="${d}"></i>`).join('')}</div>` : ''}</div>
+          <span class="tr">${trend(pct, pp, '%')}</span></div>`;
+      }).join('') + `</div>${dots ? '<div class="legend"><span><i style="background:var(--good)"></i>виконано</span><span><i style="background:var(--empty)"></i>не виконано</span><span><i style="border:1px dashed var(--empty)"></i>немає запису</span></div>' : ''}</section>`;
+  }
+
+  // school
+  const subs = p.subjects || [];
+  if (subs.length) {
+    const tot = cur.hwTotal || 1;
+    html += `<section class="card"><div class="card-head"><h2>Домашні завдання</h2><span class="meta">${cur.hwTotal} ${plural(cur.hwTotal, 'завдання', 'завдання', 'завдань')}</span></div>`;
+    if (cur.hwTotal) {
+      html += `<div class="stackbar"><i style="width:${cur.hw.done / tot * 100}%;background:var(--good)"></i><i style="width:${cur.hw.part / tot * 100}%;background:var(--m3)"></i><i style="width:${cur.hw.miss / tot * 100}%;background:var(--bad)"></i></div>
+        <div class="legend"><span><i style="background:var(--good)"></i>зроблено · ${cur.hw.done}</span><span><i style="background:var(--m3)"></i>частково · ${cur.hw.part}</span><span><i style="background:var(--bad)"></i>не зроблено · ${cur.hw.miss}</span></div>
+        <div class="rows" style="margin-top:14px">` +
+        subs.map(s => {
+          const h = cur.hwSubj[s.id], n = h.done + h.part + h.miss, pct = n ? (h.done + h.part * 0.5) / n : null;
+          const ph = prev.hwSubj[s.id], pn = ph ? ph.done + ph.part + ph.miss : 0, ppct = pn ? (ph.done + ph.part * 0.5) / pn : null;
+          if (!n) return '';
+          return `<div class="srow" style="grid-template-columns:1fr auto"><span class="nm">${esc(s.name)} <span class="meta">${h.done}/${n}${h.miss ? ` · пропущено ${h.miss}` : ''}</span></span><span class="num">${Math.round(pct * 100)}%</span>
+            <div class="bar" style="grid-column:1"><div class="progress"><i style="width:${pct * 100}%;background:${pct >= .8 ? 'var(--good)' : pct >= .5 ? 'var(--m3)' : 'var(--bad)'}"></i></div></div><span class="tr">${trend(pct, ppct, '%')}</span></div>`;
+        }).join('') + '</div>';
+    } else html += `<p class="help">За цей період домашку ще не позначали.</p>`;
+    html += '</section>';
+
+    // grades by subject
+    const withGrades = subs.filter(s => cur.grades[s.id].length || prev.grades[s.id].length);
+    const sel = S.gradeSubject && subs.find(s => s.id === S.gradeSubject) ? S.gradeSubject : (withGrades[0] || subs[0]).id;
+    html += `<section class="card"><div class="card-head"><h2>Оцінки з предметів</h2><span class="meta">середня і зміна</span></div>`;
+    if (cur.gradeCount || prev.gradeCount) {
+      const ranked = subs.map(s => {
+        const a = avg(cur.grades[s.id].map(g => g.v)), b = avg(prev.grades[s.id].map(g => g.v));
+        return { s, a, b, n: cur.grades[s.id].length };
+      });
+      html += '<div>' + ranked.map(({ s, a, b, n }) => `<button class="subj" data-act="grade-pick" data-id="${esc(s.id)}" aria-pressed="${s.id === sel}">
+          <span class="nm">${esc(s.name)}<small>${n ? `${n} ${plural(n, 'оцінка', 'оцінки', 'оцінок')} · ${gradeBand(a)} рівень` : 'немає оцінок за період'}</small></span>
+          <span class="tr" style="font-size:13px;font-weight:800">${trend(a, b)}</span>
+          <span class="avgbadge" style="--gc:${a != null ? gradeColor(a) : 'var(--empty)'}">${a != null ? fmt1(a) : '—'}</span></button>`).join('') + '</div>';
+      const ss = subs.find(s => s.id === sel);
+      html += `<div style="margin-top:14px"><div class="eyebrow" style="margin-bottom:6px">${esc(ss.name)} · кожна оцінка</div>${gradeChart(cur.grades[sel], cur.ds)}
+        ${insightGrades(ranked)}</div>`;
+    } else html += `<p class="help">Оцінок за цей період ще немає. Додай їх на вкладці «День».</p>`;
+    html += '</section>';
+  }
+  html += '</div>';
+  return html;
+}
+function insightGrades(ranked) {
+  const ch = ranked.filter(x => x.a != null && x.b != null).map(x => ({ ...x, d: x.a - x.b }));
+  if (!ch.length) return '';
+  const up = ch.filter(x => x.d >= 0.5).sort((a, b) => b.d - a.d), down = ch.filter(x => x.d <= -0.5).sort((a, b) => a.d - b.d);
+  const parts = [];
+  if (up.length) parts.push(`Пішло вгору: <b class="up">${up.map(x => esc(x.s.name)).join(', ')}</b>.`);
+  if (down.length) parts.push(`Варто підтягнути: <b class="down">${down.map(x => esc(x.s.name)).join(', ')}</b>.`);
+  if (!parts.length) parts.push('Оцінки тримаються на тому самому рівні, що й минулого періоду.');
+  return `<p class="insight">${parts.join(' ')}</p>`;
+}
+function plural(n, one, few, many) {
+  const a = Math.abs(n) % 100, b = a % 10;
+  if (a > 10 && a < 20) return many;
+  if (b > 1 && b < 5) return few;
+  if (b === 1) return one;
+  return many;
+}
+
+function viewCal() {
+  const [y, m] = S.calMonth.split('-').map(Number);
+  const first = iso(new Date(y, m - 1, 1)), last = iso(new Date(y, m, 0)), t = today();
+  const all = daysOf(), habits = prof().habits || [];
+  const ds = dates(first, last);
+  let html = `<div class="stack"><div class="datenav" style="margin:0">
+    <button class="iconbtn" data-act="cal-shift" data-n="-1" aria-label="Попередній місяць">${ICON_L}</button>
+    <div class="label"><b>${cap(MONTH_NOM[m - 1])} ${y}</b><span>${ds.filter(d => all[d]).length} ${plural(ds.filter(d => all[d]).length, 'день', 'дні', 'днів')} із записами</span></div>
+    <button class="iconbtn" data-act="cal-shift" data-n="1" aria-label="Наступний місяць" ${last >= t ? 'disabled' : ''}>${ICON_R}</button>
+  </div><section class="card"><div class="cal">${DOW_SHORT.map(d => `<div class="dh">${d}</div>`).join('')}`;
+  for (let i = 0; i < dow(first); i++) html += '<div></div>';
+  ds.forEach(d => {
+    const day = all[d], mood = day && day.mood;
+    const hp = day && habits.length ? habits.filter(h => day.habits && day.habits[h.id]).length / habits.length : null;
+    html += `<button data-act="open-day" data-d="${d}" class="${mood ? 'has' : ''} ${d === t ? 'today' : ''}" style="${mood ? `--mc:${MOODS[mood].c}` : ''}" ${d > t ? 'disabled' : ''} aria-label="${d}${mood ? ', ' + MOODS[mood].label : ''}">
+      ${mood ? `<span class="e">${MOODS[mood].e}</span>` : ''}<span>${parse(d).getDate()}</span>${hp != null ? `<span class="hb"><i style="width:${hp * 100}%"></i></span>` : ''}</button>`;
+  });
+  html += `</div><div class="legend"><span><i style="background:var(--good)"></i>смужка внизу: частка виконаних звичок</span></div></section>`;
+
+  const counts = [5, 4, 3, 2, 1].map(v => ds.filter(d => all[d] && all[d].mood === v).length), total = counts.reduce((a, b) => a + b, 0);
+  html += `<section class="card"><div class="card-head"><h2>Настрої місяця</h2><span class="meta">${total} ${plural(total, 'запис', 'записи', 'записів')}</span></div>`;
+  if (total) html += `<div class="stackbar">${[5, 4, 3, 2, 1].map((v, i) => `<i style="width:${counts[i] / total * 100}%;background:${MOODS[v].c}"></i>`).join('')}</div>
+    <div class="legend">${[5, 4, 3, 2, 1].map((v, i) => `<span><i style="background:${MOODS[v].c}"></i>${MOODS[v].e} ${MOODS[v].label} · ${counts[i]}</span>`).join('')}</div>`;
+  else html += `<p class="help">У цьому місяці ще немає записів настрою.</p>`;
+  html += '</section></div>';
+  return html;
+}
+
+function viewMore() {
+  const p = prof(), arm = k => S.armed === k;
+  let html = `<div class="stack">
+  <section class="card"><div class="card-head"><h2>Профіль</h2></div>
+    <div class="editrow"><input type="text" class="emo" id="p-emoji" data-act="p-emoji" value="${esc(p.emoji || '')}" maxlength="4" aria-label="Значок профілю"><input type="text" class="nm" id="p-name" data-act="p-name" value="${esc(p.name)}" aria-label="Імʼя профілю"></div>
+    <div class="row-actions" style="margin-top:10px">
+      <button class="btn ghost" data-act="add-profile">+ Новий профіль</button>
+      ${sortedPids().length > 1 ? `<button class="btn danger" data-act="del-profile">${arm('profile') ? 'Видалити профіль назавжди?' : 'Видалити профіль'}</button>` : ''}
+    </div>
+  </section>
+
+  <section class="card"><div class="card-head"><h2>Звички</h2><span class="meta">${(p.habits || []).length}</span></div><div class="list">` +
+    (p.habits || []).map(h => `<div class="editrow"><input type="text" class="emo" id="h-ic-${esc(h.id)}" data-act="h-icon" data-id="${esc(h.id)}" value="${esc(h.icon || '')}" maxlength="4" aria-label="Значок звички"><input type="text" class="nm" id="h-nm-${esc(h.id)}" data-act="h-name" data-id="${esc(h.id)}" value="${esc(h.name)}" aria-label="Назва звички"><button class="del ${arm('h' + h.id) ? 'armed' : ''}" data-act="h-del" data-id="${esc(h.id)}" aria-label="Видалити звичку">${arm('h' + h.id) ? 'Видалити?' : '✕'}</button></div>`).join('') +
+    `<form class="editrow" data-form="add-habit"><input type="text" class="emo" id="new-h-ic" placeholder="⭐" maxlength="4" aria-label="Значок нової звички"><input type="text" class="nm" id="new-h-nm" placeholder="Нова звичка, напр. «Пити воду»" aria-label="Назва нової звички"><button class="btn" type="submit">Додати</button></form>
+  </div></section>
+
+  <section class="card"><div class="card-head"><h2>Шкільні предмети</h2><span class="meta">${(p.subjects || []).length}</span></div>
+    <p class="help" style="margin-bottom:10px">Якщо предметів немає, розділи «Домашні завдання» та «Оцінки» не показуються.</p><div class="list">` +
+    (p.subjects || []).map(s => `<div class="editrow"><input type="text" class="nm" id="s-nm-${esc(s.id)}" data-act="s-name" data-id="${esc(s.id)}" value="${esc(s.name)}" aria-label="Назва предмета"><button class="del ${arm('s' + s.id) ? 'armed' : ''}" data-act="s-del" data-id="${esc(s.id)}" aria-label="Видалити предмет">${arm('s' + s.id) ? 'Видалити?' : '✕'}</button></div>`).join('') +
+    `<form class="editrow" data-form="add-subject"><input type="text" class="nm" id="new-s-nm" placeholder="Новий предмет, напр. «Фізкультура»" aria-label="Назва нового предмета"><button class="btn" type="submit">Додати</button></form>
+  </div></section>
+
+  <section class="card"><div class="card-head"><h2>Резервна копія</h2></div>
+    <p class="help">Збережи всі записи у файл або скопіюй їх, щоб перенести на інший пристрій.</p>
+    <div class="row-actions" style="margin-top:10px">
+      <button class="btn ghost" data-act="export">Зберегти файл</button>
+      <button class="btn ghost" data-act="copy">Скопіювати</button>
+      <button class="btn ghost" data-act="toggle-import">Відновити з копії</button>
+    </div>
+    ${S.showJson ? `<div style="margin-top:10px" class="list"><textarea class="json" id="import-json" placeholder="Встав сюди скопійовані дані"></textarea><button class="btn" data-act="import">${arm('import') ? 'Замінити все цими даними?' : 'Відновити'}</button></div>` : ''}
+    <p class="help" style="margin-top:10px">${Store.mode === 'db' ? 'Записи зберігаються в хмарі Claude і доступні всім, з ким поділишся щоденником.' : 'Записи зберігаються тільки в цьому браузері. Роби копію час від часу.'}</p>
+  </section>
+  </div>`;
+  return html;
+}
+
+/* ---------- actions ---------- */
+function setView(v) { S.view = v; S.armed = null; savePrefs(); render(); window.scrollTo(0, 0); }
+
+document.addEventListener('click', e => {
+  const nav = e.target.closest('.nav button');
+  if (nav) { setView(nav.dataset.view); return; }
+  const el = e.target.closest('[data-act]');
+  if (!el || el.tagName === 'SELECT' || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') return;
+  const act = el.dataset.act, id = el.dataset.id;
+  const ae = document.activeElement;
+  if (ae && ae.matches && ae.matches('input, textarea') && ae.closest('#main')) ae.blur();
+  const armedBefore = S.armed;
+  if (!['h-del', 's-del', 'del-profile', 'import', 'clear-examples'].includes(act)) S.armed = null;
+  const day = () => getDay(S.date);
+
+  switch (act) {
+    case 'pick-profile':
+      if (id !== S.pid) { S.pid = id; S.subject = null; S.gradeSubject = null; savePrefs(); Store.watchDays(id); }
+      break;
+    case 'day-shift': { const n = +el.dataset.n, d = addDays(S.date, n); if (d <= today()) S.date = d; break; }
+    case 'day-today': S.date = today(); break;
+    case 'mood': { const d = day(), v = +el.dataset.v; d.mood = d.mood === v ? null : v; saveDay(S.date, d); break; }
+    case 'habit': { const d = day(); d.habits[id] = !d.habits[id]; if (!d.habits[id]) delete d.habits[id]; saveDay(S.date, d); break; }
+    case 'hw': { const d = day(), k = el.dataset.k; if (d.hw[id] === k) delete d.hw[id]; else d.hw[id] = k; saveDay(S.date, d); break; }
+    case 'grade-add': {
+      const d = day(), sel = $('#gsub') ? $('#gsub').value : null; if (!sel) break;
+      S.subject = sel; d.grades.push({ s: sel, v: +el.dataset.v }); saveDay(S.date, d);
+      const s = (prof().subjects || []).find(x => x.id === sel);
+      toast(`Додано ${el.dataset.v} · ${s ? s.name : ''}`);
+      break;
+    }
+    case 'grade-del': { const d = day(); d.grades.splice(+el.dataset.i, 1); saveDay(S.date, d); break; }
+    case 'period': S.period = el.dataset.k; S.anchor = today(); savePrefs(); break;
+    case 'period-shift': { const a = shiftAnchor(S.period, S.anchor, +el.dataset.n); if (range(S.period, a).start <= today()) S.anchor = a; break; }
+    case 'grade-pick': S.gradeSubject = id; break;
+    case 'cal-shift': { const [y, m] = S.calMonth.split('-').map(Number); S.calMonth = iso(new Date(y, m - 1 + +el.dataset.n, 1)).slice(0, 7); break; }
+    case 'open-day': S.date = el.dataset.d; setView('day'); return;
+    case 'create-defaults':
+      Object.entries(DEFAULT_PROFILES).forEach(([k, v]) => saveProfile(k, JSON.parse(JSON.stringify(v))));
+      S.pid = 'donia'; Store.watchDays('donia'); break;
+    case 'add-profile': {
+      const k = uid('p'), n = sortedPids().length;
+      saveProfile(k, { name: 'Новий профіль', emoji: '🙂', order: n, habits: [], subjects: [] });
+      S.pid = k; savePrefs(); Store.watchDays(k); toast('Профіль створено. Дай йому імʼя нижче.');
+      break;
+    }
+    case 'del-profile':
+      if (armedBefore !== 'profile') { S.armed = 'profile'; break; }
+      S.armed = null; saveProfile(S.pid, null); S.pid = sortedPids()[0] || null; savePrefs(); Store.watchDays(S.pid);
+      toast('Профіль видалено'); break;
+    case 'h-del': case 's-del': {
+      const key = (act === 'h-del' ? 'h' : 's') + id;
+      if (armedBefore !== key) { S.armed = key; break; }
+      S.armed = null;
+      const p = JSON.parse(JSON.stringify(prof())), f = act === 'h-del' ? 'habits' : 'subjects';
+      p[f] = p[f].filter(x => x.id !== id); saveProfile(S.pid, p); break;
+    }
+    case 'clear-examples': {
+      if (armedBefore !== 'examples') { S.armed = 'examples'; break; }
+      S.armed = null;
+      const days = Object.assign({}, daysOf());
+      Object.entries(days).forEach(([d, v]) => { if (v.example) { delete days[d]; Store.write(`profiles/${S.pid}/days/${d}`, null); } });
+      S.days[S.pid] = days; toast('Приклад прибрано'); break;
+    }
+    case 'export': exportData(); return;
+    case 'copy': copyData(); return;
+    case 'toggle-import': S.showJson = !S.showJson; break;
+    case 'import':
+      if (armedBefore !== 'import') { S.armed = 'import'; break; }
+      S.armed = null; importData(); return;
+    default: return;
+  }
+  render();
+});
+
+document.addEventListener('submit', e => {
+  const f = e.target.closest('[data-form]'); if (!f) return;
+  e.preventDefault();
+  const p = JSON.parse(JSON.stringify(prof()));
+  if (f.dataset.form === 'add-habit') {
+    const nm = $('#new-h-nm').value.trim(); if (!nm) { toast('Напиши назву звички'); return; }
+    p.habits = p.habits || []; p.habits.push({ id: uid('h'), name: nm, icon: $('#new-h-ic').value.trim() || '⭐' });
+    $('#new-h-nm').value = ''; $('#new-h-ic').value = '';
+  } else {
+    const nm = $('#new-s-nm').value.trim(); if (!nm) { toast('Напиши назву предмета'); return; }
+    p.subjects = p.subjects || []; p.subjects.push({ id: uid('s'), name: nm });
+    $('#new-s-nm').value = '';
+  }
+  saveProfile(S.pid, p);
+  document.activeElement && document.activeElement.blur();
+  render();
+});
+
+let noteTimer;
+document.addEventListener('input', e => {
+  if (e.target.id === 'note') {
+    const v = e.target.value, date = S.date, pid = S.pid;
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(() => { if (pid !== S.pid) return; const d = getDay(date); d.note = v; saveDay(date, d); }, 600);
+  }
+});
+document.addEventListener('change', e => {
+  const el = e.target, act = el.dataset && el.dataset.act;
+  if (!act) return;
+  if (act === 'grade-subject') { S.subject = el.value; return; }
+  const p = JSON.parse(JSON.stringify(prof())), v = el.value.trim();
+  if (act === 'p-name') { if (!v) return; p.name = v; }
+  else if (act === 'p-emoji') p.emoji = v || '🙂';
+  else if (act === 'h-name' || act === 'h-icon') {
+    const h = p.habits.find(x => x.id === el.dataset.id); if (!h) return;
+    if (act === 'h-name') { if (!v) return; h.name = v; } else h.icon = v || '⭐';
+  } else if (act === 's-name') {
+    const s = p.subjects.find(x => x.id === el.dataset.id); if (!s || !v) return; s.name = v;
+  } else return;
+  saveProfile(S.pid, p);
+});
+document.addEventListener('focusout', () => {
+  setTimeout(() => {
+    const a = document.activeElement;
+    if (S.deferred && !(a && a.closest && a.closest('#main') && a.matches('input[type="text"], textarea'))) render();
+  }, 0);
+});
+
+/* ---------- backup ---------- */
+async function collect() {
+  const out = { app: 'shchodennyk', version: 1, exported: new Date().toISOString(), profiles: S.profiles, days: {} };
+  for (const pid of Object.keys(S.profiles)) out.days[pid] = await Store.allDays(pid);
+  return JSON.stringify(out, null, 1);
+}
+async function exportData() {
+  const json = await collect();
+  let dl = null;
+  try { dl = window.claude && window.claude.use ? await window.claude.use('downloads') : null; } catch (e) { dl = null; }
+  if (dl) {
+    try { await dl.save({ filename: `shchodennyk-${today()}.json`, data: json }); toast('Файл збережено'); }
+    catch (e) { if (e.code !== 'declined') toast('Не вдалося зберегти файл. Спробуй «Скопіювати».'); }
+    return;
+  }
+  try {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+    a.download = `shchodennyk-${today()}.json`; a.click();
+  } catch (e) { toast('Не вдалося зберегти файл. Спробуй «Скопіювати».'); }
+}
+async function copyData() {
+  const p = collect();
+  try {
+    await navigator.clipboard.writeText(await p);
+    toast('Скопійовано. Встав у нотатки чи повідомлення собі.');
+  } catch (e) {
+    S.showJson = true; render();
+    const ta = $('#import-json'); ta.value = await p; ta.select(); toast('Виділено. Скопіюй вручну.');
+  }
+}
+function importData() {
+  let data;
+  try { data = JSON.parse($('#import-json').value); } catch (e) { toast('Не схоже на копію щоденника. Перевір текст.'); render(); return; }
+  if (!data || !data.profiles || !data.days) { toast('У копії немає профілів чи записів.'); render(); return; }
+  Object.entries(data.profiles).forEach(([pid, p]) => saveProfile(pid, p));
+  Object.entries(data.days).forEach(([pid, days]) => Object.entries(days).forEach(([d, v]) => Store.write(`profiles/${pid}/days/${d}`, v)));
+  if (Store.mode === 'local') { S.days = {}; }
+  S.showJson = false; S.pid = Object.keys(data.profiles)[0]; Store.watchDays(S.pid);
+  toast('Дані відновлено'); render();
+}
+
+/* ---------- boot ---------- */
+render();
+Store.init();
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+</script>
+</body>
+</html>
