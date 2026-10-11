@@ -759,7 +759,7 @@ function viewStats() {
     <div class="legend">${[5, 4, 3, 2, 1].map((v, i) => `<span><i style="background:${MOODS[v].c}"></i>${MOODS[v].label} · ${counts[i]}</span>`).join('')}</div>
   </section>`;
 
-  if (S.period !== 'week' || cur.moodCount >= 3) {
+  if (S.period !== 'week') {
     const wc = weekdayChart(byDow);
     let insight = 'Запиши настрій хоча б за кілька різних днів тижня, і тут зʼявиться, які дні кращі.';
     if (wc.best != null && wc.best !== wc.worst) {
