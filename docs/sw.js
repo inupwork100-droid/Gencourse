@@ -1,4 +1,4 @@
-const CACHE = 'zrostannia-391cf6b1e1';
+const CACHE = 'zrostannia-da50e98665';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icon-180.png', 'icon-192.png', 'icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

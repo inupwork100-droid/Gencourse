@@ -791,49 +791,57 @@ function smoothPath(pts, yMin, yMax) {
   return d;
 }
 function gradeChart(grades, subs, ds, focus, hidden) {
-  const H = 300, top = 30, bottom = 30, left = 26, right = 16, ih = H - top - bottom, iw = W - left - right;
-  const first = ds[0], last = ds[ds.length - 1];
+  const H = 300, top = 30, bottom = 32, left = 38, right = 14, ih = H - top - bottom, iw = W - left - right;
+  const first = ds[0], last = ds[ds.length - 1], n = ds.length;
   const visible = subs.map((sub, i) => ({ sub, i })).filter(({ sub }) => !hidden.has(sub.id));
   const all = [];
   visible.forEach(({ sub, i }) => (grades[sub.id] || []).forEach(g => {
     if (g.d >= first && g.d <= last) all.push({ ...g, sid: sub.id, color: subjColor(sub, i) });
   }));
-  const cats = [...new Set(all.map(g => g.d))].sort();
-  const ci = {}; cats.forEach((d, k) => { ci[d] = k; });
-  const X = d => left + (ci[d] + 0.5) * (iw / Math.max(1, cats.length));
+  // every day of the period has its own place on the date axis
+  const di = {}; ds.forEach((d, k) => { di[d] = k; });
+  const X = d => left + (di[d] + 0.5) * (iw / n);
   const Y = v => top + ih - ((v - 1) / 5) * ih;
   const font = 'font-family:var(--f-body);';
   let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Оцінки з усіх предметів по датах">`;
+  // grade scale: coloured circles with a thin line of the same colour across the chart
   for (let v = 1; v <= 6; v++) {
-    s += `<line x1="${left}" x2="${W - right}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" stroke="var(--line)" stroke-width="0.6"/>`;
-    s += `<text x="${left - 8}" y="${(Y(v) + 3).toFixed(1)}" text-anchor="end" style="${font}font-size:9px;fill:var(--muted)">${v}</text>`;
+    const y = Y(v).toFixed(1), c = GRADES[v].c;
+    s += `<line x1="${left - 6}" x2="${W - right}" y1="${y}" y2="${y}" stroke="${c}" stroke-width="0.8" opacity=".45"/>`;
+    s += `<circle cx="${left - 18}" cy="${y}" r="7.5" fill="${c}"/>`;
+    s += `<text x="${left - 18}" y="${(Y(v) + 3.5).toFixed(1)}" text-anchor="middle" style="${font}font-size:10px;font-weight:800;fill:#fff">${v}</text>`;
   }
-  // thin axes: grades go up, dates go right
-  s += `<line x1="${left}" y1="${top + ih}" x2="${left}" y2="${top - 14}" stroke="var(--muted)" stroke-width="0.7"/>`;
-  s += `<path d="M${left - 2.5},${top - 10} L${left},${top - 15} L${left + 2.5},${top - 10}" fill="none" stroke="var(--muted)" stroke-width="0.7"/>`;
-  s += `<text x="${left + 6}" y="${top - 10}" style="${font}font-size:8.5px;fill:var(--muted)">оцінка</text>`;
-  s += `<line x1="${left}" y1="${top + ih}" x2="${W - right + 6}" y2="${top + ih}" stroke="var(--muted)" stroke-width="0.7"/>`;
-  s += `<path d="M${W - right + 1},${top + ih - 2.5} L${W - right + 6},${top + ih} L${W - right + 1},${top + ih + 2.5}" fill="none" stroke="var(--muted)" stroke-width="0.7"/>`;
-  let lastX = -99;
-  cats.forEach(d => {
-    const x = X(d);
-    if (x - lastX >= 24) { s += `<text x="${x.toFixed(1)}" y="${top + ih + 15}" text-anchor="middle" style="${font}font-size:8.5px;fill:var(--muted);letter-spacing:.02em">${fmtDM(d)}</text>`; lastX = x; }
+  // date axis with an arrow
+  s += `<line x1="${left - 6}" y1="${top + ih + 10}" x2="${W - right + 6}" y2="${top + ih + 10}" stroke="var(--muted)" stroke-width="0.7"/>`;
+  s += `<path d="M${W - right + 1},${top + ih + 7.5} L${W - right + 6},${top + ih + 10} L${W - right + 1},${top + ih + 12.5}" fill="none" stroke="var(--muted)" stroke-width="0.7"/>`;
+  const step = iw / n;
+  ds.forEach((d, k) => {
+    const x = X(d), dt = parse(d), day = dt.getDate();
+    let lab = '';
+    if (n <= 7) lab = `${DOW_SHORT[dow(d)]} ${day}`;
+    else if (n <= 31) lab = String(day);
+    else if (day === 1) lab = MONTH_NOM[dt.getMonth()].slice(0, 3);
+    else if (n <= 95 && dow(d) === 0) lab = String(day);
+    if (!lab) return;
+    const weekend = n <= 31 && dow(d) >= 5;
+    s += `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${top + ih + 8}" y2="${top + ih + 12}" stroke="var(--muted)" stroke-width="0.6"/>`;
+    s += `<text x="${x.toFixed(1)}" y="${top + ih + 23}" text-anchor="middle" style="${font}font-size:${n <= 7 ? 8.5 : step < 11 ? 6.8 : 8}px;fill:var(--muted);${weekend ? 'opacity:.55;' : ''}">${lab}</text>`;
   });
-  if (!cats.length) s += `<text x="${left + iw / 2}" y="${top + ih / 2}" text-anchor="middle" style="${font}font-size:10px;fill:var(--muted)">Немає оцінок за цей період</text>`;
   const groups = {};
   all.forEach(g => { (groups[g.d + '|' + g.v] = groups[g.d + '|' + g.v] || []).push(g); });
-  Object.values(groups).forEach(gs => gs.forEach((g, k) => { g.dx = (k - (gs.length - 1) / 2) * 6; }));
+  Object.values(groups).forEach(gs => gs.forEach((g, k) => { g.dx = (k - (gs.length - 1) / 2) * 5; g.lab = k === 0; }));
   const dim = id => focus && focus !== id;
   visible.forEach(({ sub, i }) => {
     const pts = all.filter(g => g.sid === sub.id).sort((a, b) => a.d.localeCompare(b.d)).map(g => [X(g.d) + g.dx, Y(g.v)]);
-    if (pts.length > 1) s += `<path d="${smoothPath(pts, top, top + ih)}" fill="none" stroke="${subjColor(sub, i)}" stroke-width="${focus === sub.id ? 2.2 : 1.5}" stroke-linecap="round" stroke-linejoin="round" opacity="${dim(sub.id) ? 0.1 : 0.9}"/>`;
+    if (pts.length > 1) s += `<path d="${smoothPath(pts, top, top + ih)}" fill="none" stroke="${subjColor(sub, i)}" stroke-width="${focus === sub.id ? 2 : 1.4}" stroke-dasharray="6 3 1.5 3" stroke-linecap="round" stroke-linejoin="round" opacity="${dim(sub.id) ? 0.1 : 0.95}"/>`;
   });
   all.sort((a, b) => (a.sid === focus) - (b.sid === focus)).forEach(g => {
     const x = X(g.d) + g.dx, y = Y(g.v), sub = subs.find(z => z.id === g.sid), big = focus === g.sid;
     s += `<g opacity="${dim(g.sid) ? 0.15 : 1}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${big ? 3.6 : 2.9}" fill="${gradeColor(g.v)}" stroke="var(--surface)" stroke-width="1"/>`;
-    if (!focus || big) s += `<text x="${x.toFixed(1)}" y="${(y - 6).toFixed(1)}" text-anchor="middle" style="${font}font-size:${big ? 9.5 : 8}px;font-weight:600;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:2.5px">${g.v}</text>`;
+    if (focus ? big : g.lab) s += `<text x="${(focus ? x : X(g.d)).toFixed(1)}" y="${(y - 6).toFixed(1)}" text-anchor="middle" style="${font}font-size:${big ? 9.5 : 8}px;font-weight:600;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:2.5px">${g.v}</text>`;
     s += `<title>${esc(sub ? sub.name : '')}: ${g.v} (${fmtDM(g.d)})</title></g>`;
   });
+  if (!all.length) s += `<text x="${left + iw / 2}" y="${top + ih / 2}" text-anchor="middle" style="${font}font-size:10px;fill:var(--muted);paint-order:stroke;stroke:var(--surface);stroke-width:3px">Немає оцінок за цей період</text>`;
   return s + '</svg>';
 }
 
@@ -922,20 +930,23 @@ function viewStats() {
     const focus = S.gradeSubject && subs.find(x => x.id === S.gradeSubject) ? S.gradeSubject : null;
     const hidden = S.hiddenSubjects || (S.hiddenSubjects = new Set());
     html += `<section class="card"><div class="card-head"><h2>Оцінки з предметів</h2><span class="meta">середня і зміна</span></div>`;
-    if (cur.gradeCount || prev.gradeCount) {
+    {
       const ranked = subs.map((sub, i) => {
         const a = avg(cur.grades[sub.id].map(g => g.v)), b = avg(prev.grades[sub.id].map(g => g.v));
         return { s: sub, i, a, b, n: cur.grades[sub.id].length };
       });
+      let lastGrade = null;
+      if (!cur.gradeCount) Object.entries(daysOf()).forEach(([d, v]) => { if (d < r.start && (v.grades || []).length && (!lastGrade || d > lastGrade)) lastGrade = d; });
       html += `${gradeChart(cur.grades, subs, cur.ds, focus, hidden)}
+        ${lastGrade ? `<p class="meta" style="margin:4px 0 6px">У цьому періоді оцінок ще немає. <button class="linkbtn" data-act="goto-date" data-d="${lastGrade}">Показати ${S.period === 'week' ? 'тиждень' : S.period === 'month' ? MONTH_NOM[parse(lastGrade).getMonth()] : 'період'} з останніми оцінками →</button></p>` : ''}
         <div class="hlegend">${subs.map((sub, i) => `<button data-act="subj-toggle" data-id="${esc(sub.id)}" aria-pressed="${!hidden.has(sub.id)}"><i style="--c:${subjColor(sub, i)}"></i>${esc(sub.name)}</button>`).join('')}</div>
-        <p class="meta" style="margin:6px 0 14px">Колір кружечка й цифри показує оцінку, колір лінії показує предмет. Назви предметів під графіком ховають і показують лінії, а натискання на предмет у списку виділяє його лінію.</p>`;
+        <p class="meta" style="margin:6px 0 14px">Кольорова смуга й кружечок ліворуч показують оцінку, штрих-пунктирна лінія з'єднує оцінки одного предмета. Назви предметів під графіком ховають і показують лінії, а натискання на предмет у списку виділяє його лінію.</p>`;
       html += '<div>' + ranked.map(({ s: sub, i, a, b, n }) => `<button class="subj" data-act="grade-pick" data-id="${esc(sub.id)}" aria-pressed="${sub.id === focus}">
           <span class="nm"><i class="sw" style="background:${subjColor(sub, i)}"></i>${esc(sub.name)}<small>${n ? `${n} ${plural(n, 'оцінка', 'оцінки', 'оцінок')} · ${gradeBand(a)}` : 'немає оцінок за період'}</small></span>
           <span class="tr" style="font-size:13px;font-weight:800">${trend(a, b)}</span>
           <span class="avgbadge" style="--gc:${a != null ? gradeColor(a) : 'var(--empty)'}">${a != null ? fmt1(a) : '—'}</span></button>`).join('') + '</div>';
       html += insightGrades(ranked);
-    } else html += `<p class="help">Оцінок за цей період ще немає. Додай їх на вкладці «День» або вибери період «Рік».</p>`;
+    }
     html += '</section>';
   }
   html += '</div>';
@@ -1057,6 +1068,7 @@ document.addEventListener('click', e => {
     case 'grade-del': { const d = day(); d.grades.splice(+el.dataset.i, 1); saveDay(S.date, d); break; }
     case 'period': S.period = el.dataset.k; S.anchor = today(); savePrefs(); break;
     case 'period-shift': { const a = shiftAnchor(S.period, S.anchor, +el.dataset.n); if (range(S.period, a).start <= today()) S.anchor = a; break; }
+    case 'goto-date': S.anchor = el.dataset.d; break;
     case 'grade-pick': S.gradeSubject = S.gradeSubject === id ? null : id; break;
     case 'subj-toggle': { const h = S.hiddenSubjects || (S.hiddenSubjects = new Set()); if (h.has(id)) h.delete(id); else h.add(id); break; }
     case 'cal-shift': { const [y, m] = S.calMonth.split('-').map(Number); S.calMonth = iso(new Date(y, m - 1 + +el.dataset.n, 1)).slice(0, 7); break; }
