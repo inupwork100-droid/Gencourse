@@ -303,6 +303,8 @@ const KIRA_SEPT_GRADES = [
   ['k5', 3, '2026-09-17'], ['k6', 2, '2026-09-24'], ['k7', 5, '2026-09-11'], ['k8', 4, '2026-09-18'],
   ['k9', 5, '2026-09-08'], ['k10', 3, '2026-09-25'], ['k11', 2, '2026-09-29'],
 ];
+// example grades so the chart shows lines; marked ex:true and removable with «Прибрати приклад»
+const KIRA_DEMO_GRADES = [["k1", 6, "2026-09-18"], ["k1", 6, "2026-09-22"], ["k1", 5, "2026-09-29"], ["k2", 4, "2026-09-22"], ["k2", 5, "2026-09-30"], ["k3", 1, "2026-09-08"], ["k3", 1, "2026-09-17"], ["k4", 5, "2026-09-22"], ["k4", 2, "2026-09-29"], ["k5", 5, "2026-09-18"], ["k5", 2, "2026-09-24"], ["k5", 4, "2026-09-25"], ["k6", 1, "2026-09-08"], ["k6", 1, "2026-09-18"], ["k7", 3, "2026-09-10"], ["k7", 5, "2026-09-24"], ["k8", 5, "2026-09-10"], ["k8", 3, "2026-09-17"], ["k8", 3, "2026-09-24"], ["k9", 5, "2026-09-02"], ["k9", 4, "2026-09-09"], ["k9", 5, "2026-09-25"], ["k10", 3, "2026-09-11"], ["k10", 2, "2026-09-29"], ["k11", 1, "2026-09-02"], ["k11", 3, "2026-09-08"], ["k11", 1, "2026-09-22"]];
 const DEFAULT_PROFILES = {
   donia: { name: 'Кіра', emoji: '🦊', order: 0,
     habits: [
@@ -340,9 +342,8 @@ const gradeBand = v => GRADES[gradeKey(v)].label;
 const subjColor = (s, i) => (s && s.color) || SUBJECT_COLORS[i % SUBJECT_COLORS.length];
 const fmtDM = d => { const x = parse(d); return `${pad(x.getDate())}.${pad(x.getMonth() + 1)}`; };
 function migrateLocal(L) {
-  if ((L.v || 1) >= 2) return;
   const k = L.profiles.donia;
-  if (k) {
+  if ((L.v || 1) < 2 && k) {
     if (!(k.subjects || []).length || (k.subjects || []).every(x => /^s[1-6]$/.test(x.id))) k.subjects = JSON.parse(JSON.stringify(KIRA_SUBJECTS));
     if (k.name === 'Донька') k.name = 'Кіра';
     const days = L.days.donia = L.days.donia || {};
@@ -352,7 +353,14 @@ function migrateLocal(L) {
       d.grades = (d.grades || []).concat([{ s: sid, v }]);
     });
   }
-  L.v = 2;
+  if ((L.v || 1) < 3 && k) {
+    const days = L.days.donia = L.days.donia || {};
+    if (!Object.values(days).some(d => (d.grades || []).some(g => g.ex))) KIRA_DEMO_GRADES.forEach(([sid, v, date]) => {
+      const d = days[date] = Object.assign(emptyDay(), days[date] || {});
+      d.grades = (d.grades || []).concat([{ s: sid, v, ex: true }]);
+    });
+  }
+  L.v = 3;
 }
 const moodColor = v => MOODS[Math.max(1, Math.min(5, Math.round(v)))].c;
 const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
@@ -634,8 +642,8 @@ function renderProfiles() {
 
 function banners() {
   let out = '';
-  const ex = Object.values(daysOf()).some(d => d.example);
-  if (ex) out += `<div class="banner"><p>Тут поки приклад даних за кілька тижнів, щоб було видно графіки. Коли почнете записувати свої дні, приберіть його.</p><button class="btn ghost" data-act="clear-examples">${S.armed === 'examples' ? 'Точно прибрати?' : 'Прибрати приклад'}</button></div>`;
+  const ex = Object.values(daysOf()).some(d => d.example || (d.grades || []).some(g => g.ex));
+  if (ex) out += `<div class="banner"><p>Тут поки є приклад даних, щоб було видно графіки. Справжні оцінки Кіри при прибиранні залишаться.</p><button class="btn ghost" data-act="clear-examples">${S.armed === 'examples' ? 'Точно прибрати?' : 'Прибрати приклад'}</button></div>`;
   if (S.readOnly) out += `<div class="banner"><p>Режим перегляду: записи видно, але змінювати їх не можна.</p></div>`;
   return out;
 }
@@ -743,13 +751,24 @@ function weekdayChart(byDow) {
   return { svg: s + '</svg>', vals, best, worst };
 }
 function smoothPath(pts) {
-  if (pts.length < 2) return '';
-  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
-    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
-    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
-    d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+  // monotone cubic: smooth, but never overshoots above or below neighbouring grades
+  const n = pts.length;
+  if (n < 2) return '';
+  const f = v => v.toFixed(1);
+  if (n === 2) return `M${f(pts[0][0])},${f(pts[0][1])} L${f(pts[1][0])},${f(pts[1][1])}`;
+  const dx = [], m = [], t = [];
+  for (let i = 0; i < n - 1; i++) { dx[i] = pts[i + 1][0] - pts[i][0] || 1e-6; m[i] = (pts[i + 1][1] - pts[i][1]) / dx[i]; }
+  t[0] = m[0]; t[n - 1] = m[n - 2];
+  for (let i = 1; i < n - 1; i++) {
+    t[i] = m[i - 1] * m[i] <= 0 ? 0
+      : 3 * (dx[i - 1] + dx[i]) / ((2 * dx[i] + dx[i - 1]) / m[i - 1] + (dx[i] + 2 * dx[i - 1]) / m[i]);
+  }
+  t[0] = m[0] * t[1] <= 0 ? 0 : Math.min(Math.abs(m[0]), Math.abs(t[1])) * Math.sign(m[0]);
+  t[n - 1] = m[n - 2] * t[n - 2] <= 0 ? 0 : Math.min(Math.abs(m[n - 2]), Math.abs(t[n - 2])) * Math.sign(m[n - 2]);
+  let d = `M${f(pts[0][0])},${f(pts[0][1])}`;
+  for (let i = 0; i < n - 1; i++) {
+    const h = dx[i] / 3;
+    d += ` C${f(pts[i][0] + h)},${f(pts[i][1] + t[i] * h)} ${f(pts[i + 1][0] - h)},${f(pts[i + 1][1] - t[i + 1] * h)} ${f(pts[i + 1][0])},${f(pts[i + 1][1])}`;
   }
   return d;
 }
@@ -788,16 +807,17 @@ function gradeChart(grades, subs, ds, focus, hidden) {
   // spread points that share a date and grade
   const groups = {};
   all.forEach(g => { (groups[g.d + '|' + g.v] = groups[g.d + '|' + g.v] || []).push(g); });
-  Object.values(groups).forEach(gs => gs.forEach((g, k) => { g.dx = (k - (gs.length - 1) / 2) * 11; }));
+  Object.values(groups).forEach(gs => gs.forEach((g, k) => { g.dx = (k - (gs.length - 1) / 2) * Math.min(11, iw / Math.max(1, cats.length) / gs.length); }));
   const dim = id => focus && focus !== id;
+  const r = Math.max(5, Math.min(8, iw / Math.max(1, cats.length) * 0.42));
   visible.forEach(({ sub, i }) => {
     const pts = all.filter(g => g.sid === sub.id).sort((a, b) => a.d.localeCompare(b.d)).map(g => [X(idx[g.d]) + g.dx, Y(g.v)]);
     if (pts.length > 1) s += `<path d="${smoothPath(pts)}" fill="none" stroke="${subjColor(sub, i)}" stroke-width="${focus === sub.id ? 3.2 : 2.4}" stroke-linecap="round" opacity="${dim(sub.id) ? 0.15 : 0.95}"/>`;
   });
   all.sort((a, b) => (a.sid === focus) - (b.sid === focus)).forEach(g => {
     const x = X(idx[g.d]) + g.dx, y = Y(g.v), sub = subs.find(z => z.id === g.sid);
-    s += `<g opacity="${dim(g.sid) ? 0.25 : 1}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="8" fill="${gradeColor(g.v)}" stroke="${g.color}" stroke-width="2.2"/>`;
-    s += `<text x="${x.toFixed(1)}" y="${(y + 3.6).toFixed(1)}" text-anchor="middle" style="fill:#fff;font-weight:800;font-size:10px">${g.v}</text>`;
+    s += `<g opacity="${dim(g.sid) ? 0.25 : 1}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="${gradeColor(g.v)}" stroke="${g.color}" stroke-width="2.2"/>`;
+    s += `<text x="${x.toFixed(1)}" y="${(y + r * 0.42).toFixed(1)}" text-anchor="middle" style="fill:#fff;font-weight:800;font-size:${(r * 1.2).toFixed(1)}px">${g.v}</text>`;
     s += `<title>${esc(sub ? sub.name : '')}: ${g.v} (${fmtDM(g.d)})</title></g>`;
   });
   return s + '</svg>';
@@ -1052,9 +1072,11 @@ document.addEventListener('click', e => {
       S.armed = null;
       const days = Object.assign({}, daysOf());
       Object.entries(days).forEach(([d, v]) => {
-        if (!v.example) return;
-        if ((v.grades || []).length) { days[d] = Object.assign(emptyDay(), { grades: v.grades }); Store.write(`profiles/${S.pid}/days/${d}`, days[d]); }
-        else { delete days[d]; Store.write(`profiles/${S.pid}/days/${d}`, null); }
+        const grades = v.grades || [], real = grades.filter(g => !g.ex);
+        if (!v.example && real.length === grades.length) return;
+        const nd = v.example ? Object.assign(emptyDay(), { grades: real }) : Object.assign({}, v, { grades: real });
+        if (isEmptyDay(nd)) { delete days[d]; Store.write(`profiles/${S.pid}/days/${d}`, null); }
+        else { days[d] = nd; Store.write(`profiles/${S.pid}/days/${d}`, nd); }
       });
       S.days[S.pid] = days; toast('Приклад прибрано'); break;
     }
