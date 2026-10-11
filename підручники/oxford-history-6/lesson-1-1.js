@@ -89,7 +89,21 @@ window.LESSON = {
         ["Use the map on page 6 and an atlas to help you name the areas and countries.", "Скористайся картою на сторінці 6 та атласом, щоб назвати території та країни."]
       ]}
     ]},
-    { type: "box", kind: "challenge", title: ["Challenge", "Виклик"], items: [
+    { type: "box", kind: "challenge", title: ["Challenge", "Виклик"],
+      // Короткі відповіді на запитання (відкриваються значком конверта).
+      answers: [
+        { q: ["Who were the Vikings who reached North America?", "Хто були вікінги, які дісталися Північної Америки?"],
+          a: ["Their leader was Leif Erikson, the son of Erik the Red. He sailed west from Greenland with about 35 men.", "Їхнім ватажком був Лейф Ерікссон, син Еріка Рудого. Він вирушив на захід із Гренландії приблизно з 35 чоловіками."] },
+        { q: ["When did they do this?", "Коли вони це зробили?"],
+          a: ["In about 1000 CE, more than 1,000 years ago.", "Приблизно в 1000 році н. е., тобто понад 1000 років тому."] },
+        { q: ["Where did they land?", "Де вони висадилися?"],
+          a: ["They landed on the island of Newfoundland, in today's Canada. They called the new land Vinland. Archaeologists found their camp at L'Anse aux Meadows.", "Вони висадилися на острові Ньюфаундленд, на території сучасної Канади. Нову землю вони назвали Вінланд. Археологи знайшли їхній табір у місці Ланс-о-Медоуз."] },
+        { q: ["Did they settle for long?", "Чи надовго вони там оселилися?"],
+          a: ["No. They stayed for only a few years and then sailed back to Greenland.", "Ні. Вони прожили там лише кілька років і повернулися до Гренландії."] },
+        { q: ["Did they fight with North American tribes?", "Чи воювали вони з північноамериканськими племенами?"],
+          a: ["Yes. The old Viking stories, called sagas, say they traded with the local people but also fought with them. These fights were one reason why the Vikings left.", "Так. У давніх розповідях вікінгів — сагах — сказано, що вони торгували з місцевими жителями, але й билися з ними. Ці сутички були однією з причин, чому вікінги звідти поїхали."] }
+      ],
+      items: [
       { s: [
         ["Find out about the Vikings who reached North America.", "Дізнайся про вікінгів, які дісталися Північної Америки."],
         ["When did they do this?", "Коли вони це зробили?"],
