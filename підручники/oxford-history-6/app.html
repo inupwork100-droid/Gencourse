@@ -22,6 +22,8 @@
   --ua: #5a4a8a;           /* Ukrainian translation */
   --ua-soft: #efe9fb;
   --green: #3f8f3a;
+  --lime: #8fd14f;         /* салатовий: word card and tooltip */
+  --lime-soft: #e4f6d0;
   --pink: #c0336b;
   --line: #e2c9b8;
   --surface: #ffffff;
@@ -36,7 +38,7 @@
     --paper: #23201f; --paper-2: #2c2826; --ground: #151a20;
     --ink: #efe6df; --muted: #b3a69c; --red: #ff7a6b;
     --now: #ffd23f; --now-ink: #1b1715; --done: #7cc6e0;
-    --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae;
+    --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae; --lime: #9be05c; --lime-soft: #2c3d21;
     --line: #3d3532; --banner: #9e2f27; --surface: #2a2624; --shadow: 0 10px 30px rgba(0,0,0,.5);
     color-scheme: dark;
   }
@@ -46,7 +48,7 @@
   --paper: #23201f; --paper-2: #2c2826; --ground: #151a20;
   --ink: #efe6df; --muted: #b3a69c; --red: #ff7a6b;
   --now: #ffd23f; --now-ink: #1b1715; --done: #7cc6e0;
-  --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae;
+  --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae; --lime: #9be05c; --lime-soft: #2c3d21;
   --line: #3d3532; --banner: #9e2f27; --surface: #2a2624; --shadow: 0 10px 30px rgba(0,0,0,.5);
   color-scheme: dark;
 }
@@ -97,7 +99,7 @@ p.blk { padding-right: 40px; }
 
 .s { border-radius: 4px; transition: background-color .2s; }
 .s.cur { background: color-mix(in srgb, var(--now) 22%, transparent); }
-.w { border-radius: 4px; cursor: pointer; padding: 0 1px; margin: 0 -1px; transition: background-color .12s, color .12s; }
+.w { touch-action: manipulation; border-radius: 4px; cursor: pointer; padding: 0 1px; margin: 0 -1px; transition: background-color .12s, color .12s; }
 .w:hover { background: color-mix(in srgb, var(--ua) 14%, transparent); }
 .w.done { color: var(--done); }
 .w.now { background: var(--now); color: var(--now-ink); box-shadow: 0 0 0 2px var(--now); }
@@ -160,22 +162,23 @@ body.mode-ua .box h3 .h3ua { font-family: var(--f-display); font-size: inherit; 
 /* sheet (word card / selection / saved words / settings) */
 .scrim { position: fixed; inset: 0; background: rgba(10,20,30,.35); z-index: 40; }
 .sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: var(--surface); color: var(--ink);
+  border: 3px solid var(--lime); border-bottom: 0;
   border-radius: 18px 18px 0 0; box-shadow: var(--shadow); max-height: 78%; overflow: auto;
   padding: 10px 18px calc(18px + env(safe-area-inset-bottom, 0px)); }
 .sheet .in { max-width: 680px; margin: 0 auto; display: grid; gap: 12px; }
-.grab { width: 44px; height: 5px; border-radius: 3px; background: var(--line); margin: 0 auto 4px; }
+.grab { width: 44px; height: 5px; border-radius: 3px; background: var(--lime); margin: 0 auto 4px; }
 .sheet .head { display: flex; align-items: center; gap: 10px; }
 .sheet .word { font-family: var(--f-display); font-size: 30px; line-height: 1.1; min-width: 0; overflow-wrap: anywhere; }
 .sheet .tr { font-size: 22px; font-weight: 700; color: var(--ua); }
 .sheet .hint { font-size: 15px; color: var(--muted); }
 .sheet .lbl { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
-.card { background: var(--paper); border-radius: 12px; padding: 10px 12px; }
+.card { background: var(--lime-soft); border-radius: 12px; padding: 10px 12px; }
 .card .ua { margin-top: 6px; }
 .phr { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
 .phr b { min-width: 0; }
 .phr span { color: var(--ua); font-weight: 700; text-align: right; }
 .btns { display: flex; flex-wrap: wrap; gap: 8px; }
-.btn { border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-size: 15px; background: var(--paper-2); display: inline-flex; align-items: center; gap: 6px; }
+.btn { border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-size: 15px; background: var(--lime-soft); display: inline-flex; align-items: center; gap: 6px; }
 .btn.primary { background: var(--sea); color: var(--sea-ink); }
 .btn svg { width: 18px; height: 18px; }
 .sayw { border: 0; background: var(--sea); color: var(--sea-ink); width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; flex: none; }
@@ -185,7 +188,7 @@ a.ext { color: var(--ua); font-weight: 700; }
 .glist div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 10px; font-size: 16px; border-bottom: 1px dashed var(--line); padding: 4px 0; }
 .glist div span { color: var(--ua); }
 .saved-list { display: grid; gap: 6px; }
-.saved-row { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 10px; align-items: center; background: var(--paper); border-radius: 10px; padding: 6px 10px; }
+.saved-row { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 10px; align-items: center; background: var(--lime-soft); border-radius: 10px; padding: 6px 10px; }
 .saved-row .sayw { width: 36px; height: 36px; }
 .saved-row b { display: block; }
 .saved-row small { color: var(--ua); font-size: 15px; }
@@ -196,6 +199,16 @@ a.ext { color: var(--ua); font-weight: 700; }
 .empty { color: var(--muted); }
 label.row { display: grid; gap: 4px; font-size: 15px; }
 select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); width: 100%; }
+/* double-tap tooltip: short translation above the word */
+.pop { position: absolute; z-index: 35; background: var(--surface); color: var(--ink); border: 3px solid var(--lime);
+  border-radius: 12px; padding: 4px 12px; font-size: 17px; font-weight: 700; line-height: 1.3; white-space: nowrap;
+  max-width: calc(100vw - 32px); overflow: hidden; text-overflow: ellipsis; box-shadow: 0 6px 16px rgba(0,0,0,.18);
+  transform: translate(-50%, -100%); pointer-events: none; }
+.pop::after { content: ""; position: absolute; left: var(--tip, 50%); bottom: -9px; width: 12px; height: 12px; margin-left: -6px;
+  background: var(--surface); border-right: 3px solid var(--lime); border-bottom: 3px solid var(--lime); transform: rotate(45deg); }
+.pop.below { transform: translate(-50%, 0); }
+.pop.below::after { bottom: auto; top: -9px; transform: rotate(225deg); }
+.w.popped { background: var(--lime-soft); box-shadow: 0 0 0 2px var(--lime); }
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 170px; background: var(--ink); color: var(--paper); padding: 8px 16px; border-radius: 999px; z-index: 60; font-size: 15px; }
 .nosupport { background: var(--ua-soft); color: var(--ua); border-radius: 10px; padding: 10px 12px; font-size: 15px; margin-bottom: 14px; }
 
@@ -255,6 +268,7 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 <div class="scrim" id="scrim" hidden></div>
 <section class="sheet" id="sheet" hidden aria-live="polite"><div class="in" id="sheetIn"></div></section>
 <div class="toast" id="toast" hidden></div>
+<div class="pop" id="pop" role="status" hidden></div>
 
 <script>{{LESSON_JS}}</script>
 <script>{{DICT_JS}}</script>
@@ -618,12 +632,8 @@ sheetIn.addEventListener("click", e => {
   else if (b.id === "closeSheet") closeSheet();
 });
 
-// tap on a word
-book.addEventListener("click", e => {
-  const gl = e.target.closest("[data-gloss]");
-  if (gl) { const w = gl.dataset.gloss; openSheet(wordCard(w)); sayOnce(w); return; }
-  const wEl = e.target.closest(".w");
-  if (!wEl) return;
+// one tap on a word → card with details; quick double tap → small tooltip with the translation only
+function openWord(wEl) {
   const sel = getSelection(); if (sel && !sel.isCollapsed && sel.toString().trim().length > 1) return;
   const wasPlaying = playing; if (playing) pause();
   const sEl = wEl.closest(".s");
@@ -636,7 +646,50 @@ book.addEventListener("click", e => {
     openSheet(wordCard(wEl.textContent));
   }
   sayOnce(wEl.textContent);
+}
+function shortTr(word) {
+  const e = lookup(word);
+  const t = e ? e[0] : (GLOSS[word.toLowerCase()] || "немає в словнику");
+  // first meaning only, without notes in brackets: "відомий, знаменитий" → "відомий"
+  const first = t.split(";")[0].replace(/\([^)]*\)/g, "").trim();
+  return (first || t).split(",")[0].trim() || t;
+}
+const pop = $("#pop");
+let popT, poppedEl = null;
+function hidePop() { pop.hidden = true; clearTimeout(popT); poppedEl && poppedEl.classList.remove("popped"); poppedEl = null; }
+function showPop(wEl) {
+  hidePop();
+  try { getSelection().removeAllRanges(); } catch (e) {}
+  poppedEl = wEl; wEl.classList.add("popped");
+  pop.textContent = shortTr(wEl.textContent);
+  pop.hidden = false; pop.classList.remove("below");
+  const r = wEl.getBoundingClientRect(), pw = pop.offsetWidth;
+  const cx = r.left + r.width / 2;
+  const left = Math.max(16 + pw / 2, Math.min(innerWidth - 16 - pw / 2, cx));
+  pop.style.setProperty("--tip", (50 + (cx - left) / pw * 100).toFixed(1) + "%");
+  let top = r.top + scrollY - 12;
+  if (r.top - pop.offsetHeight - 12 < 80) { pop.classList.add("below"); top = r.bottom + scrollY + 12; }
+  pop.style.left = left + "px"; pop.style.top = top + "px";
+  popT = setTimeout(hidePop, 4000);
+}
+addEventListener("scroll", () => { if (!pop.hidden) hidePop(); }, { passive: true });
+
+let tapT = null, tapEl = null;
+book.addEventListener("click", e => {
+  const gl = e.target.closest("[data-gloss]");
+  if (gl) { const w = gl.dataset.gloss; openSheet(wordCard(w)); sayOnce(w); return; }
+  const wEl = e.target.closest(".w");
+  if (!wEl) { hidePop(); return; }
+  if (tapT && tapEl === wEl) {            // second tap on the same word → tooltip
+    clearTimeout(tapT); tapT = null; tapEl = null;
+    showPop(wEl);
+    return;
+  }
+  clearTimeout(tapT); hidePop();
+  tapEl = wEl;
+  tapT = setTimeout(() => { tapT = null; tapEl = null; openWord(wEl); }, 300);
 });
+book.addEventListener("dblclick", e => { if (e.target.closest(".w")) e.preventDefault(); });
 
 // select several words with a finger/mouse → translation of the selection
 let selT;
