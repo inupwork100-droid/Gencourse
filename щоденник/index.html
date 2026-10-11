@@ -116,11 +116,26 @@ textarea.note { width: 100%; margin-top: 12px; border: 1px solid var(--line); ba
 .field { display: grid; gap: 6px; }
 .field label { font-size: 12px; font-weight: 700; color: var(--muted); }
 select, input[type="text"] { width: 100%; border: 1px solid var(--line); background: var(--surface-2); border-radius: 12px; padding: 10px 12px; }
-.gradegrid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+.gradegrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
 .gradegrid button { border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 9px 0; font-weight: 800; font-variant-numeric: tabular-nums; }
 .gradegrid button:hover { border-color: var(--gc); }
 .gradegrid button:active { background: var(--gc); color: #fff; }
 .scale-note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+.gradegrid button { display: grid; gap: 2px; align-content: center; padding: 8px 2px; min-width: 0; justify-items: center; background: color-mix(in srgb, var(--gc) 14%, var(--surface)); border-color: color-mix(in srgb, var(--gc) 45%, var(--line)); }
+.gradegrid button b { font-size: 17px; color: var(--gc); }
+.gradegrid button small { font-size: 9px; font-weight: 700; color: var(--muted); line-height: 1.1; text-align: center; overflow-wrap: anywhere; }
+.gradegrid button:active b, .gradegrid button:active small { color: #fff; }
+.gscale { display: grid; gap: 4px; margin-top: 10px; font-size: 12px; }
+.gscale div { display: flex; align-items: center; gap: 8px; }
+.gscale i { flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: 800; color: #fff; font-size: 12px; }
+.gscale span { color: var(--muted); }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+.slegend { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.slegend button { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 10px 4px 8px; font-size: 12px; font-weight: 700; }
+.slegend button i { width: 16px; height: 4px; border-radius: 2px; }
+.slegend button[aria-pressed="false"] { opacity: .4; }
+.slegend button[aria-pressed="false"] i { background: var(--empty) !important; }
+input[type="color"] { width: 40px; height: 38px; flex: none; border: 1px solid var(--line); border-radius: 10px; padding: 3px; background: var(--surface-2); }
 
 /* tabs (segmented) */
 .tabs { display: flex; gap: 4px; background: var(--surface); padding: 4px; border-radius: 14px; box-shadow: var(--shadow); }
@@ -259,6 +274,35 @@ const MONTH_GEN = ['січня','лютого','березня','квітня','
 const DOW_FULL = ['понеділок','вівторок','середа','четвер','пʼятниця','субота','неділя'];
 const DOW_ACC = ['понеділок','вівторок','середу','четвер','пʼятницю','суботу','неділю'];
 const DOW_SHORT = ['Пн','Вт','Ср','Чт','Пт','Сб','Нд'];
+const GRADES = {
+  6: { c: '#4f9a3c', label: 'перевершую', say: 'Знаю це на всі 100' },
+  5: { c: '#84b257', label: 'вмію', say: 'Я це вмію' },
+  4: { c: '#4f86df', label: 'впевнено', say: 'Вмію більшість, майже завжди' },
+  3: { c: '#e8973d', label: 'розвиваюсь', say: 'Вмію частину, іноді' },
+  2: { c: '#df5f5f', label: 'починаю', say: 'Ще не виходить, але працюю' },
+  1: { c: '#b3261e', label: 'ще не вмію', say: 'Поки не розумію' },
+};
+const SUBJECT_COLORS = ['#d6409f', '#0fa3b1', '#2f5bea', '#8e44ad', '#b9770e', '#e67e22', '#16a085',
+  '#c9a30a', '#5d6d7e', '#a93226', '#27ae60', '#6c5ce7', '#00897b', '#d35400'];
+const KIRA_SUBJECTS = [
+  { id: 'k1', name: 'Мистецтво і дизайн', color: '#d6409f' },
+  { id: 'k2', name: 'Цифрова грамотність', color: '#0fa3b1' },
+  { id: 'k3', name: 'Англійська мова', color: '#2f5bea' },
+  { id: 'k4', name: 'Гуманітарні (Яворська)', color: '#8e44ad' },
+  { id: 'k5', name: 'Гуманітарні (Като)', color: '#b9770e' },
+  { id: 'k6', name: 'Іспанська мова', color: '#e67e22' },
+  { id: 'k7', name: 'Математика', color: '#16a085' },
+  { id: 'k8', name: 'Музика', color: '#c9a30a' },
+  { id: 'k9', name: 'Фізкультура', color: '#5d6d7e' },
+  { id: 'k10', name: 'Польська мова', color: '#a93226' },
+  { id: 'k11', name: 'Природничі науки', color: '#27ae60' },
+];
+// Kira's current grades (September 2026), one per subject
+const KIRA_SEPT_GRADES = [
+  ['k1', 6, '2026-09-09'], ['k2', 4, '2026-09-15'], ['k3', 1, '2026-09-22'], ['k4', 3, '2026-09-10'],
+  ['k5', 3, '2026-09-17'], ['k6', 2, '2026-09-24'], ['k7', 5, '2026-09-11'], ['k8', 4, '2026-09-18'],
+  ['k9', 5, '2026-09-08'], ['k10', 3, '2026-09-25'], ['k11', 2, '2026-09-29'],
+];
 const DEFAULT_PROFILES = {
   donia: { name: 'Кіра', emoji: '🦊', order: 0,
     habits: [
@@ -268,11 +312,7 @@ const DEFAULT_PROFILES = {
       { id: 'h4', name: 'Почистити зуби двічі', icon: '🪥' },
       { id: 'h5', name: 'Без телефону до уроків', icon: '📵' },
     ],
-    subjects: [
-      { id: 's1', name: 'Математика' }, { id: 's2', name: 'Українська мова' },
-      { id: 's3', name: 'Українська література' }, { id: 's4', name: 'Англійська мова' },
-      { id: 's5', name: 'Історія' }, { id: 's6', name: 'Природознавство' },
-    ] },
+    subjects: KIRA_SUBJECTS },
   mama: { name: 'Мама', emoji: '🌻', order: 1,
     habits: [
       { id: 'h1', name: 'Випити 2 л води', icon: '💧' },
@@ -294,8 +334,26 @@ const today = () => iso(new Date());
 const dow = s => (parse(s).getDay() + 6) % 7;
 const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const fmt1 = n => (Math.round(n * 10) / 10).toLocaleString('uk-UA', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-const gradeColor = v => v >= 10 ? 'var(--m5)' : v >= 7 ? 'var(--m4)' : v >= 4 ? 'var(--m2)' : 'var(--m1)';
-const gradeBand = v => v >= 10 ? 'високий' : v >= 7 ? 'достатній' : v >= 4 ? 'середній' : 'початковий';
+const gradeKey = v => Math.max(1, Math.min(6, Math.round(v)));
+const gradeColor = v => GRADES[gradeKey(v)].c;
+const gradeBand = v => GRADES[gradeKey(v)].label;
+const subjColor = (s, i) => (s && s.color) || SUBJECT_COLORS[i % SUBJECT_COLORS.length];
+const fmtDM = d => { const x = parse(d); return `${pad(x.getDate())}.${pad(x.getMonth() + 1)}`; };
+function migrateLocal(L) {
+  if ((L.v || 1) >= 2) return;
+  const k = L.profiles.donia;
+  if (k) {
+    if (!(k.subjects || []).length || (k.subjects || []).every(x => /^s[1-6]$/.test(x.id))) k.subjects = JSON.parse(JSON.stringify(KIRA_SUBJECTS));
+    if (k.name === 'Донька') k.name = 'Кіра';
+    const days = L.days.donia = L.days.donia || {};
+    const has = Object.values(days).some(d => (d.grades || []).some(g => /^k\d+$/.test(g.s)));
+    if (!has) KIRA_SEPT_GRADES.forEach(([sid, v, date]) => {
+      const d = days[date] = Object.assign(emptyDay(), days[date] || {});
+      d.grades = (d.grades || []).concat([{ s: sid, v }]);
+    });
+  }
+  L.v = 2;
+}
 const moodColor = v => MOODS[Math.max(1, Math.min(5, Math.round(v)))].c;
 const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* storage blocked */ } };
@@ -353,6 +411,7 @@ const Store = {
       let data = null;
       try { data = JSON.parse(lsGet(LS_DATA)); } catch (e) { data = null; }
       this.local = data && data.profiles ? data : { profiles: JSON.parse(JSON.stringify(DEFAULT_PROFILES)), days: {} };
+      migrateLocal(this.local);
       this.persistLocal();
       onProfiles(this.local.profiles, true);
     }
@@ -476,6 +535,10 @@ function range(period, anchor) {
   } else if (period === 'month') {
     start = iso(new Date(y, m, 1)); end = iso(new Date(y, m + 1, 0));
     label = `${cap(MONTH_NOM[m])} ${y}`;
+  } else if (period === 'year') {
+    const sy = m >= 8 ? y : y - 1;
+    start = iso(new Date(sy, 8, 1)); end = iso(new Date(sy + 1, 7, 31));
+    label = `Навчальний рік ${sy}/${String(sy + 1).slice(2)}`;
   } else {
     start = iso(new Date(y, m - 2, 1)); end = iso(new Date(y, m + 1, 0));
     const s = parse(start);
@@ -485,7 +548,7 @@ function range(period, anchor) {
 }
 function shiftAnchor(period, anchor, dir) {
   if (period === 'week') return addDays(anchor, 7 * dir);
-  const a = parse(anchor), step = period === 'month' ? 1 : 3;
+  const a = parse(anchor), step = period === 'month' ? 1 : period === 'year' ? 12 : 3;
   return iso(new Date(a.getFullYear(), a.getMonth() + step * dir, 1));
 }
 function dates(start, end) { const out = []; for (let d = start; d <= end; d = addDays(d, 1)) out.push(d); return out; }
@@ -616,7 +679,7 @@ function viewDay() {
       '</div></section>';
 
     const sel = S.subject && subs.find(s => s.id === S.subject) ? S.subject : subs[0].id;
-    html += `<section class="card"><div class="card-head"><h2>Оцінки</h2><span class="meta">шкала 1–12</span></div>`;
+    html += `<section class="card"><div class="card-head"><h2>Оцінки</h2><span class="meta">шкала 1–6</span></div>`;
     if (day.grades.length) {
       html += '<div class="gradelist">' + day.grades.map((g, i) => {
         const s = subs.find(x => x.id === g.s);
@@ -624,8 +687,9 @@ function viewDay() {
       }).join('') + '</div>';
     }
     html += `<div class="field"><label for="gsub">Предмет</label><select id="gsub" data-act="grade-subject">${subs.map(s => `<option value="${esc(s.id)}" ${s.id === sel ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select></div>
-      <div class="gradegrid">${Array.from({ length: 12 }, (_, i) => i + 1).map(v => `<button style="--gc:${gradeColor(v)}" data-act="grade-add" data-v="${v}">${v}</button>`).join('')}</div>
-      <p class="scale-note">Натисни бал, щоб додати оцінку. 1–3 початковий · 4–6 середній · 7–9 достатній · 10–12 високий рівень</p>
+      <div class="gradegrid">${[1, 2, 3, 4, 5, 6].map(v => `<button style="--gc:${gradeColor(v)}" data-act="grade-add" data-v="${v}" aria-label="Оцінка ${v}, ${GRADES[v].label}"><b>${v}</b></button>`).join('')}</div>
+      <p class="scale-note">Натисни оцінку, щоб додати її з цієї дати.</p>
+      <div class="gscale">${[6, 5, 4, 3, 2, 1].map(v => `<div><i style="background:${GRADES[v].c}">${v}</i><b>${cap(GRADES[v].label)}</b><span>${GRADES[v].say}</span></div>`).join('')}</div>
     </section>`;
   }
   html += '</div>';
@@ -636,7 +700,7 @@ function viewDay() {
 const W = 340;
 function moodChart(ds) {
   const all = daysOf(), H = 130, top = 8, bottom = 22, left = 4, right = 4;
-  const n = ds.length, slot = (W - left - right) / n, bw = Math.max(2, Math.min(28, slot * 0.68));
+  const n = ds.length, slot = (W - left - right) / n, bw = Math.max(0.8, Math.min(28, slot * 0.68));
   const ih = H - top - bottom;
   let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Настрій по днях">`;
   [1, 3, 5].forEach(v => { const y = top + ih - (v / 5) * ih; s += `<line x1="${left}" x2="${W - right}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-dasharray="${v === 3 ? '3 3' : '0'}" stroke-width="1"/>`; });
@@ -678,28 +742,64 @@ function weekdayChart(byDow) {
   });
   return { svg: s + '</svg>', vals, best, worst };
 }
-function gradeChart(points, ds) {
-  const H = 170, top = 10, bottom = 22, left = 22, right = 8, ih = H - top - bottom, iw = W - left - right;
-  const n = ds.length, idx = {}; ds.forEach((d, i) => { idx[d] = i; });
-  const X = i => left + (n === 1 ? iw / 2 : (i + 0.5) * (iw / n));
-  const Y = v => top + ih - ((v - 1) / 11) * ih;
-  let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Оцінки з предмета">`;
-  [[1, 3.5, 'var(--m1)'], [3.5, 6.5, 'var(--m2)'], [6.5, 9.5, 'var(--m4)'], [9.5, 12, 'var(--m5)']].forEach(([a, b, c]) => {
-    s += `<rect x="${left}" y="${Y(b).toFixed(1)}" width="${iw}" height="${(Y(a) - Y(b)).toFixed(1)}" fill="${c}" opacity=".08"/>`;
-  });
-  [1, 4, 7, 10, 12].forEach(v => { s += `<text x="${left - 6}" y="${(Y(v) + 3).toFixed(1)}" text-anchor="end">${v}</text>`; });
-  ds.forEach((d, i) => { const lab = xLabel(ds, i); if (lab) s += `<text x="${X(i).toFixed(1)}" y="${H - 6}" text-anchor="middle">${lab}</text>`; });
-  const pts = points.filter(p => idx[p.d] != null).sort((a, b) => a.d.localeCompare(b.d));
-  if (pts.length) {
-    const a = avg(pts.map(p => p.v));
-    s += `<line x1="${left}" x2="${W - right}" y1="${Y(a).toFixed(1)}" y2="${Y(a).toFixed(1)}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"/>`;
-    s += `<text x="${W - right}" y="${(Y(a) - 5).toFixed(1)}" text-anchor="end" style="fill:var(--accent);font-weight:800">середня ${fmt1(a)}</text>`;
-    if (pts.length > 1) s += `<polyline fill="none" stroke="var(--muted)" stroke-opacity=".5" stroke-width="1.5" points="${pts.map(p => `${X(idx[p.d]).toFixed(1)},${Y(p.v).toFixed(1)}`).join(' ')}"/>`;
-    pts.forEach((p, k) => {
-      const last = k === pts.length - 1;
-      s += `<circle cx="${X(idx[p.d]).toFixed(1)}" cy="${Y(p.v).toFixed(1)}" r="${last ? 6 : 4.5}" fill="${gradeColor(p.v)}" stroke="var(--surface)" stroke-width="2"><title>${p.d}: ${p.v}</title></circle>`;
-    });
+function smoothPath(pts) {
+  if (pts.length < 2) return '';
+  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
   }
+  return d;
+}
+function gradeChart(grades, subs, ds, focus, hidden) {
+  const H = 236, top = 26, bottom = 30, left = 30, right = 16, ih = H - top - bottom, iw = W - left - right;
+  const first = ds[0], last = ds[ds.length - 1];
+  const inRange = d => d >= first && d <= last;
+  // evenly spaced dates on which grades were received
+  const cats = [...new Set(subs.filter(x => !hidden.has(x.id)).flatMap(x => (grades[x.id] || []).map(g => g.d)).filter(inRange))].sort();
+  const idx = {}; cats.forEach((d, i) => { idx[d] = i; });
+  const X = i => left + (i + 0.5) * (iw / Math.max(1, cats.length));
+  const Y = v => top + ih - ((v - 1) / 5) * ih;
+  let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Оцінки з усіх предметів по датах">`;
+  for (let v = 1; v <= 6; v++) {
+    s += `<line x1="${left}" x2="${W - right}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" stroke="var(--line)" stroke-width="1"/>`;
+    s += `<text x="${left - 9}" y="${(Y(v) + 3.5).toFixed(1)}" text-anchor="end" style="fill:${GRADES[v].c};font-weight:800;font-size:11px">${v}</text>`;
+  }
+  // axes with arrows: grades go up, dates go right
+  s += `<line x1="${left}" y1="${top + ih}" x2="${left}" y2="${top - 14}" stroke="var(--muted)" stroke-width="1.2"/>`;
+  s += `<path d="M${left - 4},${top - 9} L${left},${top - 17} L${left + 4},${top - 9} Z" fill="var(--muted)"/>`;
+  s += `<text x="${left + 7}" y="${top - 10}" style="font-weight:700">оцінка</text>`;
+  s += `<line x1="${left}" y1="${top + ih}" x2="${W - right + 8}" y2="${top + ih}" stroke="var(--muted)" stroke-width="1.2"/>`;
+  s += `<path d="M${W - right + 3},${top + ih - 4} L${W - right + 11},${top + ih} L${W - right + 3},${top + ih + 4} Z" fill="var(--muted)"/>`;
+  const visible = subs.map((sub, i) => ({ sub, i })).filter(({ sub }) => !hidden.has(sub.id));
+  const all = [];
+  visible.forEach(({ sub, i }) => (grades[sub.id] || []).forEach(g => { if (idx[g.d] != null) all.push({ ...g, sid: sub.id, color: subjColor(sub, i) }); }));
+  // date labels under the points, skipping ones that would collide
+  const labelDates = [...new Set(all.map(g => g.d))].sort();
+  let lastX = -99;
+  labelDates.forEach(d => {
+    const x = X(idx[d]);
+    s += `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${top + ih}" y2="${top + ih + 4}" stroke="var(--muted)"/>`;
+    if (x - lastX >= 24) { s += `<text x="${x.toFixed(1)}" y="${H - 10}" text-anchor="middle" style="font-size:9px">${fmtDM(d)}</text>`; lastX = x; }
+  });
+  if (!labelDates.length) s += `<text x="${left + iw / 2}" y="${top + ih / 2}" text-anchor="middle">Немає оцінок за цей період</text>`;
+  // spread points that share a date and grade
+  const groups = {};
+  all.forEach(g => { (groups[g.d + '|' + g.v] = groups[g.d + '|' + g.v] || []).push(g); });
+  Object.values(groups).forEach(gs => gs.forEach((g, k) => { g.dx = (k - (gs.length - 1) / 2) * 11; }));
+  const dim = id => focus && focus !== id;
+  visible.forEach(({ sub, i }) => {
+    const pts = all.filter(g => g.sid === sub.id).sort((a, b) => a.d.localeCompare(b.d)).map(g => [X(idx[g.d]) + g.dx, Y(g.v)]);
+    if (pts.length > 1) s += `<path d="${smoothPath(pts)}" fill="none" stroke="${subjColor(sub, i)}" stroke-width="${focus === sub.id ? 3.2 : 2.4}" stroke-linecap="round" opacity="${dim(sub.id) ? 0.15 : 0.95}"/>`;
+  });
+  all.sort((a, b) => (a.sid === focus) - (b.sid === focus)).forEach(g => {
+    const x = X(idx[g.d]) + g.dx, y = Y(g.v), sub = subs.find(z => z.id === g.sid);
+    s += `<g opacity="${dim(g.sid) ? 0.25 : 1}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="8" fill="${gradeColor(g.v)}" stroke="${g.color}" stroke-width="2.2"/>`;
+    s += `<text x="${x.toFixed(1)}" y="${(y + 3.6).toFixed(1)}" text-anchor="middle" style="fill:#fff;font-weight:800;font-size:10px">${g.v}</text>`;
+    s += `<title>${esc(sub ? sub.name : '')}: ${g.v} (${fmtDM(g.d)})</title></g>`;
+  });
   return s + '</svg>';
 }
 
@@ -709,10 +809,10 @@ function viewStats() {
   const cur = summarize(r.start, r.end), prev = summarize(pr.start, pr.end);
   const t = today(), all = daysOf();
   const nextDisabled = r.end >= t;
-  const prevName = { week: 'минулим тижнем', month: 'минулим місяцем', quarter: 'попередніми 3 місяцями' }[S.period];
+  const prevName = { week: 'минулим тижнем', month: 'минулим місяцем', quarter: 'попередніми 3 місяцями', year: 'минулим навчальним роком' }[S.period];
 
   let html = `<div class="stack">
-    <div class="tabs" role="group" aria-label="Період">${[['week', 'Тиждень'], ['month', 'Місяць'], ['quarter', '3 місяці']].map(([k, l]) => `<button data-act="period" data-k="${k}" aria-pressed="${S.period === k}">${l}</button>`).join('')}</div>
+    <div class="tabs" role="group" aria-label="Період">${[['week', 'Тиждень'], ['month', 'Місяць'], ['quarter', '3 міс.'], ['year', 'Рік']].map(([k, l]) => `<button data-act="period" data-k="${k}" aria-pressed="${S.period === k}">${l}</button>`).join('')}</div>
     <div class="datenav" style="margin:0">
       <button class="iconbtn" data-act="period-shift" data-n="-1" aria-label="Попередній період">${ICON_L}</button>
       <div class="label"><b>${r.label}</b><span>${cur.logged.length} ${plural(cur.logged.length, 'день', 'дні', 'днів')} із записами</span></div>
@@ -753,7 +853,7 @@ function viewStats() {
   // habits
   const habits = p.habits || [];
   if (habits.length) {
-    const dots = S.period === 'quarter' ? null : cur.ds;
+    const dots = S.period === 'quarter' || S.period === 'year' ? null : cur.ds;
     html += `<section class="card"><div class="card-head"><h2>Звички: що прокачалось</h2><span class="meta">${cur.logged.length ? `з ${cur.logged.length} ${plural(cur.logged.length, 'дня', 'днів', 'днів')}` : ''}</span></div><div class="rows">` +
       habits.map(h => {
         const n = cur.habit[h.id] ? cur.habit[h.id].done : 0;
@@ -785,22 +885,23 @@ function viewStats() {
     html += '</section>';
 
     // grades by subject
-    const withGrades = subs.filter(s => cur.grades[s.id].length || prev.grades[s.id].length);
-    const sel = S.gradeSubject && subs.find(s => s.id === S.gradeSubject) ? S.gradeSubject : (withGrades[0] || subs[0]).id;
+    const focus = S.gradeSubject && subs.find(x => x.id === S.gradeSubject) ? S.gradeSubject : null;
+    const hidden = S.hiddenSubjects || (S.hiddenSubjects = new Set());
     html += `<section class="card"><div class="card-head"><h2>Оцінки з предметів</h2><span class="meta">середня і зміна</span></div>`;
     if (cur.gradeCount || prev.gradeCount) {
-      const ranked = subs.map(s => {
-        const a = avg(cur.grades[s.id].map(g => g.v)), b = avg(prev.grades[s.id].map(g => g.v));
-        return { s, a, b, n: cur.grades[s.id].length };
+      const ranked = subs.map((sub, i) => {
+        const a = avg(cur.grades[sub.id].map(g => g.v)), b = avg(prev.grades[sub.id].map(g => g.v));
+        return { s: sub, i, a, b, n: cur.grades[sub.id].length };
       });
-      html += '<div>' + ranked.map(({ s, a, b, n }) => `<button class="subj" data-act="grade-pick" data-id="${esc(s.id)}" aria-pressed="${s.id === sel}">
-          <span class="nm">${esc(s.name)}<small>${n ? `${n} ${plural(n, 'оцінка', 'оцінки', 'оцінок')} · ${gradeBand(a)} рівень` : 'немає оцінок за період'}</small></span>
+      html += `<div class="eyebrow" style="margin-bottom:6px">Кожна оцінка по датах</div>${gradeChart(cur.grades, subs, cur.ds, focus, hidden)}
+        <div class="slegend">${subs.map((sub, i) => `<button data-act="subj-toggle" data-id="${esc(sub.id)}" aria-pressed="${!hidden.has(sub.id)}"><i style="background:${subjColor(sub, i)}"></i>${esc(sub.name)}</button>`).join('')}</div>
+        <p class="meta" style="margin:6px 0 14px">Колір кружечка показує оцінку, колір лінії показує предмет. Натисни предмет у списку, щоб виділити його лінію.</p>`;
+      html += '<div>' + ranked.map(({ s: sub, i, a, b, n }) => `<button class="subj" data-act="grade-pick" data-id="${esc(sub.id)}" aria-pressed="${sub.id === focus}">
+          <span class="nm"><i class="sw" style="background:${subjColor(sub, i)}"></i>${esc(sub.name)}<small>${n ? `${n} ${plural(n, 'оцінка', 'оцінки', 'оцінок')} · ${gradeBand(a)}` : 'немає оцінок за період'}</small></span>
           <span class="tr" style="font-size:13px;font-weight:800">${trend(a, b)}</span>
           <span class="avgbadge" style="--gc:${a != null ? gradeColor(a) : 'var(--empty)'}">${a != null ? fmt1(a) : '—'}</span></button>`).join('') + '</div>';
-      const ss = subs.find(s => s.id === sel);
-      html += `<div style="margin-top:14px"><div class="eyebrow" style="margin-bottom:6px">${esc(ss.name)} · кожна оцінка</div>${gradeChart(cur.grades[sel], cur.ds)}
-        ${insightGrades(ranked)}</div>`;
-    } else html += `<p class="help">Оцінок за цей період ще немає. Додай їх на вкладці «День».</p>`;
+      html += insightGrades(ranked);
+    } else html += `<p class="help">Оцінок за цей період ще немає. Додай їх на вкладці «День» або вибери період «Рік».</p>`;
     html += '</section>';
   }
   html += '</div>';
@@ -809,7 +910,7 @@ function viewStats() {
 function insightGrades(ranked) {
   const ch = ranked.filter(x => x.a != null && x.b != null).map(x => ({ ...x, d: x.a - x.b }));
   if (!ch.length) return '';
-  const up = ch.filter(x => x.d >= 0.5).sort((a, b) => b.d - a.d), down = ch.filter(x => x.d <= -0.5).sort((a, b) => a.d - b.d);
+  const up = ch.filter(x => x.d >= 0.3).sort((a, b) => b.d - a.d), down = ch.filter(x => x.d <= -0.3).sort((a, b) => a.d - b.d);
   const parts = [];
   if (up.length) parts.push(`Пішло вгору: <b class="up">${up.map(x => esc(x.s.name)).join(', ')}</b>.`);
   if (down.length) parts.push(`Варто підтягнути: <b class="down">${down.map(x => esc(x.s.name)).join(', ')}</b>.`);
@@ -870,7 +971,7 @@ function viewMore() {
 
   <section class="card"><div class="card-head"><h2>Шкільні предмети</h2><span class="meta">${(p.subjects || []).length}</span></div>
     <p class="help" style="margin-bottom:10px">Якщо предметів немає, розділи «Домашні завдання» та «Оцінки» не показуються.</p><div class="list">` +
-    (p.subjects || []).map(s => `<div class="editrow"><input type="text" class="nm" id="s-nm-${esc(s.id)}" data-act="s-name" data-id="${esc(s.id)}" value="${esc(s.name)}" aria-label="Назва предмета"><button class="del ${arm('s' + s.id) ? 'armed' : ''}" data-act="s-del" data-id="${esc(s.id)}" aria-label="Видалити предмет">${arm('s' + s.id) ? 'Видалити?' : '✕'}</button></div>`).join('') +
+    (p.subjects || []).map((s, i) => `<div class="editrow"><input type="color" id="s-c-${esc(s.id)}" data-act="s-color" data-id="${esc(s.id)}" value="${esc(subjColor(s, i))}" aria-label="Колір предмета"><input type="text" class="nm" id="s-nm-${esc(s.id)}" data-act="s-name" data-id="${esc(s.id)}" value="${esc(s.name)}" aria-label="Назва предмета"><button class="del ${arm('s' + s.id) ? 'armed' : ''}" data-act="s-del" data-id="${esc(s.id)}" aria-label="Видалити предмет">${arm('s' + s.id) ? 'Видалити?' : '✕'}</button></div>`).join('') +
     `<form class="editrow" data-form="add-subject"><input type="text" class="nm" id="new-s-nm" placeholder="Новий предмет, напр. «Фізкультура»" aria-label="Назва нового предмета"><button class="btn" type="submit">Додати</button></form>
   </div></section>
 
@@ -922,7 +1023,8 @@ document.addEventListener('click', e => {
     case 'grade-del': { const d = day(); d.grades.splice(+el.dataset.i, 1); saveDay(S.date, d); break; }
     case 'period': S.period = el.dataset.k; S.anchor = today(); savePrefs(); break;
     case 'period-shift': { const a = shiftAnchor(S.period, S.anchor, +el.dataset.n); if (range(S.period, a).start <= today()) S.anchor = a; break; }
-    case 'grade-pick': S.gradeSubject = id; break;
+    case 'grade-pick': S.gradeSubject = S.gradeSubject === id ? null : id; break;
+    case 'subj-toggle': { const h = S.hiddenSubjects || (S.hiddenSubjects = new Set()); if (h.has(id)) h.delete(id); else h.add(id); break; }
     case 'cal-shift': { const [y, m] = S.calMonth.split('-').map(Number); S.calMonth = iso(new Date(y, m - 1 + +el.dataset.n, 1)).slice(0, 7); break; }
     case 'open-day': S.date = el.dataset.d; setView('day'); return;
     case 'create-defaults':
@@ -949,7 +1051,11 @@ document.addEventListener('click', e => {
       if (armedBefore !== 'examples') { S.armed = 'examples'; break; }
       S.armed = null;
       const days = Object.assign({}, daysOf());
-      Object.entries(days).forEach(([d, v]) => { if (v.example) { delete days[d]; Store.write(`profiles/${S.pid}/days/${d}`, null); } });
+      Object.entries(days).forEach(([d, v]) => {
+        if (!v.example) return;
+        if ((v.grades || []).length) { days[d] = Object.assign(emptyDay(), { grades: v.grades }); Store.write(`profiles/${S.pid}/days/${d}`, days[d]); }
+        else { delete days[d]; Store.write(`profiles/${S.pid}/days/${d}`, null); }
+      });
       S.days[S.pid] = days; toast('Приклад прибрано'); break;
     }
     case 'export': exportData(); return;
@@ -973,7 +1079,9 @@ document.addEventListener('submit', e => {
     $('#new-h-nm').value = ''; $('#new-h-ic').value = '';
   } else {
     const nm = $('#new-s-nm').value.trim(); if (!nm) { toast('Напиши назву предмета'); return; }
-    p.subjects = p.subjects || []; p.subjects.push({ id: uid('s'), name: nm });
+    p.subjects = p.subjects || [];
+    const used = new Set(p.subjects.map((x, i) => subjColor(x, i)));
+    p.subjects.push({ id: uid('s'), name: nm, color: SUBJECT_COLORS.find(c => !used.has(c)) || SUBJECT_COLORS[p.subjects.length % SUBJECT_COLORS.length] });
     $('#new-s-nm').value = '';
   }
   saveProfile(S.pid, p);
@@ -1001,6 +1109,8 @@ document.addEventListener('change', e => {
     if (act === 'h-name') { if (!v) return; h.name = v; } else h.icon = v || '⭐';
   } else if (act === 's-name') {
     const s = p.subjects.find(x => x.id === el.dataset.id); if (!s || !v) return; s.name = v;
+  } else if (act === 's-color') {
+    const i = p.subjects.findIndex(x => x.id === el.dataset.id); if (i < 0) return; p.subjects[i].color = v; saveProfile(S.pid, p); render(); return;
   } else return;
   saveProfile(S.pid, p);
 });
