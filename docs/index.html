@@ -330,6 +330,13 @@ const KIRA_SEPT_GRADES = [
 ];
 // example grades so the chart shows lines; marked ex:true and removable with «Прибрати приклад»
 const KIRA_DEMO_GRADES = [["k1", 6, "2026-09-18"], ["k1", 6, "2026-09-22"], ["k1", 5, "2026-09-29"], ["k2", 4, "2026-09-22"], ["k2", 5, "2026-09-30"], ["k3", 1, "2026-09-08"], ["k3", 1, "2026-09-17"], ["k4", 5, "2026-09-22"], ["k4", 2, "2026-09-29"], ["k5", 5, "2026-09-18"], ["k5", 2, "2026-09-24"], ["k5", 4, "2026-09-25"], ["k6", 1, "2026-09-08"], ["k6", 1, "2026-09-18"], ["k7", 3, "2026-09-10"], ["k7", 5, "2026-09-24"], ["k8", 5, "2026-09-10"], ["k8", 3, "2026-09-17"], ["k8", 3, "2026-09-24"], ["k9", 5, "2026-09-02"], ["k9", 4, "2026-09-09"], ["k9", 5, "2026-09-25"], ["k10", 3, "2026-09-11"], ["k10", 2, "2026-09-29"], ["k11", 1, "2026-09-02"], ["k11", 3, "2026-09-08"], ["k11", 1, "2026-09-22"]];
+// grades entered by mom for September 2026 (history goes to Humanities, Cato)
+const KIRA_MOM_GRADES = [
+  ['k7', 4, '2026-09-02'], ['k7', 5, '2026-09-09'], ['k7', 2, '2026-09-13'], ['k7', 6, '2026-09-22'], ['k7', 6, '2026-09-27'],
+  ['k5', 3, '2026-09-05'], ['k5', 6, '2026-09-11'], ['k5', 5, '2026-09-20'],
+  ['k9', 4, '2026-09-04'], ['k9', 5, '2026-09-10'],
+  ['k6', 2, '2026-09-06'], ['k6', 3, '2026-09-08'], ['k6', 3, '2026-09-12'], ['k6', 5, '2026-09-18'], ['k6', 4, '2026-09-21'], ['k6', 5, '2026-09-28'],
+];
 const DEFAULT_PROFILES = {
   donia: { name: 'Кіра', emoji: '🦊', order: 0,
     habits: [
@@ -385,7 +392,15 @@ function migrateLocal(L) {
       d.grades = (d.grades || []).concat([{ s: sid, v, ex: true }]);
     });
   }
-  L.v = 3;
+  if ((L.v || 1) < 4 && k) {
+    const days = L.days.donia = L.days.donia || {}, mine = new Set(KIRA_MOM_GRADES.map(x => x[0]));
+    Object.values(days).forEach(d => { d.grades = (d.grades || []).filter(g => !(g.ex && mine.has(g.s))); });
+    KIRA_MOM_GRADES.forEach(([sid, v, date]) => {
+      const d = days[date] = Object.assign(emptyDay(), days[date] || {});
+      if (!d.grades.some(g => g.s === sid && g.v === v && !g.ex)) d.grades = d.grades.concat([{ s: sid, v }]);
+    });
+  }
+  L.v = 4;
 }
 const moodColor = v => MOODS[Math.max(1, Math.min(5, Math.round(v)))].c;
 const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
