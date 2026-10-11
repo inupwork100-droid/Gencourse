@@ -808,8 +808,9 @@ function gradeChart(grades, subs, ds, focus, hidden) {
   });
   all.sort((a, b) => (a.sid === focus) - (b.sid === focus)).forEach(g => {
     const x = X(g.d) + g.dx, y = Y(g.v), sub = subs.find(z => z.id === g.sid), big = focus === g.sid;
-    s += `<g opacity="${dim(g.sid) ? 0.2 : 1}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${big ? 6 : 4.6}" fill="${gradeColor(g.v)}" stroke="${g.color}" stroke-width="2"/>`;
-    if (!focus || big) s += `<text x="${x.toFixed(1)}" y="${(y - 8).toFixed(1)}" text-anchor="middle" style="fill:${gradeColor(g.v)};font-weight:800;font-size:${big ? 11 : 9.5}px;paint-order:stroke;stroke:var(--surface);stroke-width:3px">${g.v}</text>`;
+    const r = big ? 6.5 : 5.5;
+    s += `<g opacity="${dim(g.sid) ? 0.2 : 1}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${gradeColor(g.v)}"/>`;
+    s += `<text x="${x.toFixed(1)}" y="${(y + r * 0.45).toFixed(1)}" text-anchor="middle" style="fill:#fff;font-weight:800;font-size:${(r * 1.35).toFixed(1)}px">${g.v}</text>`;
     s += `<title>${esc(sub ? sub.name : '')}: ${g.v} (${fmtDM(g.d)})</title></g>`;
   });
   return s + '</svg>';
