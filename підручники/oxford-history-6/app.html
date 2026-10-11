@@ -26,6 +26,9 @@
   --lime-soft: #e4f6d0;
   --blue: #2f6fd6;         /* challenge answers window */
   --blue-soft: #e3edfc;
+  --yellow: #ffc800;       /* activities answers window */
+  --yellow-soft: #fff5c7;
+  --yellow-ink: #8a6500;
   --pink: #c0336b;
   --line: #e2c9b8;
   --surface: #ffffff;
@@ -40,7 +43,7 @@
     --paper: #23201f; --paper-2: #2c2826; --ground: #151a20;
     --ink: #efe6df; --muted: #b3a69c; --red: #ff7a6b;
     --now: #ffd23f; --now-ink: #1b1715; --done: #7cc6e0;
-    --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae; --lime: #9be05c; --lime-soft: #2c3d21; --blue: #6fa3ff; --blue-soft: #1f2c44;
+    --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae; --lime: #9be05c; --lime-soft: #2c3d21; --blue: #6fa3ff; --blue-soft: #1f2c44; --yellow: #ffcf1f; --yellow-soft: #3a3214; --yellow-ink: #ffd84d;
     --line: #3d3532; --banner: #9e2f27; --surface: #2a2624; --shadow: 0 10px 30px rgba(0,0,0,.5);
     color-scheme: dark;
   }
@@ -50,7 +53,7 @@
   --paper: #23201f; --paper-2: #2c2826; --ground: #151a20;
   --ink: #efe6df; --muted: #b3a69c; --red: #ff7a6b;
   --now: #ffd23f; --now-ink: #1b1715; --done: #7cc6e0;
-  --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae; --lime: #9be05c; --lime-soft: #2c3d21; --blue: #6fa3ff; --blue-soft: #1f2c44;
+  --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae; --lime: #9be05c; --lime-soft: #2c3d21; --blue: #6fa3ff; --blue-soft: #1f2c44; --yellow: #ffcf1f; --yellow-soft: #3a3214; --yellow-ink: #ffd84d;
   --line: #3d3532; --banner: #9e2f27; --surface: #2a2624; --shadow: 0 10px 30px rgba(0,0,0,.5);
   color-scheme: dark;
 }
@@ -141,21 +144,26 @@ body.mode-ua .box h3 .en, body.mode-ua .gloss h3 .en { display: none; }
 .ansbtn { margin-left: auto; border: 0; background: #fff; color: #2f6fd6; width: 42px; height: 32px; border-radius: 8px;
   display: grid; place-items: center; flex: none; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
 .ansbtn svg { width: 28px; height: 22px; }
-.sheet.blue { border-color: var(--blue); }
-.sheet.blue .grab { background: var(--blue); }
-.sheet.blue .card, .sheet.blue .btn { background: var(--blue-soft); }
+.box.activities .ansbtn { color: var(--yellow); }
+.box.activities .ansbtn svg { stroke-width: 3; }
+.sheet.blue { --acc: var(--blue); --acc-soft: var(--blue-soft); --acc-ink: #fff; --acc-text: var(--blue); }
+.sheet.yellow { --acc: var(--yellow); --acc-soft: var(--yellow-soft); --acc-ink: #2a2320; --acc-text: var(--yellow-ink); }
+.sheet.blue, .sheet.yellow { border-color: var(--acc); }
+.sheet.blue .grab, .sheet.yellow .grab { background: var(--acc); }
+.sheet.blue .card, .sheet.blue .btn, .sheet.yellow .card, .sheet.yellow .btn { background: var(--acc-soft); }
 .ans { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: start; }
-.ans .num { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); color: #fff; font-weight: 700; display: grid; place-items: center; }
+.ans .num { width: 30px; height: 30px; border-radius: 50%; background: var(--acc); color: var(--acc-ink); font-size: 14px; font-weight: 700; display: grid; place-items: center; }
 .ans .q { font-weight: 700; }
 .ans .qua { color: var(--muted); font-size: 15px; }
+.ans .a, .ans .ua { white-space: pre-line; }
 .ans .a { margin-top: 8px; background: var(--surface); border-radius: 8px; padding: 8px 12px; line-height: 1.5; }
-.ans .say-a { border: 0; background: transparent; color: var(--blue); padding: 0; margin-top: 6px; font-weight: 700; font-size: 14px; display: inline-flex; gap: 4px; align-items: center; }
+.ans .say-a { border: 0; background: transparent; color: var(--acc-text); padding: 0; margin-top: 6px; font-weight: 700; font-size: 14px; display: inline-flex; gap: 4px; align-items: center; }
 .ans .say-a svg { width: 16px; height: 16px; }
 .box h3 .h3ua { font-family: var(--f-body); font-size: 14px; opacity: .9; margin-left: 8px; }
 body.mode-ua .box h3 .h3ua { font-family: var(--f-display); font-size: inherit; margin: 0; opacity: 1; }
 .box .items { padding: 10px 14px 12px; display: grid; gap: 8px; }
 .item { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 6px; padding-right: 40px; position: relative; }
-.item.sub { padding-left: 22px; }
+.item.subq { padding-left: 22px; }
 .item .n { font-weight: 700; color: var(--muted); }
 .item .ua-tog { position: absolute; right: 0; top: 0; }
 .item .ua { grid-column: 2; }
@@ -394,7 +402,7 @@ L.blocks.forEach((b, bi) => {
     out += `<div class="box blk ${b.kind}"><h3><span class="en">${esc(b.title[0])}</span><span class="h3ua">${esc(b.title[1])}</span>${b.answers ? `<button class="ansbtn" data-answers="${bi}" aria-label="Відповіді на запитання" title="Відповіді">${SVG.mail}</button>` : ""}</h3><div class="items">` +
       b.items.map(it => {
         const r = renderSentences(it.s);
-        return `<div class="item${it.sub ? " sub" : ""}"><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div><button class="ua-tog" data-tog aria-label="Переклад">UA</button></div>`;
+        return `<div class="item${it.sub ? " subq" : ""}"><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div><button class="ua-tog" data-tog aria-label="Переклад">UA</button></div>`;
       }).join("") + `</div></div>`;
   }
 });
@@ -747,11 +755,11 @@ function openAnswers(b) {
   if (playing) pause();
   hidePop();
   const h = `<div class="head"><div class="word ttl">Відповіді · ${esc(b.title[0])}</div></div>` +
-    b.answers.map((x, i) => `<div class="card ans"><span class="num">${i + 1}</span><div style="min-width:0">
+    b.answers.map((x, i) => `<div class="card ans"><span class="num">${esc(x.n || i + 1)}</span><div style="min-width:0">
       <div class="q">${esc(x.q[0])}</div><div class="qua">${esc(x.q[1])}</div>
       <div class="a">${esc(x.a[0])}</div><span class="ua">${esc(x.a[1])}</span>
-      <button class="say-a" data-say="${esc(x.a[0])}">${SVG.speak} Слухати відповідь</button></div></div>`).join("");
-  openSheet(h, null, "blue");
+      <button class="say-a" data-say="${esc(x.a[0].replace(/\n/g, " "))}">${SVG.speak} Слухати відповідь</button></div></div>`).join("");
+  openSheet(h, null, b.kind === "activities" ? "yellow" : "blue");
 }
 
 /* ---------- saved words sheet + quiz ---------- */

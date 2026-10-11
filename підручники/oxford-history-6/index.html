@@ -34,6 +34,9 @@
   --lime-soft: #e4f6d0;
   --blue: #2f6fd6;         /* challenge answers window */
   --blue-soft: #e3edfc;
+  --yellow: #ffc800;       /* activities answers window */
+  --yellow-soft: #fff5c7;
+  --yellow-ink: #8a6500;
   --pink: #c0336b;
   --line: #e2c9b8;
   --surface: #ffffff;
@@ -48,7 +51,7 @@
     --paper: #23201f; --paper-2: #2c2826; --ground: #151a20;
     --ink: #efe6df; --muted: #b3a69c; --red: #ff7a6b;
     --now: #ffd23f; --now-ink: #1b1715; --done: #7cc6e0;
-    --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae; --lime: #9be05c; --lime-soft: #2c3d21; --blue: #6fa3ff; --blue-soft: #1f2c44;
+    --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae; --lime: #9be05c; --lime-soft: #2c3d21; --blue: #6fa3ff; --blue-soft: #1f2c44; --yellow: #ffcf1f; --yellow-soft: #3a3214; --yellow-ink: #ffd84d;
     --line: #3d3532; --banner: #9e2f27; --surface: #2a2624; --shadow: 0 10px 30px rgba(0,0,0,.5);
     color-scheme: dark;
   }
@@ -58,7 +61,7 @@
   --paper: #23201f; --paper-2: #2c2826; --ground: #151a20;
   --ink: #efe6df; --muted: #b3a69c; --red: #ff7a6b;
   --now: #ffd23f; --now-ink: #1b1715; --done: #7cc6e0;
-  --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae; --lime: #9be05c; --lime-soft: #2c3d21; --blue: #6fa3ff; --blue-soft: #1f2c44;
+  --ua: #c7b6ff; --ua-soft: #2f2a40; --green: #7bc874; --pink: #ff7fae; --lime: #9be05c; --lime-soft: #2c3d21; --blue: #6fa3ff; --blue-soft: #1f2c44; --yellow: #ffcf1f; --yellow-soft: #3a3214; --yellow-ink: #ffd84d;
   --line: #3d3532; --banner: #9e2f27; --surface: #2a2624; --shadow: 0 10px 30px rgba(0,0,0,.5);
   color-scheme: dark;
 }
@@ -149,21 +152,26 @@ body.mode-ua .box h3 .en, body.mode-ua .gloss h3 .en { display: none; }
 .ansbtn { margin-left: auto; border: 0; background: #fff; color: #2f6fd6; width: 42px; height: 32px; border-radius: 8px;
   display: grid; place-items: center; flex: none; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
 .ansbtn svg { width: 28px; height: 22px; }
-.sheet.blue { border-color: var(--blue); }
-.sheet.blue .grab { background: var(--blue); }
-.sheet.blue .card, .sheet.blue .btn { background: var(--blue-soft); }
+.box.activities .ansbtn { color: var(--yellow); }
+.box.activities .ansbtn svg { stroke-width: 3; }
+.sheet.blue { --acc: var(--blue); --acc-soft: var(--blue-soft); --acc-ink: #fff; --acc-text: var(--blue); }
+.sheet.yellow { --acc: var(--yellow); --acc-soft: var(--yellow-soft); --acc-ink: #2a2320; --acc-text: var(--yellow-ink); }
+.sheet.blue, .sheet.yellow { border-color: var(--acc); }
+.sheet.blue .grab, .sheet.yellow .grab { background: var(--acc); }
+.sheet.blue .card, .sheet.blue .btn, .sheet.yellow .card, .sheet.yellow .btn { background: var(--acc-soft); }
 .ans { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: start; }
-.ans .num { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); color: #fff; font-weight: 700; display: grid; place-items: center; }
+.ans .num { width: 30px; height: 30px; border-radius: 50%; background: var(--acc); color: var(--acc-ink); font-size: 14px; font-weight: 700; display: grid; place-items: center; }
 .ans .q { font-weight: 700; }
 .ans .qua { color: var(--muted); font-size: 15px; }
+.ans .a, .ans .ua { white-space: pre-line; }
 .ans .a { margin-top: 8px; background: var(--surface); border-radius: 8px; padding: 8px 12px; line-height: 1.5; }
-.ans .say-a { border: 0; background: transparent; color: var(--blue); padding: 0; margin-top: 6px; font-weight: 700; font-size: 14px; display: inline-flex; gap: 4px; align-items: center; }
+.ans .say-a { border: 0; background: transparent; color: var(--acc-text); padding: 0; margin-top: 6px; font-weight: 700; font-size: 14px; display: inline-flex; gap: 4px; align-items: center; }
 .ans .say-a svg { width: 16px; height: 16px; }
 .box h3 .h3ua { font-family: var(--f-body); font-size: 14px; opacity: .9; margin-left: 8px; }
 body.mode-ua .box h3 .h3ua { font-family: var(--f-display); font-size: inherit; margin: 0; opacity: 1; }
 .box .items { padding: 10px 14px 12px; display: grid; gap: 8px; }
 .item { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 6px; padding-right: 40px; position: relative; }
-.item.sub { padding-left: 22px; }
+.item.subq { padding-left: 22px; }
 .item .n { font-weight: 700; color: var(--muted); }
 .item .ua-tog { position: absolute; right: 0; top: 0; }
 .item .ua { grid-column: 2; }
@@ -372,7 +380,21 @@ window.LESSON = {
       ["Viking explorers were the first Europeans to reach North America, in about 1000 CE.", "Дослідники-вікінги першими з європейців дісталися Північної Америки — приблизно в 1000 році н. е."],
       ["Travelling to North America was an amazing achievement – it was nearly 500 years before Europeans reached this continent again.", "Подорож до Північної Америки була дивовижним досягненням: минуло майже 500 років, перш ніж європейці знову дісталися цього континенту."]
     ]},
-    { type: "box", kind: "activities", title: ["Activities", "Завдання"], items: [
+    { type: "box", kind: "activities", title: ["Activities", "Завдання"],
+      // Короткі відповіді на завдання (відкриваються жовтим значком конверта).
+      answers: [
+        { n: "1a", q: ["Where did the Vikings come from?", "Звідки походили вікінги?"],
+          a: ["The Vikings came from Norway, Denmark and Sweden. Together these countries are called Scandinavia.", "Вікінги походили з Норвегії, Данії та Швеції. Разом ці країни називають Скандинавією."] },
+        { n: "1b", q: ["Why were the Vikings such skilled boat builders and navigators?", "Чому вікінги були такими вправними кораблебудівниками й мореплавцями?"],
+          a: ["Scandinavia has many rivers and lakes and is surrounded by seas. The Vikings lived near water all the time, so they learned to build boats and travel by sea.", "У Скандинавії багато річок і озер, а навколо — моря. Вікінги весь час жили біля води, тому навчилися будувати човни й подорожувати морем."] },
+        { n: "1c", q: ["Why did some Vikings decide to raid and settle in other countries?", "Чому деякі вікінги вирішили нападати на інші країни й оселятися там?"],
+          a: ["Scandinavia became overcrowded and there was not enough good farmland. The eldest son got all of his father's land, so younger sons had to leave home. They went to other countries to start new farms or to steal treasure.", "Скандинавія стала перенаселеною, і доброї землі не вистачало. Уся земля батька діставалася старшому синові, тож молодші мусили покидати дім. Вони вирушали в інші країни, щоб заснувати нові ферми або вкрасти скарби."] },
+        { n: "2", q: ["Describe the picture. What are the Vikings stealing?", "Опиши малюнок. Що крадуть вікінги?"],
+          a: ["The Vikings have landed their boats on a beach next to a village. They are carrying stolen things from the village down to their boats to take them home to Scandinavia.\nThey are stealing: gold and silver, jewels, a treasure chest, sacks of food, cloth and clothes, tools and animals.", "Вікінги причалили на човнах до берега біля села. Вони несуть викрадені в селі речі до своїх човнів, щоб повезти їх додому, до Скандинавії.\nВони крадуть: золото й срібло, коштовності, скриню зі скарбами, мішки з їжею, тканину й одяг, інструменти та тварин."] },
+        { n: "3", q: ["Timeline: when and where did the Vikings raid and settle?", "Стрічка часу: коли й де вікінги нападали та оселялися?"],
+          a: ["8th century (700s): the Vikings live in Norway, Denmark and Sweden. In 793 they raid Lindisfarne, a monastery in Britain.\n9th century (800s): they raid Britain, Ireland and France and even Sicily and Italy. They settle in England, Ireland and Scotland, and in Iceland (about 870). They travel along rivers to Eastern Europe, to Novgorod and Kyiv.\n10th century (900s): they settle in Normandy in northern France (911) and in Greenland (about 985).\n11th century (1000s): they reach North America (about 1000). After 1066 the Viking Age ends.", "VIII століття (700-ті роки): вікінги живуть у Норвегії, Данії та Швеції. У 793 році вони нападають на Ліндисфарн — монастир у Британії.\nIX століття (800-ті): нападають на Британію, Ірландію, Францію і навіть Сицилію та Італію. Оселяються в Англії, Ірландії, Шотландії та в Ісландії (близько 870 року). Річками доходять до Східної Європи — до Новгорода й Києва.\nX століття (900-ті): оселяються в Нормандії на півночі Франції (911) та в Гренландії (близько 985 року).\nXI століття (1000-ні): дістаються Північної Америки (близько 1000 року). Після 1066 року доба вікінгів закінчується."] }
+      ],
+      items: [
       { n: "1", s: [["Use the information on these two pages to answer these questions.", "Використай інформацію з цих двох сторінок, щоб відповісти на запитання."]] },
       { n: "a", sub: true, s: [["Where did the Vikings come from?", "Звідки походили вікінги?"]] },
       { n: "b", sub: true, s: [["Why were the Vikings such skilled boat builders and navigators?", "Чому вікінги були такими вправними кораблебудівниками й мореплавцями?"]] },
@@ -842,7 +864,7 @@ L.blocks.forEach((b, bi) => {
     out += `<div class="box blk ${b.kind}"><h3><span class="en">${esc(b.title[0])}</span><span class="h3ua">${esc(b.title[1])}</span>${b.answers ? `<button class="ansbtn" data-answers="${bi}" aria-label="Відповіді на запитання" title="Відповіді">${SVG.mail}</button>` : ""}</h3><div class="items">` +
       b.items.map(it => {
         const r = renderSentences(it.s);
-        return `<div class="item${it.sub ? " sub" : ""}"><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div><button class="ua-tog" data-tog aria-label="Переклад">UA</button></div>`;
+        return `<div class="item${it.sub ? " subq" : ""}"><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div><button class="ua-tog" data-tog aria-label="Переклад">UA</button></div>`;
       }).join("") + `</div></div>`;
   }
 });
@@ -1195,11 +1217,11 @@ function openAnswers(b) {
   if (playing) pause();
   hidePop();
   const h = `<div class="head"><div class="word ttl">Відповіді · ${esc(b.title[0])}</div></div>` +
-    b.answers.map((x, i) => `<div class="card ans"><span class="num">${i + 1}</span><div style="min-width:0">
+    b.answers.map((x, i) => `<div class="card ans"><span class="num">${esc(x.n || i + 1)}</span><div style="min-width:0">
       <div class="q">${esc(x.q[0])}</div><div class="qua">${esc(x.q[1])}</div>
       <div class="a">${esc(x.a[0])}</div><span class="ua">${esc(x.a[1])}</span>
-      <button class="say-a" data-say="${esc(x.a[0])}">${SVG.speak} Слухати відповідь</button></div></div>`).join("");
-  openSheet(h, null, "blue");
+      <button class="say-a" data-say="${esc(x.a[0].replace(/\n/g, " "))}">${SVG.speak} Слухати відповідь</button></div></div>`).join("");
+  openSheet(h, null, b.kind === "activities" ? "yellow" : "blue");
 }
 
 /* ---------- saved words sheet + quiz ---------- */
