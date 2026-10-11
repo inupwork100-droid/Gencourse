@@ -1,0 +1,366 @@
+<title>Три шляхи щоденника</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: intro, three phone mockups side by side (stacked on phones) with screen tabs, then a price/time table and a recommendation. */
+:root {
+  --bg: #f2f4fa; --surface: #ffffff; --ink: #1a2140; --muted: #646d8c; --line: #e0e4f0;
+  --accent: #3550d6; --accent-soft: #e6eaff; --good: #1f9a6a; --warn: #c98a12; --bad: #d23f58;
+  --tg: #2f8ad6; --tg-bg: #dfe9f2; --tg-in: #ffffff; --tg-out: #e2f7cb;
+  --wa: #1d8f5f; --wa-bg: #ece5dd; --wa-in: #ffffff; --wa-out: #d8fdd2;
+  --app: #3550d6; --frame: #1a2140;
+  --f-display: "Unbounded", "Manrope", system-ui, sans-serif;
+  --f-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1222; --surface: #171c31; --ink: #e8ebf8; --muted: #9ba3c2; --line: #2a3152;
+    --accent: #8396ff; --accent-soft: #252d58; --good: #45c992; --warn: #f2c341; --bad: #f2667f; --frame: #000;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1222; --surface: #171c31; --ink: #e8ebf8; --muted: #9ba3c2; --line: #2a3152;
+  --accent: #8396ff; --accent-soft: #252d58; --good: #45c992; --warn: #f2c341; --bad: #f2667f; --frame: #000;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 60px; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(24px, 4vw, 34px); letter-spacing: -.02em; margin: 0 0 8px; text-wrap: balance; }
+.lead { color: var(--muted); max-width: 62ch; margin: 0 0 28px; }
+h2 { font-family: var(--f-display); font-weight: 500; font-size: 20px; margin: 40px 0 14px; text-wrap: balance; }
+
+.options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+@media (max-width: 920px) { .options { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; } }
+.opt { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.opt-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; min-height: 2.9em; }
+@media (max-width: 920px) { .opt-head { min-height: 0; } }
+.opt-head b { font-family: var(--f-display); font-weight: 700; font-size: 17px; }
+.tag { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.tag.no { background: color-mix(in srgb, var(--bad) 14%, var(--surface)); color: var(--bad); }
+
+.seg { display: flex; gap: 4px; background: var(--surface); border-radius: 12px; padding: 4px; border: 1px solid var(--line); }
+.seg button { flex: 1; border: 0; background: none; padding: 7px 4px; border-radius: 9px; font: inherit; font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* phone */
+.phone { background: var(--frame); border-radius: 38px; padding: 10px; box-shadow: 0 20px 40px rgba(20,25,50,.18); max-width: 340px; width: 100%; margin: 0 auto; }
+.screen { border-radius: 29px; overflow: hidden; height: 600px; display: flex; flex-direction: column; font-size: 13px; color: #1a1f2e; }
+.screen[hidden] { display: none !important; }
+.sbar { display: flex; justify-content: space-between; padding: 10px 22px 4px; font-size: 12px; font-weight: 800; }
+.chat-head { display: flex; align-items: center; gap: 10px; padding: 6px 12px 10px; border-bottom: 1px solid rgba(0,0,0,.08); }
+.av { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 17px; flex: none; }
+.chat-head .t { font-weight: 800; font-size: 14px; line-height: 1.2; }
+.chat-head .s { font-size: 11px; opacity: .6; }
+.feed { flex: 1; overflow: hidden; padding: 10px; display: flex; flex-direction: column; gap: 6px; justify-content: flex-end; }
+.msg { max-width: 86%; padding: 7px 10px 6px; border-radius: 12px; box-shadow: 0 1px 1px rgba(0,0,0,.08); line-height: 1.38; }
+.msg .tm { display: block; text-align: right; font-size: 10px; opacity: .5; margin-top: 2px; }
+.msg b { font-weight: 800; }
+.in { align-self: flex-start; border-bottom-left-radius: 4px; }
+.out { align-self: flex-end; border-bottom-right-radius: 4px; }
+.kb { display: grid; gap: 4px; align-self: flex-start; width: 86%; margin-top: -2px; }
+.kb .row { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; }
+.kb span { text-align: center; padding: 7px 2px; border-radius: 8px; font-weight: 700; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.day-sep { align-self: center; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; background: rgba(0,0,0,.12); color: #fff; }
+.compose { margin: 0 10px 12px; padding: 10px 14px; border-radius: 22px; background: #fff; font-size: 13px; color: #9aa0ad; }
+
+/* telegram-style */
+.tg { background: var(--tg-bg); }
+.tg .sbar, .tg .chat-head { background: #fff; }
+.tg .in { background: var(--tg-in); }
+.tg .out { background: var(--tg-out); }
+.tg .kb span { background: rgba(47,138,214,.16); color: #1d5f99; }
+.tg .topics { flex: 1; background: #fff; overflow: hidden; }
+.topic { display: flex; gap: 10px; padding: 10px 12px; border-bottom: 1px solid #eef0f4; align-items: center; }
+.topic .ic { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-size: 18px; flex: none; }
+.topic .b { flex: 1; min-width: 0; }
+.topic .n { font-weight: 800; font-size: 13.5px; display: flex; justify-content: space-between; gap: 6px; }
+.topic .n small { font-weight: 600; color: #9aa0ad; font-size: 11px; }
+.topic .p { color: #6b7280; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topic .badge { background: var(--tg); color: #fff; border-radius: 99px; font-size: 11px; font-weight: 800; padding: 1px 7px; }
+
+/* whatsapp-style */
+.wa { background: var(--wa-bg); }
+.wa .sbar, .wa .chat-head { background: #f7f7f7; }
+.wa .in { background: var(--wa-in); }
+.wa .out { background: var(--wa-out); }
+.wa .btns { display: grid; gap: 1px; margin: 6px -10px -6px; border-top: 1px solid #e5e7eb; }
+.wa .btns span { text-align: center; padding: 8px; color: #0b7d5a; font-weight: 700; background: #fff; }
+.wa .btns span + span { border-top: 1px solid #eef0f2; }
+.wa .sheet { background: #fff; border-radius: 18px 18px 0 0; padding: 12px 16px 18px; box-shadow: 0 -6px 20px rgba(0,0,0,.12); }
+.wa .sheet .h { font-weight: 800; text-align: center; margin-bottom: 8px; }
+.wa .sheet .it { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f0f1f3; font-weight: 600; }
+.wa .sheet .it i { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #b6bcc6; }
+.chartimg { background: #fff; border-radius: 8px; padding: 8px; margin-bottom: 4px; }
+.bars { display: flex; align-items: flex-end; gap: 5px; height: 70px; }
+.bars i { flex: 1; border-radius: 4px 4px 0 0; }
+.bars-l { display: flex; gap: 5px; font-size: 9px; color: #8a90a0; margin-top: 3px; }
+.bars-l span { flex: 1; text-align: center; }
+
+/* app-style */
+.app { background: #f2f4fa; }
+.app .body { flex: 1; overflow: hidden; padding: 4px 14px 0; display: flex; flex-direction: column; gap: 10px; }
+.app .hello { display: flex; justify-content: space-between; align-items: center; }
+.app .hello b { font-family: var(--f-display); font-size: 17px; font-weight: 700; color: #1a2140; }
+.app .streak { background: #fff1dc; color: #b26b00; border-radius: 99px; padding: 4px 10px; font-weight: 800; font-size: 12px; }
+.app .card { background: #fff; border-radius: 16px; padding: 12px; box-shadow: 0 1px 2px rgba(26,33,64,.06), 0 4px 14px rgba(26,33,64,.05); }
+.app .card h4 { margin: 0 0 8px; font-size: 13px; font-weight: 800; color: #1a2140; display: flex; justify-content: space-between; }
+.app .card h4 small { color: #646d8c; font-weight: 600; }
+.app .moods { display: flex; justify-content: space-between; font-size: 24px; }
+.app .moods span { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: #f2f4fa; }
+.app .moods span.on { background: #e3f3d6; outline: 2px solid #84bf3c; }
+.app .next { display: flex; gap: 10px; align-items: center; background: #3550d6; color: #fff; }
+.app .next .big { font-family: var(--f-display); font-size: 20px; font-weight: 700; line-height: 1; }
+.app .next .k { font-size: 11px; opacity: .8; }
+.app .hab { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-weight: 600; color: #1a2140; }
+.app .hab i { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #d5dae8; flex: none; }
+.app .hab i.on { background: #1f9a6a; border-color: #1f9a6a; }
+.app .badges { display: flex; gap: 8px; }
+.app .badges span { flex: 1; text-align: center; background: #f7f8fc; border-radius: 12px; padding: 8px 4px; font-size: 10px; font-weight: 700; color: #646d8c; }
+.app .badges span b { display: block; font-size: 20px; }
+.app .badges span.lock { opacity: .4; }
+.app .tabbar { display: grid; grid-template-columns: repeat(4, 1fr); padding: 8px 6px 14px; background: #fff; border-top: 1px solid #e0e4f0; font-size: 10px; font-weight: 700; color: #8a90a0; text-align: center; }
+.app .tabbar .on { color: #3550d6; }
+.app .row2 { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; color: #1a2140; font-weight: 600; }
+.pill { color: #fff; border-radius: 8px; padding: 2px 8px; font-weight: 800; font-size: 12px; }
+.prog { height: 7px; border-radius: 99px; background: #eef1f8; overflow: hidden; margin-top: 4px; }
+.prog i { display: block; height: 100%; border-radius: 99px; }
+.up { color: #1f9a6a; font-weight: 800; } .dn { color: #d23f58; font-weight: 800; }
+
+.facts { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-size: 14px; }
+.facts li { display: flex; gap: 8px; }
+.facts li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; margin-top: 8px; flex: none; background: var(--muted); }
+.facts li.p::before { background: var(--good); }
+.facts li.m::before { background: var(--bad); }
+
+/* table */
+.tbl { overflow-x: auto; background: var(--surface); border-radius: 18px; border: 1px solid var(--line); }
+table { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 14px; }
+th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: .03em; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 800; white-space: nowrap; }
+td .sub { display: block; color: var(--muted); font-size: 12.5px; font-weight: 500; }
+.money { font-variant-numeric: tabular-nums; font-weight: 800; }
+.rec { background: var(--surface); border-radius: 18px; padding: 18px 20px; border: 2px solid var(--accent); display: grid; gap: 8px; max-width: 760px; }
+.rec b.h { font-family: var(--f-display); font-weight: 700; font-size: 17px; }
+.rec p { margin: 0; }
+.note { color: var(--muted); font-size: 12.5px; margin-top: 14px; max-width: 80ch; }
+.note a { color: var(--accent); }
+</style>
+
+<div class="wrap">
+  <h1>Три шляхи для щоденника доньки</h1>
+  <p class="lead">Ті самі функції в трьох оболонках: настрій, розклад із нагадуваннями, оцінки, домашка, звички і графіки. Під кожним телефоном можна перемикати екрани. Це макети: так приблизно все виглядатиме.</p>
+
+  <div class="options">
+    <!-- TELEGRAM -->
+    <section class="opt" data-group="tg">
+      <div class="opt-head"><b>1. Telegram-бот</b><span class="tag">код уже готовий</span></div>
+      <div class="seg" role="group" aria-label="Екрани Telegram">
+        <button aria-pressed="true" data-s="0">Гілки</button><button aria-pressed="false" data-s="1">Заняття</button><button aria-pressed="false" data-s="2">Звички</button>
+      </div>
+      <div class="phone">
+        <div class="screen tg">
+          <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
+          <div class="chat-head"><div class="av" style="background:#e6eaff">👩‍👧</div><div><div class="t">Щоденник Софії</div><div class="s">3 учасники · 5 гілок</div></div></div>
+          <div class="topics">
+            <div class="topic"><div class="ic" style="background:#dceafe">📅</div><div class="b"><div class="n">День <small>21:30</small></div><div class="p">Субота, 10 жовтня · настрій 🙂 · звички 4 з 5</div></div></div>
+            <div class="topic"><div class="ic" style="background:#fff3d6">😊</div><div class="b"><div class="n">Настрій <small>20:02</small></div><div class="p">Софія: втомилась, але контрольну написала</div></div><span class="badge">2</span></div>
+            <div class="topic"><div class="ic" style="background:#f3e3f7">🕐</div><div class="b"><div class="n">Розклад і заняття <small>16:00</small></div><div class="p">⏰ Через 10 хв: Танці (16:00–17:00)</div></div></div>
+            <div class="topic"><div class="ic" style="background:#ffe1dc">⭐</div><div class="b"><div class="n">Оцінки і домашка <small>12:20</small></div><div class="p">⭐ Нова оцінка: Математика — 10</div></div><span class="badge">1</span></div>
+            <div class="topic"><div class="ic" style="background:#dcf7e2">✅</div><div class="b"><div class="n">Звички <small>07:30</small></div><div class="p">Звички на 10 жовтня: 4 з 5</div></div></div>
+          </div>
+        </div>
+        <div class="screen tg" hidden>
+          <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
+          <div class="chat-head"><div class="av" style="background:#f3e3f7">🕐</div><div><div class="t">Розклад і заняття</div><div class="s">Щоденник Софії</div></div></div>
+          <div class="feed">
+            <div class="day-sep">Сьогодні</div>
+            <div class="msg in">🗓 <b>План на пʼятницю</b><br>08:30–09:15 Математика<br>09:25–10:10 Українська мова<br>16:00–17:00 Танці<span class="tm">07:30</span></div>
+            <div class="msg in">⏰ Через 10 хв: <b>Математика</b> (08:30–09:15)<span class="tm">08:20</span></div>
+            <div class="msg in">📝 Як пройшло заняття <b>Математика</b>?<br><br>Враження: 🙂 добре<br>Оцінка: <b>10</b><span class="tm">09:15</span></div>
+            <div class="kb"><div class="row"><span>😄</span><span>·🙂·</span><span>😐</span><span>🙁</span><span>😣</span></div><div class="row"><span>7</span><span>8</span><span>9</span><span>[10]</span><span>11</span><span>12</span></div></div>
+            <div class="msg out">Писали самостійну, все встигла!<span class="tm">09:17</span></div>
+          </div>
+          <div class="compose">Повідомлення</div>
+        </div>
+        <div class="screen tg" hidden>
+          <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
+          <div class="chat-head"><div class="av" style="background:#dcf7e2">✅</div><div><div class="t">Звички</div><div class="s">Щоденник Софії</div></div></div>
+          <div class="feed">
+            <div class="msg in">✅ <b>Звички на 10 жовтня</b>: 3 з 5<br>Натискай на звичку, коли виконаєш.<span class="tm">07:30</span></div>
+            <div class="kb"><div class="row"><span>✅ 🤸 Зарядка зранку</span></div><div class="row"><span>✅ 📚 Читання 20 хвилин</span></div><div class="row"><span>⬜ 🧹 Прибрати в кімнаті</span></div><div class="row"><span>✅ 🪥 Почистити зуби</span></div><div class="row"><span>⬜ 📵 Без телефону до уроків</span></div></div>
+            <div class="msg in">📊 <b>Звички за тиждень</b>: 67% ↑8%<br>📈 Прокачалось: Читання<br>📉 Просіло: Без телефону<div class="chartimg" style="margin-top:6px"><div class="bars"><i style="height:78%;background:#1f9a6a"></i><i style="height:100%;background:#1f9a6a"></i><i style="height:44%;background:#e9b024"></i><i style="height:67%;background:#1f9a6a"></i><i style="height:44%;background:#e9b024"></i></div></div><span class="tm">неділя</span></div>
+          </div>
+          <div class="compose">Повідомлення</div>
+        </div>
+      </div>
+      <ul class="facts">
+        <li class="p">Кожна тема у своїй гілці, мама в групі й бачить усе</li>
+        <li class="p">Безкоштовно, працює і на iPhone, і на Android</li>
+        <li class="m">Донька не користується Telegram: доведеться ставити заради одного бота</li>
+      </ul>
+    </section>
+
+    <!-- APP -->
+    <section class="opt" data-group="app">
+      <div class="opt-head"><b>2. Програма на iPhone</b><span class="tag">вибір доньки</span></div>
+      <div class="seg" role="group" aria-label="Екрани програми">
+        <button aria-pressed="true" data-s="0">Сьогодні</button><button aria-pressed="false" data-s="1">Статистика</button><button aria-pressed="false" data-s="2">Мамин екран</button>
+      </div>
+      <div class="phone">
+        <div class="screen app">
+          <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
+          <div class="body">
+            <div class="hello"><b>Привіт, Софіє!</b><span class="streak">🔥 12 днів</span></div>
+            <div class="card next"><div><div class="k">Наступне заняття</div><div class="big">через 25 хв</div><div class="k">Українська мова · 09:25–10:10</div></div></div>
+            <div class="card"><h4>Як настрій? <small>добре</small></h4><div class="moods"><span>😄</span><span class="on">🙂</span><span>😐</span><span>🙁</span><span>😣</span></div></div>
+            <div class="card"><h4>Звички <small>3 з 5</small></h4>
+              <div class="hab"><i class="on"></i>🤸 Зарядка зранку</div><div class="hab"><i class="on"></i>📚 Читання 20 хвилин</div><div class="hab"><i></i>🧹 Прибрати в кімнаті</div>
+            </div>
+            <div class="card"><h4>Досягнення <small>3 з 12</small></h4><div class="badges"><span><b>📚</b>Книжковий черв'як</span><span><b>🔥</b>Тиждень поспіль</span><span class="lock"><b>🏆</b>Відмінниця місяця</span></div></div>
+          </div>
+          <div class="tabbar"><span class="on">● Сьогодні</span><span>Статистика</span><span>Календар</span><span>Ще</span></div>
+        </div>
+        <div class="screen app" hidden>
+          <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
+          <div class="body">
+            <div class="hello"><b>Жовтень</b><span class="streak">тиждень · місяць</span></div>
+            <div class="card"><h4>Настрій по днях <small>середній 3,9</small></h4>
+              <div class="bars"><i style="height:70%;background:#84bf3c"></i><i style="height:70%;background:#84bf3c"></i><i style="height:80%;background:#84bf3c"></i><i style="height:60%;background:#e9b024"></i><i style="height:70%;background:#84bf3c"></i><i style="height:80%;background:#84bf3c"></i><i style="height:100%;background:#2aa876"></i><i style="height:40%;background:#ef7d2d"></i><i style="height:70%;background:#84bf3c"></i><i style="height:80%;background:#84bf3c"></i></div>
+              <div class="bars-l"><span>1</span><span></span><span></span><span></span><span>5</span><span></span><span></span><span></span><span></span><span>10</span></div>
+            </div>
+            <div class="card"><h4>Оцінки <small>зміна за місяць</small></h4>
+              <div class="row2"><span>Історія</span><span><span class="up">↑2,9</span> <span class="pill" style="background:#2aa876">11,0</span></span></div>
+              <div class="row2"><span>Англійська мова</span><span><span class="up">↑0,8</span> <span class="pill" style="background:#84bf3c">8,4</span></span></div>
+              <div class="row2"><span>Математика</span><span><span class="up">↑0,9</span> <span class="pill" style="background:#84bf3c">7,8</span></span></div>
+              <div class="row2"><span>Природознавство</span><span><span class="dn">↓0,7</span> <span class="pill" style="background:#84bf3c">7,5</span></span></div>
+            </div>
+            <div class="card"><h4>Звички <small>67% ↑8%</small></h4>
+              <div class="row2"><span>📚 Читання</span><span class="up">100%</span></div><div class="prog"><i style="width:100%;background:#1f9a6a"></i></div>
+              <div class="row2"><span>📵 Без телефону</span><span class="dn">44%</span></div><div class="prog"><i style="width:44%;background:#e9b024"></i></div>
+            </div>
+          </div>
+          <div class="tabbar"><span>Сьогодні</span><span class="on">● Статистика</span><span>Календар</span><span>Ще</span></div>
+        </div>
+        <div class="screen app" hidden>
+          <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
+          <div class="body">
+            <div class="hello"><b>Софія сьогодні</b><span class="streak" style="background:#e6eaff;color:#3550d6">режим мами</span></div>
+            <div class="card"><h4>Настрій <small>ранок і вечір</small></h4><div class="row2"><span>Ранок</span><span>🙂 добре</span></div><div class="row2"><span>Вечір</span><span>😐 так собі</span></div><div style="color:#646d8c;font-size:12px">💬 «втомилась, але контрольну написала»</div></div>
+            <div class="card"><h4>Заняття</h4><div class="row2"><span>08:30 Математика</span><span>🙂 <span class="pill" style="background:#2aa876">10</span></span></div><div class="row2"><span>09:25 Укр. мова</span><span>😐 без оцінки</span></div><div class="row2"><span>16:00 Танці</span><span>😄</span></div></div>
+            <div class="card"><h4>Домашка на завтра <small>3 з 4</small></h4><div class="row2"><span>✅ Математика ✅ Історія</span></div><div class="row2"><span>✅ Англійська ❌ Природознавство</span></div></div>
+            <div class="card"><h4>Звички <small>4 з 5</small></h4><div class="prog"><i style="width:80%;background:#1f9a6a"></i></div></div>
+          </div>
+          <div class="tabbar"><span class="on">● Софія</span><span>Тиждень</span><span>Місяць</span><span>Ще</span></div>
+        </div>
+      </div>
+      <ul class="facts">
+        <li class="p">Найкрасивіше: бейджі, серії, власний простір доньки</li>
+        <li class="p">Сповіщення на iPhone: «Як настрій?», «через 10 хв Математика»</li>
+        <li class="m">Треба самій відкривати, тож тримається на сповіщеннях і грі</li>
+      </ul>
+    </section>
+
+    <!-- WHATSAPP -->
+    <section class="opt" data-group="wa">
+      <div class="opt-head"><b>3. WhatsApp-бот</b><span class="tag no">найскладніший</span></div>
+      <div class="seg" role="group" aria-label="Екрани WhatsApp">
+        <button aria-pressed="true" data-s="0">Настрій</button><button aria-pressed="false" data-s="1">Заняття</button><button aria-pressed="false" data-s="2">Чат мами</button>
+      </div>
+      <div class="phone">
+        <div class="screen wa">
+          <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
+          <div class="chat-head"><div class="av" style="background:#d8fdd2">🌱</div><div><div class="t">Щоденник</div><div class="s">бізнес-акаунт</div></div></div>
+          <div class="feed">
+            <div class="day-sep" style="background:rgba(0,0,0,.18)">Сьогодні</div>
+            <div class="msg in">Доброго ранку, Софійко! ☀️ Як настрій?<div class="btns"><span>☰ Обрати настрій</span></div><span class="tm">07:30</span></div>
+            <div class="msg out">🙂 Добре<span class="tm">07:41</span></div>
+            <div class="msg in">Записала! Сьогодні 3 заняття, перше о 08:30. Звички на день:<div class="btns"><span>✅ Відмітити звички</span></div><span class="tm">07:41</span></div>
+          </div>
+          <div class="sheet"><div class="h">Як настрій?</div><div class="it">😄 Супер<i></i></div><div class="it">🙂 Добре<i></i></div><div class="it">😐 Так собі<i></i></div><div class="it">🙁 Погано<i></i></div></div>
+        </div>
+        <div class="screen wa" hidden>
+          <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
+          <div class="chat-head"><div class="av" style="background:#d8fdd2">🌱</div><div><div class="t">Щоденник</div><div class="s">бізнес-акаунт</div></div></div>
+          <div class="feed">
+            <div class="msg in">⏰ Через 10 хв: <b>Математика</b> (08:30–09:15)<span class="tm">08:20</span></div>
+            <div class="msg in">📝 Як пройшла <b>Математика</b>?<div class="btns"><span>😄 Супер</span><span>😐 Нормально</span><span>🙁 Погано</span></div><span class="tm">09:15</span></div>
+            <div class="msg out">😄 Супер<span class="tm">09:16</span></div>
+            <div class="msg in">Яка оцінка? Напиши число від 1 до 12 або «немає».<span class="tm">09:16</span></div>
+            <div class="msg out">10<span class="tm">09:17</span></div>
+            <div class="msg in">⭐ Записала: Математика — 10. Так тримати!<span class="tm">09:17</span></div>
+          </div>
+          <div class="compose">Повідомлення</div>
+        </div>
+        <div class="screen wa" hidden>
+          <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
+          <div class="chat-head"><div class="av" style="background:#d8fdd2">🌱</div><div><div class="t">Щоденник · для мами</div><div class="s">бізнес-акаунт</div></div></div>
+          <div class="feed">
+            <div class="msg in">📅 <b>Субота, 10 жовтня</b><br>Настрій: ранок 🙂 · вечір 😐<br>💬 «втомилась, але контрольну написала»<br>Математика 🙂 оцінка 10<br>Домашка: ✅ 3 · ❌ 1<br>Звички: 4 з 5<span class="tm">21:30</span></div>
+            <div class="msg in"><div class="chartimg"><div class="bars"><i style="height:70%;background:#84bf3c"></i><i style="height:80%;background:#84bf3c"></i><i style="height:60%;background:#e9b024"></i><i style="height:80%;background:#84bf3c"></i><i style="height:100%;background:#2aa876"></i><i style="height:40%;background:#ef7d2d"></i><i style="height:70%;background:#84bf3c"></i></div><div class="bars-l"><span>пн</span><span>вт</span><span>ср</span><span>чт</span><span>пт</span><span>сб</span><span>нд</span></div></div>📊 Настрій за тиждень: 3,8 ↑0,2<span class="tm">неділя</span></div>
+          </div>
+          <div class="compose">Повідомлення</div>
+        </div>
+      </div>
+      <ul class="facts">
+        <li class="p">Донька вже в WhatsApp, нічого нового не ставити</li>
+        <li class="m">Немає гілок: усе в одному чаті, мамі окремий чат із підсумками</li>
+        <li class="m">Максимум 3 кнопки під повідомленням, потрібен окремий номер і бізнес-акаунт Meta</li>
+      </ul>
+    </section>
+  </div>
+
+  <h2>Ціни й час</h2>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Варіант</th><th>Скільки коштує</th><th>Скільки часу на розробку</th><th>Що треба зробити тобі</th><th>Як донька встановлює</th></tr></thead>
+      <tbody>
+        <tr><td>1. Telegram-бот</td>
+          <td><span class="money">≈ $5 / міс</span><span class="sub">тільки сервер, сам бот безкоштовний</span></td>
+          <td>Готово<span class="sub">лишилось запустити</span></td>
+          <td>Токен від @BotFather, сервер Railway, група з темами<span class="sub">≈ 30–60 хв разом зі мною</span></td>
+          <td>Поставити Telegram і вступити в групу</td></tr>
+        <tr><td>2а. Програма з іконкою<span class="sub">через Safari, без App Store</span></td>
+          <td><span class="money">$0–5 / міс</span><span class="sub">безкоштовна хмара Firebase, хостинг</span></td>
+          <td>1–3 дні<span class="sub">на основі нашого щоденника</span></td>
+          <td>Створити безкоштовний проєкт Firebase<span class="sub">≈ 15 хв, я підкажу</span></td>
+          <td>Відкрити посилання в Safari → «Поділитися» → «На екран Додому». З'являється іконка, працюють сповіщення</td></tr>
+        <tr><td>2б. Справжня програма для iPhone<span class="sub">через TestFlight або App Store</span></td>
+          <td><span class="money">$99 / рік</span><span class="sub">акаунт розробника Apple + $0–5/міс хмара</span></td>
+          <td>1–2 тижні<span class="sub">плюс перевірка акаунта Apple кілька днів</span></td>
+          <td>Оформити акаунт Apple Developer; для збирання потрібен Mac або платна хмарна збірка</td>
+          <td>Застосунок TestFlight за запрошенням; збірку треба оновлювати щонайменше раз на 90 днів</td></tr>
+        <tr><td>3. WhatsApp-бот</td>
+          <td><span class="money">≈ $5–15 / міс</span><span class="sub">сервер + ≈ $0,02 за кожне повідомлення-нагадування від бота; відповіді протягом 24 год безкоштовні</span></td>
+          <td>3–5 днів<span class="sub">плюс схвалення Meta від кількох днів</span></td>
+          <td>Бізнес-акаунт Meta, окремий номер телефону для бота, погодження шаблонів повідомлень</td>
+          <td>Нічого, просто написати боту в WhatsApp</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Що я раджу</h2>
+  <div class="rec">
+    <b class="h">Варіант 2а: програма з іконкою на iPhone</b>
+    <p>Донька обрала програму, а цей шлях дає її безкоштовно і найшвидше: за 1–3 дні, без App Store і без Mac. На екрані з'являється іконка, сповіщення приходять як від звичайного застосунку, а ти бачиш її дані у своєму «режимі мами».</p>
+    <p>Якщо через місяць стане зрозуміло, що вона справді нею користується, ту саму програму можна перенести в App Store (варіант 2б), і дані збережуться.</p>
+  </div>
+
+  <p class="note">Ціни приблизні, станом на жовтень 2026. Тариф WhatsApp для України ($0,0212 за службове повідомлення) взято зі стороннього калькулятора, а не з офіційного прайсу Meta. Він може змінитися з 1 січня 2027. Джерела: <a href="https://developers.facebook.com/docs/whatsapp/pricing" target="_blank" rel="noopener">ціни WhatsApp Business Platform</a>, <a href="https://whautomate.com/tools/whatsapp-business-api-pricing-calculator" target="_blank" rel="noopener">калькулятор WhatsApp API</a>, <a href="https://studio.adalo.com/blog/apple-developer-program-guide" target="_blank" rel="noopener">Apple Developer Program</a>.</p>
+</div>
+
+<script>
+document.querySelectorAll('.opt').forEach(opt => {
+  const btns = opt.querySelectorAll('.seg button');
+  const screens = opt.querySelectorAll('.screen');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    screens.forEach((s, i) => { s.hidden = String(i) !== b.dataset.s; });
+  }));
+});
+</script>
