@@ -228,7 +228,10 @@ figcaption { font-size: 16px; margin-top: 8px; color: var(--ink); }
 @keyframes cta-flow { from { background-position: 0% 0; } to { background-position: 300% 0; } }
 .owl-say.popin { transform-origin: 85% 100%; animation: bubble-pop .9s cubic-bezier(.3,1.6,.5,1); }
 @keyframes bubble-pop { 0% { transform: scale(.4); opacity: 0; } 35% { transform: scale(1.12); opacity: 1; } 55% { transform: scale(.94); } 75% { transform: scale(1.05); } 100% { transform: scale(1); } }
-@media (prefers-reduced-motion: reduce) { .owl-say .cta, .owl-say.popin { animation: none; } }
+/* the first hello: flies out towards you, a little too far, then settles in place */
+.owl-say.flyin { transform-origin: 85% 100%; animation: owl-fly .85s cubic-bezier(.2,.9,.3,1); }
+@keyframes owl-fly { 0% { transform: translate(12%, 30%) scale(.3); opacity: 0; } 55% { transform: translate(0, -4%) scale(1.14); opacity: 1; } 78% { transform: scale(.97); } 100% { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .owl-say .cta, .owl-say.popin, .owl-say.flyin { animation: none; } }
 .owl-say .notice { background: rgba(225,225,225,.85); border-radius: 22px; padding: 8px 12px; display: grid; gap: 2px; }
 .owl-say .notice .nenv { color: #c79a00; }
 .owl-say .notice .nenv svg { width: 24px; height: 18px; }
@@ -4349,8 +4352,8 @@ function owlNotice(en, ua) {
   const o = $("#owl"); o.classList.remove("talk", "party"); void o.offsetWidth; o.classList.add("talk", "big");
   clearTimeout(owlT); owlT = setTimeout(hideOwlSay, 5000);
 }
-function hideOwlSay() { $("#owlSay").hidden = true; $("#owl").classList.remove("big", "party"); }
-function owlGreet() {
+function hideOwlSay() { $("#owlSay").hidden = true; $("#owlSay").classList.remove("flyin"); $("#owl").classList.remove("big", "party"); }
+function owlGreet(first) {
   const yest = Object.keys(hist).filter(d => d < today()).sort().pop();
   const yp = yest ? hist[yest] : 0;
   const n = day.read, pg = day.pages.length, stars = starsToday().filter(Boolean).length;
@@ -4364,8 +4367,9 @@ function owlGreet() {
        [`You have ${stars} of 5 stars already!|Let's get them all together!`, `У тебе вже ${stars} з 5 зірочок!|Зберімо всі разом!`]];
   const [en, ua] = pick(lines);
   owlSay(pick(["Hi!", "Hey, it's me!", "Hey, friend!"]), en, ua, -1, true);
+  if (first) { const box = $("#owlSay"); box.classList.remove("flyin"); void box.offsetWidth; box.classList.add("flyin"); clearTimeout(owlT); owlT = setTimeout(hideOwlSay, 5000); }
 }
-$("#owl").addEventListener("click", () => { if (!$("#owlSay").hidden) { hideOwlSay(); return; } owlGreet(); });
+$("#owl").addEventListener("click", () => { if (!$("#owlSay").hidden) { hideOwlSay(); return; } owlGreet(false); });
 $("#owlSay").addEventListener("click", e => { if (e.target.closest(".x")) hideOwlSay(); });
 
 /* ---------- library (shelf of books) ---------- */
@@ -4915,7 +4919,7 @@ renderShelf();
   if (!assetsRef) $("#libNote").textContent = "Щоб додати нову книжку, надішли фото чи PDF у чат Claude.";
 })();
 if (store.get("view", "lib") === "lib") document.body.classList.add("lib-mode");
-setTimeout(owlGreet, 900);
+setTimeout(() => owlGreet(true), 900);
 
 if (MAGIC) {
   $(".top .t b").textContent = MAGIC.meta.title || "Моя книжка";
