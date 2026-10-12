@@ -455,15 +455,18 @@ body:not(.lib-mode) .library { display: none; }
 .fpdf { display: grid; place-items: center; height: 100%; }
 .fnum { position: absolute; top: 4px; left: 4px; min-width: 20px; height: 20px; border-radius: 10px; background: rgba(22,50,79,.85); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; padding: 0 5px; }
 .up-files.edit .ftile { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
-.up-files.edit .ftile img { -webkit-user-drag: none; pointer-events: none; }
+.up-files.edit .ftile img, .up-files.edit .ftile a { -webkit-user-drag: none; }
+.up-files.edit .ftile img { pointer-events: none; }
 .ftile.held > a { transform: scale(.94); transition: transform .15s; }
 .fdel { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); border: 2px solid #fff; border-radius: 999px; background: #c8372d; color: #fff;
   font-weight: 700; font-size: 13px; padding: 6px 12px; box-shadow: 0 4px 12px rgba(0,0,0,.3); animation: popIn .18s ease-out; z-index: 2; }
 @keyframes popIn { from { transform: translate(-50%, -50%) scale(.6); opacity: 0; } }
 .fx { position: absolute; top: -6px; right: -6px; width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; background: #c8372d; color: #fff; font-size: 16px; line-height: 1; display: grid; place-items: center; padding: 0; box-shadow: 0 2px 6px rgba(0,0,0,.25); }
-.fmove { display: flex; justify-content: space-between; gap: 4px; margin-top: 4px; }
-.fmove button, .fmove i { flex: 1; height: 28px; }
-.fmove button { border: 0; border-radius: 8px; background: var(--paper-2); color: var(--ink); font-size: 20px; font-weight: 700; line-height: 1; padding: 0; }
+.ftile.dragging { z-index: 5; transition: none; }
+.ftile.dragging > a { transform: scale(1.08) rotate(-2deg); box-shadow: 0 10px 22px rgba(0,0,0,.35); }
+.up-files.edit .ftile:not(.dragging) { transition: transform .15s; }
+.ed-files { display: grid; gap: 8px; border-top: 1px dashed var(--line); padding-top: 12px; }
+.ed-files .hint { margin: 0; font-size: 13px; }
 .up-files a { display: grid; place-items: center; aspect-ratio: 3 / 4; border-radius: 8px; overflow: hidden; background: var(--paper); color: var(--ink); font-size: 12px; text-align: center; text-decoration: none; padding: 4px; }
 .up-files img { width: 100%; height: 100%; object-fit: cover; }
 .up-form { display: grid; gap: 10px; }
@@ -1467,6 +1470,7 @@ function openEditFolder(b) {
   if (!b) return;
   if (!dbRef) { toast("Тут змінювати папки не можна"); return; }
   let color = b.color || "#5b6fa8", coverFile = null;
+  const doc = uploaded[b.id] || {}, nf = (doc.files || []).length;
   const cov = coverOf(b);
   openSheet(`<div class="head"><div class="word ttl">Змінити папку</div></div>
     <div class="newf-row">
@@ -1476,7 +1480,15 @@ function openEditFolder(b) {
     <div class="lbl">Колір папки</div>
     <div class="swatches">${FOLDER_COLORS.map(c => `<button type="button" class="sw${c === color ? " on" : ""}" data-c="${c}" style="background:${c}" aria-label="Колір"></button>`).join("")}</div>
     <input type="file" id="edFile" accept="image/*" hidden>
+    ${b.id === "history6" ? "" : `<div class="ed-files">
+      <div class="lbl">Файли в папці: <span data-fcount="${esc(b.id)}">${nf}</span></div>
+      ${nf ? `<p class="hint">Потримай фото — з'явиться «Видалити». Потримай і посунь — зміниш порядок.</p>${fileTiles(doc, b.id)}` : ""}
+      <div class="btns"><button class="btn" id="edAdd">Додати фото або PDF</button>${nf ? `<button class="btn magicbtn" id="magicGo">${MAGIC_SVG} Магія у книгу</button>` : ""}</div>
+      <div class="magic-log" id="magicLog" aria-live="polite" hidden></div>
+    </div>`}
     <div class="btns"><button class="btn primary" id="edSave">Зберегти</button><button class="btn" id="edCancel">Скасувати</button></div>`, el => {
+    const ea = $("#edAdd", el); if (ea) ea.addEventListener("click", () => openUpload(b));
+    const mg = $("#magicGo", el); if (mg) mg.addEventListener("click", () => runMagic(b, el));
     const fol = $("#edCover", el), inp = $("#edFile", el);
     $(".swatches", el).addEventListener("click", e => { const w = e.target.closest(".sw"); if (!w) return; color = w.dataset.c; el.querySelectorAll(".sw").forEach(x => x.classList.toggle("on", x === w)); fol.style.setProperty("--f", color); });
     fol.addEventListener("click", () => inp.click());
@@ -1506,58 +1518,92 @@ $("#shelf").addEventListener("click", e => {
   if (f.dataset.add) return openUploadTo(null);
   const b = allBooks().find(x => x.id === f.dataset.book);
   if (b.ready && b.id === "history6") return switchBook(b.id);
+  if (uploaded[b.id] && uploaded[b.id].magic) return switchBook(b.id);   // finished book: open it straight away
   openBookSheet(b);
 });
-// files in a folder: tap ‹ › to change the order; hold a file to show a small «Видалити»
+// files in a folder: hold a file to show a small «Видалити»; hold and slide it to change the order
 function fileTiles(doc, bookId) {
   const fs = doc.files || [];
-  return `<div class="up-files${bookId ? " edit" : ""}" data-fbook="${esc(bookId || "")}">${fs.map((f, i) => `<div class="ftile">
-    <a href="${blobUrl(f.id)}" target="_blank" rel="noopener">${/^image\//.test(f.type) ? `<img src="${blobUrl(f.id)}" alt="${esc(f.name)}">` : `<span class="fpdf">PDF<br>${esc(f.name)}</span>`}</a>
-    ${bookId ? `<span class="fnum">${i + 1}</span>
-    <span class="fmove">${i > 0 ? `<button data-fact="left" data-fi="${i}" aria-label="Перемістити раніше">‹</button>` : "<i></i>"}${i < fs.length - 1 ? `<button data-fact="right" data-fi="${i}" aria-label="Перемістити далі">›</button>` : "<i></i>"}</span>` : ""}
+  return `<div class="up-files${bookId ? " edit" : ""}" data-fbook="${esc(bookId || "")}">${fs.map((f, i) => `<div class="ftile" data-fi="${i}">
+    <a href="${blobUrl(f.id)}" target="_blank" rel="noopener" draggable="false">${/^image\//.test(f.type) ? `<img src="${blobUrl(f.id)}" alt="${esc(f.name)}">` : `<span class="fpdf">PDF<br>${esc(f.name)}</span>`}</a>
+    ${bookId ? `<span class="fnum">${i + 1}</span>` : ""}
   </div>`).join("")}</div>`;
 }
-let fileRerender = null;   // reopens the current folder sheet after a change
-let fTimer = 0, fFired = false, fX = 0, fY = 0;
+let fTimer = 0, fFired = false, fX = 0, fY = 0, drag = null;
 const hideFdel = () => sheetIn.querySelectorAll(".fdel").forEach(x => { x.closest(".ftile").classList.remove("held"); x.remove(); });
-sheetIn.addEventListener("pointerdown", e => {
-  const tile = e.target.closest(".up-files.edit .ftile");
-  if (!tile || e.target.closest("button")) return;
-  fFired = false; fX = e.clientX; fY = e.clientY; clearTimeout(fTimer);
-  fTimer = setTimeout(() => {
-    fFired = true; hideFdel();
-    const i = [...tile.parentNode.children].indexOf(tile);
-    tile.classList.add("held");
-    tile.insertAdjacentHTML("beforeend", `<button class="fdel" data-fact="yes" data-fi="${i}">Видалити</button>`);
-    if (navigator.vibrate) navigator.vibrate(20);
-  }, 550);
-});
-["pointerup", "pointercancel", "pointerleave"].forEach(t => sheetIn.addEventListener(t, () => clearTimeout(fTimer)));
-sheetIn.addEventListener("pointermove", e => { if (Math.hypot(e.clientX - fX, e.clientY - fY) > 8) clearTimeout(fTimer); });
-sheetIn.addEventListener("contextmenu", e => { if (e.target.closest(".up-files.edit")) e.preventDefault(); });
-sheetIn.addEventListener("click", e => {
-  if (e.target.closest(".fdel")) return;
-  if (fFired && e.target.closest(".ftile")) { e.preventDefault(); e.stopPropagation(); fFired = false; return; }
-  if (sheetIn.querySelector(".fdel")) { hideFdel(); if (e.target.closest(".ftile > a")) e.preventDefault(); }
-}, true);
-sheetIn.addEventListener("click", async e => {
-  const btn = e.target.closest("[data-fact]"); if (!btn) return;
-  e.preventDefault(); e.stopPropagation();
-  const id = btn.closest("[data-fbook]").dataset.fbook, i = +btn.dataset.fi;
-  const doc = uploaded[id]; if (!doc || !dbRef) return;
-  const files = [...(doc.files || [])];
-  let removed = null;
-  if (btn.dataset.fact === "yes") removed = files.splice(i, 1)[0];
-  else { const j = btn.dataset.fact === "left" ? i - 1 : i + 1; [files[i], files[j]] = [files[j], files[i]]; }
+// save a new file list for a folder and redraw its tiles in place
+async function saveFiles(id, files, removed) {
+  const doc = uploaded[id];
   const cover = removed && doc.cover === removed.id ? ((files.find(f => /^image\//.test(f.type)) || {}).id || "") : doc.cover || "";
   try {
     await dbRef.doc("books/" + id).update({ files, cover });
     uploaded[id] = { ...doc, files, cover };
     if (removed && assetsRef) assetsRef.delete(removed.id).catch(() => {});
-    renderShelf();
-    if (fileRerender) fileRerender();
     toast(removed ? "Файл видалено" : "Порядок змінено");
   } catch (err) { toast("Не вдалося зберегти зміни"); }
+  sheetIn.querySelectorAll(".up-files[data-fbook]").forEach(x => { if (x.dataset.fbook === id) x.outerHTML = fileTiles(uploaded[id], id); });
+  sheetIn.querySelectorAll("[data-fcount]").forEach(x => { if (x.dataset.fcount === id) x.textContent = (uploaded[id].files || []).length; });
+  renderShelf();
+}
+sheetIn.addEventListener("pointerdown", e => {
+  const tile = e.target.closest(".up-files.edit .ftile");
+  if (!tile || e.target.closest("button")) return;
+  fFired = false; fX = e.clientX; fY = e.clientY; clearTimeout(fTimer); drag = null;
+  fTimer = setTimeout(() => {
+    fFired = true; hideFdel();
+    const r = tile.getBoundingClientRect();
+    drag = { tile, list: tile.parentNode, ox: fX - r.left, oy: fY - r.top, active: false };
+    tile.classList.add("held");
+    tile.insertAdjacentHTML("beforeend", `<button class="fdel" data-fact="yes" data-fi="${tile.dataset.fi}">Видалити</button>`);
+    if (navigator.vibrate) navigator.vibrate(20);
+  }, 500);
+});
+function dragTo(x, y) {
+  const { tile, list } = drag;
+  tile.style.transform = "";
+  const over = [...list.children].find(t => { if (t === tile) return false; const r = t.getBoundingClientRect(); return x > r.left && x < r.right && y > r.top && y < r.bottom; });
+  if (over) { const k = [...list.children]; k.indexOf(tile) < k.indexOf(over) ? over.after(tile) : over.before(tile); }
+  const r = tile.getBoundingClientRect();
+  tile.style.transform = `translate(${x - drag.ox - r.left}px, ${y - drag.oy - r.top}px)`;
+}
+sheetIn.addEventListener("pointermove", e => {
+  if (drag) {
+    if (!drag.active && Math.hypot(e.clientX - fX, e.clientY - fY) > 6) { drag.active = true; hideFdel(); drag.tile.classList.add("dragging"); }
+    if (drag.active) { e.preventDefault(); dragTo(e.clientX, e.clientY); }
+    return;
+  }
+  if (Math.hypot(e.clientX - fX, e.clientY - fY) > 8) clearTimeout(fTimer);
+});
+// while a file is held, the finger moves the file, not the page
+sheetIn.addEventListener("touchmove", e => { if (drag) e.preventDefault(); }, { passive: false });
+function endDrag(save) {
+  clearTimeout(fTimer);
+  if (!drag) return;
+  const d = drag; drag = null;
+  if (!d.active) return;   // just held: the «Видалити» button stays
+  d.tile.classList.remove("dragging"); d.tile.style.transform = "";
+  const id = d.list.dataset.fbook, doc = uploaded[id];
+  const order = [...d.list.children].map(t => +t.dataset.fi);
+  if (!save || !doc || !dbRef || order.every((v, i) => v === i)) { if (doc) d.list.outerHTML = fileTiles(doc, id); return; }
+  saveFiles(id, order.map(i => doc.files[i]));
+}
+sheetIn.addEventListener("pointerup", () => endDrag(true));
+sheetIn.addEventListener("pointercancel", () => endDrag(false));
+sheetIn.addEventListener("contextmenu", e => { if (e.target.closest(".up-files.edit")) e.preventDefault(); });
+sheetIn.addEventListener("dragstart", e => { if (e.target.closest(".up-files.edit")) e.preventDefault(); });
+sheetIn.addEventListener("click", e => {
+  if (e.target.closest(".fdel")) return;
+  if (fFired && e.target.closest(".ftile")) { e.preventDefault(); e.stopPropagation(); fFired = false; return; }
+  if (sheetIn.querySelector(".fdel")) { hideFdel(); if (e.target.closest(".ftile > a")) e.preventDefault(); }
+}, true);
+sheetIn.addEventListener("click", e => {
+  const btn = e.target.closest("[data-fact]"); if (!btn) return;
+  e.preventDefault(); e.stopPropagation();
+  const id = btn.closest("[data-fbook]").dataset.fbook, i = +btn.dataset.fi;
+  const doc = uploaded[id]; if (!doc || !dbRef) return;
+  const files = [...(doc.files || [])];
+  const removed = files.splice(i, 1)[0];
+  saveFiles(id, files, removed);
 });
 function openBookSheet(b) {
   const doc = uploaded[b.id];
@@ -1571,7 +1617,6 @@ function openBookSheet(b) {
       ${n ? `<button class="btn magicbtn" id="magicGo">${MAGIC_SVG} Магія у книгу</button>` : ""}
       <button class="btn${made || n ? "" : " primary"}" id="addToBook">Додати фото або PDF</button></div>
     <div class="magic-log" id="magicLog" aria-live="polite" hidden></div>`, el => {
-    fileRerender = () => openBookSheet(allBooks().find(x => x.id === b.id) || b);
     $("#addToBook", el).addEventListener("click", () => openUpload(b));
     const om = $("#openMagic", el); if (om) om.addEventListener("click", () => switchBook(b.id));
     const mg = $("#magicGo", el); if (mg) mg.addEventListener("click", () => runMagic(b, el));
@@ -1836,7 +1881,6 @@ function openUploadTo(b, choose) {
     <input type="file" id="inPdf" accept="application/pdf,.pdf" hidden>
     <div class="up-log" id="upLog" aria-live="polite"></div>
     ${doc && doc.files && doc.files.length ? `<div class="lbl">Уже в папці: ${doc.files.length}</div>${fileTiles(doc, b.id)}` : `<p class="hint">Першим додай фото обкладинки — воно стане картинкою папки.</p>`}`, el => {
-    fileRerender = b ? () => openUploadTo(allBooks().find(x => x.id === b.id) || b, choose) : null;
     if (choose) $("#newFold", el).addEventListener("click", () => askFolderName(el));
     if (choose) $(".minis", el).addEventListener("click", e => { const m = e.target.closest("[data-mini]"); if (m) openUploadTo(choose.find(x => x.id === m.dataset.mini), choose); });
     $("#pickPhoto", el).addEventListener("click", () => $("#inPhoto", el).click());
