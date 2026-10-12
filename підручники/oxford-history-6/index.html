@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#16324f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Bree+Serif&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Bree+Serif&family=Caveat:wght@600;700&display=swap">
 <style>
 /* Layout: one reading column styled like the textbook page (peach paper, red headings),
    framed by navy "sea" chrome: sticky top bar with language mode, fixed bottom player with live subtitle. */
@@ -328,28 +328,32 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 
 /* ---------- owl helper: purple circle with a speech bubble ---------- */
 .owl { position: fixed; right: 16px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 45; width: 72px; height: 72px; border-radius: 50%;
-  background: #fff; border: 4px solid #1f5fbf; box-shadow: inset 0 0 0 3px #f6c419, 0 6px 16px rgba(20,40,90,.35); padding: 0; display: grid; place-items: center; animation: owl-bob 3s ease-in-out infinite; }
-body:not(.lib-mode) .owl { bottom: calc(150px + env(safe-area-inset-bottom, 0px)); width: 60px; height: 60px; }
-/* celebration ring: blue, yellow and purple running round the circle */
-.owl::before { content: ""; position: absolute; inset: -8px; border-radius: 50%; opacity: 0; pointer-events: none;
-  background: conic-gradient(#1f5fbf, #f6c419, #8a3fd8, #1f5fbf, #f6c419, #8a3fd8, #1f5fbf);
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 8px)); mask: radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 8px)); }
-.owl.party::before { opacity: 1; animation: owl-spin 1.1s linear infinite; }
-.owl svg { width: 80%; height: 80%; overflow: visible; }
+  background: #fff; border: 0; box-shadow: 0 0 0 4px #fff, 0 6px 18px rgba(20,40,90,.35); padding: 0; display: grid; place-items: center;
+  animation: owl-bob 3s ease-in-out infinite; transition: width .35s cubic-bezier(.3,1.6,.5,1), height .35s cubic-bezier(.3,1.6,.5,1); }
+body:not(.lib-mode) .owl { bottom: calc(150px + env(safe-area-inset-bottom, 0px)); width: 62px; height: 62px; }
+.owl.big { width: 98px; height: 98px; }
+body:not(.lib-mode) .owl.big { width: 88px; height: 88px; }
+/* the ring: blue and yellow flowing round all the time; purple joins and it spins fast on a celebration */
+.owl::before, .owl::after { content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 8px), #000 calc(100% - 7px)); mask: radial-gradient(farthest-side, transparent calc(100% - 8px), #000 calc(100% - 7px)); }
+.owl::before { background: conic-gradient(#1f5fbf, #3d8ce8, #f6c419, #ffe27a, #1f5fbf, #f6c419, #1f5fbf); animation: owl-spin 7s linear infinite; }
+.owl::after { opacity: 0; transition: opacity .4s; background: conic-gradient(#1f5fbf, #f6c419, #8a3fd8, #1f5fbf, #f6c419, #8a3fd8, #1f5fbf); }
+.owl.party::after { opacity: 1; animation: owl-spin 1s linear infinite; }
+.owl svg { position: relative; z-index: 1; width: 76%; height: 76%; overflow: visible; }
 .owl .lid { transform-origin: center; transform-box: fill-box; animation: owl-blink 4.5s infinite; }
 .owl.talk { animation: owl-hop .5s ease-in-out 3; }
 @keyframes owl-spin { to { transform: rotate(360deg); } }
 @keyframes owl-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 @keyframes owl-hop { 0%, 100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(-10px) rotate(-6deg); } 60% { transform: translateY(-4px) rotate(5deg); } }
 @keyframes owl-blink { 0%, 92%, 100% { transform: scaleY(0); } 95% { transform: scaleY(1); } }
-.owl-say { position: fixed; right: 16px; bottom: calc(100px + env(safe-area-inset-bottom, 0px)); z-index: 44; width: min(340px, calc(100vw - 32px)); background: #fff; color: #2a2320;
-  border: 3px solid #f2d33a; border-radius: 18px; padding: 12px 16px 12px; box-shadow: 0 10px 26px rgba(0,0,0,.2); display: grid; gap: 6px; }
-body:not(.lib-mode) .owl-say { bottom: calc(220px + env(safe-area-inset-bottom, 0px)); }
-.owl-say::after { content: ""; position: absolute; right: 26px; bottom: -11px; width: 18px; height: 18px; background: #fff; border-right: 3px solid #f2d33a; border-bottom: 3px solid #f2d33a; transform: rotate(45deg); }
-.owl-say .hi { font-family: var(--f-display); font-size: 26px; color: #7a3fc4; line-height: 1.1; }
-.owl-say p { margin: 0; font-size: 15px; line-height: 1.4; }
-.owl-say b { color: #7a3fc4; }
-.owl-say .stars { display: flex; gap: 4px; padding-right: 20px; }
+.owl-say { position: fixed; right: 12px; bottom: calc(132px + env(safe-area-inset-bottom, 0px)); z-index: 44; width: min(350px, calc(100vw - 24px)); background: #fff; color: #1b1715;
+  border: 3px solid #f2d33a; border-radius: 48px; box-shadow: 0 0 0 5px #fff, 0 12px 30px rgba(0,0,0,.22); padding: 16px 26px 18px; display: grid; gap: 4px; }
+body:not(.lib-mode) .owl-say { bottom: calc(252px + env(safe-area-inset-bottom, 0px)); }
+.owl-say::after { content: ""; position: absolute; right: 40px; bottom: -12px; width: 20px; height: 20px; background: #fff; border-right: 3px solid #f2d33a; border-bottom: 3px solid #f2d33a; transform: rotate(45deg); }
+.owl-say .hi { font-family: "Caveat", "Segoe Script", cursive; font-weight: 700; font-size: 38px; color: #7a3fc4; line-height: 1; margin-top: 2px; }
+.owl-say .en { display: block; font-family: "Caveat", "Segoe Script", cursive; font-weight: 600; font-size: 23px; color: #16324f; line-height: 1.15; }
+.owl-say .uk { display: block; font-size: 14px; font-weight: 400; color: #1b1715; line-height: 1.35; }
+.owl-say .stars { display: flex; gap: 2px; padding-right: 14px; }
 .owl-say .star { hyphens: manual; -webkit-hyphens: manual; overflow-wrap: normal; display: grid; justify-items: center; align-content: start; gap: 1px; font-size: 10px; color: #b3aaa3; text-align: center; line-height: 1.1; flex: 1; min-width: 0; }
 .owl-say .star.on { color: #1b1715; font-weight: 700; }
 .owl-say .star svg { width: 28px; height: 28px; }
@@ -357,13 +361,13 @@ body:not(.lib-mode) .owl-say { bottom: calc(220px + env(safe-area-inset-bottom, 
 .owl-say .star:not(.on) svg { fill: #f1f1f1; stroke: #d0d0d0; }
 .owl-say .star.new svg { animation: star-pop .7s ease-out 2; }
 @keyframes star-pop { 50% { transform: scale(1.45) rotate(18deg); } }
-.owl-say .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 2px; }
-.owl-say .tile { background: #e3f0ff; border-radius: 12px; padding: 6px 10px; display: grid; gap: 0; }
-.owl-say .tile small { font-size: 12px; color: #3b5a85; line-height: 1.2; }
-.owl-say .tile strong { font-size: 24px; color: #1f5fbf; line-height: 1.15; font-variant-numeric: tabular-nums; }
-.owl-say .tile strong span { font-size: 13px; font-weight: 700; }
-.owl-say .x { position: absolute; top: 4px; right: 8px; border: 0; background: transparent; font-size: 20px; color: #999; padding: 4px; }
-@media (prefers-reduced-motion: reduce) { .owl, .owl.talk, .owl .lid, .owl.party::before, .owl-say .star.new svg { animation: none; } }
+.owl-say .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
+.owl-say .tile { background: #e3f0ff; border-radius: 16px; padding: 8px 10px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px; }
+.owl-say .tile small { font-size: 12px; color: #3b5a85; line-height: 1.2; display: grid; }
+.owl-say .tile strong { display: flex; align-items: center; gap: 3px; font-size: 30px; color: #1f6fe0; line-height: 1; font-variant-numeric: tabular-nums; }
+.owl-say .tile strong svg { width: 20px; height: 20px; flex: none; }
+.owl-say .x { position: absolute; top: 10px; right: 18px; border: 0; background: transparent; font-size: 20px; color: #999; padding: 4px; }
+@media (prefers-reduced-motion: reduce) { .owl, .owl.talk, .owl .lid, .owl.party::after, .owl::before, .owl-say .star.new svg { animation: none; } }
 body.lib-mode .top, body.lib-mode .wrap, body.lib-mode .player { display: none; }
 body:not(.lib-mode) .library { display: none; }
 .up-files { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
@@ -4051,8 +4055,10 @@ function saveDay() {
   return j;
 }
 const pick = a => a[Math.floor(Math.random() * a.length)];
-const CHEERS = ["Ура!", "Ти змогла!", "В тебе вийшло!", "Супер!", "Чудово!", "Молодчинка!"];
+const CHEERS = ["Hooray!", "You did it!", "Well done!", "Great job!", "You won!", "Super!", "Amazing!"];
 const lessonName = li => LESSONS[li].label || "Розділ " + LESSONS[li].id;
+const lessonNameEn = li => /Повторення/.test(LESSONS[li].label || "") ? "Review " + LESSONS[li].id.replace(/\D.*/, "") : /Розділ/.test(LESSONS[li].label || "") ? "Unit " + LESSONS[li].id : "Lesson " + LESSONS[li].id;
+const STAR_WHY_EN = ["you look up new words", "you listen with focus for a long time", "you listen in order, sentence by sentence", "you check the answers to the tasks", "you finished a whole lesson in one go"];
 function markRead(i) {
   const s = sentences[i], k = keyOf(s);
   if (!readSet[k]) { readSet[k] = 1; store.set("read", readSet); }
@@ -4068,51 +4074,60 @@ function markRead(i) {
     const lid = LESSONS[li].id;
     if (!doneLessons[lid] && sentences.every(x => x.li !== li || readSet[keyOf(x)])) {
       doneLessons[lid] = 1; store.set("done", doneLessons);
-      msg = `${esc(lessonName(li))} пройдено!`;
+      msg = [`${lessonNameEn(li)} is finished!`, `${lessonName(li)} пройдено!`];
     }
-    if (oneGo && !sessRead[li].counted) { sessRead[li].counted = true; day.oneGo++; msg = `${esc(lessonName(li))} ти пройшла за один раз!`; }
+    if (oneGo && !sessRead[li].counted) { sessRead[li].counted = true; day.oneGo++; msg = [`You finished ${lessonNameEn(li)} in one go!`, `${lessonName(li)}: ти пройшла його за один раз!`]; }
   }
   const j = saveDay();
-  if (j >= 0) owlSay(pick(CHEERS), (msg ? msg + " " : "") + `Нова зірочка за <b>${STAR_NAMES[j].toLowerCase()}</b>: ${STAR_WHY[j]}.`, j);
-  else if (msg) owlSay(pick(CHEERS), msg, -1, true);
+  if (j >= 0) owlSay(pick(CHEERS), starEn(j, msg), starUa(j, msg), j);
+  else if (msg) owlSay(pick(CHEERS), msg[0], msg[1], -1, true);
 }
-function noteLook() { day.looks++; const j = saveDay(); if (j >= 0) owlSay(pick(CHEERS), `Нова зірочка за <b>уважність</b>: ${STAR_WHY[0]}.`, j); }
-function noteTask() { day.tasks++; const j = saveDay(); if (j >= 0) owlSay(pick(CHEERS), `Нова зірочка за <b>завдання</b>: ${STAR_WHY[3]}.`, j); }
+const starEn = (j, pre) => (pre ? pre[0] + " " : "") + `A new star for ${STAR_NAMES_EN[j]}: ${STAR_WHY_EN[j]}.`;
+const starUa = (j, pre) => (pre ? pre[1] + " " : "") + `Нова зірочка за ${STAR_NAMES[j].toLowerCase()}: ${STAR_WHY[j]}.`;
+const STAR_NAMES_EN = ["attention", "focus", "order", "tasks", "a lesson"];
+function noteLook() { day.looks++; const j = saveDay(); if (j >= 0) owlSay(pick(CHEERS), starEn(j), starUa(j), j); }
+function noteTask() { day.tasks++; const j = saveDay(); if (j >= 0) owlSay(pick(CHEERS), starEn(j), starUa(j), j); }
 
 /* ---------- owl ---------- */
 const STAR_SVG = '<svg viewBox="0 0 24 24" stroke-width="1.4" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6-4.9-4.5 6.6-.8z"/></svg>';
 const plural = (n, one, few, many) => n % 10 === 1 && n % 100 !== 11 ? one : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? few : many;
 let owlT, partyT;
-function owlSay(hi, html, newStar = -1, party = false) {
+const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="#2fa84f" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg>';
+function owlSay(hi, en, ua, newStar = -1, party = false) {
   const st = starsToday();
   const pages = day.pages.length, done = Object.keys(doneLessons).length;
   const box = $("#owlSay");
   box.innerHTML = `<button class="x" aria-label="Закрити">×</button>
     <div class="stars" aria-label="Зірочки за сьогодні">${st.map((on, j) => `<span class="star${on ? " on" : ""}${j === newStar ? " new" : ""}">${STAR_SVG}${STAR_LABELS[j]}</span>`).join("")}</div>
-    <div class="hi">${esc(hi)}</div><p>${html}</p>
+    <div class="hi">${esc(hi)}</div>
+    <span class="en">${esc(en)}</span><span class="uk">${esc(ua)}</span>
     <div class="tiles">
-      <div class="tile"><small>Прочитано сьогодні</small><strong>${pages} <span>${plural(pages, "сторінка", "сторінки", "сторінок")}</span></strong></div>
-      <div class="tile"><small>Пройдено розділів</small><strong>${done} <span>з ${LESSONS.length}</span></strong></div>
+      <div class="tile"><small><span>Прочитано</span><span>сьогодні</span><span>сторінок</span></small><strong>${pages}${CHECK}</strong></div>
+      <div class="tile"><small><span>Всього</span><span>прочитано</span><span>розділів</span></small><strong>${done}${CHECK}</strong></div>
     </div>`;
   box.hidden = false;
-  const o = $("#owl"); o.classList.remove("talk"); void o.offsetWidth; o.classList.add("talk");
+  const o = $("#owl"); o.classList.remove("talk"); void o.offsetWidth; o.classList.add("talk", "big");
   if (newStar >= 0 || party) { o.classList.add("party"); clearTimeout(partyT); partyT = setTimeout(() => o.classList.remove("party"), 4000); }
-  clearTimeout(owlT); owlT = setTimeout(() => { box.hidden = true; }, 10000);
+  clearTimeout(owlT); owlT = setTimeout(hideOwlSay, 10000);
 }
+function hideOwlSay() { $("#owlSay").hidden = true; $("#owl").classList.remove("big", "party"); }
 function owlGreet() {
   const yest = Object.keys(hist).filter(d => d < today()).sort().pop();
   const yp = yest ? hist[yest] : 0;
-  const lines = day.read === 0
-    ? [yp ? `Минулого разу ти прочитала ${yp} ${plural(yp, "сторінку", "сторінки", "сторінок")}. Цікаво, чи зможеш сьогодні більше?` : "Цікаво, наскільки сьогодні ти зможеш збільшити свій результат?",
-       "Сьогодні твоя ефективність може бути ще вищою. Почнемо?",
-       "Спробуй сьогодні пройти хоча б один розділ за один раз — і отримаєш зірочку!"]
-    : [`Сьогодні вже ${day.pages.length} ${plural(day.pages.length, "сторінка", "сторінки", "сторінок")}! Наскільки ще збільшиш свій результат?`,
-       "Так тримати! Кожне речення — крок уперед.",
-       `Уже ${starsToday().filter(Boolean).length} з 5 зірочок. Збереш усі?`];
-  owlSay("Вітаю!", pick(lines), -1, true);
+  const n = day.read, pg = day.pages.length, stars = starsToday().filter(Boolean).length;
+  const lines = n === 0
+    ? [yp ? [`Last time you read ${yp} ${yp === 1 ? "page" : "pages"}. Can you read more today?`, `Минулого разу ти прочитала ${yp} ${plural(yp, "сторінку", "сторінки", "сторінок")}. Чи зможеш сьогодні більше?`]
+          : ["How much can you improve your result today?", "Цікаво, наскільки сьогодні ти зможеш збільшити свій результат?"],
+       ["Today you can be even better than yesterday. Let's start!", "Сьогодні ти можеш бути ще кращою, ніж учора. Почнемо!"],
+       ["Try to finish one lesson in one go and get a star!", "Спробуй пройти один розділ за один раз — і отримаєш зірочку!"]]
+    : [[`Today you have already listened to ${n} ${n === 1 ? "sentence" : "sentences"}. Now read them on your own!`, `Сьогодні ти вже прослухала ${n} ${plural(n, "речення", "речення", "речень")}. Тепер прочитай їх самостійно!`],
+       [`${pg} ${pg === 1 ? "page" : "pages"} today! How far can you go?`, `Сьогодні вже ${pg} ${plural(pg, "сторінка", "сторінки", "сторінок")}! Скільки ще зможеш?`],
+       [`You have ${stars} of 5 stars. Can you collect them all?`, `У тебе вже ${stars} з 5 зірочок. Збереш усі?`]];
+  const [en, ua] = pick(lines);
+  owlSay("Hello!", en, ua, -1, true);
 }
-$("#owl").addEventListener("click", () => { if (!$("#owlSay").hidden) { $("#owlSay").hidden = true; return; } owlGreet(); });
-$("#owlSay").addEventListener("click", e => { if (e.target.closest(".x")) $("#owlSay").hidden = true; });
+$("#owl").addEventListener("click", () => { if (!$("#owlSay").hidden) { hideOwlSay(); return; } owlGreet(); });
+$("#owlSay").addEventListener("click", e => { if (e.target.closest(".x")) hideOwlSay(); });
 
 /* ---------- library (shelf of books) ---------- */
 // Books on the shelf. "ready" books open the reader; others collect photos/PDFs for Claude to process.
