@@ -358,6 +358,12 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 .namebox input { font: inherit; font-size: 16px; padding: 9px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); width: 100%; }
 .newf.has-n .nbody { background: color-mix(in srgb, #7a3fc4 18%, var(--surface)); border-color: #b9a2e3; color: #7a3fc4; }
 .newf.has-n .mtab { background: #b9a2e3; }
+.btn.magicbtn { background: linear-gradient(90deg, #7a3fc4, #b25bd6); color: #fff; }
+.btn.magicbtn svg { width: 20px; height: 20px; }
+.magic-log { display: grid; gap: 4px; font-size: 14px; color: var(--muted); max-height: 180px; overflow: auto; background: var(--paper); border-radius: 12px; padding: 10px 12px; }
+.magic-log .ok { color: #2f8a1f; }
+.magic-log .bad { color: #b0412c; }
+.magic-log .big { font-weight: 700; font-size: 16px; }
 .pick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .pick button { border: 2px solid var(--line); background: var(--paper); border-radius: 16px; padding: 14px 8px; display: grid; justify-items: center; gap: 6px; font-weight: 700; font-size: 15px; color: var(--ink); }
 .pick button:disabled { opacity: .5; }
@@ -538,8 +544,27 @@ body:not(.lib-mode) .library { display: none; }
 <script>{{DICT_JS}}</script>
 <script>{{CONTENTS_JS}}</script>
 <script>
-(() => {
+// A book made by "Магія у книгу" lives in the artifact's db: books/<id> + books/<id>/lessons/* + books/<id>/extra/dict.
+async function loadMagicBook(id) {
+  try {
+    if (!window.claude || !claude.use) return null;
+    const db = await Promise.race([claude.use("db"), new Promise(r => setTimeout(() => r(null), 9000))]);
+    if (!db) return null;
+    const meta = await db.doc("books/" + id).get();
+    if (!meta.exists) return null;
+    const ls = await db.collection("books/" + id + "/lessons").get();
+    const lessons = ls.docs.slice().sort((a, b) => a.id < b.id ? -1 : 1).map(d => d.data().lesson).filter(Boolean);
+    if (!lessons.length) return null;
+    const dict = await db.doc("books/" + id + "/extra/dict").get();
+    return { id, meta: meta.data(), lessons: JSON.parse(JSON.stringify(lessons)), dict: dict.exists ? (dict.data().words || {}) : {} };
+  } catch (e) { return null; }
+}
+(async () => {
 "use strict";
+const BOOK_ID = (() => { try { return JSON.parse(localStorage.getItem("vk:book")) || "history6"; } catch (e) { return "history6"; } })();
+const MAGIC = BOOK_ID !== "history6" ? await loadMagicBook(BOOK_ID) : null;
+if (BOOK_ID !== "history6" && !MAGIC) { try { localStorage.setItem("vk:book", JSON.stringify("history6")); localStorage.setItem("vk:view", JSON.stringify("lib")); } catch (e) {} location.reload(); return; }
+if (MAGIC) { window.LESSONS = MAGIC.lessons; Object.assign(window.DICT, MAGIC.dict); window.CONTENTS = null; }
 const LESSONS = window.LESSONS, D = window.DICT;
 const ALL_BLOCKS = LESSONS.flatMap(l => l.blocks);
 const IMG = {{IMAGES_JSON}};
@@ -547,8 +572,8 @@ const IMG_COVER = "{{IMG_cover}}";
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const store = {
-  get(k, d) { try { const v = localStorage.getItem("vk:" + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
-  set(k, v) { try { localStorage.setItem("vk:" + k, JSON.stringify(v)); } catch (e) {} }
+  get(k, d) { if (k === "pos" && BOOK_ID !== "history6") k = "pos:" + BOOK_ID; try { const v = localStorage.getItem("vk:" + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { if (k === "pos" && BOOK_ID !== "history6") k = "pos:" + BOOK_ID; try { localStorage.setItem("vk:" + k, JSON.stringify(v)); } catch (e) {} }
 };
 const SVG = {
   speak: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>',
@@ -651,10 +676,10 @@ L.blocks.forEach((b, bi) => {
       legend = `<div class="legend"><span class="lt">${esc(b.legendTitle || "Viking settlements · Viking raids")}</span>` +
         b.legend.map(l => `<span><i style="background:${l[0]}"></i><span class="lg" title="${esc(l[2])}">${tokenSpans(l[1]).html}</span></span>`).join("") + `</div>`;
     }
-    out += `<figure class="blk" data-bi="${li}:${bi}"><img src="${IMG[b.src]}" alt="${esc(b.alt)}"><figcaption>${r.en}${uaHtml(r.sis)}</figcaption>${legend}</figure>`;
+    out += `<figure class="blk" data-bi="${li}:${bi}"><img src="${IMG[b.src] || esc(b.src)}" alt="${esc(b.alt)}"><figcaption>${r.en}${uaHtml(r.sis)}</figcaption>${legend}</figure>`;
   } else if (b.type === "figs") {
     out += `<div class="figs blk n${b.items.length}">` + b.items.map(f =>
-      `<figure><img src="${IMG[f.src]}" alt="${esc(f.label[1])}"><figcaption><span class="fl">${tokenSpans(f.label[0]).html}</span><span class="fua">${esc(f.label[1])}</span></figcaption></figure>`).join("") + `</div>`;
+      `<figure><img src="${IMG[f.src] || esc(f.src)}" alt="${esc(f.label[1])}"><figcaption><span class="fl">${tokenSpans(f.label[0]).html}</span><span class="fua">${esc(f.label[1])}</span></figcaption></figure>`).join("") + `</div>`;
   } else if (b.type === "glossary") {
     out += `<div class="gloss blk"><h3><span class="en">${esc(b.title[0])}</span> <span class="h3ua">${esc(b.title[1])}</span></h3><ul>` +
       b.words.map(w => `<li><button data-gloss="${esc(w[0])}">${esc(w[0])}</button></li>`).join("") + `</ul></div>`;
@@ -1277,6 +1302,7 @@ function markRead(i) {
     }
     if (oneGo && !sessRead[li].counted) { sessRead[li].counted = true; day.oneGo++; msg = [`You finished ${lessonNameEn(li)} in one go!`, `${lessonName(li)}: ти пройшла його за один раз!`]; }
   }
+  store.set("pct:" + BOOK_ID, progress().pct);
   const j = saveDay();
   if (j >= 0) owlSay(pick(CHEERS), starEn(j, msg), starUa(j, msg), j);
   else if (msg) { const [e, u] = withCta(msg[0], msg[1]); owlSay(pick(CHEERS), e, u, -1, true); }
@@ -1353,8 +1379,16 @@ $("#owlSay").addEventListener("click", e => { if (e.target.closest(".x")) hideOw
 /* ---------- library (shelf of books) ---------- */
 // Books on the shelf. "ready" books open the reader; others collect photos/PDFs for Claude to process.
 const PAGE_RANGE = (() => { const ps = [...new Set([...(TOC ? [TOC.page] : []), ...ALL_BLOCKS.filter(b => b.page).map(b => b.page)])]; return Math.min(...ps) + "–" + Math.max(...ps); })();
+if (!MAGIC) store.set("range:history6", PAGE_RANGE);
+const pctOf = id => id === BOOK_ID ? progress().pct : store.get("pct:" + id, 0);
+function switchBook(id) {
+  if (id === BOOK_ID) return openReader();
+  store.set("book", id); store.set("view", "reader");
+  toast("Відкриваю книжку…");
+  setTimeout(() => location.reload(), 150);
+}
 const BOOKS = [
-  { id: "history6", title: "Oxford International Primary History 6", sub: "History · Історія", color: "#c8372d", cover: IMG_COVER, ready: true, pages: PAGE_RANGE },
+  { id: "history6", title: "Oxford International Primary History 6", sub: "History · Історія", color: "#c8372d", cover: IMG_COVER, ready: true, pages: MAGIC ? store.get("range:history6", "3–23") : PAGE_RANGE },
   { id: "geography", title: "Oxford International Primary Geography 6", sub: "Geography · Географія", color: "#1f6fb0", cover: IMG["geo-cover"] }
 ];
 const GLOBE = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c6 6 6 30 0 36M24 6c-6 6-6 30 0 36"/></svg>';
@@ -1366,7 +1400,7 @@ const coverOf = b => b.cover || (uploaded[b.id] && (uploaded[b.id].cover || (upl
 function folderHtml(b) {
   const cov = coverOf(b);
   const tab = b.ready ? `${b.pages} ст.` : "";
-  const pct = b.ready ? progress().pct : 0;
+  const pct = b.ready ? pctOf(b.id) : 0;
   return `<button class="folder" data-book="${esc(b.id)}" style="--f:${esc(b.color || "#5b6fa8")}" aria-label="${esc(b.title)}, прочитано ${pct}%">
     <span class="tab">${esc(tab)}</span><span class="pct">${pct}%</span>
     <span class="fbody"><span class="paper"></span><span class="photo">${cov ? `<img src="${esc(cov)}" alt="">` : `<span class="ph-empty">${b.id === "geography" ? GLOBE : BOOK_ICON}Обкладинку ще не додано</span>`}</span></span>
@@ -1374,7 +1408,7 @@ function folderHtml(b) {
 }
 function allBooks() {
   const extra = Object.keys(uploaded).filter(id => !BOOKS.some(b => b.id === id))
-    .map(id => ({ id, title: uploaded[id].title || "Нова книжка", sub: uploaded[id].subject || "Додано з телефона", color: "#5b6fa8" }));
+    .map(id => ({ id, title: uploaded[id].title || "Нова книжка", sub: uploaded[id].subject || "Додано з телефона", color: "#5b6fa8", ready: !!uploaded[id].magic, pages: uploaded[id].range || "" }));
   return [...BOOKS, ...extra];
 }
 function renderShelf() {
@@ -1390,7 +1424,7 @@ $("#shelf").addEventListener("click", e => {
   const f = e.target.closest(".folder"); if (!f) return;
   if (f.dataset.add) return openUploadTo(null);
   const b = allBooks().find(x => x.id === f.dataset.book);
-  if (b.ready) return openReader();
+  if (b.ready && b.id === "history6") return switchBook(b.id);
   openBookSheet(b);
 });
 function fileTiles(doc) {
@@ -1401,12 +1435,184 @@ function fileTiles(doc) {
 function openBookSheet(b) {
   const doc = uploaded[b.id];
   const n = doc && doc.files ? doc.files.length : 0;
+  const made = doc && doc.magic;
   openSheet(`<div class="head"><div class="word ttl">${esc(b.title)}</div></div>
-    ${n ? `<p class="hint">Завантажено файлів: ${n}. Щоб вони стали сторінками з озвученням і перекладом, напиши Claude в чаті: «Опрацюй книжку ${esc(b.title)}».</p>${fileTiles(doc)}`
-        : `<p class="hint">Для цієї книжки ще немає матеріалів, тому вона поки не відкривається. Додай фото обкладинки й розворотів або PDF — і попроси Claude їх опрацювати.</p>`}
-    <div class="btns"><button class="btn primary" id="addToBook">Додати фото або PDF</button></div>`, el => {
+    ${made ? `<p class="hint">Готово уроків: <b>${doc.lessons || 0}</b>${doc.range ? `, сторінки ${esc(doc.range)}` : ""}. Можна відкрити книжку або додати нові сторінки й знову натиснути «Магія у книгу».</p>` : ""}
+    ${n ? `${made ? "" : `<p class="hint">Завантажено файлів: ${n}. Натисни «Магія у книгу» — Claude прочитає сторінки й зробить з них уроки з озвученням, перекладом і відповідями до завдань.</p>`}${fileTiles(doc)}`
+        : `<p class="hint">Для цієї книжки ще немає матеріалів. Додай фото розворотів або PDF, а тоді натисни «Магія у книгу».</p>`}
+    <div class="btns">${made ? `<button class="btn primary" id="openMagic">Відкрити книжку</button>` : ""}
+      ${n ? `<button class="btn magicbtn" id="magicGo">${MAGIC_SVG} Магія у книгу</button>` : ""}
+      <button class="btn${made || n ? "" : " primary"}" id="addToBook">Додати фото або PDF</button></div>
+    <div class="magic-log" id="magicLog" aria-live="polite" hidden></div>`, el => {
     $("#addToBook", el).addEventListener("click", () => openUpload(b));
+    const om = $("#openMagic", el); if (om) om.addEventListener("click", () => switchBook(b.id));
+    const mg = $("#magicGo", el); if (mg) mg.addEventListener("click", () => runMagic(b, el));
   });
+}
+
+/* ---------- "Магія у книгу": Claude reads the page photos and builds lessons ---------- */
+const MAGIC_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L14 10"/><path d="M15 4l1 2.5L18.5 7.5 16 8.5 15 11l-1-2.5L11.5 7.5 14 6.5z" fill="currentColor"/><path d="M19.5 12l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z" fill="currentColor"/></svg>';
+let magicCtl = null;
+function loadScript(src) { return new Promise((ok, bad) => { const t = document.createElement("script"); t.src = src; t.onload = ok; t.onerror = bad; document.head.append(t); }); }
+async function pdfPages(blob, maxPages) {
+  if (!window.pdfjsLib) {
+    await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js");
+    await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js");
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  }
+  const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await blob.arrayBuffer()) }).promise;
+  const out = [];
+  for (let i = 1; i <= Math.min(pdf.numPages, maxPages); i++) {
+    const page = await pdf.getPage(i);
+    const v0 = page.getViewport({ scale: 1 });
+    const v = page.getViewport({ scale: Math.min(3, 1800 / v0.width) });
+    const c = document.createElement("canvas"); c.width = v.width; c.height = v.height;
+    await page.render({ canvasContext: c.getContext("2d"), viewport: v }).promise;
+    out.push(await new Promise(r => c.toBlob(r, "image/jpeg", .88)));
+  }
+  return out;
+}
+// a two-page spread is split into halves so each page keeps enough detail
+async function halves(blob) {
+  const img = await createImageBitmap(blob);
+  if (img.width < img.height * 1.2) return [blob];
+  const res = [];
+  for (const x of [0, 1]) {
+    const w = Math.round(img.width / 2), c = document.createElement("canvas");
+    c.width = w; c.height = img.height;
+    c.getContext("2d").drawImage(img, x * w, 0, w, img.height, 0, 0, w, img.height);
+    res.push(await new Promise(r => c.toBlob(r, "image/jpeg", .9)));
+  }
+  return res;
+}
+const MAGIC_PROMPT = (bookTitle, nextId) => `You are turning photos of a school textbook spread into an interactive reading lesson for an 11-year-old Ukrainian girl who is learning the subject in English.
+Book: "${bookTitle}". The images are the left and right page of ONE spread (or one page).
+
+Reply with ONLY one JSON object of this shape (no comments):
+{
+ "id": "lesson number as printed, e.g. \"2.2\" (if none: \"${nextId}\")",
+ "unit": "unit name as printed, e.g. \"2 The Age of Discovery and Exploration\"",
+ "title": ["English title as printed", "Ukrainian translation"],
+ "pages": "printed page numbers, e.g. \"24–25\"",
+ "blocks": [ ...in reading order... ],
+ "phrases": [["fixed English phrase from the text", "Ukrainian meaning"], ... 15-40 items]
+}
+Block types (every English sentence is paired with its Ukrainian translation as ["English", "Українською"]):
+ {"type":"lead","page":24,"s":[[en,ua],...]}  — the bold introduction (put "page" on the FIRST block of each printed page, the number as printed)
+ {"type":"h2","s":[[en,ua]]}                  — a heading
+ {"type":"p","s":[[en,ua],...]}               — a paragraph; also picture captions
+ {"type":"glossary","title":["Glossary words","Слова з глосарію"],"words":[["word","Ukrainian meaning"],...]}
+ {"type":"box","kind":K,"title":[en,ua],"items":[{"n":"1","s":[[en,ua]]},{"n":"a","sub":true,"s":[[en,ua]]},...],"answers":[{"n":"1","q":[en,ua],"a":[en,ua]},...]}
+   K is "activities" (green Activities box), "challenge" (red Challenge box), "know" (Did you know?), "think" (a "?" question box), "review" (quiz / review questions), "plain" (any other box, labels around a picture), "timeline" (dates: n = the date).
+   For multiple-choice options use items with "sub":true and n "a"/"b"/"c", and add "ok":true to the correct option.
+   Give "answers" for activities, challenge, think and review boxes: short, clear, correct, child-friendly answers in simple English with a Ukrainian translation (use \n between lines).
+Rules:
+- Copy the English text EXACTLY as printed, split into sentences, nothing skipped, in reading order (left page, then right page). Mark the book's bold key words with *asterisks*.
+- Ukrainian: natural, simple, for a child; address the reader as a girl ("ти дізналася").
+- Do not invent text that is not on the page, except the answers.`;
+function cleanLesson(L, fallbackId) {
+  const pair = x => Array.isArray(x) && typeof x[0] === "string" && x[0].trim() ? [x[0], String(x[1] || "")] : null;
+  const pairs = a => (Array.isArray(a) ? a : []).map(pair).filter(Boolean);
+  const out = { id: String(L.id || fallbackId), unit: String(L.unit || ""), title: pair(L.title) || ["Lesson " + fallbackId, "Урок " + fallbackId], pages: String(L.pages || ""), blocks: [], phrases: pairs(L.phrases) };
+  for (const b of Array.isArray(L.blocks) ? L.blocks : []) {
+    if (!b || typeof b !== "object") continue;
+    const page = Number.isFinite(+b.page) && +b.page > 0 ? +b.page : undefined;
+    if (["lead", "h2", "p"].includes(b.type)) { const sp = pairs(b.s); if (sp.length) out.blocks.push({ type: b.type, ...(page ? { page } : {}), s: sp }); }
+    else if (b.type === "glossary") { const w = pairs(b.words); if (w.length) out.blocks.push({ type: "glossary", ...(page ? { page } : {}), title: pair(b.title) || ["Glossary words", "Слова з глосарію"], words: w }); }
+    else if (b.type === "box") {
+      const items = (Array.isArray(b.items) ? b.items : []).map(it => it && { n: it.n != null ? String(it.n) : undefined, sub: !!it.sub || undefined, ok: !!it.ok || undefined, s: pairs(it.s) }).filter(it => it && it.s.length);
+      if (!items.length) continue;
+      const kind = ["activities", "challenge", "know", "think", "review", "plain", "timeline", "goals", "historian"].includes(b.kind) ? b.kind : "plain";
+      const answers = (Array.isArray(b.answers) ? b.answers : []).map(a => a && pair(a.q) && pair(a.a) ? { n: String(a.n || ""), q: pair(a.q), a: pair(a.a) } : null).filter(Boolean);
+      out.blocks.push({ type: "box", kind, ...(page ? { page } : {}), title: pair(b.title) || ["", ""], items, ...(answers.length ? { answers } : {}) });
+    }
+  }
+  return out.blocks.length ? out : null;
+}
+async function runMagic(b, el) {
+  const log = $("#magicLog", el), btn = $("#magicGo", el);
+  const say = (t, cls) => { log.hidden = false; const d = document.createElement("div"); if (cls) d.className = cls; d.textContent = t; log.append(d); log.scrollTop = 1e6; return d; };
+  if (magicCtl) { magicCtl.abort(); return; }
+  let sample = null;
+  try { sample = await claude.use("sample"); } catch (e) {}
+  if (!sample) { say("Магія тут недоступна: у цьому перегляді застосунок не може звертатися до Claude. Надішли фото в чат Claude — і я зроблю уроки.", "bad"); return; }
+  const lim = await sample.limits().catch(() => null);
+  if (!lim || !lim.images) { say("Цей перегляд не може передавати фото Claude. Надішли їх у чат — і я зроблю уроки.", "bad"); return; }
+  const doc = uploaded[b.id] || {};
+  const files = (doc.files || []).filter(f => !f.magicDone);
+  if (!files.length) { say("Нових файлів немає — додай фото або PDF.", "bad"); return; }
+  magicCtl = new AbortController();
+  btn.innerHTML = "Зупинити магію";
+  const pagesLeft = 24;
+  try {
+    // 1) collect page images: photos as they are, PDFs page by page
+    const spreads = [];   // {blobs:[...], photoId}
+    for (const f of files) {
+      const blob = await (await fetch(blobUrl(f.id))).blob();
+      if (/pdf/.test(f.type)) {
+        const line = say("Відкриваю PDF «" + f.name + "»…");
+        const pages = await pdfPages(blob, pagesLeft - spreads.length);
+        line.textContent = "PDF «" + f.name + "»: сторінок " + pages.length;
+        for (const pg of pages) {
+          let photoId = "";
+          try { photoId = (await assetsRef.upload(pg, { type: "image/jpeg" })).id; } catch (e) {}
+          spreads.push({ blobs: [pg], photoId });
+        }
+      } else spreads.push({ blobs: await halves(blob), photoId: f.id });
+      if (spreads.length >= pagesLeft) break;
+    }
+    // 2) one lesson per spread
+    const existing = await dbRef.collection("books/" + b.id + "/lessons").get();
+    let n = existing.docs.length;
+    const made = [];
+    for (let i = 0; i < spreads.length; i++) {
+      const sp = spreads[i];
+      const line = say(`Розворот ${i + 1} з ${spreads.length}: Claude читає сторінки…`);
+      const raw = await sample.json(MAGIC_PROMPT(b.title, String(n + 1)), { images: sp.blobs.slice(0, lim.images.maxCount), signal: magicCtl.signal, modelTier: "default" });
+      const L = cleanLesson(raw || {}, String(n + 1));
+      if (!L) { line.textContent = `Розворот ${i + 1}: не вдалося прочитати текст — спробуй чіткіше фото.`; line.className = "bad"; continue; }
+      L.color = b.color || "#5b6fa8";
+      if (sp.photoId) L.blocks.unshift({ type: "figs", items: [{ src: blobUrl(sp.photoId), label: ["Page from the book", "Сторінка з книжки"] }] });
+      n++;
+      await dbRef.doc(`books/${b.id}/lessons/l${String(n).padStart(3, "0")}`).set({ lesson: L });
+      made.push(L);
+      line.textContent = `Розворот ${i + 1}: готово — «${L.title[0]}»`; line.className = "ok";
+    }
+    // 3) dictionary for words the app does not know yet
+    const words = new Set();
+    const RE = /[A-Za-z\u00C0-\u017F]+(?:['’][A-Za-z]+)?/g;
+    const known = w => D[w] || D[w.replace(/'s$/, "")] || D[w.replace(/s$/, "")] || D[w.replace(/es$/, "")] || D[w.replace(/ed$/, "")];
+    const addTxt = t => (String(t).replace(/\*/g, "").match(RE) || []).forEach(w => { w = w.toLowerCase(); if (!known(w)) words.add(w); });
+    made.forEach(L => { addTxt(L.title[0]); L.blocks.forEach(bl => { (bl.s || []).forEach(x => addTxt(x[0])); (bl.items || []).forEach(it => (it.s || []).forEach(x => addTxt(x[0]))); }); });
+    const dictRef = dbRef.doc(`books/${b.id}/extra/dict`);
+    const prevDict = await dictRef.get();
+    const dict = prevDict.exists ? { ...(prevDict.data().words || {}) } : {};
+    const list = [...words].filter(w => !dict[w]);
+    for (let k = 0; k < list.length; k += 150) {
+      const part = list.slice(k, k + 150);
+      const line = say(`Словник: перекладаю ${Math.min(k + 150, list.length)} з ${list.length} слів…`);
+      try {
+        const res = await sample.json(`Translate these English words from a school textbook into Ukrainian for an 11-year-old. Reply with ONLY a JSON object: {"word": ["short Ukrainian translation", "optional short grammar hint in Ukrainian, e.g. минулий час від go"]}. Keep the keys exactly as given.\n\n${part.join("\n")}`, { signal: magicCtl.signal, modelTier: "quick" });
+        for (const [w, v] of Object.entries(res || {})) if (Array.isArray(v) && typeof v[0] === "string") dict[w.toLowerCase()] = v[1] ? [v[0], String(v[1])] : [v[0]];
+        line.className = "ok";
+      } catch (e) { if (e && e.code === "cancelled") throw e; line.textContent = "Частину словника не вдалося зробити — ці слова можна перекласти через Google."; }
+    }
+    await dictRef.set({ words: dict });
+    // 4) mark the book as ready
+    const all = (await dbRef.collection("books/" + b.id + "/lessons").get()).docs.map(d => d.data().lesson).filter(Boolean);
+    const pgs = all.flatMap(L => L.blocks.filter(x => x.page).map(x => x.page));
+    const range = pgs.length ? Math.min(...pgs) + "–" + Math.max(...pgs) : "";
+    const ids = new Set(files.map(f => f.id));
+    await dbRef.doc("books/" + b.id).update({ magic: true, lessons: all.length, range, files: (doc.files || []).map(f => ids.has(f.id) ? { ...f, magicDone: true } : f) });
+    say(made.length ? `Готово! Уроків у книжці: ${all.length}.` : "Не вийшло зробити жодного уроку.", made.length ? "ok big" : "bad");
+    if (made.length) { owlSay("You did it!", "Your new book is ready!|Open it and start reading!", "Твоя нова книжка готова!|Відкрий її й почни читати!", -1, true); btn.outerHTML = `<button class="btn primary" id="openNow">Відкрити книжку</button>`; $("#openNow", el).addEventListener("click", () => switchBook(b.id)); }
+  } catch (e) {
+    const why = { cancelled: "Магію зупинено.", not_granted: "Без дозволу Claude не може прочитати сторінки. Натисни кнопку ще раз і дозволь.", rate_limited: "Забагато запитів — спробуй за кілька хвилин.", invalid_json: "Claude відповів не так, як треба — спробуй ще раз.", image_rejected: "Фото не підходить — зроби його чіткішим або меншим.", prompt_too_large: "Забагато тексту за раз — додай менше сторінок." }[e && e.code] || "Щось пішло не так. Спробуй ще раз.";
+    say(why, "bad"); console.error("magic", e && (e.code || e.message || e));
+  } finally {
+    magicCtl = null;
+    const bb = $("#magicGo", el); if (bb) bb.innerHTML = MAGIC_SVG + " Магія у книгу";
+  }
 }
 function miniHtml(b) {
   const cov = coverOf(b), c = b.color || "#5b6fa8";
@@ -1554,6 +1760,11 @@ renderShelf();
 if (store.get("view", "lib") === "lib") document.body.classList.add("lib-mode");
 setTimeout(owlGreet, 900);
 
+if (MAGIC) {
+  $(".top .t b").textContent = MAGIC.meta.title || "Моя книжка";
+  const mc = MAGIC.meta.cover || ((MAGIC.meta.files || []).find(f => /^image\//.test(f.type)) || {}).id;
+  if (mc) $(".top .cover").src = blobUrl(mc);
+}
 /* ---------- start ---------- */
 applyMode(); applySub(); refreshSaved(); setPlayingUI();
 if (cur > 0) { showSentence(cur, 0); $("#subtitle").textContent = "Продовжимо з того місця, де зупинилися. Натисни ▶."; }
