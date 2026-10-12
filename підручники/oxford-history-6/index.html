@@ -356,10 +356,11 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 .newf .ncap { font-size: 12px; font-weight: 700; }
 .newf.has .nbody { border-style: solid; background: #5b6fa8; }
 .newf .nbody img { height: 86%; aspect-ratio: 3 / 4; object-fit: cover; border: 3px solid #fff; border-radius: 3px; transform: rotate(-4deg); box-shadow: 0 3px 8px rgba(0,0,0,.3); }
-.newf-side { display: grid; gap: 8px; min-width: 0; }
-.newf-side input[type=text], .namebox input[type=text] { font: inherit; font-size: 16px; padding: 9px 10px; border-radius: 10px; border: 1px solid #ddcdf6; background: #f3edfd; color: var(--ink); width: 100%; }
-.newf-side input[type=text]::placeholder, .namebox input[type=text]::placeholder { color: #a596c2; }
-.newf-side input[type=text]:focus, .namebox input[type=text]:focus { outline: none; border-color: #a77bea; box-shadow: 0 0 0 3px rgba(167,123,234,.25); }
+.newf-side { display: grid; gap: 8px; min-width: 0; align-content: start; padding-top: 10px; }
+.newf-side label.row { align-content: start; }
+.newf-side input[type=text], .namebox input[type=text] { font: inherit; font-size: 17px; padding: 6px 2px; border: 0; border-bottom: 2px dashed #a77bea; border-radius: 0; background: transparent; color: var(--ink); width: 100%; }
+.newf-side input[type=text]::placeholder, .namebox input[type=text]::placeholder { color: #cdbfe6; }
+.newf-side input[type=text]:focus, .namebox input[type=text]:focus { outline: none; border-bottom-color: #7a2fe8; }
 .newf-row:has(.newf.has-n) { grid-template-columns: 80px minmax(0, 1fr); }
 .newf.has-n { width: 80px; padding-top: 10px; }
 .newf.has-n .mtab { height: 13px; }
@@ -4717,7 +4718,7 @@ function openNewFolder() {
   openSheet(`<div class="head"><div class="word ttl">Нова папка</div></div>
     <div class="newf-row">
       <button type="button" class="newf" id="newCover" aria-label="Додати фото обкладинки"><span class="mtab"></span><span class="nbody"><span class="nplus">+</span><span class="ncap">Фото обкладинки</span></span></button>
-      <div class="newf-side"><label class="row" for="upTitle">Назва книжки<input type="text" id="upTitle" placeholder="Наприклад: Oxford Science 6"></label>
+      <div class="newf-side"><label class="row" for="upTitle">Назва книжки<input type="text" id="upTitle" placeholder="Book XX"></label>
         <p class="hint">Натисни на сіру папку й вибери фото обкладинки з галереї.</p></div>
     </div>
     <input type="file" id="inCover" accept="image/*" hidden>
@@ -4763,7 +4764,7 @@ function askFolderName(el) {
   if ($(".namebox", el)) return;
   const box = document.createElement("div");
   box.className = "namebox";
-  box.innerHTML = `<form><label for="nfName">Назва нової папки</label><input type="text" id="nfName" placeholder="Наприклад: Oxford Science 6" autocomplete="off">
+  box.innerHTML = `<form><label for="nfName">Назва нової папки</label><input type="text" id="nfName" placeholder="Book XX" autocomplete="off">
     <div class="btns"><button type="button" class="btn" id="nfCancel">Скасувати</button><button class="btn primary" type="submit">Створити</button></div></form>`;
   el.append(box);
   const inp = $("#nfName", box); setTimeout(() => inp.focus(), 50);
@@ -4789,7 +4790,7 @@ function openUploadTo(b, choose) {
   const doc = b && uploaded[b.id];
   openSheet(`<div class="head"><div class="word ttl">${choose ? "Додати файли" : b ? "Додати в: " + esc(b.title) : "Нова папка"}</div>${choose ? `<button class="newfold" id="newFold" aria-label="Створити нову папку" title="Нова папка">${NEWFOLD_SVG}</button>` : ""}</div>
     ${choose ? `<div class="lbl">Вибери папку</div><div class="minis">${choose.map(x => miniHtml(x).replace('class="mini"', `class="mini${x.id === b.id ? " sel" : ""}"`)).join("")}</div>` : ""}
-    ${!choose && !b ? `<div class="newf-row"><div class="newf has-n"><span class="mtab"></span><span class="nbody"><span class="nplus">+</span><span class="ncap">Нова папка</span></span></div><div class="newf-side"><label class="row" for="upTitle">Назва папки<input type="text" id="upTitle" placeholder="Наприклад: Oxford Science 6"></label></div></div>` : ""}
+    ${!choose && !b ? `<div class="newf-row"><div class="newf has-n"><span class="mtab"></span><span class="nbody"><span class="nplus">+</span><span class="ncap">Нова папка</span></span></div><div class="newf-side"><label class="row" for="upTitle">Назва папки<input type="text" id="upTitle" placeholder="Book XX"></label></div></div>` : ""}
     <div class="pick">
       <button type="button" id="pickPhoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" fill="#ffd84d"/><circle cx="9" cy="10" r="2" fill="#fff"/><path d="M21 16l-5-5-8 8"/></svg><b>Фото з галереї</b><small>JPG, PNG</small></button>
       <button type="button" id="pickPdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z" fill="#ffd84d"/><path d="M14 3v4h4" fill="#fff"/><path d="M9 14h6M9 17h4"/></svg><b>PDF з файлів</b><small>до 20 МБ</small></button>
