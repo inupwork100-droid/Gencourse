@@ -255,6 +255,10 @@ body.mode-ua .box h3 .h3ua { font-family: var(--f-display); font-size: inherit; 
 .item { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 6px; padding-right: 40px; position: relative; }
 .item.subq { padding-left: 22px; }
 .item .n { font-weight: 700; color: var(--muted); }
+.item.term { grid-template-columns: minmax(58px, max-content) minmax(0, 1fr); column-gap: 0; align-items: baseline; padding-block: 3px; }
+.item.term .n { font-size: 1.3em; font-weight: 800; color: #4a1f8e; padding-right: 10px; }
+.item.term .n::after { content: "—"; font-weight: 300; color: #a98bdc; margin-left: 10px; }
+.item.term > div { font-size: .9em; font-weight: 300; color: #3b3330; }
 .item .ua-tog { position: absolute; right: 0; top: 0; }
 .item .ua { grid-column: 2; }
 
@@ -742,7 +746,9 @@ L.blocks.forEach((b, bi) => {
         if (!it.sub) q = k;
         const isOpt = it.sub && /^[a-c]$/.test(it.n) && q != null && groups[q].some(x => x.ok);
         const r = renderSentences(it.s);
-        return `<div class="item${it.sub ? " subq" : ""}${isOpt ? " opt" : ""}"${isOpt ? ` data-q="${li}:${bi}:${q}" data-box="${li}:${bi}"${it.ok ? ' data-ok="1"' : ""} role="button" tabindex="0"` : ""}><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div><button class="ua-tog" data-tog aria-label="Переклад">UA</button></div>`;
+        // a word in place of the number (e.g. a suffix "-ful") is shown as a term with its meaning
+        const isTerm = b.kind !== "timeline" && it.n && String(it.n).length > 1 && !/^\d+[a-z]?[.)]?$/i.test(it.n);
+        return `<div class="item${it.sub ? " subq" : ""}${isOpt ? " opt" : ""}${isTerm ? " term" : ""}"${isOpt ? ` data-q="${li}:${bi}:${q}" data-box="${li}:${bi}"${it.ok ? ' data-ok="1"' : ""} role="button" tabindex="0"` : ""}><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div><button class="ua-tog" data-tog aria-label="Переклад">UA</button></div>`;
       }).join(""); })() + `</div></div>`;
   }
 });
