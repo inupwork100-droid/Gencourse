@@ -1,7 +1,7 @@
 // Урок 1.1 «Who were the Vikings?» — сторінки 6–7 підручника Oxford International Primary History 6.
 // Кожен блок — абзац. Кожне речення — [англійською, українською].
 // *слово* — жирне слово з підручника (ключова лексика).
-window.LESSON = {
+(window.LESSONS = window.LESSONS || []).push({
   id: "1.1",
   unit: "1 The Vikings",
   title: ["1.1 Who were the Vikings?", "1.1 Хто такі вікінги?"],
@@ -177,4 +177,4 @@ window.LESSON = {
     ["fierce warriors", "люті, запеклі воїни"],
     ["Who, exactly", "Хто саме, хто ж"]
   ]
-};
+});
