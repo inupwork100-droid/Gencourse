@@ -71,6 +71,15 @@ button:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid
 .top .t { min-width: 0; flex: 1 1 160px; line-height: 1.2; }
 .top .t b { display: block; font-family: var(--f-display); font-weight: 400; font-size: 17px; }
 .top .t span { font-size: 13px; opacity: .75; }
+/* page scale: tap a page number or drag the slider */
+.pager { flex: 1 1 100%; display: grid; gap: 4px; min-width: 0; }
+.pager .chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px 0; align-items: center; }
+.pager .chips::-webkit-scrollbar { display: none; }
+.pager .lbl { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; flex: none; margin-right: 2px; }
+.pg { flex: none; min-width: 34px; height: 30px; border-radius: 8px; border: 1px solid rgba(255,255,255,.3); background: transparent;
+  color: var(--sea-ink); font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums; padding: 0 8px; }
+.pg[aria-current="true"] { background: var(--now); border-color: var(--now); color: var(--now-ink); }
+.pager input[type=range] { width: 100%; margin: 0; accent-color: var(--now); height: 22px; }
 .seg { display: inline-flex; background: rgba(255,255,255,.12); border-radius: 999px; padding: 3px; gap: 2px; }
 .seg button { border: 0; background: transparent; color: var(--sea-ink); padding: 6px 12px; border-radius: 999px; font-size: 14px; font-weight: 700; letter-spacing: .02em; }
 .seg button[aria-pressed="true"] { background: var(--sea-ink); color: var(--sea); }
@@ -261,6 +270,10 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
   <button class="iconbtn" id="openSettings" aria-label="Налаштування голосу" title="Голос і швидкість">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
   </button>
+  <nav class="pager" aria-label="Сторінки книги">
+    <div class="chips" id="pageChips"><span class="lbl">Сторінка</span></div>
+    <input type="range" id="pageSlider" min="0" max="0" step="1" value="0" aria-label="Гортати сторінки">
+  </nav>
 </header>
 
 <main class="wrap">
@@ -379,7 +392,7 @@ let curPage = null;
 L.blocks.forEach((b, bi) => {
   if (b.page && b.page !== curPage) {
     curPage = b.page;
-    out += `<div class="pagemark">Page <b>${b.page}</b></div>`;
+    out += `<div class="pagemark" id="page-${b.page}" data-page="${b.page}">Page <b>${b.page}</b></div>`;
   }
   if (b.type === "lead" || b.type === "p") {
     const r = renderSentences(b.s);
@@ -824,6 +837,47 @@ $("#openSettings").addEventListener("click", () => {
     $("#resetPos", el).addEventListener("click", () => { pause(); cur = 0; curWord = 0; store.set("pos", 0); markDone(0, 0); clearMarks(); closeSheet(); scrollTo({ top: 0 }); });
   });
 });
+
+/* ---------- page scale ---------- */
+const PAGES = [...new Set(L.blocks.filter(b => b.page).map(b => b.page))].sort((a, b) => a - b);
+const chips = $("#pageChips"), slider = $("#pageSlider");
+chips.insertAdjacentHTML("beforeend", PAGES.map((p, i) => `<button class="pg" data-pg="${i}" aria-label="Сторінка ${p}">${p}</button>`).join(""));
+slider.max = String(Math.max(0, PAGES.length - 1));
+slider.hidden = PAGES.length < 2;
+function pageTarget(i) {
+  // the first page starts with the lesson banner, the others at their page marker
+  return i === 0 ? book : document.getElementById("page-" + PAGES[i]);
+}
+function goPage(i, smooth) {
+  const el = pageTarget(i); if (!el) return;
+  const head = $(".top").getBoundingClientRect().bottom;
+  scrollTo({ top: el.getBoundingClientRect().top + scrollY - head - 8, behavior: smooth && !matchMedia("(prefers-reduced-motion: reduce)").matches ? "smooth" : "auto" });
+  markPage(i);
+}
+let curPg = -1;
+function markPage(i) {
+  if (i === curPg) return; curPg = i;
+  chips.querySelectorAll(".pg").forEach(b => b.setAttribute("aria-current", String(+b.dataset.pg === i)));
+  slider.value = String(i);
+  const c = chips.querySelector(`[data-pg="${i}"]`);
+  if (c) chips.scrollTo({ left: c.offsetLeft - chips.clientWidth / 2 + c.offsetWidth / 2, behavior: "smooth" });
+}
+let dragging = false;
+chips.addEventListener("click", e => { const b = e.target.closest(".pg"); if (b) goPage(+b.dataset.pg, true); });
+slider.addEventListener("input", () => { dragging = true; goPage(+slider.value, false); });
+slider.addEventListener("change", () => { dragging = false; });
+let pgRaf = 0;
+addEventListener("scroll", () => {
+  if (dragging || pgRaf) return;
+  pgRaf = requestAnimationFrame(() => {
+    pgRaf = 0;
+    const line = $(".top").getBoundingClientRect().bottom + 60;
+    let i = 0;
+    PAGES.forEach((p, k) => { const el = pageTarget(k); if (k && el && el.getBoundingClientRect().top < line) i = k; });
+    markPage(i);
+  });
+}, { passive: true });
+markPage(0);
 
 /* ---------- start ---------- */
 applyMode(); applySub(); refreshSaved(); setPlayingUI();
