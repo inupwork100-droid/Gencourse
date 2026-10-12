@@ -311,6 +311,15 @@ body.mode-ua .box h3 .h3ua { font-family: var(--f-display); font-size: inherit; 
 .sayw svg { width: 22px; height: 22px; }
 a.ext { color: var(--ua); font-weight: 700; }
 .glist { display: grid; gap: 4px; }
+.wtable { margin: 14px 0 20px; font-size: 16px; }
+.wt-head, .wt-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); column-gap: 14px; padding: 9px 4px; }
+.wt-head { font-weight: 800; font-size: 14px; color: #1b1715; border-bottom: 1.5px solid #c9b6ea; padding-top: 0; }
+.wt-row { border-bottom: 1px solid #ece6f3; }
+.wt-row b { display: block; color: #6a2fb0; font-weight: 800; font-size: 1.15em; line-height: 1.25; }
+.wt-row small { display: block; color: #3b3330; font-weight: 300; font-size: .88em; line-height: 1.35; margin-top: 3px; }
+.wt-ex { display: block; align-self: start; border: 0; background: transparent; padding: 0; text-align: left; font: inherit; color: inherit; }
+.wt-ex b { font-size: 1.08em; }
+.wt-ex:active b { color: #8a4fe0; }
 .glist div { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 10px; font-size: 16px; border-bottom: 1px dashed var(--line); padding: 5px 0; }
 /* term — meaning: the same look everywhere a word comes with its meaning */
 .glist div b, .saved-row b, .gloss li button { color: #4a1f8e; font-weight: 800; }
@@ -3636,6 +3645,12 @@ L.blocks.forEach((b, bi) => {
         b.legend.map(l => `<span><i style="background:${l[0]}"></i><span class="lg" title="${esc(l[2])}">${tokenSpans(l[1]).html}</span></span>`).join("") + `</div>`;
     }
     out += `<figure class="blk" data-bi="${li}:${bi}"><img src="${IMG[b.src] || esc(b.src)}" alt="${esc(b.alt)}"><figcaption>${r.en}${uaHtml(r.sis)}</figcaption>${legend}</figure>`;
+  } else if (b.type === "wordtable") {
+    // two columns: the word part with its meaning | how a new word is made (tap a row to hear it)
+    const hd = b.head || [];
+    out += `<div class="wtable blk" data-bi="${li}:${bi}"><div class="wt-head"><span>${esc((hd[0] || [])[1] || "")}</span><span>${esc((hd[1] || [])[1] || "")}</span></div>` +
+      b.rows.map(r => `<div class="wt-row"><div><b class="wt-t">${esc(r.t)}</b><small>${esc((r.m || [])[1] || (r.m || [])[0] || "")}</small></div>` +
+        `<button class="wt-ex" data-say="${esc(String((r.ex || [])[0] || "").replace(/→/g, ","))}"><b>${esc((r.ex || [])[0] || "")}</b><small>${esc((r.ex || [])[1] || "")}</small></button></div>`).join("") + `</div>`;
   } else if (b.type === "figs") {
     out += `<div class="figs blk n${b.items.length}">` + b.items.map(f =>
       `<figure><img src="${IMG[f.src] || esc(f.src)}" alt="${esc(f.label[1])}"><figcaption><span class="fl">${tokenSpans(f.label[0]).html}</span><span class="fua">${esc(f.label[1])}</span></figcaption></figure>`).join("") + `</div>`;
@@ -3919,6 +3934,7 @@ function wordCard(word, opts) {
   return h;
 }
 
+document.addEventListener("click", e => { const x = e.target.closest(".wt-ex"); if (x) sayOnce(x.dataset.say); });
 sheetIn.addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.say != null) sayOnce(b.dataset.say);
@@ -4609,6 +4625,8 @@ Block types (every English sentence is paired with its Ukrainian translation as 
  {"type":"h2","s":[[en,ua]]}                  — a heading
  {"type":"p","s":[[en,ua],...]}               — a paragraph; also picture captions
  {"type":"glossary","title":["Glossary words","Слова з глосарію"],"words":[["word","Ukrainian meaning"],...]}
+ {"type":"wordtable","head":[["Suffix and meaning","Суфікс і значення"],["How the word is formed","Як утворюється слово"]],"rows":[{"t":"-ful","m":["full of","Сповнений чогось, має певну рису"],"ex":["care → careful","турбота → обережний, уважний"]},...]}
+   — for lists of prefixes, suffixes or word parts: one row each, with a clear example of how a new word is made (add a good example if the page has none).
  {"type":"box","kind":K,"title":[en,ua],"items":[{"n":"1","s":[[en,ua]]},{"n":"a","sub":true,"s":[[en,ua]]},...],"answers":[{"n":"1","q":[en,ua],"a":[en,ua]},...]}
    K is "activities" (green Activities box), "challenge" (red Challenge box), "know" (Did you know?), "think" (a "?" question box), "review" (quiz / review questions), "plain" (any other box, labels around a picture), "timeline" (dates: n = the date).
    For multiple-choice options use items with "sub":true and n "a"/"b"/"c", and add "ok":true to the correct option.
@@ -4625,6 +4643,10 @@ function cleanLesson(L, fallbackId) {
     if (!b || typeof b !== "object") continue;
     const page = Number.isFinite(+b.page) && +b.page > 0 ? +b.page : undefined;
     if (["lead", "h2", "p"].includes(b.type)) { const sp = pairs(b.s); if (sp.length) out.blocks.push({ type: b.type, ...(page ? { page } : {}), s: sp }); }
+    else if (b.type === "wordtable") {
+      const rows = (Array.isArray(b.rows) ? b.rows : []).map(r => r && typeof r.t === "string" && r.t.trim() ? { t: r.t, m: pair(r.m) || ["", ""], ex: pair(r.ex) || ["", ""] } : null).filter(Boolean);
+      if (rows.length) out.blocks.push({ type: "wordtable", ...(page ? { page } : {}), head: [pair((b.head || [])[0]) || ["", ""], pair((b.head || [])[1]) || ["", ""]], rows });
+    }
     else if (b.type === "glossary") { const w = pairs(b.words); if (w.length) out.blocks.push({ type: "glossary", ...(page ? { page } : {}), title: pair(b.title) || ["Glossary words", "Слова з глосарію"], words: w }); }
     else if (b.type === "box") {
       const items = (Array.isArray(b.items) ? b.items : []).map(it => it && { n: it.n != null ? String(it.n) : undefined, sub: !!it.sub || undefined, ok: !!it.ok || undefined, s: pairs(it.s) }).filter(it => it && it.s.length);
