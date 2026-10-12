@@ -99,6 +99,26 @@ button:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid
 /* the page */
 .wrap { padding-inline: 16px; padding-block: 16px 210px; }
 .lessons { display: grid; gap: 28px; }
+/* contents page: four coloured unit cards like page 3 of the book */
+.toc .banner h1 { margin: 0; }
+.toc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; align-items: start; }
+.toc-unit { background: var(--surface); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+.toc-head { width: 100%; display: flex; align-items: center; gap: 10px; border: 0; background: var(--u); color: #fff; padding: 10px 14px; text-align: left; }
+.toc-head > span:last-child { display: grid; min-width: 0; font-family: var(--f-display); font-size: 20px; line-height: 1.15; }
+.toc-head small { font-family: var(--f-body); font-size: 13px; opacity: .9; }
+.toc-c { flex: none; width: 34px; height: 34px; border-radius: 50%; background: #fff; color: var(--u); display: grid; place-items: center; font-weight: 700; font-size: 19px; }
+.toc-list { display: grid; padding: 6px 4px; }
+.toc-row { display: grid; grid-template-columns: 42px minmax(0, 1fr) auto; gap: 6px; align-items: start; border: 0; background: transparent; text-align: left; padding: 7px 10px; border-radius: 10px; color: var(--ink); }
+.toc-row:hover { background: color-mix(in srgb, var(--u) 10%, transparent); }
+.toc-row.review { grid-template-columns: minmax(0, 1fr) auto; }
+.toc-row.review .toc-t > span { color: var(--u); font-weight: 700; }
+.toc-n { color: var(--u); font-weight: 700; font-variant-numeric: tabular-nums; }
+.toc-t { display: grid; min-width: 0; line-height: 1.3; }
+.toc-t small { color: var(--muted); font-size: 13px; }
+.toc-p { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--muted); min-width: 30px; text-align: center; border-radius: 8px; padding: 1px 6px; }
+.toc-row.ready .toc-p { background: var(--u); color: #fff; }
+.toc-extra .toc-row { grid-template-columns: minmax(0, 1fr) auto; font-weight: 700; }
+.toc-hint { color: var(--muted); font-size: 14px; margin: 14px 0 0; }
 .figs { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 14px 0 18px; max-width: none; }
 .figs figure { margin: 0; flex: 0 1 200px; min-width: 0; text-align: center; }
 .figs.n3 figure { flex: 1 1 0; max-width: 170px; }
@@ -281,6 +301,9 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
     <button id="m-ua" aria-pressed="false" title="Весь текст українською">UA</button>
   </div>
   <div class="row2">
+  <button class="iconbtn" id="openToc" aria-label="Зміст" title="Зміст">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.2" fill="currentColor"/><circle cx="4.5" cy="12" r="1.2" fill="currentColor"/><circle cx="4.5" cy="18" r="1.2" fill="currentColor"/></svg>
+  </button>
   <button class="iconbtn" id="openSaved" aria-label="Мої слова" title="Мої слова">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
     <span class="badge" id="savedCount" hidden>0</span>
@@ -326,6 +349,7 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 
 <script>{{LESSON_JS}}</script>
 <script>{{DICT_JS}}</script>
+<script>{{CONTENTS_JS}}</script>
 <script>
 (() => {
 "use strict";
@@ -400,6 +424,20 @@ function renderSentences(list) {
 
 const book = $("#book");
 let out = "";
+const TOC = window.CONTENTS;
+const LESSON_PAGES = new Set(ALL_BLOCKS.filter(b => b.page).map(b => b.page));
+if (TOC) {
+  // a review row and the extra rows have no separate number column
+  const row = (num, en, ua, pg, review) => `<button class="toc-row${LESSON_PAGES.has(pg) ? " ready" : ""}${review ? " review" : ""}" data-goto="${pg}">
+      ${review || !num ? "" : `<span class="toc-n">${esc(num)}</span>`}<span class="toc-t"><span>${esc(review ? num + " " + en : en)}</span><small>${esc(ua)}</small></span><span class="toc-p">${pg}</span></button>`;
+  out += `<article class="page toc" id="contents"><div class="banner"><h1>${esc(TOC.title[0])}</h1><div class="uah1">${esc(TOC.title[1])}</div></div>
+    <div class="pagemark" id="page-${TOC.page}" data-page="${TOC.page}">Page <b>${TOC.page}</b></div>
+    <div class="toc-grid">` + TOC.units.map(u => `<section class="toc-unit" style="--u:${u.color}">
+      <button class="toc-head" data-goto="${u.items[0][3]}"><span class="toc-c">${u.n}</span><span><span>${esc(u.title[0])}</span><small>${esc(u.title[1])}</small></span></button>
+      <div class="toc-list">${u.items.map(it => row(it[0], it[1], it[2], it[3], it[4])).join("")}</div></section>`).join("") +
+    `<section class="toc-unit toc-extra" style="--u:var(--sea)"><div class="toc-list">${TOC.extra.map(x => row("", x[0], x[1], x[2])).join("")}</div></section></div>
+    <p class="toc-hint">Натисни на тему або номер сторінки, щоб перейти туди. Яскраві номери — сторінки, які вже є в застосунку.</p></article>`;
+}
 const paraBlocks = []; // elements that can show a UA paragraph
 LESSONS.forEach((L, li) => {
 const t = renderSentences([L.title]);
@@ -423,10 +461,10 @@ L.blocks.forEach((b, bi) => {
       legend = `<div class="legend"><span class="lt">Viking settlements · Viking raids</span>` +
         b.legend.map(l => `<span><i style="background:${l[0]}"></i><span class="lg" title="${esc(l[2])}">${tokenSpans(l[1]).html}</span></span>`).join("") + `</div>`;
     }
-    out += `<figure class="blk" data-bi="${li}:${bi}"><img src="${IMG[b.src]}" alt="${esc(b.alt)}" loading="lazy"><figcaption>${r.en}${uaHtml(r.sis)}</figcaption>${legend}</figure>`;
+    out += `<figure class="blk" data-bi="${li}:${bi}"><img src="${IMG[b.src]}" alt="${esc(b.alt)}"><figcaption>${r.en}${uaHtml(r.sis)}</figcaption>${legend}</figure>`;
   } else if (b.type === "figs") {
     out += `<div class="figs blk n${b.items.length}">` + b.items.map(f =>
-      `<figure><img src="${IMG[f.src]}" alt="${esc(f.label[1])}" loading="lazy"><figcaption><span class="fl">${tokenSpans(f.label[0]).html}</span><span class="fua">${esc(f.label[1])}</span></figcaption></figure>`).join("") + `</div>`;
+      `<figure><img src="${IMG[f.src]}" alt="${esc(f.label[1])}"><figcaption><span class="fl">${tokenSpans(f.label[0]).html}</span><span class="fua">${esc(f.label[1])}</span></figcaption></figure>`).join("") + `</div>`;
   } else if (b.type === "glossary") {
     out += `<div class="gloss blk"><h3><span class="en">${esc(b.title[0])}</span> <span class="h3ua">${esc(b.title[1])}</span></h3><ul>` +
       b.words.map(w => `<li><button data-gloss="${esc(w[0])}">${esc(w[0])}</button></li>`).join("") + `</ul></div>`;
@@ -860,8 +898,8 @@ $("#openSettings").addEventListener("click", () => {
 });
 
 /* ---------- page ruler ---------- */
-const BOOK_PAGES = LESSONS.find(l => l.bookPages)?.bookPages || 96;
-const PAGES = [...new Set(ALL_BLOCKS.filter(b => b.page).map(b => b.page))].sort((a, b) => a - b);
+const BOOK_PAGES = (TOC && TOC.bookPages) || LESSONS.find(l => l.bookPages)?.bookPages || 96;
+const PAGES = [...new Set([...(TOC ? [TOC.page] : []), ...LESSON_PAGES])].sort((a, b) => a - b);
 // which lesson each page belongs to, and the lesson's first page
 const PAGE_LESSON = {}, LESSON_FIRST = new Set();
 LESSONS.forEach((l, li) => l.blocks.filter(b => b.page).forEach((b, k) => { PAGE_LESSON[b.page] = li; if (k === 0) LESSON_FIRST.add(b.page); }));
@@ -869,9 +907,19 @@ const ruler = $("#ruler"), rtrack = $("#rtrack"), rthumb = $("#rthumb");
 const TICK = 28, PAD = 14;
 rtrack.insertAdjacentHTML("beforeend", Array.from({ length: BOOK_PAGES }, (_, i) => i + 1)
   .map(p => `<button class="rt${PAGES.includes(p) ? "" : " na"}" data-p="${p}" aria-label="Сторінка ${p}">${p}</button>`).join(""));
-function pageTarget(p) { return LESSON_FIRST.has(p) ? document.getElementById("lesson-" + PAGE_LESSON[p]) : document.getElementById("page-" + p); }
-function goPage(p, smooth) {
+function pageTarget(p) { if (TOC && p === TOC.page) return document.getElementById("contents"); return LESSON_FIRST.has(p) ? document.getElementById("lesson-" + PAGE_LESSON[p]) : document.getElementById("page-" + p); }
+// start reading (▶) from the first sentence of the chosen page
+function readFrom(p) {
   const el = pageTarget(p); if (!el) return;
+  const i = sentences.findIndex(s => s.el && (el.contains(s.el) || (el.compareDocumentPosition(s.el) & Node.DOCUMENT_POSITION_FOLLOWING)));
+  if (i < 0) return;
+  const was = playing; if (playing) pause();
+  cur = i; curWord = 0; store.set("pos", cur); showSentence(cur, 0);
+  if (was) play(0);
+}
+function goPage(p, smooth, sync = true) {
+  const el = pageTarget(p); if (!el) return;
+  if (sync) readFrom(p);
   const head = $(".top").getBoundingClientRect().bottom;
   scrollTo({ top: el.getBoundingClientRect().top + scrollY - head - 8, behavior: smooth && !matchMedia("(prefers-reduced-motion: reduce)").matches ? "smooth" : "auto" });
 }
@@ -880,7 +928,7 @@ let curPg = 0;
 function placeThumb(p, keepInView) {
   curPg = p;
   const L = LESSONS[PAGE_LESSON[p]];
-  if (L) $("#topSub").textContent = `Урок ${L.id} · с. ${p}`;
+  $("#topSub").textContent = L ? `Урок ${L.id} · с. ${p}` : `Зміст · с. ${p}`;
   rthumb.style.left = (PAD + (p - 1) * TICK) + "px";
   rthumb.setAttribute("aria-valuenow", p); rthumb.setAttribute("aria-valuetext", "Сторінка " + p);
   rtrack.querySelectorAll(".rt.on").forEach(b => b.classList.remove("on"));
@@ -907,7 +955,7 @@ rthumb.addEventListener("pointerdown", e => { dragging = true; rthumb.setPointer
 rthumb.addEventListener("pointermove", e => {
   if (!dragging) return;
   const p = pageAtX(e.clientX);
-  if (p !== curPg) { placeThumb(p, false); if (PAGES.includes(p)) goPage(p, false); }
+  if (p !== curPg) { placeThumb(p, false); if (PAGES.includes(p)) goPage(p, false, false); }
   // scroll the ruler when the finger reaches its edge
   const r = ruler.getBoundingClientRect(); clearInterval(edgeT);
   const dir = e.clientX < r.left + 24 ? -1 : e.clientX > r.right - 24 ? 1 : 0;
@@ -917,6 +965,7 @@ function endDrag() {
   if (!dragging) return;
   dragging = false; clearInterval(edgeT); rthumb.classList.remove("drag");
   if (!PAGES.includes(curPg)) { const n = nearest(curPg); toast(`Сторінку ${curPg} ще не додано · відкрито ${n}`); placeThumb(n, true); goPage(n, true); }
+  else readFrom(curPg);
 }
 rthumb.addEventListener("pointerup", endDrag); rthumb.addEventListener("pointercancel", endDrag);
 rthumb.addEventListener("keydown", e => {
@@ -936,6 +985,14 @@ addEventListener("scroll", () => {
     if (p !== curPg) placeThumb(p, true);
   });
 }, { passive: true });
+// contents: tap a unit, a topic or a page number
+book.addEventListener("click", e => {
+  const g = e.target.closest("[data-goto]"); if (!g) return;
+  const p = +g.dataset.goto;
+  if (!PAGES.includes(p)) { toast(`Сторінки ${p} ще немає в застосунку — надішли фото розвороту`); return; }
+  placeThumb(p, true); goPage(p, true);
+});
+$("#openToc").addEventListener("click", () => { if (TOC) { placeThumb(TOC.page, true); goPage(TOC.page, true, false); } });
 placeThumb(PAGES[0], false);
 ruler.scrollLeft = Math.max(0, PAD + (PAGES[0] - 1) * TICK - 60);
 
