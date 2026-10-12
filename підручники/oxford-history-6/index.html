@@ -153,10 +153,12 @@ button:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid
 .blk.lead { font-weight: 700; }
 /* books made with «Магія у книгу»: soft yellow pages, bold text in purple (banners stay red) */
 body.magic-book .page { background: #fdf5d6; }
-body.magic-book h2.blk, body.magic-book .wt-title, body.magic-book .blk.lead, body.magic-book strong .w, body.magic-book .w.key { color: #6a2fb0; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) body.magic-book .page { background: var(--paper); } :root:not([data-theme="light"]) body.magic-book h2.blk, :root:not([data-theme="light"]) body.magic-book .blk.lead { color: #c9a6ff; } }
+body.magic-book .blk.lead, body.magic-book strong .w, body.magic-book .w.key { color: #6a2fb0; }
+body.magic-book h2.blk, body.magic-book .wt-title { color: #1c86d6; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) body.magic-book .page { background: var(--paper); } :root:not([data-theme="light"]) body.magic-book .blk.lead { color: #c9a6ff; } :root:not([data-theme="light"]) body.magic-book h2.blk { color: #7cc4ff; } }
 :root[data-theme="dark"] body.magic-book .page { background: var(--paper); }
-:root[data-theme="dark"] body.magic-book h2.blk, :root[data-theme="dark"] body.magic-book .blk.lead { color: #c9a6ff; }
+:root[data-theme="dark"] body.magic-book .blk.lead { color: #c9a6ff; }
+:root[data-theme="dark"] body.magic-book h2.blk { color: #7cc4ff; }
 h2.blk { font-family: var(--f-display); font-weight: 400; color: var(--red); font-size: 24px; line-height: 1.25; margin: 24px 0 6px; text-wrap: balance; }
 .blk .ua-tog { position: absolute; right: -6px; top: -2px; border: 1px solid var(--line); background: var(--paper-2); color: var(--ua);
   font-size: 12px; font-weight: 700; border-radius: 999px; padding: 1px 8px; opacity: .85; }
