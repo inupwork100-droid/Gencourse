@@ -351,6 +351,11 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 .newf-side input[type=text] { font: inherit; font-size: 16px; padding: 9px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); width: 100%; }
 .sheet .head .newfold { margin-left: auto; border: 0; background: transparent; padding: 2px; width: 52px; height: 46px; flex: none; }
 .newfold svg { width: 100%; height: 100%; }
+.ed-acts { margin-left: auto; display: flex; gap: 10px; flex: none; }
+.ed-acts .ico { width: 44px; height: 44px; border-radius: 50%; border: 0; padding: 9px; display: grid; place-items: center; background: var(--paper-2); color: var(--ink); }
+.ed-acts .ico svg { width: 100%; height: 100%; }
+.ed-acts .ok { background: linear-gradient(135deg, #8a4fe0, #b36af0); color: #fff; box-shadow: 0 3px 10px rgba(138,79,224,.35); }
+.ed-acts .ico:disabled { opacity: .5; }
 .sheet .in { position: relative; }
 .namebox { position: absolute; left: 10px; right: 10px; top: 60px; z-index: 3; background: var(--surface); border: 3px solid #7a3fc4; border-radius: 18px; padding: 14px; box-shadow: 0 10px 28px rgba(0,0,0,.25); animation: bubble-pop .6s cubic-bezier(.3,1.6,.5,1); }
 .namebox form { display: grid; gap: 8px; }
@@ -1472,7 +1477,7 @@ function openEditFolder(b) {
   let color = b.color || "#5b6fa8", coverFile = null;
   const doc = uploaded[b.id] || {}, nf = (doc.files || []).length;
   const cov = coverOf(b);
-  openSheet(`<div class="head"><div class="word ttl">Змінити папку</div></div>
+  openSheet(`<div class="head"><div class="word ttl">Змінити папку</div><span class="ed-acts"><button type="button" class="ico ok" id="edSave" aria-label="Зберегти" title="Зберегти"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><button type="button" class="ico" id="edCancel" aria-label="Закрити без змін" title="Закрити без змін"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button></span></div>
     <div class="newf-row">
       <button type="button" class="newf ed" id="edCover" style="--f:${esc(color)}" aria-label="Змінити картинку"><span class="mtab"></span><span class="nbody">${cov ? `<img src="${esc(cov)}" alt="">` : `<span class="nplus">+</span>`}<span class="ncap">Змінити картинку</span></span></button>
       <div class="newf-side"><label class="row" for="edName">Назва<input type="text" id="edName" value="${esc(b.title)}"></label></div>
@@ -1485,8 +1490,7 @@ function openEditFolder(b) {
       ${nf ? `<p class="hint">Потримай фото — з'явиться «Видалити». Потримай і посунь — зміниш порядок.</p>${fileTiles(doc, b.id)}` : ""}
       <div class="btns"><button class="btn" id="edAdd">Додати фото або PDF</button>${nf ? `<button class="btn magicbtn" id="magicGo">${MAGIC_SVG} Магія у книгу</button>` : ""}</div>
       <div class="magic-log" id="magicLog" aria-live="polite" hidden></div>
-    </div>`}
-    <div class="btns"><button class="btn primary" id="edSave">Зберегти</button><button class="btn" id="edCancel">Скасувати</button></div>`, el => {
+    </div>`}`, el => {
     const ea = $("#edAdd", el); if (ea) ea.addEventListener("click", () => openUpload(b));
     const mg = $("#magicGo", el); if (mg) mg.addEventListener("click", () => runMagic(b, el));
     const fol = $("#edCover", el), inp = $("#edFile", el);
@@ -1889,6 +1893,19 @@ function openUploadTo(b, choose) {
     go($("#inPhoto", el)); go($("#inPdf", el));
   });
 }
+// phone photos are 3–4 MB; a 2000 px JPEG keeps the text sharp and loads many times faster
+async function shrinkPhoto(f) {
+  if (f.size < 900000) return null;
+  try {
+    const url = URL.createObjectURL(f);
+    const img = await new Promise((ok, bad) => { const i = new Image(); i.onload = () => ok(i); i.onerror = bad; i.src = url; });
+    const k = Math.min(1, 2000 / Math.max(img.naturalWidth, img.naturalHeight));
+    const c = document.createElement("canvas"); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+    const out = await new Promise(r => c.toBlob(r, "image/jpeg", .85));
+    return out && out.size < f.size ? out : null;
+  } catch (e) { return null; }
+}
 async function doUpload(b, el, files) {
   const title = b ? b.title : (($("#upTitle", el) || {}).value || "").trim() || "Нова книжка";
   const id = b ? b.id : "book-" + Date.now().toString(36);
@@ -1900,7 +1917,8 @@ async function doUpload(b, el, files) {
     const line = document.createElement("div"); line.textContent = f.name + " — завантажую…"; log.append(line);
     const type = f.type || (/\.pdf$/i.test(f.name) ? "application/pdf" : /\.png$/i.test(f.name) ? "image/png" : "image/jpeg");
     try {
-      const r = await assetsRef.upload(f, { type });
+      const small = /^image\/(jpeg|png|webp)$/.test(type) ? await shrinkPhoto(f) : null;
+      const r = small ? await assetsRef.upload(small, { type: "image/jpeg" }) : await assetsRef.upload(f, { type });
       list.push({ id: r.id, name: f.name, type: r.contentType });
       line.textContent = f.name + " — готово";
     } catch (err) {
