@@ -522,6 +522,12 @@ body:not(.lib-mode) .library { display: none; }
 .up-files.edit .ftile:not(.dragging) { transition: transform .15s; }
 .ed-files { display: grid; gap: 8px; border-top: 1px dashed var(--line); padding-top: 12px; }
 .ed-files .hint { margin: 0; font-size: 13px; }
+.ed-ttl { font-weight: 300 !important; color: #7a3fc4; letter-spacing: .01em; }
+.ftile.pview { position: relative; border: 0; padding: 0; background: var(--paper); border-radius: 8px; overflow: hidden; aspect-ratio: 4 / 3; }
+.ftile.pview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lightbox { position: fixed; inset: 0; z-index: 90; background: rgba(10,16,24,.88); display: grid; place-items: center; padding: 12px; }
+.lightbox img { max-width: 100%; max-height: 100%; border-radius: 6px; }
+.lightbox .x { position: absolute; top: calc(10px + env(safe-area-inset-top, 0px)); right: 12px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(255,255,255,.9); font-size: 24px; }
 .up-files a { display: grid; place-items: center; aspect-ratio: 3 / 4; border-radius: 8px; overflow: hidden; background: var(--paper); color: var(--ink); font-size: 12px; text-align: center; text-decoration: none; padding: 4px; }
 .up-files img { width: 100%; height: 100%; object-fit: cover; }
 .up-form { display: grid; gap: 10px; }
@@ -650,6 +656,7 @@ if (MAGIC) { document.body.classList.add("magic-book"); window.LESSONS = MAGIC.l
 const LESSONS = window.LESSONS, D = window.DICT;
 const ALL_BLOCKS = LESSONS.flatMap(l => l.blocks);
 const IMG = {{IMAGES_JSON}};
+const SPREAD_PHOTOS = {{PAGES_JSON}};
 const IMG_COVER = "{{IMG_cover}}";
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -1535,14 +1542,15 @@ $("#shelf").addEventListener("pointerdown", e => {
 ["pointerup", "pointercancel", "pointerleave"].forEach(t => $("#shelf").addEventListener(t, () => clearTimeout(lpT)));
 $("#shelf").addEventListener("pointermove", e => { if (Math.abs(e.movementX) + Math.abs(e.movementY) > 6) clearTimeout(lpT); });
 $("#shelf").addEventListener("contextmenu", e => { if (e.target.closest(".folder")) e.preventDefault(); });
-const FOLDER_COLORS = ["#f25c54", "#ff8c42", "#f7c531", "#6cc551", "#22b8a5", "#3fb6ef", "#3d84e8", "#7b6cf6", "#b26ee8", "#f2709c"];
+const FOLDER_COLORS = ["#f25c54", "#ff8c42", "#f7c531", "#6cc551", "#22b8a5", "#3fb6ef", "#3d84e8", "#7b6cf6", "#b26ee8", "#f2709c",
+  "#8a8f3c", "#c2185b", "#c9ccd1", "#5f6368", "#7b93a8", "#1f2f5c", "#33383d", "#d8c3a0", "#b0835a", "#5d3a22", "#1b1b1b", "#ffffff"];
 function openEditFolder(b) {
   if (!b) return;
   if (!dbRef) { toast("Тут змінювати папки не можна"); return; }
   let color = b.color || "#5b6fa8", coverFile = null;
   const doc = uploaded[b.id] || {}, nf = (doc.files || []).length;
   const cov = coverOf(b);
-  openSheet(`<div class="head"><div class="word ttl">Змінити папку</div><span class="ed-acts"><button type="button" class="ico ok" id="edSave" aria-label="Зберегти" title="Зберегти"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><button type="button" class="ico" id="edCancel" aria-label="Закрити без змін" title="Закрити без змін"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button></span></div>
+  openSheet(`<div class="head"><div class="word ttl ed-ttl">Редагувати</div><span class="ed-acts"><button type="button" class="ico ok" id="edSave" aria-label="Зберегти" title="Зберегти"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><button type="button" class="ico" id="edCancel" aria-label="Закрити без змін" title="Закрити без змін"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button></span></div>
     <div class="newf-row">
       <button type="button" class="newf ed" id="edCover" style="--f:${esc(color)}" aria-label="Змінити картинку"><span class="mtab"></span><span class="nbody">${cov ? `<img src="${esc(cov)}" alt="">` : `<span class="nplus">+</span>`}<span class="ncap">Змінити картинку</span></span></button>
       <div class="newf-side"><label class="row" for="edName">Назва<input type="text" id="edName" value="${esc(b.title)}"></label></div>
@@ -1550,7 +1558,10 @@ function openEditFolder(b) {
     <div class="lbl">Колір папки</div>
     <div class="swatches">${FOLDER_COLORS.map(c => `<button type="button" class="sw${c === color ? " on" : ""}" data-c="${c}" style="background:${c}" aria-label="Колір"></button>`).join("")}</div>
     <input type="file" id="edFile" accept="image/*" hidden>
-    ${b.id === "history6" ? "" : `<div class="ed-files">
+    ${b.id === "history6" ? `<div class="ed-files">
+      <div class="lbl">Сторінки, з яких зроблено книжку: ${SPREAD_PHOTOS.length}</div>
+      <div class="up-files">${SPREAD_PHOTOS.map((src, i) => `<button type="button" class="ftile pview" data-pview="${i}"><img src="${src}" alt="Сторінка ${i + 1}"><span class="fnum">${i + 1}</span></button>`).join("")}</div>
+    </div>` : `<div class="ed-files">
       <div class="lbl">Файли в папці: <span data-fcount="${esc(b.id)}">${nf}</span></div>
       ${nf ? `<p class="hint">Потримай фото — з'явиться «Видалити». Потримай і посунь — зміниш порядок.</p>${fileTiles(doc, b.id)}` : ""}
       <div class="btns"><button class="btn" id="edAdd">Додати фото або PDF</button>${nf ? `<button class="btn magicbtn" id="magicGo">${MAGIC_SVG} Магія у книгу</button>` : ""}</div>
@@ -1614,6 +1625,12 @@ async function saveFiles(id, files, removed) {
   sheetIn.querySelectorAll("[data-fcount]").forEach(x => { if (x.dataset.fcount === id) x.textContent = (uploaded[id].files || []).length; });
   renderShelf();
 }
+sheetIn.addEventListener("click", e => {
+  const b = e.target.closest("[data-pview]"); if (!b) return;
+  const box = document.createElement("div"); box.className = "lightbox";
+  box.innerHTML = `<img src="${SPREAD_PHOTOS[+b.dataset.pview]}" alt=""><button class="x" aria-label="Закрити">×</button>`;
+  box.addEventListener("click", () => box.remove()); document.body.append(box);
+});
 sheetIn.addEventListener("pointerdown", e => {
   const tile = e.target.closest(".up-files.edit .ftile");
   if (!tile || e.target.closest("button")) return;

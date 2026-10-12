@@ -12,6 +12,8 @@ uri = lambda f: "data:image/jpeg;base64," + base64.b64encode(f.read_bytes()).dec
 app = app.replace("{{IMG_cover}}", uri(here / "images" / "cover.jpg"))
 images = {f.stem: uri(f) for f in sorted((here / "images").glob("*.jpg")) if f.stem != "cover"}
 app = app.replace("{{IMAGES_JSON}}", json.dumps(images))
+# photos of the textbook spreads the book was made from (shown in the folder's edit sheet)
+app = app.replace("{{PAGES_JSON}}", json.dumps([uri(f) for f in sorted((here / "images" / "pages").glob("*.jpg"))]))
 # усі уроки по черзі: lesson-1-1.js, lesson-1-2.js, …
 lessons = sorted(here.glob("lesson-*.js"), key=lambda f: [int(x) for x in f.stem.split("-")[1:]])
 app = app.replace("{{LESSON_JS}}", "\n".join(f.read_text(encoding="utf-8") for f in lessons))
