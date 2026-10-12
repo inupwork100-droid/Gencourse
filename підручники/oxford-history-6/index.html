@@ -4368,7 +4368,7 @@ $("#shelf").addEventListener("pointerdown", e => {
 ["pointerup", "pointercancel", "pointerleave"].forEach(t => $("#shelf").addEventListener(t, () => clearTimeout(lpT)));
 $("#shelf").addEventListener("pointermove", e => { if (Math.abs(e.movementX) + Math.abs(e.movementY) > 6) clearTimeout(lpT); });
 $("#shelf").addEventListener("contextmenu", e => { if (e.target.closest(".folder")) e.preventDefault(); });
-const FOLDER_COLORS = ["#c8372d", "#d98a4e", "#cfae4e", "#8fb15a", "#3f9a83", "#1f6fb0", "#5b6fa8", "#8a64b8", "#c0607e", "#8d7d70"];
+const FOLDER_COLORS = ["#f25c54", "#ff8c42", "#f7c531", "#6cc551", "#22b8a5", "#3fb6ef", "#3d84e8", "#7b6cf6", "#b26ee8", "#f2709c"];
 function openEditFolder(b) {
   if (!b) return;
   if (!dbRef) { toast("Тут змінювати папки не можна"); return; }
