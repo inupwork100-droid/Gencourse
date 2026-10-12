@@ -292,7 +292,7 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg>
       </button>
       <span class="grow"></span>
-      <button class="chip" id="speed" title="Швидкість читання">0.8×</button>
+      <button class="chip" id="speed" title="Швидкість читання">0.6×</button>
       <button class="chip" id="subTog" aria-pressed="true" title="Показувати переклад речення, яке звучить">UA ↓</button>
     </div>
   </div>
@@ -914,7 +914,10 @@ const canSpeak = !!(synth && window.SpeechSynthesisUtterance);
 if (!canSpeak) $("#nosupport").hidden = false;
 let voices = [], voice = null;
 const RATES = [0.6, 0.7, 0.8, 0.9, 1];
-let rate = RATES.includes(+store.get("rate", 0.8)) ? +store.get("rate", 0.8) : 0.8;
+// Default: Samantha voice at 0.6× until the user picks something else.
+// One-time reset so earlier saved choices give way to these defaults.
+if (store.get("defaults", 0) < 2) { store.set("voice", null); store.set("rate", 0.6); store.set("defaults", 2); }
+let rate = RATES.includes(+store.get("rate", 0.6)) ? +store.get("rate", 0.6) : 0.6;
 // The chosen voice is remembered by its voiceURI (names repeat on iPhone: "Daniel" exists in several qualities).
 function pickVoices() {
   if (!canSpeak) return;
@@ -924,7 +927,7 @@ function pickVoices() {
   const want = store.get("voice", null);
   const exact = want && (voices.find(v => v.voiceURI === want) || voices.find(v => v.name === want));
   if (exact) { voice = exact; return; }
-  const score = v => (/en[-_]GB/i.test(v.lang) ? 20 : 0) +
+  const score = v => (/^Samantha\b/i.test(v.name) ? 100 : 0) + (/en[-_]US/i.test(v.lang) ? 20 : 0) + (/en[-_]GB/i.test(v.lang) ? 10 : 0) +
     (/(Daniel|Kate|Serena|Martha|Arthur|Google UK|Libby|Sonia|Ryan|Natural|Enhanced|Premium)/i.test(v.name) ? 8 : 0) + (v.localService ? 1 : 0);
   voice = voices.slice().sort((a, b) => score(b) - score(a))[0] || null;
 }
@@ -1031,7 +1034,7 @@ function sayOnce(text) {
 
 $("#speed").textContent = rate + "×";
 $("#speed").addEventListener("click", () => {
-  rate = RATES[(RATES.indexOf(rate) + 1) % RATES.length] || 0.8;
+  rate = RATES[(RATES.indexOf(rate) + 1) % RATES.length] || 0.6;
   $("#speed").textContent = rate + "×"; store.set("rate", rate);
   if (playing) speakSentence(cur, curWord);
 });
@@ -1269,13 +1272,17 @@ $("#openSettings").addEventListener("click", () => {
   pickVoices();
   const opts = voices.map(v => `<option value="${esc(v.voiceURI)}"${voice && v.voiceURI === voice.voiceURI ? " selected" : ""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("");
   openSheet(`<div class="head"><div class="word ttl">Голос і швидкість</div></div>
-    ${canSpeak ? `<label class="row" for="voiceSel">Англійський голос (найкраще — британський, en-GB)<select id="voiceSel">${opts || "<option>Голоси ще завантажуються…</option>"}</select></label>` : `<p class="empty">Цей браузер не підтримує озвучення.</p>`}
+    ${canSpeak ? `<label class="row" for="voiceSel">Англійський голос (стандартний — Samantha)<select id="voiceSel">${opts || "<option>Голоси ще завантажуються…</option>"}</select></label>` : `<p class="empty">Цей браузер не підтримує озвучення.</p>`}
     <label class="row" for="rateSel">Швидкість читання<select id="rateSel">${RATES.map(r => `<option value="${r}"${r === rate ? " selected" : ""}>${r}× ${r <= .7 ? "— повільно" : r === 1 ? "— звичайна" : ""}</option>`).join("")}</select></label>
-    <div class="btns"><button class="btn" data-say="The Vikings were great explorers.">${SVG.speak} Прослухати голос</button><button class="btn" id="resetPos">Почати урок спочатку</button></div>
+    <div class="btns"><button class="btn" data-say="The Vikings were great explorers.">${SVG.speak} Прослухати голос</button><button class="btn" id="resetVoice">Стандартні: Samantha, 0.6×</button><button class="btn" id="resetPos">Почати урок спочатку</button></div>
     <p class="hint">Порада: на iPhone кращі голоси можна завантажити в Параметри → Універсальний доступ → Усний контент → Голоси → English (UK).</p>`, el => {
     const vs = $("#voiceSel", el);
     vs && vs.addEventListener("change", () => { voice = voices.find(v => v.voiceURI === vs.value) || voice; store.set("voice", voice && voice.voiceURI); toast("Голос збережено"); sayOnce("The Vikings were great explorers."); });
     $("#rateSel", el).addEventListener("change", ev => { rate = +ev.target.value; $("#speed").textContent = rate + "×"; store.set("rate", rate); toast("Швидкість збережено"); });
+    $("#resetVoice", el).addEventListener("click", () => {
+      store.set("voice", null); rate = 0.6; store.set("rate", 0.6); $("#speed").textContent = "0.6×"; voice = null; pickVoices();
+      closeSheet(); toast("Повернуто: " + (voice ? voice.name : "Samantha") + ", 0.6×");
+    });
     $("#resetPos", el).addEventListener("click", () => { pause(); cur = 0; curWord = 0; store.set("pos", 0); markDone(0, 0); clearMarks(); closeSheet(); scrollTo({ top: 0 }); });
   });
 });
