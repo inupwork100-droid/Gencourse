@@ -379,13 +379,16 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 @keyframes star-shine { 0% { transform: scale(1) rotate(0); } 35% { transform: scale(1.35) rotate(-14deg); } 70% { transform: scale(.95) rotate(6deg); } 100% { transform: none; } }
 /* little satin notes with a nose pointing up at the star; they fade out quickly */
 .lib-acts { position: relative; }
-.lib-q { position: absolute; top: calc(100% + 12px); right: 40px; display: grid; justify-items: end; gap: 8px; pointer-events: none; z-index: 25; }
-.qb { position: relative; padding: 5px 12px 6px; border-radius: 12px; border: 1.5px solid #b98af5; color: #4a1f8e; text-align: right; white-space: nowrap;
-  background: linear-gradient(135deg, #ffffff 0%, #f1e8ff 38%, #fbf8ff 50%, #e8dcff 68%, #fdfbff 100%); background-size: 220% 220%;
-  box-shadow: 0 6px 16px rgba(74,31,142,.18), inset 0 1px 0 rgba(255,255,255,.9); animation: qb-in .45s cubic-bezier(.3,1.6,.5,1), qb-sheen 2.4s ease-in-out infinite; }
-.qb b { display: block; font-size: 14px; font-weight: 800; line-height: 1.15; }
-.qb small { display: block; font-size: 11px; color: #7a5aa8; line-height: 1.2; }
-.qb:first-child::before { content: ""; position: absolute; top: -7px; right: -2px; width: 11px; height: 11px; background: #f6f0ff; border-left: 1.5px solid #b98af5; border-top: 1.5px solid #b98af5; transform: rotate(45deg); border-radius: 2px 0 0 0; }
+.lib-q { position: absolute; top: calc(100% + 10px); right: 62px; display: grid; justify-items: end; gap: 5px; pointer-events: none; z-index: 25; }
+.qb { position: relative; padding: 3px 7px 4px; border-radius: 8px; border: 1px solid rgba(155,108,240,.8); color: #4a1f8e; text-align: right; white-space: nowrap;
+  background: linear-gradient(135deg, rgba(255,255,255,.62) 0%, rgba(241,232,255,.5) 38%, rgba(251,248,255,.66) 50%, rgba(232,220,255,.5) 68%, rgba(253,251,255,.62) 100%); background-size: 220% 220%;
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  box-shadow: 0 3px 10px rgba(74,31,142,.14), inset 0 1px 0 rgba(255,255,255,.8); animation: qb-in .45s cubic-bezier(.3,1.6,.5,1), qb-sheen 2.4s ease-in-out infinite; }
+.qb b { display: block; font-size: 11px; font-weight: 800; line-height: 1.15; }
+.qb small { display: block; font-size: 8.5px; color: #7a5aa8; line-height: 1.2; }
+/* a comic-style tail curving from the top-right corner up to the star */
+.qb .tail { position: absolute; top: -13px; right: -9px; width: 18px; height: 20px; overflow: visible; }
+.qb .tail path { fill: rgba(246,240,255,.75); stroke: rgba(155,108,240,.8); stroke-width: 1; stroke-linejoin: round; }
 .qb.out { animation: qb-out .7s ease forwards; }
 @keyframes qb-in { from { transform: translateY(-6px) scale(.6); opacity: 0; } }
 @keyframes qb-sheen { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
@@ -4478,7 +4481,7 @@ function showQuality() {
   const box = $("#libQ"), q = todayQualities();
   qTs.forEach(clearTimeout); qTs = []; box.innerHTML = "";
   const x = q.length ? q[qTurn++ % q.length] : ["Let's go!", "Уперед!"];
-  const note = (en, ua) => { const d = document.createElement("div"); d.className = "qb"; d.innerHTML = `<b>${esc(en)}</b><small>${esc(ua)}</small>`; box.append(d); return d; };
+  const note = (en, ua) => { const d = document.createElement("div"); d.className = "qb"; d.innerHTML = (box.children.length ? "" : '<svg class="tail" viewBox="0 0 18 20"><path d="M1 13 C7 12 12 8 15 1 C15 8 15 13 17 19"/></svg>') + `<b>${esc(en)}</b><small>${esc(ua)}</small>`; box.append(d); return d; };
   const a = note(x[0], x[1]);
   qTs.push(setTimeout(() => a.classList.add("out"), 2000));
   if (x[2]) {
