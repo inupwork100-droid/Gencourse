@@ -68,18 +68,25 @@ button:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--sea); color: var(--sea-ink);
   padding: 10px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .top .cover { width: 34px; height: 46px; border-radius: 3px; object-fit: cover; flex: none; box-shadow: 0 2px 6px rgba(0,0,0,.35); }
-.top .t { min-width: 0; flex: 1 1 160px; line-height: 1.2; }
+.top .t { min-width: 0; flex: 1 1 0; line-height: 1.2; }
+.top .seg { flex: none; }
+.top .row2 { flex: 1 1 100%; display: flex; align-items: center; gap: 10px; min-width: 0; }
 .top .t b { display: block; font-family: var(--f-display); font-weight: 400; font-size: 17px; }
 .top .t span { font-size: 13px; opacity: .75; }
-/* page scale: tap a page number or drag the slider */
-.pager { flex: 1 1 100%; display: grid; gap: 4px; min-width: 0; }
-.pager .chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px 0; align-items: center; }
-.pager .chips::-webkit-scrollbar { display: none; }
-.pager .lbl { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; flex: none; margin-right: 2px; }
-.pg { flex: none; min-width: 34px; height: 30px; border-radius: 8px; border: 1px solid rgba(255,255,255,.3); background: transparent;
-  color: var(--sea-ink); font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums; padding: 0 8px; }
-.pg[aria-current="true"] { background: var(--now); border-color: var(--now); color: var(--now-ink); }
-.pager input[type=range] { width: 100%; margin: 0; accent-color: var(--now); height: 22px; }
+/* page ruler: all book pages on one line; drag the white marker or tap a number */
+.ruler { flex: 1 1 0; min-width: 0; overflow-x: auto; scrollbar-width: none; position: relative; height: 40px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent); mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent); }
+.ruler::-webkit-scrollbar { display: none; }
+.rtrack { position: relative; display: flex; height: 100%; align-items: center; padding: 0 14px; width: max-content; }
+.rtrack::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: 5px; height: 2px; background: color-mix(in srgb, var(--sea-ink) 35%, transparent); border-radius: 1px; }
+.rt { position: relative; z-index: 1; width: 28px; flex: none; border: 0; background: transparent; padding: 0 0 6px; color: var(--sea-ink);
+  font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+.rt.na { opacity: .38; font-weight: 400; }
+.rt.on { color: var(--sea); opacity: 1; font-weight: 700; pointer-events: none; }
+.rthumb { position: absolute; z-index: 0; top: 4px; width: 28px; height: 26px; border-radius: 8px; background: var(--sea-ink);
+  box-shadow: 0 2px 6px rgba(0,0,0,.35); cursor: grab; touch-action: none; transition: left .15s; }
+.rthumb.drag { transition: none; cursor: grabbing; transform: scale(1.12); }
+.rthumb::after { content: ""; position: absolute; left: 50%; bottom: -7px; width: 2px; height: 6px; margin-left: -1px; background: var(--now); }
 .seg { display: inline-flex; background: rgba(255,255,255,.12); border-radius: 999px; padding: 3px; gap: 2px; }
 .seg button { border: 0; background: transparent; color: var(--sea-ink); padding: 6px 12px; border-radius: 999px; font-size: 14px; font-weight: 700; letter-spacing: .02em; }
 .seg button[aria-pressed="true"] { background: var(--sea-ink); color: var(--sea); }
@@ -263,6 +270,7 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
     <button id="m-both" aria-pressed="false" title="Англійський текст і переклад під кожним абзацом">EN+UA</button>
     <button id="m-ua" aria-pressed="false" title="Весь текст українською">UA</button>
   </div>
+  <div class="row2">
   <button class="iconbtn" id="openSaved" aria-label="Мої слова" title="Мої слова">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
     <span class="badge" id="savedCount" hidden>0</span>
@@ -270,10 +278,8 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
   <button class="iconbtn" id="openSettings" aria-label="Налаштування голосу" title="Голос і швидкість">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
   </button>
-  <nav class="pager" aria-label="Сторінки книги">
-    <div class="chips" id="pageChips"><span class="lbl">Сторінка</span></div>
-    <input type="range" id="pageSlider" min="0" max="0" step="1" value="0" aria-label="Гортати сторінки">
-  </nav>
+  <div class="ruler" id="ruler" aria-label="Сторінки книги"><div class="rtrack" id="rtrack"><span class="rthumb" id="rthumb" role="slider" tabindex="0" aria-label="Сторінка"></span></div></div>
+  </div>
 </header>
 
 <main class="wrap">
@@ -838,46 +844,80 @@ $("#openSettings").addEventListener("click", () => {
   });
 });
 
-/* ---------- page scale ---------- */
+/* ---------- page ruler ---------- */
+const BOOK_PAGES = L.bookPages || 96;
 const PAGES = [...new Set(L.blocks.filter(b => b.page).map(b => b.page))].sort((a, b) => a - b);
-const chips = $("#pageChips"), slider = $("#pageSlider");
-chips.insertAdjacentHTML("beforeend", PAGES.map((p, i) => `<button class="pg" data-pg="${i}" aria-label="Сторінка ${p}">${p}</button>`).join(""));
-slider.max = String(Math.max(0, PAGES.length - 1));
-slider.hidden = PAGES.length < 2;
-function pageTarget(i) {
-  // the first page starts with the lesson banner, the others at their page marker
-  return i === 0 ? book : document.getElementById("page-" + PAGES[i]);
-}
-function goPage(i, smooth) {
-  const el = pageTarget(i); if (!el) return;
+const ruler = $("#ruler"), rtrack = $("#rtrack"), rthumb = $("#rthumb");
+const TICK = 28, PAD = 14;
+rtrack.insertAdjacentHTML("beforeend", Array.from({ length: BOOK_PAGES }, (_, i) => i + 1)
+  .map(p => `<button class="rt${PAGES.includes(p) ? "" : " na"}" data-p="${p}" aria-label="Сторінка ${p}">${p}</button>`).join(""));
+function pageTarget(p) { return p === PAGES[0] ? book : document.getElementById("page-" + p); }
+function goPage(p, smooth) {
+  const el = pageTarget(p); if (!el) return;
   const head = $(".top").getBoundingClientRect().bottom;
   scrollTo({ top: el.getBoundingClientRect().top + scrollY - head - 8, behavior: smooth && !matchMedia("(prefers-reduced-motion: reduce)").matches ? "smooth" : "auto" });
-  markPage(i);
 }
-let curPg = -1;
-function markPage(i) {
-  if (i === curPg) return; curPg = i;
-  chips.querySelectorAll(".pg").forEach(b => b.setAttribute("aria-current", String(+b.dataset.pg === i)));
-  slider.value = String(i);
-  const c = chips.querySelector(`[data-pg="${i}"]`);
-  if (c) chips.scrollTo({ left: c.offsetLeft - chips.clientWidth / 2 + c.offsetWidth / 2, behavior: "smooth" });
+const nearest = p => PAGES.reduce((a, b) => Math.abs(b - p) < Math.abs(a - p) ? b : a, PAGES[0]);
+let curPg = 0;
+function placeThumb(p, keepInView) {
+  curPg = p;
+  rthumb.style.left = (PAD + (p - 1) * TICK) + "px";
+  rthumb.setAttribute("aria-valuenow", p); rthumb.setAttribute("aria-valuetext", "Сторінка " + p);
+  rtrack.querySelectorAll(".rt.on").forEach(b => b.classList.remove("on"));
+  const t = rtrack.querySelector(`[data-p="${p}"]`); t && t.classList.add("on");
+  if (keepInView) {
+    const x = PAD + (p - 1) * TICK, l = ruler.scrollLeft, w = ruler.clientWidth;
+    if (x < l + 30 || x + TICK > l + w - 30) ruler.scrollTo({ left: x - w / 2 + TICK / 2, behavior: "smooth" });
+  }
 }
-let dragging = false;
-chips.addEventListener("click", e => { const b = e.target.closest(".pg"); if (b) goPage(+b.dataset.pg, true); });
-slider.addEventListener("input", () => { dragging = true; goPage(+slider.value, false); });
-slider.addEventListener("change", () => { dragging = false; });
+rthumb.setAttribute("aria-valuemin", 1); rthumb.setAttribute("aria-valuemax", BOOK_PAGES);
+rtrack.addEventListener("click", e => {
+  const b = e.target.closest(".rt"); if (!b) return;
+  const p = +b.dataset.p;
+  if (!PAGES.includes(p)) { toast(`Сторінку ${p} ще не додано`); return; }
+  placeThumb(p, true); goPage(p, true);
+});
+// drag the white marker along the ruler
+let dragging = false, edgeT = 0;
+function pageAtX(clientX) {
+  const r = rtrack.getBoundingClientRect();
+  return Math.max(1, Math.min(BOOK_PAGES, Math.floor((clientX - r.left - PAD) / TICK) + 1));
+}
+rthumb.addEventListener("pointerdown", e => { dragging = true; rthumb.setPointerCapture(e.pointerId); rthumb.classList.add("drag"); e.preventDefault(); });
+rthumb.addEventListener("pointermove", e => {
+  if (!dragging) return;
+  const p = pageAtX(e.clientX);
+  if (p !== curPg) { placeThumb(p, false); if (PAGES.includes(p)) goPage(p, false); }
+  // scroll the ruler when the finger reaches its edge
+  const r = ruler.getBoundingClientRect(); clearInterval(edgeT);
+  const dir = e.clientX < r.left + 24 ? -1 : e.clientX > r.right - 24 ? 1 : 0;
+  if (dir) edgeT = setInterval(() => { ruler.scrollLeft += dir * TICK; const q = pageAtX(e.clientX); if (q !== curPg) placeThumb(q, false); }, 120);
+});
+function endDrag() {
+  if (!dragging) return;
+  dragging = false; clearInterval(edgeT); rthumb.classList.remove("drag");
+  if (!PAGES.includes(curPg)) { const n = nearest(curPg); toast(`Сторінку ${curPg} ще не додано · відкрито ${n}`); placeThumb(n, true); goPage(n, true); }
+}
+rthumb.addEventListener("pointerup", endDrag); rthumb.addEventListener("pointercancel", endDrag);
+rthumb.addEventListener("keydown", e => {
+  const i = PAGES.indexOf(nearest(curPg));
+  const j = e.key === "ArrowRight" ? Math.min(PAGES.length - 1, i + 1) : e.key === "ArrowLeft" ? Math.max(0, i - 1) : -1;
+  if (j < 0) return; e.preventDefault(); placeThumb(PAGES[j], true); goPage(PAGES[j], true);
+});
+// follow the text while reading or scrolling
 let pgRaf = 0;
 addEventListener("scroll", () => {
   if (dragging || pgRaf) return;
   pgRaf = requestAnimationFrame(() => {
     pgRaf = 0;
     const line = $(".top").getBoundingClientRect().bottom + 60;
-    let i = 0;
-    PAGES.forEach((p, k) => { const el = pageTarget(k); if (k && el && el.getBoundingClientRect().top < line) i = k; });
-    markPage(i);
+    let p = PAGES[0];
+    PAGES.forEach(q => { const el = q === PAGES[0] ? null : document.getElementById("page-" + q); if (el && el.getBoundingClientRect().top < line) p = q; });
+    if (p !== curPg) placeThumb(p, true);
   });
 }, { passive: true });
-markPage(0);
+placeThumb(PAGES[0], false);
+ruler.scrollLeft = Math.max(0, PAD + (PAGES[0] - 1) * TICK - 60);
 
 /* ---------- start ---------- */
 applyMode(); applySub(); refreshSaved(); setPlayingUI();
