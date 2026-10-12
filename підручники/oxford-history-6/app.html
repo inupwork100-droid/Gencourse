@@ -198,14 +198,20 @@ figcaption { font-size: 16px; margin-top: 8px; color: var(--ink); }
 .item .n { white-space: nowrap; }
 .item.opt { cursor: pointer; border-radius: 12px; margin-left: 16px; padding: 4px 40px 4px 6px; transition: background-color .3s; }
 .item.opt.subq { padding-left: 6px; }
-.item.opt:hover { background: color-mix(in srgb, var(--lime) 12%, transparent); }
+@media (hover: hover) { .item.opt:hover { background: color-mix(in srgb, var(--lime) 12%, transparent); } }
+.item.opt .w:hover { background: transparent; }
 .item.opt .w { cursor: pointer; }
 .item.opt::before { content: ""; position: absolute; inset: 0; border-radius: 12px; background: #c9c9c9; opacity: 0; pointer-events: none; }
-.item.opt.flash::before { animation: opt-flash .9s ease-out; }
-@keyframes opt-flash { 0% { opacity: 0; } 15% { opacity: 1; } 100% { opacity: 0; } }
-.owl-say .notice { background: #ececec; border-radius: 28px; padding: 12px 16px; display: grid; gap: 4px; }
+.item.opt.flash::before { animation: opt-flash .6s ease-out; }
+@keyframes opt-flash { 0% { opacity: 0; background: #b9b9b9; } 12% { opacity: 1; background: #b9b9b9; } 55% { opacity: .8; background: #e2e2e2; } 100% { opacity: 0; background: #f2f2f2; } }
+.owl-say.small { width: min(230px, calc(100vw - 24px)); padding: 9px 12px; border-radius: 30px; background: rgba(255,255,255,.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 0 0 4px rgba(255,255,255,.55), 0 8px 20px rgba(0,0,0,.15); }
+.owl-say.small::after { background: rgba(255,255,255,.55); right: 30px; }
+.owl-say.small .x { top: 4px; right: 10px; font-size: 16px; }
+.owl-say.small .en { font-size: 18px; }
+.owl-say.small .uk { font-size: 12px; }
+.owl-say .notice { background: rgba(225,225,225,.85); border-radius: 22px; padding: 8px 12px; display: grid; gap: 2px; }
 .owl-say .notice .nenv { color: #c79a00; }
-.owl-say .notice .nenv svg { width: 34px; height: 26px; }
+.owl-say .notice .nenv svg { width: 24px; height: 18px; }
 .item.opt.right { background: color-mix(in srgb, var(--lime) 45%, var(--surface)); box-shadow: 0 0 0 2px var(--lime), 0 0 16px color-mix(in srgb, var(--lime) 70%, transparent); animation: opt-glow 1.6s ease-in-out 3; }
 .item.opt.right .n { color: #2f8a1f; font-weight: 800; }
 .item.opt.wrong { background: linear-gradient(270deg, #f2cfc4, #e6c3a2, #f5ddd5, #e6c3a2, #f2cfc4); background-size: 300% 100%; animation: opt-flow 2.4s linear infinite; }
@@ -1242,6 +1248,7 @@ function owlSay(hi, en, ua, newStar = -1, party = false) {
   const st = starsToday();
   const pages = day.pages.length, done = Object.keys(doneLessons).length;
   const box = $("#owlSay");
+  box.classList.remove("small");
   box.innerHTML = `<button class="x" aria-label="Закрити">×</button>
     <div class="stars" aria-label="Зірочки за сьогодні">${st.map((on, j) => `<span class="star${on ? " on" : ""}${j === newStar ? " new" : ""}">${STAR_SVG}${STAR_LABELS[j]}</span>`).join("")}</div>
     <div class="hi">${esc(hi)}</div>
@@ -1260,6 +1267,7 @@ function owlNotice(en, ua) {
   const box = $("#owlSay");
   box.innerHTML = `<button class="x" aria-label="Закрити">×</button>
     <div class="notice"><span class="nenv">${SVG.mail}</span><span class="en">${esc(en)}</span><span class="uk">${esc(ua)}</span></div>`;
+  box.classList.add("small");
   box.hidden = false;
   const o = $("#owl"); o.classList.remove("talk", "party"); void o.offsetWidth; o.classList.add("talk", "big");
   clearTimeout(owlT); owlT = setTimeout(hideOwlSay, 5000);
