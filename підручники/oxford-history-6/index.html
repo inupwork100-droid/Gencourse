@@ -327,29 +327,43 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 .lib-note { color: var(--muted); font-size: 14px; margin: 0; }
 
 /* ---------- owl helper: purple circle with a speech bubble ---------- */
-.owl { position: fixed; right: 16px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 45; width: 70px; height: 70px; border-radius: 50%;
-  background: #7a3fc4; border: 3px solid #fff; box-shadow: 0 6px 16px rgba(60,20,110,.4); padding: 0; display: grid; place-items: center; animation: owl-bob 3s ease-in-out infinite; }
-body:not(.lib-mode) .owl { bottom: calc(150px + env(safe-area-inset-bottom, 0px)); width: 58px; height: 58px; }
-.owl svg { width: 82%; height: 82%; overflow: visible; }
+.owl { position: fixed; right: 16px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 45; width: 72px; height: 72px; border-radius: 50%;
+  background: #fff; border: 4px solid #1f5fbf; box-shadow: inset 0 0 0 3px #f6c419, 0 6px 16px rgba(20,40,90,.35); padding: 0; display: grid; place-items: center; animation: owl-bob 3s ease-in-out infinite; }
+body:not(.lib-mode) .owl { bottom: calc(150px + env(safe-area-inset-bottom, 0px)); width: 60px; height: 60px; }
+/* celebration ring: blue, yellow and purple running round the circle */
+.owl::before { content: ""; position: absolute; inset: -8px; border-radius: 50%; opacity: 0; pointer-events: none;
+  background: conic-gradient(#1f5fbf, #f6c419, #8a3fd8, #1f5fbf, #f6c419, #8a3fd8, #1f5fbf);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 8px)); mask: radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 8px)); }
+.owl.party::before { opacity: 1; animation: owl-spin 1.1s linear infinite; }
+.owl svg { width: 80%; height: 80%; overflow: visible; }
 .owl .lid { transform-origin: center; transform-box: fill-box; animation: owl-blink 4.5s infinite; }
 .owl.talk { animation: owl-hop .5s ease-in-out 3; }
+@keyframes owl-spin { to { transform: rotate(360deg); } }
 @keyframes owl-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 @keyframes owl-hop { 0%, 100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(-10px) rotate(-6deg); } 60% { transform: translateY(-4px) rotate(5deg); } }
 @keyframes owl-blink { 0%, 92%, 100% { transform: scaleY(0); } 95% { transform: scaleY(1); } }
-.owl-say { position: fixed; right: 16px; bottom: calc(100px + env(safe-area-inset-bottom, 0px)); z-index: 44; width: min(320px, calc(100vw - 32px)); background: #fff; color: #2a2320;
+.owl-say { position: fixed; right: 16px; bottom: calc(100px + env(safe-area-inset-bottom, 0px)); z-index: 44; width: min(340px, calc(100vw - 32px)); background: #fff; color: #2a2320;
   border: 3px solid #f2d33a; border-radius: 18px; padding: 12px 16px 12px; box-shadow: 0 10px 26px rgba(0,0,0,.2); display: grid; gap: 6px; }
 body:not(.lib-mode) .owl-say { bottom: calc(220px + env(safe-area-inset-bottom, 0px)); }
 .owl-say::after { content: ""; position: absolute; right: 26px; bottom: -11px; width: 18px; height: 18px; background: #fff; border-right: 3px solid #f2d33a; border-bottom: 3px solid #f2d33a; transform: rotate(45deg); }
-.owl-say .hi { font-family: var(--f-display); font-size: 24px; color: #7a3fc4; line-height: 1.1; }
+.owl-say .hi { font-family: var(--f-display); font-size: 26px; color: #7a3fc4; line-height: 1.1; }
 .owl-say p { margin: 0; font-size: 15px; line-height: 1.4; }
 .owl-say b { color: #7a3fc4; }
-.owl-say .stars { display: flex; gap: 6px; margin-top: 2px; }
-.owl-say .star { display: grid; justify-items: center; gap: 1px; font-size: 10px; color: #6e625b; text-align: center; line-height: 1.1; flex: 1; }
-.owl-say .star svg { width: 30px; height: 30px; }
+.owl-say .stars { display: flex; gap: 4px; padding-right: 20px; }
+.owl-say .star { hyphens: manual; -webkit-hyphens: manual; overflow-wrap: normal; display: grid; justify-items: center; align-content: start; gap: 1px; font-size: 10px; color: #b3aaa3; text-align: center; line-height: 1.1; flex: 1; min-width: 0; }
+.owl-say .star.on { color: #1b1715; font-weight: 700; }
+.owl-say .star svg { width: 28px; height: 28px; }
 .owl-say .star.on svg { fill: #f6c419; stroke: #b88a00; }
-.owl-say .star:not(.on) svg { fill: #eee; stroke: #c9c9c9; }
+.owl-say .star:not(.on) svg { fill: #f1f1f1; stroke: #d0d0d0; }
+.owl-say .star.new svg { animation: star-pop .7s ease-out 2; }
+@keyframes star-pop { 50% { transform: scale(1.45) rotate(18deg); } }
+.owl-say .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 2px; }
+.owl-say .tile { background: #e3f0ff; border-radius: 12px; padding: 6px 10px; display: grid; gap: 0; }
+.owl-say .tile small { font-size: 12px; color: #3b5a85; line-height: 1.2; }
+.owl-say .tile strong { font-size: 24px; color: #1f5fbf; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.owl-say .tile strong span { font-size: 13px; font-weight: 700; }
 .owl-say .x { position: absolute; top: 4px; right: 8px; border: 0; background: transparent; font-size: 20px; color: #999; padding: 4px; }
-@media (prefers-reduced-motion: reduce) { .owl, .owl.talk, .owl .lid { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .owl, .owl.talk, .owl .lid, .owl.party::before, .owl-say .star.new svg { animation: none; } }
 body.lib-mode .top, body.lib-mode .wrap, body.lib-mode .player { display: none; }
 body:not(.lib-mode) .library { display: none; }
 .up-files { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
@@ -3376,7 +3390,7 @@ const WORD_RE = /[A-Za-z\u00C0-\u017F0-9]+(?:['’][A-Za-z]+)?/g;
 
 /* ---------- build sentence model + DOM ---------- */
 const sentences = [];
-let curLi = null;   // {en, ua, words:[{t, el}], el, uaEl, speech, starts:[]}
+let curLi = null, curPgNum = null;   // {en, ua, words:[{t, el}], el, uaEl, speech, starts:[]}
 
 function tokenSpans(text, opts = {}) {
   // returns {html, words:[{t, bold}]} ; *x* marks bold
@@ -3411,7 +3425,7 @@ function makeSentence(pair) {
     last = off + m.length; wi++;
   });
   speech += plain.slice(last);
-  sentences.push({ en: plain, ua: pair[1], words, speech, starts, el: null, uaEl: null, li: curLi });
+  sentences.push({ en: plain, ua: pair[1], words, speech, starts, el: null, uaEl: null, li: curLi, pg: curPgNum });
   return { si, html: `<span class="s" data-si="${si}">${html}</span>` };
 }
 
@@ -3442,13 +3456,13 @@ if (TOC) {
 }
 const paraBlocks = []; // elements that can show a UA paragraph
 LESSONS.forEach((L, li) => {
-curLi = li;
+curLi = li; curPgNum = (L.blocks.find(b => b.page) || {}).page || null;
 const t = renderSentences([L.title]);
 out += `<article class="page" id="lesson-${li}" data-li="${li}"${L.color ? ` style="--red:${L.color};--banner:${L.color}"` : ""}><div class="banner"><div class="unit">${esc(L.unit)} · pages ${esc(L.pages)}</div><h1>${t.en}${uaHtml(t.sis).replace('class="ua"', 'class="ua uah1"')}</h1></div>`;
 let curPage = null;
 L.blocks.forEach((b, bi) => {
   if (b.page && b.page !== curPage) {
-    curPage = b.page;
+    curPage = b.page; curPgNum = b.page;
     out += `<div class="pagemark" id="page-${b.page}" data-page="${b.page}">Page <b>${b.page}</b></div>`;
   }
   if (b.type === "lead" || b.type === "p") {
@@ -4007,65 +4021,95 @@ ruler.scrollLeft = Math.max(0, PAD + (PAGES[0] - 1) * TICK - 60);
 const keyOf = s => { let h = 0; for (const c of s.en) h = (h * 31 + c.charCodeAt(0)) | 0; return (h >>> 0).toString(36); };
 const today = () => new Date().toISOString().slice(0, 10);
 let readSet = store.get("read", {});
+let doneLessons = store.get("done", {});           // lesson id -> 1, all time
+let hist = store.get("hist", {});                  // date -> pages read that day
+const NEW_DAY = () => ({ date: today(), read: 0, seq: 0, looks: 0, tasks: 0, pages: [], oneGo: 0, on: [false, false, false, false, false] });
 let day = store.get("day", null);
-if (!day || day.date !== today()) day = { date: today(), read: 0, seq: 0, looks: 0, tasks: 0, lessons: [], on: [false, false, false, false] };
+if (!day || day.date !== today()) day = NEW_DAY();
+if (!day.pages) day.pages = []; if (!day.on || day.on.length < 5) day.on = [...(day.on || []), false, false, false, false, false].slice(0, 5);
 let lastRead = -2;
+const sessRead = {};                               // lesson index -> Set of sentences heard since the app was opened
+const lessonSize = {};
+sentences.forEach(s => { if (s.li != null) lessonSize[s.li] = (lessonSize[s.li] || 0) + 1; });
 function progress() {
   const done = sentences.filter(s => readSet[keyOf(s)]).length;
-  return { done, total: sentences.length, pct: Math.round(done / Math.max(1, sentences.length) * 100), todayPct: Math.round(day.read / Math.max(1, sentences.length) * 100) };
+  return { done, total: sentences.length, pct: Math.round(done / Math.max(1, sentences.length) * 100) };
 }
-// four stars: attention (looking up words), concentration (listening a lot), sequence (in order), tasks (answers, finished lessons)
-const STAR_NAMES = ["Уважність", "Зосередженість", "Послідовність", "Завдання"];
+// five stars for today
+const STAR_NAMES = ["Уважність", "Зосередженість", "Послідовність", "Завдання", "Розділ"];
+const STAR_LABELS = ["Уваж\u00ADність", "Зосеред\u00ADженість", "Послідов\u00ADність", "Завдан\u00ADня", "Розділ"];
+const STAR_WHY = ["ти перевіряєш незнайомі слова", "ти слухаєш довго й зосереджено", "ти слухаєш по порядку, речення за реченням", "ти перевіряєш відповіді до завдань", "ти пройшла цілий розділ за один раз"];
 function starsToday() {
-  return [day.looks >= 3, day.read >= 20, day.seq >= 15, day.tasks >= 1 || day.lessons.length >= 1];
+  return [day.looks >= 3, day.read >= 20, day.seq >= 15, day.tasks >= 1, day.oneGo >= 1];
 }
 // saves today's activity; returns the index of a star earned just now, or -1
 function saveDay() {
-  const st = starsToday(), had = day.on || [false, false, false, false];
+  const st = starsToday(), had = day.on;
   const j = st.findIndex((on, k) => on && !had[k]);
   day.on = st; store.set("day", day);
+  hist[day.date] = day.pages.length; store.set("hist", hist);
   return j;
 }
-const STAR_WHY = ["ти перевіряєш незнайомі слова", "ти слухаєш довго й зосереджено", "ти слухаєш по порядку, речення за реченням", "ти виконуєш завдання"];
-function starMsg(j) { return `Нова зірочка за <b>${STAR_NAMES[j].toLowerCase()}</b>: ${STAR_WHY[j]}.`; }
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const CHEERS = ["Ура!", "Ти змогла!", "В тебе вийшло!", "Супер!", "Чудово!", "Молодчинка!"];
+const lessonName = li => LESSONS[li].label || "Розділ " + LESSONS[li].id;
 function markRead(i) {
   const s = sentences[i], k = keyOf(s);
   if (!readSet[k]) { readSet[k] = 1; store.set("read", readSet); }
   day.read++;
   if (i === lastRead + 1) day.seq++;
   lastRead = i;
-  let msg = null;
+  if (s.pg != null && !day.pages.includes(s.pg)) day.pages.push(s.pg);
   const li = s.li;
-  if (li != null && !day.lessons.includes(li) && sentences.filter(x => x.li === li).every(x => readSet[keyOf(x)])) {
-    day.lessons.push(li);
-    msg = `${LESSONS[li].label || "Урок " + LESSONS[li].id} прослухано повністю!`;
+  let msg = null;
+  if (li != null) {
+    (sessRead[li] = sessRead[li] || new Set()).add(i);
+    const oneGo = sessRead[li].size === lessonSize[li];
+    const lid = LESSONS[li].id;
+    if (!doneLessons[lid] && sentences.every(x => x.li !== li || readSet[keyOf(x)])) {
+      doneLessons[lid] = 1; store.set("done", doneLessons);
+      msg = `${esc(lessonName(li))} пройдено!`;
+    }
+    if (oneGo && !sessRead[li].counted) { sessRead[li].counted = true; day.oneGo++; msg = `${esc(lessonName(li))} ти пройшла за один раз!`; }
   }
   const j = saveDay();
-  if (j >= 0) msg = (msg ? msg + " " : "") + starMsg(j);
-  if (msg) owlSay("Well done!", msg);
+  if (j >= 0) owlSay(pick(CHEERS), (msg ? msg + " " : "") + `Нова зірочка за <b>${STAR_NAMES[j].toLowerCase()}</b>: ${STAR_WHY[j]}.`, j);
+  else if (msg) owlSay(pick(CHEERS), msg, -1, true);
 }
-function noteLook() { day.looks++; const j = saveDay(); if (j >= 0) owlSay("Great!", starMsg(j)); }
-function noteTask() { day.tasks++; const j = saveDay(); if (j >= 0) owlSay("Super!", starMsg(j)); }
+function noteLook() { day.looks++; const j = saveDay(); if (j >= 0) owlSay(pick(CHEERS), `Нова зірочка за <b>уважність</b>: ${STAR_WHY[0]}.`, j); }
+function noteTask() { day.tasks++; const j = saveDay(); if (j >= 0) owlSay(pick(CHEERS), `Нова зірочка за <b>завдання</b>: ${STAR_WHY[3]}.`, j); }
 
 /* ---------- owl ---------- */
 const STAR_SVG = '<svg viewBox="0 0 24 24" stroke-width="1.4" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6-4.9-4.5 6.6-.8z"/></svg>';
-let owlT;
-function owlSay(hi, html) {
-  const pr = progress(), st = starsToday();
+const plural = (n, one, few, many) => n % 10 === 1 && n % 100 !== 11 ? one : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? few : many;
+let owlT, partyT;
+function owlSay(hi, html, newStar = -1, party = false) {
+  const st = starsToday();
+  const pages = day.pages.length, done = Object.keys(doneLessons).length;
   const box = $("#owlSay");
-  box.innerHTML = `<button class="x" aria-label="Закрити">×</button><div class="hi">${esc(hi)}</div><p>${html}</p>
-    <p>Історія: прочитано <b>${pr.pct}%</b> книжки, сьогодні <b>+${pr.todayPct}%</b>.</p>
-    <div class="stars" aria-label="Зірочки за сьогодні">${st.map((on, j) => `<span class="star${on ? " on" : ""}">${STAR_SVG}${STAR_NAMES[j]}</span>`).join("")}</div>`;
+  box.innerHTML = `<button class="x" aria-label="Закрити">×</button>
+    <div class="stars" aria-label="Зірочки за сьогодні">${st.map((on, j) => `<span class="star${on ? " on" : ""}${j === newStar ? " new" : ""}">${STAR_SVG}${STAR_LABELS[j]}</span>`).join("")}</div>
+    <div class="hi">${esc(hi)}</div><p>${html}</p>
+    <div class="tiles">
+      <div class="tile"><small>Прочитано сьогодні</small><strong>${pages} <span>${plural(pages, "сторінка", "сторінки", "сторінок")}</span></strong></div>
+      <div class="tile"><small>Пройдено розділів</small><strong>${done} <span>з ${LESSONS.length}</span></strong></div>
+    </div>`;
   box.hidden = false;
   const o = $("#owl"); o.classList.remove("talk"); void o.offsetWidth; o.classList.add("talk");
-  clearTimeout(owlT); owlT = setTimeout(() => { box.hidden = true; }, 9000);
+  if (newStar >= 0 || party) { o.classList.add("party"); clearTimeout(partyT); partyT = setTimeout(() => o.classList.remove("party"), 4000); }
+  clearTimeout(owlT); owlT = setTimeout(() => { box.hidden = true; }, 10000);
 }
 function owlGreet() {
-  const pr = progress();
-  const msg = day.read === 0
-    ? (pr.done ? `Радію тебе бачити! Продовжимо читати історію?` : `Я сова-помічниця. Відкрий книжку й натисни ▶ — я рахуватиму твої успіхи.`)
-    : `Сьогодні ти вже прослухала <b>${day.read}</b> ${day.read === 1 ? "речення" : day.read < 5 ? "речення" : "речень"}. Так тримати!`;
-  owlSay("Hello!", msg);
+  const yest = Object.keys(hist).filter(d => d < today()).sort().pop();
+  const yp = yest ? hist[yest] : 0;
+  const lines = day.read === 0
+    ? [yp ? `Минулого разу ти прочитала ${yp} ${plural(yp, "сторінку", "сторінки", "сторінок")}. Цікаво, чи зможеш сьогодні більше?` : "Цікаво, наскільки сьогодні ти зможеш збільшити свій результат?",
+       "Сьогодні твоя ефективність може бути ще вищою. Почнемо?",
+       "Спробуй сьогодні пройти хоча б один розділ за один раз — і отримаєш зірочку!"]
+    : [`Сьогодні вже ${day.pages.length} ${plural(day.pages.length, "сторінка", "сторінки", "сторінок")}! Наскільки ще збільшиш свій результат?`,
+       "Так тримати! Кожне речення — крок уперед.",
+       `Уже ${starsToday().filter(Boolean).length} з 5 зірочок. Збереш усі?`];
+  owlSay("Вітаю!", pick(lines), -1, true);
 }
 $("#owl").addEventListener("click", () => { if (!$("#owlSay").hidden) { $("#owlSay").hidden = true; return; } owlGreet(); });
 $("#owlSay").addEventListener("click", e => { if (e.target.closest(".x")) $("#owlSay").hidden = true; });
