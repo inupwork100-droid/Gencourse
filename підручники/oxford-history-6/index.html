@@ -448,7 +448,19 @@ body:not(.lib-mode) .owl-say { bottom: calc(252px + env(safe-area-inset-bottom, 
 body.lib-mode .top, body.lib-mode .wrap, body.lib-mode .player { display: none; }
 body:not(.lib-mode) .library { display: none; }
 .up-files { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
-.up-files a, .up-files div { display: grid; place-items: center; aspect-ratio: 3 / 4; border-radius: 8px; overflow: hidden; background: var(--paper); color: var(--ink); font-size: 12px; text-align: center; text-decoration: none; padding: 4px; }
+.up-files.edit .ftile { position: relative; padding: 0; background: transparent; aspect-ratio: auto; display: block; overflow: visible; }
+.up-files .ftile > a { display: grid; aspect-ratio: 3 / 4; }
+.fpdf { display: grid; place-items: center; height: 100%; }
+.fnum { position: absolute; top: 4px; left: 4px; min-width: 20px; height: 20px; border-radius: 10px; background: rgba(22,50,79,.85); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; padding: 0 5px; }
+.fx { position: absolute; top: -6px; right: -6px; width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; background: #c8372d; color: #fff; font-size: 16px; line-height: 1; display: grid; place-items: center; padding: 0; box-shadow: 0 2px 6px rgba(0,0,0,.25); }
+.fmove { display: flex; justify-content: space-between; gap: 4px; margin-top: 4px; }
+.fmove button, .fmove i { flex: 1; height: 28px; }
+.fmove button { border: 0; border-radius: 8px; background: var(--paper-2); color: var(--ink); font-size: 20px; font-weight: 700; line-height: 1; padding: 0; }
+.fask { position: absolute; inset: 0 0 32px; border-radius: 8px; background: rgba(255,255,255,.93); display: grid; place-content: center; gap: 6px; text-align: center; font-weight: 700; font-size: 13px; color: #b0412c; }
+.fask span { display: flex; gap: 6px; }
+.fask button { border: 0; border-radius: 8px; padding: 5px 9px; font-weight: 700; background: #c8372d; color: #fff; }
+.fask button + button { background: var(--paper-2); color: var(--ink); }
+.up-files a { display: grid; place-items: center; aspect-ratio: 3 / 4; border-radius: 8px; overflow: hidden; background: var(--paper); color: var(--ink); font-size: 12px; text-align: center; text-decoration: none; padding: 4px; }
 .up-files img { width: 100%; height: 100%; object-fit: cover; }
 .up-form { display: grid; gap: 10px; }
 .up-form input[type=text] { font: inherit; font-size: 16px; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
@@ -4310,8 +4322,8 @@ function folderHtml(b) {
     <span class="ft">${esc(b.title)}</span></button>`;
 }
 function allBooks() {
-  const extra = Object.keys(uploaded).filter(id => !BOOKS.some(b => b.id === id))
-    .map(id => ({ id, title: uploaded[id].title || "Нова книжка", sub: uploaded[id].subject || "Додано з телефона", color: "#5b6fa8", ready: !!uploaded[id].magic, pages: uploaded[id].range || "" }));
+  const extra = Object.keys(uploaded).filter(id => !BOOKS.some(b => b.id === id)).sort((a, b) => String(uploaded[a].createdAt || a) < String(uploaded[b].createdAt || b) ? -1 : 1)
+    .map((id, k) => ({ id, title: uploaded[id].title || "Нова книжка", sub: uploaded[id].subject || "Додано з телефона", color: k % 2 ? "#cfae4e" : "#d98a4e", ready: !!uploaded[id].magic, pages: uploaded[id].range || "" }));
   return [...BOOKS, ...extra];
 }
 function renderShelf() {
@@ -4330,23 +4342,59 @@ $("#shelf").addEventListener("click", e => {
   if (b.ready && b.id === "history6") return switchBook(b.id);
   openBookSheet(b);
 });
-function fileTiles(doc) {
-  return `<div class="up-files">${(doc.files || []).map(f => /^image\//.test(f.type)
-    ? `<a href="${blobUrl(f.id)}" target="_blank" rel="noopener"><img src="${blobUrl(f.id)}" alt="${esc(f.name)}"></a>`
-    : `<a href="${blobUrl(f.id)}" target="_blank" rel="noopener">PDF<br>${esc(f.name)}</a>`).join("")}</div>`;
+// files in a folder: tap ‹ › to change the order, × to delete (asks first)
+function fileTiles(doc, bookId) {
+  const fs = doc.files || [];
+  return `<div class="up-files${bookId ? " edit" : ""}" data-fbook="${esc(bookId || "")}">${fs.map((f, i) => `<div class="ftile">
+    <a href="${blobUrl(f.id)}" target="_blank" rel="noopener">${/^image\//.test(f.type) ? `<img src="${blobUrl(f.id)}" alt="${esc(f.name)}">` : `<span class="fpdf">PDF<br>${esc(f.name)}</span>`}</a>
+    ${bookId ? `<span class="fnum">${i + 1}</span>
+    <button class="fx" data-fact="del" data-fi="${i}" aria-label="Видалити файл ${i + 1}">×</button>
+    <span class="fmove">${i > 0 ? `<button data-fact="left" data-fi="${i}" aria-label="Перемістити раніше">‹</button>` : "<i></i>"}${i < fs.length - 1 ? `<button data-fact="right" data-fi="${i}" aria-label="Перемістити далі">›</button>` : "<i></i>"}</span>` : ""}
+  </div>`).join("")}</div>`;
 }
+let fileRerender = null;   // reopens the current folder sheet after a change
+sheetIn.addEventListener("click", async e => {
+  const btn = e.target.closest("[data-fact]"); if (!btn) return;
+  e.preventDefault(); e.stopPropagation();
+  const id = btn.closest("[data-fbook]").dataset.fbook, i = +btn.dataset.fi;
+  const doc = uploaded[id]; if (!doc || !dbRef) return;
+  const files = [...(doc.files || [])];
+  if (btn.dataset.fact === "del") {
+    const tile = btn.closest(".ftile");
+    if (!tile.classList.contains("ask")) {
+      tile.classList.add("ask");
+      tile.insertAdjacentHTML("beforeend", `<span class="fask">Видалити?<span><button data-fact="yes" data-fi="${i}">Так</button><button data-fact="no" data-fi="${i}">Ні</button></span></span>`);
+      return;
+    }
+    return;
+  }
+  if (btn.dataset.fact === "no") { const t = btn.closest(".ftile"); t.classList.remove("ask"); t.querySelector(".fask").remove(); return; }
+  let removed = null;
+  if (btn.dataset.fact === "yes") removed = files.splice(i, 1)[0];
+  else { const j = btn.dataset.fact === "left" ? i - 1 : i + 1; [files[i], files[j]] = [files[j], files[i]]; }
+  const cover = removed && doc.cover === removed.id ? ((files.find(f => /^image\//.test(f.type)) || {}).id || "") : doc.cover || "";
+  try {
+    await dbRef.doc("books/" + id).update({ files, cover });
+    uploaded[id] = { ...doc, files, cover };
+    if (removed && assetsRef) assetsRef.delete(removed.id).catch(() => {});
+    renderShelf();
+    if (fileRerender) fileRerender();
+    toast(removed ? "Файл видалено" : "Порядок змінено");
+  } catch (err) { toast("Не вдалося зберегти зміни"); }
+});
 function openBookSheet(b) {
   const doc = uploaded[b.id];
   const n = doc && doc.files ? doc.files.length : 0;
   const made = doc && doc.magic;
   openSheet(`<div class="head"><div class="word ttl">${esc(b.title)}</div></div>
     ${made ? `<p class="hint">Готово уроків: <b>${doc.lessons || 0}</b>${doc.range ? `, сторінки ${esc(doc.range)}` : ""}. Можна відкрити книжку або додати нові сторінки й знову натиснути «Магія у книгу».</p>` : ""}
-    ${n ? `${made ? "" : `<p class="hint">Завантажено файлів: ${n}. Натисни «Магія у книгу» — Claude прочитає сторінки й зробить з них уроки з озвученням, перекладом і відповідями до завдань.</p>`}${fileTiles(doc)}`
+    ${n ? `${made ? "" : `<p class="hint">Завантажено файлів: ${n}. Натисни «Магія у книгу» — Claude прочитає сторінки й зробить з них уроки з озвученням, перекладом і відповідями до завдань.</p>`}${fileTiles(doc, b.id)}`
         : `<p class="hint">Для цієї книжки ще немає матеріалів. Додай фото розворотів або PDF, а тоді натисни «Магія у книгу».</p>`}
     <div class="btns">${made ? `<button class="btn primary" id="openMagic">Відкрити книжку</button>` : ""}
       ${n ? `<button class="btn magicbtn" id="magicGo">${MAGIC_SVG} Магія у книгу</button>` : ""}
       <button class="btn${made || n ? "" : " primary"}" id="addToBook">Додати фото або PDF</button></div>
     <div class="magic-log" id="magicLog" aria-live="polite" hidden></div>`, el => {
+    fileRerender = () => openBookSheet(allBooks().find(x => x.id === b.id) || b);
     $("#addToBook", el).addEventListener("click", () => openUpload(b));
     const om = $("#openMagic", el); if (om) om.addEventListener("click", () => switchBook(b.id));
     const mg = $("#magicGo", el); if (mg) mg.addEventListener("click", () => runMagic(b, el));
@@ -4586,7 +4634,7 @@ function askFolderName(el) {
     const title = inp.value.trim(); if (!title) { inp.focus(); return; }
     const id = "book-" + Date.now().toString(36);
     try {
-      await dbRef.doc("books/" + id).set({ title, subject: "", files: [], cover: "", updatedAt: new Date().toISOString() });
+      await dbRef.doc("books/" + id).set({ title, subject: "", files: [], cover: "", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
       uploaded[id] = { title, files: [], cover: "" };
       renderShelf(); openUploadAny(id); toast("Папку створено — додай файли");
     } catch (err) { toast("Не вдалося створити папку"); }
@@ -4610,7 +4658,8 @@ function openUploadTo(b, choose) {
     <input type="file" id="inPhoto" accept="image/*" multiple hidden>
     <input type="file" id="inPdf" accept="application/pdf,.pdf" hidden>
     <div class="up-log" id="upLog" aria-live="polite"></div>
-    ${doc && doc.files && doc.files.length ? `<div class="lbl">Уже в папці: ${doc.files.length}</div>${fileTiles(doc)}` : `<p class="hint">Першим додай фото обкладинки — воно стане картинкою папки.</p>`}`, el => {
+    ${doc && doc.files && doc.files.length ? `<div class="lbl">Уже в папці: ${doc.files.length}</div>${fileTiles(doc, b.id)}` : `<p class="hint">Першим додай фото обкладинки — воно стане картинкою папки.</p>`}`, el => {
+    fileRerender = b ? () => openUploadTo(allBooks().find(x => x.id === b.id) || b, choose) : null;
     if (choose) $("#newFold", el).addEventListener("click", () => askFolderName(el));
     if (choose) $(".minis", el).addEventListener("click", e => { const m = e.target.closest("[data-mini]"); if (m) openUploadTo(choose.find(x => x.id === m.dataset.mini), choose); });
     $("#pickPhoto", el).addEventListener("click", () => $("#inPhoto", el).click());
@@ -4639,7 +4688,7 @@ async function doUpload(b, el, files) {
     }
   }
   try {
-    await dbRef.doc("books/" + id).set({ title, subject: prev.subject || (b && b.sub) || "", files: list, cover: prev.cover || (list.find(f => /^image\//.test(f.type)) || {}).id || "", updatedAt: new Date().toISOString() });
+    await dbRef.doc("books/" + id).set({ ...prev, title, subject: prev.subject || (b && b.sub) || "", createdAt: prev.createdAt || new Date().toISOString(), files: list, cover: prev.cover || (list.find(f => /^image\//.test(f.type)) || {}).id || "", updatedAt: new Date().toISOString() });
     uploaded[id] = { ...prev, title, files: list };
     toast("Збережено в папці");
   } catch (err) { toast("Файли завантажено, але не вдалося зберегти список"); }
