@@ -300,31 +300,56 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 .pop.below::after { bottom: auto; top: -9px; transform: rotate(225deg); }
 .w.popped { background: var(--lime-soft); box-shadow: 0 0 0 2px var(--lime); }
 /* ---------- library: books as folders with photos ---------- */
-.library { min-height: 100%; padding-inline: 16px; padding-block: 20px 40px; background: var(--ground); }
-.lib-in { max-width: 820px; margin: 0 auto; display: grid; gap: 18px; }
-.lib-head h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(30px, 8vw, 40px); line-height: 1.1; margin: 0; color: var(--ink); text-wrap: balance; }
-.lib-head p { margin: 4px 0 0; color: var(--muted); font-size: 16px; }
-.shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 22px 16px; align-items: start; }
-.folder { --f: #c8372d; --f2: color-mix(in srgb, var(--f) 78%, #000); position: relative; border: 0; background: transparent; padding: 14px 0 0; text-align: left; color: var(--ink); display: grid; gap: 8px; }
-.folder .tab { position: absolute; top: 0; left: 0; width: 48%; height: 24px; background: var(--f2); border-radius: 10px 12px 0 0; }
-.folder .fbody { position: relative; aspect-ratio: 4 / 4.4; max-width: 100%; background: linear-gradient(160deg, var(--f), var(--f2)); border-radius: 0 14px 14px 14px;
-  box-shadow: 0 8px 18px rgba(22,50,79,.22); display: grid; place-items: center; overflow: hidden; transition: transform .18s; }
+.library { min-height: 100%; background: var(--ground); }
+.lib-top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--sea); color: #fff; padding: 14px 16px; }
+.lib-top h1 { max-width: 820px; margin: 0 auto; font-family: var(--f-display); font-weight: 400; font-size: 30px; line-height: 1.1; letter-spacing: .01em; -webkit-text-stroke: .6px #fff; }
+.lib-in { max-width: 820px; margin: 0 auto; display: grid; gap: 16px; padding-inline: 16px; padding-block: 18px 120px; }
+.shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 18px 16px; align-items: start; }
+.folder { --f: #c8372d; --f2: color-mix(in srgb, var(--f) 78%, #000); position: relative; border: 0; background: transparent; padding: 26px 0 0; text-align: left; color: var(--ink); display: grid; gap: 6px; }
+.folder .tab { position: absolute; top: 0; left: 0; min-width: 58%; max-width: 78%; height: 30px; padding: 0 12px; background: var(--f2); border-radius: 10px 14px 0 0;
+  display: flex; align-items: center; color: #fff; font-weight: 700; font-size: 15px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.folder .fbody { position: relative; height: 150px; max-width: 100%; background: linear-gradient(160deg, var(--f), var(--f2)); border-radius: 0 14px 14px 14px;
+  box-shadow: 0 6px 14px rgba(22,50,79,.22); display: grid; place-items: center; overflow: hidden; transition: transform .18s; }
 .folder:hover .fbody, .folder:focus-visible .fbody { transform: translateY(-3px); }
-.folder .paper { position: absolute; width: 62%; aspect-ratio: 3 / 4; background: #fffdf7; border-radius: 3px; transform: rotate(8deg) translate(14%, -4%); box-shadow: 0 2px 6px rgba(0,0,0,.2); }
-.folder .photo { position: relative; width: 64%; aspect-ratio: 3 / 4; max-width: 100%; transform: rotate(-4deg); background: #fff; padding: 5px; border-radius: 3px; box-shadow: 0 6px 14px rgba(0,0,0,.3); }
+.folder .paper { position: absolute; height: 78%; aspect-ratio: 3 / 4; background: #fffdf7; border-radius: 3px; transform: rotate(8deg) translate(16%, -3%); box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+.folder .photo { position: relative; height: 80%; aspect-ratio: 3 / 4; max-width: 100%; transform: rotate(-4deg); background: #fff; padding: 4px; border-radius: 3px; box-shadow: 0 5px 12px rgba(0,0,0,.3); }
 .folder .photo img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 2px; }
-.folder .ph-empty { width: 100%; height: 100%; display: grid; place-items: center; text-align: center; background: color-mix(in srgb, var(--f) 12%, #fff); color: var(--f2); font-size: 12px; line-height: 1.25; padding: 6px; border-radius: 2px; }
-.folder .ph-empty svg { width: 46%; height: auto; display: block; margin: 0 auto 4px; }
-.folder .ft { font-weight: 700; font-size: 16px; line-height: 1.25; text-wrap: balance; }
-.folder .fs { color: var(--muted); font-size: 14px; line-height: 1.3; }
-.chip-st { justify-self: start; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 2px 9px; background: color-mix(in srgb, var(--green) 16%, var(--surface)); color: var(--green); }
-.chip-st.wait { background: color-mix(in srgb, var(--muted) 14%, var(--surface)); color: var(--muted); }
+.folder .ph-empty { width: 100%; height: 100%; display: grid; place-items: center; text-align: center; background: color-mix(in srgb, var(--f) 12%, #fff); color: var(--f2); font-size: 11px; line-height: 1.2; padding: 4px; border-radius: 2px; }
+.folder .ph-empty svg { width: 44%; height: auto; display: block; margin: 0 auto 2px; }
+.folder .ft { font-weight: 700; font-size: 14px; line-height: 1.25; text-wrap: balance; }
+.pct { position: absolute; top: 4px; right: -4px; z-index: 2; width: 52px; height: 52px; border-radius: 50%; background: #7cc242; color: #17320a;
+  display: grid; place-items: center; font-weight: 800; font-size: 15px; font-variant-numeric: tabular-nums; box-shadow: 0 3px 8px rgba(0,0,0,.25); border: 3px solid var(--ground); }
 .folder.add { --f: #d6d9e0; --f2: #c3c7d0; }
 .folder.add .fbody { background: color-mix(in srgb, var(--surface) 55%, var(--f)); border: 3px dashed var(--f2); box-shadow: none; }
-.folder.add .tab { background: var(--f2); }
-.plus { width: 64px; height: 64px; border-radius: 50%; background: var(--surface); color: #7d838f; display: grid; place-items: center; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
-.plus svg { width: 30px; height: 30px; }
+.folder.add .tab { background: var(--f2); min-width: 50%; }
+.plus { width: 54px; height: 54px; border-radius: 50%; background: var(--surface); color: #7d838f; display: grid; place-items: center; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.plus svg { width: 26px; height: 26px; }
 .lib-note { color: var(--muted); font-size: 14px; margin: 0; }
+
+/* ---------- owl helper: purple circle with a speech bubble ---------- */
+.owl { position: fixed; right: 16px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 45; width: 70px; height: 70px; border-radius: 50%;
+  background: #7a3fc4; border: 3px solid #fff; box-shadow: 0 6px 16px rgba(60,20,110,.4); padding: 0; display: grid; place-items: center; animation: owl-bob 3s ease-in-out infinite; }
+body:not(.lib-mode) .owl { bottom: calc(150px + env(safe-area-inset-bottom, 0px)); width: 58px; height: 58px; }
+.owl svg { width: 82%; height: 82%; overflow: visible; }
+.owl .lid { transform-origin: center; transform-box: fill-box; animation: owl-blink 4.5s infinite; }
+.owl.talk { animation: owl-hop .5s ease-in-out 3; }
+@keyframes owl-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes owl-hop { 0%, 100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(-10px) rotate(-6deg); } 60% { transform: translateY(-4px) rotate(5deg); } }
+@keyframes owl-blink { 0%, 92%, 100% { transform: scaleY(0); } 95% { transform: scaleY(1); } }
+.owl-say { position: fixed; right: 16px; bottom: calc(100px + env(safe-area-inset-bottom, 0px)); z-index: 44; width: min(320px, calc(100vw - 32px)); background: #fff; color: #2a2320;
+  border: 3px solid #f2d33a; border-radius: 18px; padding: 12px 16px 12px; box-shadow: 0 10px 26px rgba(0,0,0,.2); display: grid; gap: 6px; }
+body:not(.lib-mode) .owl-say { bottom: calc(220px + env(safe-area-inset-bottom, 0px)); }
+.owl-say::after { content: ""; position: absolute; right: 26px; bottom: -11px; width: 18px; height: 18px; background: #fff; border-right: 3px solid #f2d33a; border-bottom: 3px solid #f2d33a; transform: rotate(45deg); }
+.owl-say .hi { font-family: var(--f-display); font-size: 24px; color: #7a3fc4; line-height: 1.1; }
+.owl-say p { margin: 0; font-size: 15px; line-height: 1.4; }
+.owl-say b { color: #7a3fc4; }
+.owl-say .stars { display: flex; gap: 6px; margin-top: 2px; }
+.owl-say .star { display: grid; justify-items: center; gap: 1px; font-size: 10px; color: #6e625b; text-align: center; line-height: 1.1; flex: 1; }
+.owl-say .star svg { width: 30px; height: 30px; }
+.owl-say .star.on svg { fill: #f6c419; stroke: #b88a00; }
+.owl-say .star:not(.on) svg { fill: #eee; stroke: #c9c9c9; }
+.owl-say .x { position: absolute; top: 4px; right: 8px; border: 0; background: transparent; font-size: 20px; color: #999; padding: 4px; }
+@media (prefers-reduced-motion: reduce) { .owl, .owl.talk, .owl .lid { animation: none; } }
 body.lib-mode .top, body.lib-mode .wrap, body.lib-mode .player { display: none; }
 body:not(.lib-mode) .library { display: none; }
 .up-files { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
@@ -346,9 +371,9 @@ body:not(.lib-mode) .library { display: none; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
 
-<section class="library" id="library" aria-label="Книжкова полиця">
+<section class="library" id="library" aria-label="My books">
+  <div class="lib-top"><h1>My books</h1></div>
   <div class="lib-in">
-    <div class="lib-head"><h1>Мої підручники</h1><p>Натисни на папку, щоб відкрити книжку.</p></div>
     <div class="shelf" id="shelf"></div>
     <p class="lib-note" id="libNote"></p>
   </div>
@@ -411,6 +436,21 @@ body:not(.lib-mode) .library { display: none; }
 <section class="sheet" id="sheet" hidden aria-live="polite"><div class="in" id="sheetIn"></div></section>
 <div class="toast" id="toast" hidden></div>
 <div class="pop" id="pop" role="status" hidden></div>
+<div class="owl-say" id="owlSay" role="status" aria-live="polite" hidden></div>
+<button class="owl" id="owl" aria-label="Сова-помічниця: мої успіхи">
+  <svg viewBox="0 0 60 60" aria-hidden="true">
+    <path d="M14 14 L20 22 L26 18 Z M46 14 L40 22 L34 18 Z" fill="#8a5a2b"/>
+    <ellipse cx="30" cy="34" rx="18" ry="20" fill="#a8743f"/>
+    <ellipse cx="30" cy="40" rx="11" ry="13" fill="#f3e2c3"/>
+    <path d="M24 38 q6 4 12 0 M23 44 q7 4 14 0" stroke="#d1b78c" stroke-width="1.6" fill="none"/>
+    <circle cx="22" cy="27" r="8" fill="#fff"/><circle cx="38" cy="27" r="8" fill="#fff"/>
+    <circle cx="23" cy="28" r="3.6" fill="#2a2320"/><circle cx="37" cy="28" r="3.6" fill="#2a2320"/>
+    <circle cx="24.2" cy="26.6" r="1.1" fill="#fff"/><circle cx="38.2" cy="26.6" r="1.1" fill="#fff"/>
+    <rect class="lid" x="14" y="19" width="16" height="16" rx="8" fill="#a8743f"/><rect class="lid" x="30" y="19" width="16" height="16" rx="8" fill="#a8743f"/>
+    <path d="M27 33 L30 38 L33 33 Z" fill="#f2a71b"/>
+    <path d="M22 53 l-2 4 M26 54 l0 4 M34 54 l0 4 M38 53 l2 4" stroke="#f2a71b" stroke-width="2.4" stroke-linecap="round"/>
+  </svg>
+</button>
 
 <script>// Розділ 1 «The Vikings» — вступні сторінки 4–5.
 (window.LESSONS = window.LESSONS || []).push({
@@ -3335,7 +3375,8 @@ const SAY = { "ce": "C E", "c": "circa", "1100": "eleven hundred", "700": "seven
 const WORD_RE = /[A-Za-z\u00C0-\u017F0-9]+(?:['’][A-Za-z]+)?/g;
 
 /* ---------- build sentence model + DOM ---------- */
-const sentences = [];   // {en, ua, words:[{t, el}], el, uaEl, speech, starts:[]}
+const sentences = [];
+let curLi = null;   // {en, ua, words:[{t, el}], el, uaEl, speech, starts:[]}
 
 function tokenSpans(text, opts = {}) {
   // returns {html, words:[{t, bold}]} ; *x* marks bold
@@ -3370,7 +3411,7 @@ function makeSentence(pair) {
     last = off + m.length; wi++;
   });
   speech += plain.slice(last);
-  sentences.push({ en: plain, ua: pair[1], words, speech, starts, el: null, uaEl: null });
+  sentences.push({ en: plain, ua: pair[1], words, speech, starts, el: null, uaEl: null, li: curLi });
   return { si, html: `<span class="s" data-si="${si}">${html}</span>` };
 }
 
@@ -3401,6 +3442,7 @@ if (TOC) {
 }
 const paraBlocks = []; // elements that can show a UA paragraph
 LESSONS.forEach((L, li) => {
+curLi = li;
 const t = renderSentences([L.title]);
 out += `<article class="page" id="lesson-${li}" data-li="${li}"${L.color ? ` style="--red:${L.color};--banner:${L.color}"` : ""}><div class="banner"><div class="unit">${esc(L.unit)} · pages ${esc(L.pages)}</div><h1>${t.en}${uaHtml(t.sis).replace('class="ua"', 'class="ua uah1"')}</h1></div>`;
 let curPage = null;
@@ -3580,6 +3622,7 @@ function speakSentence(i, fromWord = 0) {
   u.onend = () => {
     if (my !== token) return;
     clearTimeout(timer);
+    markRead(i);
     if (!playing) return;
     if (i + 1 < sentences.length) setTimeout(() => { if (my === token && playing) speakSentence(i + 1, 0); }, 280);
     else { playing = false; setPlayingUI(); markDone(sentences.length, 0); clearMarks(); $("#subtitle").textContent = "Кінець уроку. Молодець!"; cur = 0; store.set("pos", 0); }
@@ -3709,6 +3752,7 @@ sheetIn.addEventListener("click", e => {
 
 // one tap on a word → card with details; quick double tap → small tooltip with the translation only
 function openWord(wEl) {
+  noteLook();
   const sel = getSelection(); if (sel && !sel.isCollapsed && sel.toString().trim().length > 1) return;
   const wasPlaying = playing; if (playing) pause();
   const sEl = wEl.closest(".s");
@@ -3733,6 +3777,7 @@ const pop = $("#pop");
 let popT, poppedEl = null;
 function hidePop() { pop.hidden = true; clearTimeout(popT); poppedEl && poppedEl.classList.remove("popped"); poppedEl = null; }
 function showPop(wEl) {
+  noteLook();
   hidePop();
   try { getSelection().removeAllRanges(); } catch (e) {}
   poppedEl = wEl; wEl.classList.add("popped");
@@ -3800,6 +3845,7 @@ function showSelection(text, sis) {
 
 /* ---------- answers to the Challenge questions (blue window) ---------- */
 function openAnswers(b) {
+  noteTask();
   if (playing) pause();
   hidePop();
   const h = `<div class="head"><div class="word ttl">Відповіді · ${esc(b.title[0])}</div></div>` +
@@ -3957,10 +4003,78 @@ $("#openToc").addEventListener("click", () => { if (TOC) { placeThumb(TOC.page, 
 placeThumb(PAGES[0], false);
 ruler.scrollLeft = Math.max(0, PAD + (PAGES[0] - 1) * TICK - 60);
 
+/* ---------- progress: which sentences were listened to, today's activity ---------- */
+const keyOf = s => { let h = 0; for (const c of s.en) h = (h * 31 + c.charCodeAt(0)) | 0; return (h >>> 0).toString(36); };
+const today = () => new Date().toISOString().slice(0, 10);
+let readSet = store.get("read", {});
+let day = store.get("day", null);
+if (!day || day.date !== today()) day = { date: today(), read: 0, seq: 0, looks: 0, tasks: 0, lessons: [], on: [false, false, false, false] };
+let lastRead = -2;
+function progress() {
+  const done = sentences.filter(s => readSet[keyOf(s)]).length;
+  return { done, total: sentences.length, pct: Math.round(done / Math.max(1, sentences.length) * 100), todayPct: Math.round(day.read / Math.max(1, sentences.length) * 100) };
+}
+// four stars: attention (looking up words), concentration (listening a lot), sequence (in order), tasks (answers, finished lessons)
+const STAR_NAMES = ["Уважність", "Зосередженість", "Послідовність", "Завдання"];
+function starsToday() {
+  return [day.looks >= 3, day.read >= 20, day.seq >= 15, day.tasks >= 1 || day.lessons.length >= 1];
+}
+// saves today's activity; returns the index of a star earned just now, or -1
+function saveDay() {
+  const st = starsToday(), had = day.on || [false, false, false, false];
+  const j = st.findIndex((on, k) => on && !had[k]);
+  day.on = st; store.set("day", day);
+  return j;
+}
+const STAR_WHY = ["ти перевіряєш незнайомі слова", "ти слухаєш довго й зосереджено", "ти слухаєш по порядку, речення за реченням", "ти виконуєш завдання"];
+function starMsg(j) { return `Нова зірочка за <b>${STAR_NAMES[j].toLowerCase()}</b>: ${STAR_WHY[j]}.`; }
+function markRead(i) {
+  const s = sentences[i], k = keyOf(s);
+  if (!readSet[k]) { readSet[k] = 1; store.set("read", readSet); }
+  day.read++;
+  if (i === lastRead + 1) day.seq++;
+  lastRead = i;
+  let msg = null;
+  const li = s.li;
+  if (li != null && !day.lessons.includes(li) && sentences.filter(x => x.li === li).every(x => readSet[keyOf(x)])) {
+    day.lessons.push(li);
+    msg = `${LESSONS[li].label || "Урок " + LESSONS[li].id} прослухано повністю!`;
+  }
+  const j = saveDay();
+  if (j >= 0) msg = (msg ? msg + " " : "") + starMsg(j);
+  if (msg) owlSay("Well done!", msg);
+}
+function noteLook() { day.looks++; const j = saveDay(); if (j >= 0) owlSay("Great!", starMsg(j)); }
+function noteTask() { day.tasks++; const j = saveDay(); if (j >= 0) owlSay("Super!", starMsg(j)); }
+
+/* ---------- owl ---------- */
+const STAR_SVG = '<svg viewBox="0 0 24 24" stroke-width="1.4" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6-4.9-4.5 6.6-.8z"/></svg>';
+let owlT;
+function owlSay(hi, html) {
+  const pr = progress(), st = starsToday();
+  const box = $("#owlSay");
+  box.innerHTML = `<button class="x" aria-label="Закрити">×</button><div class="hi">${esc(hi)}</div><p>${html}</p>
+    <p>Історія: прочитано <b>${pr.pct}%</b> книжки, сьогодні <b>+${pr.todayPct}%</b>.</p>
+    <div class="stars" aria-label="Зірочки за сьогодні">${st.map((on, j) => `<span class="star${on ? " on" : ""}">${STAR_SVG}${STAR_NAMES[j]}</span>`).join("")}</div>`;
+  box.hidden = false;
+  const o = $("#owl"); o.classList.remove("talk"); void o.offsetWidth; o.classList.add("talk");
+  clearTimeout(owlT); owlT = setTimeout(() => { box.hidden = true; }, 9000);
+}
+function owlGreet() {
+  const pr = progress();
+  const msg = day.read === 0
+    ? (pr.done ? `Радію тебе бачити! Продовжимо читати історію?` : `Я сова-помічниця. Відкрий книжку й натисни ▶ — я рахуватиму твої успіхи.`)
+    : `Сьогодні ти вже прослухала <b>${day.read}</b> ${day.read === 1 ? "речення" : day.read < 5 ? "речення" : "речень"}. Так тримати!`;
+  owlSay("Hello!", msg);
+}
+$("#owl").addEventListener("click", () => { if (!$("#owlSay").hidden) { $("#owlSay").hidden = true; return; } owlGreet(); });
+$("#owlSay").addEventListener("click", e => { if (e.target.closest(".x")) $("#owlSay").hidden = true; });
+
 /* ---------- library (shelf of books) ---------- */
 // Books on the shelf. "ready" books open the reader; others collect photos/PDFs for Claude to process.
+const PAGE_RANGE = (() => { const ps = [...new Set([...(TOC ? [TOC.page] : []), ...ALL_BLOCKS.filter(b => b.page).map(b => b.page)])]; return Math.min(...ps) + "–" + Math.max(...ps); })();
 const BOOKS = [
-  { id: "history6", title: "Oxford International Primary History 6", sub: "History · Історія", color: "#c8372d", cover: IMG_COVER, ready: true },
+  { id: "history6", title: "Oxford International Primary History 6", sub: "History · Історія", color: "#c8372d", cover: IMG_COVER, ready: true, pages: PAGE_RANGE },
   { id: "geography", title: "Oxford International Primary Geography 6", sub: "Geography · Географія", color: "#1f6fb0", cover: IMG["geo-cover"] }
 ];
 const GLOBE = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c6 6 6 30 0 36M24 6c-6 6-6 30 0 36"/></svg>';
@@ -3970,15 +4084,13 @@ let dbRef = null, assetsRef = null;
 const blobUrl = id => "/_blob/" + id;
 const coverOf = b => b.cover || (uploaded[b.id] && (uploaded[b.id].cover || (uploaded[b.id].files || []).find(f => /^image\//.test(f.type))?.id) && blobUrl(uploaded[b.id].cover || uploaded[b.id].files.find(f => /^image\//.test(f.type)).id));
 function folderHtml(b) {
-  const doc = uploaded[b.id], n = doc && doc.files ? doc.files.length : 0;
   const cov = coverOf(b);
-  const status = b.ready ? `<span class="chip-st">Сторінки 3–23 готові</span>`
-    : n ? `<span class="chip-st wait">${n} ${n === 1 ? "файл" : n < 5 ? "файли" : "файлів"} · чекає на Claude</span>`
-    : `<span class="chip-st wait">Ще немає матеріалів</span>`;
-  return `<button class="folder" data-book="${esc(b.id)}" style="--f:${esc(b.color || "#5b6fa8")}">
-    <span class="tab"></span>
-    <span class="fbody"><span class="paper"></span><span class="photo">${cov ? `<img src="${esc(cov)}" alt="Обкладинка: ${esc(b.title)}">` : `<span class="ph-empty">${b.id === "geography" ? GLOBE : BOOK_ICON}Обкладинку ще не додано</span>`}</span></span>
-    <span class="ft">${esc(b.title)}</span><span class="fs">${esc(b.sub || "")}</span>${status}</button>`;
+  const tab = b.ready ? `${b.pages} ст.` : "";
+  const pct = b.ready ? progress().pct : 0;
+  return `<button class="folder" data-book="${esc(b.id)}" style="--f:${esc(b.color || "#5b6fa8")}" aria-label="${esc(b.title)}, прочитано ${pct}%">
+    <span class="tab">${esc(tab)}</span><span class="pct">${pct}%</span>
+    <span class="fbody"><span class="paper"></span><span class="photo">${cov ? `<img src="${esc(cov)}" alt="">` : `<span class="ph-empty">${b.id === "geography" ? GLOBE : BOOK_ICON}Обкладинку ще не додано</span>`}</span></span>
+    <span class="ft">${esc(b.title)}</span></button>`;
 }
 function allBooks() {
   const extra = Object.keys(uploaded).filter(id => !BOOKS.some(b => b.id === id))
@@ -3988,9 +4100,9 @@ function allBooks() {
 function renderShelf() {
   $("#shelf").innerHTML = allBooks().map(folderHtml).join("") +
     `<button class="folder add" data-add="1"><span class="tab"></span><span class="fbody"><span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></span>
-      <span class="ft">Додати книжку</span><span class="fs">Фото сторінок або PDF</span></button>`;
+      <span class="ft">Додати книжку</span></button>`;
 }
-function showLibrary() { if (playing) pause(); closeSheet(); document.body.classList.add("lib-mode"); store.set("view", "lib"); scrollTo({ top: 0 }); }
+function showLibrary() { if (playing) pause(); closeSheet(); renderShelf(); document.body.classList.add("lib-mode"); store.set("view", "lib"); scrollTo({ top: 0 }); }
 function openReader() { document.body.classList.remove("lib-mode"); store.set("view", "reader"); }
 $("#toShelf").addEventListener("click", showLibrary);
 $("#shelf").addEventListener("click", e => {
@@ -4074,6 +4186,7 @@ renderShelf();
   if (!assetsRef) $("#libNote").textContent = "Щоб додати нову книжку, надішли фото чи PDF у чат Claude.";
 })();
 if (store.get("view", "lib") === "lib") document.body.classList.add("lib-mode");
+setTimeout(owlGreet, 900);
 
 /* ---------- start ---------- */
 applyMode(); applySub(); refreshSaved(); setPlayingUI();
