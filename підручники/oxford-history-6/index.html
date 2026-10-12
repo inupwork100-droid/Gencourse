@@ -395,12 +395,12 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 .swatches { display: flex; flex-wrap: wrap; gap: 10px; }
 .sw { width: 36px; height: 36px; border-radius: 50%; border: 3px solid var(--surface); box-shadow: 0 0 0 2px var(--line); padding: 0; }
 .sw.on { box-shadow: 0 0 0 3px var(--ink); }
-.pick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.pick button { border: 1.5px solid #f2c94c; background: #f3edfd; border-radius: 10px; padding: 10px 10px 10px 12px; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "t i" "s i"; align-items: center; column-gap: 8px; row-gap: 1px; text-align: left; color: #5b3a9a; }
-.pick button b { grid-area: t; font-weight: 700; font-size: 14px; line-height: 1.2; }
+.pick { display: grid; grid-template-columns: repeat(2, auto); justify-content: center; gap: 22px; }
+.pick button { border: 1.5px solid #f2c94c; background: #f3edfd; border-radius: 10px; padding: 7px 10px 7px 12px; display: grid; grid-template-columns: auto auto; grid-template-areas: "t i" "s i"; align-items: center; column-gap: 9px; row-gap: 1px; text-align: left; color: #5b3a9a; }
+.pick button b { grid-area: t; font-weight: 700; font-size: 13px; line-height: 1.2; }
 .pick button:disabled { opacity: .5; }
-.pick svg { grid-area: i; width: 26px; height: 26px; color: #8a4fe0; }
-.pick small { grid-area: s; font-weight: 400; color: #8a7aa8; font-size: 12px; }
+.pick svg { grid-area: i; width: 22px; height: 22px; color: #8a4fe0; }
+.pick small { grid-area: s; font-weight: 400; color: #8a7aa8; font-size: 11px; }
 .lib-top h1 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: 30px; line-height: 1.1; letter-spacing: .01em; -webkit-text-stroke: .6px #fff; }
 .lib-in { max-width: 820px; margin: 0 auto; display: grid; gap: 16px; padding-inline: 16px; padding-block: 18px 120px; }
 .shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 30px 26px; align-items: start; }
