@@ -914,16 +914,26 @@ const canSpeak = !!(synth && window.SpeechSynthesisUtterance);
 if (!canSpeak) $("#nosupport").hidden = false;
 let voices = [], voice = null;
 const RATES = [0.6, 0.7, 0.8, 0.9, 1];
-let rate = store.get("rate", 0.8);
+let rate = RATES.includes(+store.get("rate", 0.8)) ? +store.get("rate", 0.8) : 0.8;
+// The chosen voice is remembered by its voiceURI (names repeat on iPhone: "Daniel" exists in several qualities).
 function pickVoices() {
   if (!canSpeak) return;
-  voices = synth.getVoices().filter(v => /^en/i.test(v.lang));
+  const list = synth.getVoices().filter(v => /^en/i.test(v.lang));
+  if (!list.length) return;
+  voices = list;
   const want = store.get("voice", null);
-  const score = v => (v.name === want ? 100 : 0) + (/en[-_]GB/i.test(v.lang) ? 20 : 0) +
+  const exact = want && (voices.find(v => v.voiceURI === want) || voices.find(v => v.name === want));
+  if (exact) { voice = exact; return; }
+  const score = v => (/en[-_]GB/i.test(v.lang) ? 20 : 0) +
     (/(Daniel|Kate|Serena|Martha|Arthur|Google UK|Libby|Sonia|Ryan|Natural|Enhanced|Premium)/i.test(v.name) ? 8 : 0) + (v.localService ? 1 : 0);
   voice = voices.slice().sort((a, b) => score(b) - score(a))[0] || null;
 }
-if (canSpeak) { pickVoices(); synth.addEventListener?.("voiceschanged", pickVoices); synth.onvoiceschanged = pickVoices; }
+// iPhone often loads voices late and never fires "voiceschanged", so keep asking for a few seconds.
+function ensureVoice() { if (canSpeak && (!voices.length || !voice)) pickVoices(); }
+if (canSpeak) {
+  pickVoices(); synth.addEventListener?.("voiceschanged", pickVoices); synth.onvoiceschanged = pickVoices;
+  let tries = 0; const iv = setInterval(() => { pickVoices(); if (voices.length || ++tries > 30) clearInterval(iv); }, 300);
+}
 
 let cur = Math.min(store.get("pos", 0), sentences.length - 1);   // sentence index
 let curWord = 0;
@@ -973,6 +983,7 @@ function speakSentence(i, fromWord = 0) {
   const s = sentences[i];
   const off = s.starts[fromWord] || 0;
   const u = new SpeechSynthesisUtterance(s.speech.slice(off));
+  ensureVoice();
   u.lang = voice ? voice.lang : "en-GB"; if (voice) u.voice = voice;
   u.rate = rate; u.pitch = 1;
   let gotBoundary = false;
@@ -1013,7 +1024,8 @@ function sayOnce(text) {
   if (playing) pause();
   token++; synth.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = voice ? voice.lang : "en-GB"; if (voice) u.voice = voice; u.rate = Math.min(rate, 0.85);
+  ensureVoice();
+  u.lang = voice ? voice.lang : "en-GB"; if (voice) u.voice = voice; u.rate = rate;
   synth.speak(u);
 }
 
@@ -1255,15 +1267,15 @@ function startQuiz() {
 /* ---------- settings sheet ---------- */
 $("#openSettings").addEventListener("click", () => {
   pickVoices();
-  const opts = voices.map(v => `<option value="${esc(v.name)}"${voice && v.name === voice.name ? " selected" : ""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("");
+  const opts = voices.map(v => `<option value="${esc(v.voiceURI)}"${voice && v.voiceURI === voice.voiceURI ? " selected" : ""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("");
   openSheet(`<div class="head"><div class="word ttl">Голос і швидкість</div></div>
     ${canSpeak ? `<label class="row" for="voiceSel">Англійський голос (найкраще — британський, en-GB)<select id="voiceSel">${opts || "<option>Голоси ще завантажуються…</option>"}</select></label>` : `<p class="empty">Цей браузер не підтримує озвучення.</p>`}
     <label class="row" for="rateSel">Швидкість читання<select id="rateSel">${RATES.map(r => `<option value="${r}"${r === rate ? " selected" : ""}>${r}× ${r <= .7 ? "— повільно" : r === 1 ? "— звичайна" : ""}</option>`).join("")}</select></label>
     <div class="btns"><button class="btn" data-say="The Vikings were great explorers.">${SVG.speak} Прослухати голос</button><button class="btn" id="resetPos">Почати урок спочатку</button></div>
     <p class="hint">Порада: на iPhone кращі голоси можна завантажити в Параметри → Універсальний доступ → Усний контент → Голоси → English (UK).</p>`, el => {
     const vs = $("#voiceSel", el);
-    vs && vs.addEventListener("change", () => { voice = voices.find(v => v.name === vs.value) || voice; store.set("voice", voice && voice.name); });
-    $("#rateSel", el).addEventListener("change", ev => { rate = +ev.target.value; $("#speed").textContent = rate + "×"; store.set("rate", rate); });
+    vs && vs.addEventListener("change", () => { voice = voices.find(v => v.voiceURI === vs.value) || voice; store.set("voice", voice && voice.voiceURI); toast("Голос збережено"); sayOnce("The Vikings were great explorers."); });
+    $("#rateSel", el).addEventListener("change", ev => { rate = +ev.target.value; $("#speed").textContent = rate + "×"; store.set("rate", rate); toast("Швидкість збережено"); });
     $("#resetPos", el).addEventListener("click", () => { pause(); cur = 0; curWord = 0; store.set("pos", 0); markDone(0, 0); clearMarks(); closeSheet(); scrollTo({ top: 0 }); });
   });
 });
