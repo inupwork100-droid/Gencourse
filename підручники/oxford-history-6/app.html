@@ -204,7 +204,7 @@ figcaption { font-size: 16px; margin-top: 8px; color: var(--ink); }
 .item.opt::before { content: ""; position: absolute; inset: 0; border-radius: 12px; background: #c9c9c9; opacity: 0; pointer-events: none; }
 .item.opt.flash::before { animation: opt-flash .6s ease-out; }
 @keyframes opt-flash { 0% { opacity: 0; background: #b9b9b9; } 12% { opacity: 1; background: #b9b9b9; } 55% { opacity: .8; background: #e2e2e2; } 100% { opacity: 0; background: #f2f2f2; } }
-.owl-say.small { width: min(230px, calc(100vw - 24px)); padding: 9px 12px; border-radius: 30px; background: rgba(255,255,255,.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 0 0 4px rgba(255,255,255,.55), 0 8px 20px rgba(0,0,0,.15); }
+.owl-say.small { width: min(230px, calc(100vw - 24px)); padding: 7px; border-radius: 30px; background: rgba(255,255,255,.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 0 0 4px rgba(255,255,255,.55), 0 8px 20px rgba(0,0,0,.15); }
 .owl-say.small::after { background: rgba(255,255,255,.55); right: 30px; }
 .owl-say.small .x { top: 4px; right: 10px; font-size: 16px; }
 .owl-say.small .en { font-size: 18px; }
@@ -363,27 +363,28 @@ body:not(.lib-mode) .owl.big { width: 88px; height: 88px; }
 @keyframes owl-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 @keyframes owl-hop { 0%, 100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(-10px) rotate(-6deg); } 60% { transform: translateY(-4px) rotate(5deg); } }
 @keyframes owl-blink { 0%, 92%, 100% { transform: scaleY(0); } 95% { transform: scaleY(1); } }
-.owl-say { position: fixed; right: 12px; bottom: calc(132px + env(safe-area-inset-bottom, 0px)); z-index: 44; width: min(350px, calc(100vw - 24px)); background: #fff; color: #1b1715;
-  border: 3px solid #f2d33a; border-radius: 48px; box-shadow: 0 0 0 5px #fff, 0 12px 30px rgba(0,0,0,.22); padding: 16px 26px 18px; display: grid; gap: 4px; }
+.owl-say { position: fixed; right: 12px; bottom: calc(132px + env(safe-area-inset-bottom, 0px)); z-index: 44; width: min(300px, calc(100vw - 24px)); background: rgba(255,255,255,.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); color: #1b1715;
+  border: 3px solid #f2d33a; border-radius: 40px; box-shadow: 0 0 0 4px rgba(255,255,255,.55), 0 10px 26px rgba(0,0,0,.18); padding: 7px; display: grid; }
+.owl-say .panel { background: #fff; border-radius: 33px; padding: 10px 16px 12px; display: grid; gap: 3px; }
 body:not(.lib-mode) .owl-say { bottom: calc(252px + env(safe-area-inset-bottom, 0px)); }
-.owl-say::after { content: ""; position: absolute; right: 40px; bottom: -12px; width: 20px; height: 20px; background: #fff; border-right: 3px solid #f2d33a; border-bottom: 3px solid #f2d33a; transform: rotate(45deg); }
-.owl-say .hi { font-family: "Caveat", "Segoe Script", cursive; font-weight: 700; font-size: 38px; color: #7a3fc4; line-height: 1; margin-top: 2px; }
-.owl-say .en { display: block; font-family: "Caveat", "Segoe Script", cursive; font-weight: 600; font-size: 23px; color: #16324f; line-height: 1.15; }
-.owl-say .uk { display: block; font-size: 14px; font-weight: 400; color: #1b1715; line-height: 1.35; }
+.owl-say::after { content: ""; position: absolute; right: 40px; bottom: -12px; width: 20px; height: 20px; background: rgba(255,255,255,.7); border-right: 3px solid #f2d33a; border-bottom: 3px solid #f2d33a; transform: rotate(45deg); }
+.owl-say .hi { font-family: "Caveat", "Segoe Script", cursive; font-weight: 700; font-size: 30px; color: #7a3fc4; line-height: 1; margin-top: 1px; }
+.owl-say .en { display: block; font-family: "Caveat", "Segoe Script", cursive; font-weight: 600; font-size: 19px; color: #16324f; line-height: 1.15; }
+.owl-say .uk { display: block; font-size: 13px; font-weight: 400; color: #1b1715; line-height: 1.35; }
 .owl-say .stars { display: flex; gap: 2px; padding-right: 14px; }
-.owl-say .star { hyphens: manual; -webkit-hyphens: manual; overflow-wrap: normal; display: grid; justify-items: center; align-content: start; gap: 1px; font-size: 10px; color: #b3aaa3; text-align: center; line-height: 1.1; flex: 1; min-width: 0; }
+.owl-say .star { hyphens: manual; -webkit-hyphens: manual; overflow-wrap: normal; display: grid; justify-items: center; align-content: start; gap: 1px; font-size: 9px; color: #b3aaa3; text-align: center; line-height: 1.1; flex: 1; min-width: 0; }
 .owl-say .star.on { color: #1b1715; font-weight: 700; }
-.owl-say .star svg { width: 28px; height: 28px; }
+.owl-say .star svg { width: 22px; height: 22px; }
 .owl-say .star.on svg { fill: #f6c419; stroke: #b88a00; }
 .owl-say .star:not(.on) svg { fill: #f1f1f1; stroke: #d0d0d0; }
 .owl-say .star.new svg { animation: star-pop .7s ease-out 2; }
 @keyframes star-pop { 50% { transform: scale(1.45) rotate(18deg); } }
 .owl-say .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
-.owl-say .tile { background: #e3f0ff; border-radius: 16px; padding: 8px 10px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px; }
-.owl-say .tile small { font-size: 12px; color: #3b5a85; line-height: 1.2; display: grid; }
-.owl-say .tile strong { display: flex; align-items: center; gap: 3px; font-size: 30px; color: #1f6fe0; line-height: 1; font-variant-numeric: tabular-nums; }
-.owl-say .tile strong svg { width: 20px; height: 20px; flex: none; }
-.owl-say .x { position: absolute; top: 10px; right: 18px; border: 0; background: transparent; font-size: 20px; color: #999; padding: 4px; }
+.owl-say .tile { background: #e3f0ff; border-radius: 14px; padding: 6px 9px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px; }
+.owl-say .tile small { font-size: 11px; color: #3b5a85; line-height: 1.2; display: grid; }
+.owl-say .tile strong { display: flex; align-items: center; gap: 3px; font-size: 24px; color: #1f6fe0; line-height: 1; font-variant-numeric: tabular-nums; }
+.owl-say .tile strong svg { width: 16px; height: 16px; flex: none; }
+.owl-say .x { position: absolute; top: 12px; right: 18px; border: 0; background: transparent; font-size: 20px; color: #999; padding: 4px; }
 @media (prefers-reduced-motion: reduce) { .owl, .owl.talk, .owl .lid, .owl.party::after, .owl::before, .owl-say .star.new svg { animation: none; } }
 body.lib-mode .top, body.lib-mode .wrap, body.lib-mode .player { display: none; }
 body:not(.lib-mode) .library { display: none; }
@@ -1249,14 +1250,14 @@ function owlSay(hi, en, ua, newStar = -1, party = false) {
   const pages = day.pages.length, done = Object.keys(doneLessons).length;
   const box = $("#owlSay");
   box.classList.remove("small");
-  box.innerHTML = `<button class="x" aria-label="Закрити">×</button>
+  box.innerHTML = `<div class="panel"><button class="x" aria-label="Закрити">×</button>
     <div class="stars" aria-label="Зірочки за сьогодні">${st.map((on, j) => `<span class="star${on ? " on" : ""}${j === newStar ? " new" : ""}">${STAR_SVG}${STAR_LABELS[j]}</span>`).join("")}</div>
     <div class="hi">${esc(hi)}</div>
     <span class="en">${esc(en)}</span><span class="uk">${esc(ua)}</span>
     <div class="tiles">
       <div class="tile"><small><span>Прочитано</span><span>сьогодні</span><span>сторінок</span></small><strong>${pages}${CHECK}</strong></div>
       <div class="tile"><small><span>Всього</span><span>прочитано</span><span>розділів</span></small><strong>${done}${CHECK}</strong></div>
-    </div>`;
+    </div></div>`;
   box.hidden = false;
   const o = $("#owl"); o.classList.remove("talk"); void o.offsetWidth; o.classList.add("talk", "big");
   if (newStar >= 0 || party) { o.classList.add("party"); clearTimeout(partyT); partyT = setTimeout(() => o.classList.remove("party"), 4000); }
