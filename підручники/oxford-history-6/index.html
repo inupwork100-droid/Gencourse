@@ -372,6 +372,15 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 .magic-log .ok { color: #2f8a1f; }
 .magic-log .bad { color: #b0412c; }
 .magic-log .big { font-weight: 700; font-size: 16px; }
+.folder { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+.folder.wiggle .fbody { animation: wiggle .5s ease-in-out; }
+@keyframes wiggle { 25% { transform: rotate(-3deg) scale(1.03); } 75% { transform: rotate(3deg) scale(1.03); } }
+.newf.ed .nbody { background: var(--f); border: 0; color: #fff; position: relative; }
+.newf.ed .mtab { background: color-mix(in srgb, var(--f) 75%, #000); }
+.newf.ed .ncap { position: absolute; bottom: 6px; left: 0; right: 0; text-align: center; font-size: 11px; text-shadow: 0 1px 3px rgba(0,0,0,.6); }
+.swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.sw { width: 36px; height: 36px; border-radius: 50%; border: 3px solid var(--surface); box-shadow: 0 0 0 2px var(--line); padding: 0; }
+.sw.on { box-shadow: 0 0 0 3px var(--ink); }
 .pick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .pick button { border: 2px solid var(--line); background: var(--paper); border-radius: 16px; padding: 14px 8px; display: grid; justify-items: center; gap: 6px; font-weight: 700; font-size: 15px; color: var(--ink); }
 .pick button:disabled { opacity: .5; }
@@ -4311,7 +4320,13 @@ const BOOK_ICON = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" st
 let uploaded = {};            // book id -> db document {title, files:[{id,name,type}], cover}
 let dbRef = null, assetsRef = null;
 const blobUrl = id => "/_blob/" + id;
-const coverOf = b => b.cover || (uploaded[b.id] && (uploaded[b.id].cover || (uploaded[b.id].files || []).find(f => /^image\//.test(f.type))?.id) && blobUrl(uploaded[b.id].cover || uploaded[b.id].files.find(f => /^image\//.test(f.type)).id));
+function coverOf(b) {
+  const u = uploaded[b.id];
+  if (u && u.cover) return blobUrl(u.cover);
+  if (b.cover) return b.cover;
+  const f = u && (u.files || []).find(x => /^image\//.test(x.type));
+  return f ? blobUrl(f.id) : "";
+}
 function folderHtml(b) {
   const cov = coverOf(b);
   const tab = b.ready ? `${b.pages} ст.` : "";
@@ -4322,9 +4337,11 @@ function folderHtml(b) {
     <span class="ft">${esc(b.title)}</span></button>`;
 }
 function allBooks() {
-  const extra = Object.keys(uploaded).filter(id => !BOOKS.some(b => b.id === id)).sort((a, b) => String(uploaded[a].createdAt || a) < String(uploaded[b].createdAt || b) ? -1 : 1)
-    .map((id, k) => ({ id, title: uploaded[id].title || "Нова книжка", sub: uploaded[id].subject || "Додано з телефона", color: k % 2 ? "#cfae4e" : "#d98a4e", ready: !!uploaded[id].magic, pages: uploaded[id].range || "" }));
-  return [...BOOKS, ...extra];
+  const extra = Object.keys(uploaded).filter(id => !BOOKS.some(b => b.id === id) && !uploaded[id].builtin).sort((a, b) => String(uploaded[a].createdAt || a) < String(uploaded[b].createdAt || b) ? -1 : 1)
+    .map((id, k) => ({ id, title: uploaded[id].title || "Нова книжка", sub: uploaded[id].subject || "Додано з телефона", color: uploaded[id].color || (k % 2 ? "#cfae4e" : "#d98a4e"), ready: !!uploaded[id].magic, pages: uploaded[id].range || "" }));
+  // a long-press edit can rename or recolour the built-in books too
+  const base = BOOKS.map(b => { const u = uploaded[b.id]; return u ? { ...b, title: u.title || b.title, color: u.color || b.color } : b; });
+  return [...base, ...extra];
 }
 function renderShelf() {
   $("#shelf").innerHTML = allBooks().map(folderHtml).join("") +
@@ -4335,8 +4352,57 @@ function showLibrary() { if (playing) pause(); closeSheet(); renderShelf(); docu
 function openReader() { document.body.classList.remove("lib-mode"); store.set("view", "reader"); }
 $("#toShelf").addEventListener("click", showLibrary);
 $("#libAdd").addEventListener("click", () => openUploadAny());
+// long press on a folder → edit its name, colour and cover
+let lpT = null, lpFired = false;
+$("#shelf").addEventListener("pointerdown", e => {
+  const f = e.target.closest(".folder:not(.add)"); if (!f) return;
+  lpFired = false; clearTimeout(lpT);
+  lpT = setTimeout(() => { lpFired = true; f.classList.add("wiggle"); setTimeout(() => f.classList.remove("wiggle"), 500); openEditFolder(allBooks().find(x => x.id === f.dataset.book)); }, 600);
+});
+["pointerup", "pointercancel", "pointerleave"].forEach(t => $("#shelf").addEventListener(t, () => clearTimeout(lpT)));
+$("#shelf").addEventListener("pointermove", e => { if (Math.abs(e.movementX) + Math.abs(e.movementY) > 6) clearTimeout(lpT); });
+$("#shelf").addEventListener("contextmenu", e => { if (e.target.closest(".folder")) e.preventDefault(); });
+const FOLDER_COLORS = ["#c8372d", "#d98a4e", "#cfae4e", "#8fb15a", "#3f9a83", "#1f6fb0", "#5b6fa8", "#8a64b8", "#c0607e", "#8d7d70"];
+function openEditFolder(b) {
+  if (!b) return;
+  if (!dbRef) { toast("Тут змінювати папки не можна"); return; }
+  let color = b.color || "#5b6fa8", coverFile = null;
+  const cov = coverOf(b);
+  openSheet(`<div class="head"><div class="word ttl">Змінити папку</div></div>
+    <div class="newf-row">
+      <button type="button" class="newf ed" id="edCover" style="--f:${esc(color)}" aria-label="Змінити картинку"><span class="mtab"></span><span class="nbody">${cov ? `<img src="${esc(cov)}" alt="">` : `<span class="nplus">+</span>`}<span class="ncap">Змінити картинку</span></span></button>
+      <div class="newf-side"><label class="row" for="edName">Назва<input type="text" id="edName" value="${esc(b.title)}"></label></div>
+    </div>
+    <div class="lbl">Колір папки</div>
+    <div class="swatches">${FOLDER_COLORS.map(c => `<button type="button" class="sw${c === color ? " on" : ""}" data-c="${c}" style="background:${c}" aria-label="Колір"></button>`).join("")}</div>
+    <input type="file" id="edFile" accept="image/*" hidden>
+    <div class="btns"><button class="btn primary" id="edSave">Зберегти</button><button class="btn" id="edCancel">Скасувати</button></div>`, el => {
+    const fol = $("#edCover", el), inp = $("#edFile", el);
+    $(".swatches", el).addEventListener("click", e => { const w = e.target.closest(".sw"); if (!w) return; color = w.dataset.c; el.querySelectorAll(".sw").forEach(x => x.classList.toggle("on", x === w)); fol.style.setProperty("--f", color); });
+    fol.addEventListener("click", () => inp.click());
+    inp.addEventListener("change", () => { coverFile = inp.files[0] || null; inp.value = ""; if (coverFile) $(".nbody", el).innerHTML = `<img src="${URL.createObjectURL(coverFile)}" alt=""><span class="ncap">Змінити картинку</span>`; });
+    $("#edCancel", el).addEventListener("click", closeSheet);
+    $("#edSave", el).addEventListener("click", async ev => {
+      const title = $("#edName", el).value.trim() || b.title;
+      ev.currentTarget.disabled = true;
+      const patch = { title, color };
+      try {
+        if (coverFile) {
+          if (!assetsRef) throw { code: "no_assets" };
+          patch.cover = (await assetsRef.upload(coverFile, { type: coverFile.type || "image/jpeg" })).id;
+        }
+        const ref = dbRef.doc("books/" + b.id);
+        if (uploaded[b.id]) await ref.update(patch);
+        else await ref.set({ ...patch, builtin: true });
+        uploaded[b.id] = { ...(uploaded[b.id] || { builtin: true }), ...patch };
+        renderShelf(); closeSheet(); toast("Папку змінено");
+      } catch (err) { toast("Не вдалося зберегти зміни"); ev.currentTarget.disabled = false; }
+    });
+  });
+}
 $("#shelf").addEventListener("click", e => {
   const f = e.target.closest(".folder"); if (!f) return;
+  if (lpFired) { lpFired = false; e.preventDefault(); return; }
   if (f.dataset.add) return openUploadTo(null);
   const b = allBooks().find(x => x.id === f.dataset.book);
   if (b.ready && b.id === "history6") return switchBook(b.id);
