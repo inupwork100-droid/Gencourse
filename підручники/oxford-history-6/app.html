@@ -380,11 +380,12 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 .pick small { font-weight: 400; color: var(--muted); font-size: 12px; }
 .lib-top h1 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: 30px; line-height: 1.1; letter-spacing: .01em; -webkit-text-stroke: .6px #fff; }
 .lib-in { max-width: 820px; margin: 0 auto; display: grid; gap: 16px; padding-inline: 16px; padding-block: 18px 120px; }
-.shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 18px 16px; align-items: start; }
+.shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 30px 26px; align-items: start; }
+.shelf .folder { width: 88%; justify-self: center; }
 .folder { --f: #c8372d; --f2: color-mix(in srgb, var(--f) 78%, #000); position: relative; border: 0; background: transparent; padding: 26px 0 0; text-align: left; color: var(--ink); display: grid; gap: 6px; }
-.folder .tab { position: absolute; top: 0; left: 0; min-width: 58%; max-width: 78%; height: 30px; padding: 0 12px; background: var(--f2); border-radius: 10px 14px 0 0;
+.folder .tab { position: absolute; top: 0; left: 0; min-width: 58%; max-width: 78%; height: 28px; padding: 0 12px; background: var(--f2); border-radius: 10px 14px 0 0;
   display: flex; align-items: center; color: #fff; font-weight: 700; font-size: 15px; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.folder .fbody { position: relative; height: 150px; max-width: 100%; background: linear-gradient(160deg, var(--f), var(--f2)); border-radius: 0 14px 14px 14px;
+.folder .fbody { position: relative; height: 128px; max-width: 100%; background: linear-gradient(160deg, var(--f), var(--f2)); border-radius: 0 14px 14px 14px;
   box-shadow: 0 6px 14px rgba(22,50,79,.22); display: grid; place-items: center; overflow: hidden; transition: transform .18s; }
 .folder:hover .fbody, .folder:focus-visible .fbody { transform: translateY(-3px); }
 .folder .paper { position: absolute; height: 78%; aspect-ratio: 3 / 4; background: #fffdf7; border-radius: 3px; transform: rotate(8deg) translate(16%, -3%); box-shadow: 0 2px 6px rgba(0,0,0,.2); }
@@ -392,9 +393,9 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 .folder .photo img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 2px; }
 .folder .ph-empty { width: 100%; height: 100%; display: grid; place-items: center; text-align: center; background: color-mix(in srgb, var(--f) 12%, #fff); color: var(--f2); font-size: 11px; line-height: 1.2; padding: 4px; border-radius: 2px; }
 .folder .ph-empty svg { width: 44%; height: auto; display: block; margin: 0 auto 2px; }
-.folder .ft { font-weight: 700; font-size: 14px; line-height: 1.25; text-wrap: balance; }
-.pct { position: absolute; top: 4px; right: -4px; z-index: 2; width: 52px; height: 52px; border-radius: 50%; background: #7cc242; color: #17320a;
-  display: grid; place-items: center; font-weight: 800; font-size: 15px; font-variant-numeric: tabular-nums; box-shadow: 0 3px 8px rgba(0,0,0,.25); border: 3px solid var(--ground); }
+.folder .ft { font-weight: 700; font-size: 13px; line-height: 1.25; text-wrap: balance; }
+.pct { position: absolute; top: 4px; right: -4px; z-index: 2; width: 46px; height: 46px; border-radius: 50%; background: #7cc242; color: #17320a;
+  display: grid; place-items: center; font-weight: 800; font-size: 14px; font-variant-numeric: tabular-nums; box-shadow: 0 3px 8px rgba(0,0,0,.25); border: 3px solid var(--ground); }
 .folder.add { --f: #d6d9e0; --f2: #c3c7d0; }
 .folder.add .fbody { background: color-mix(in srgb, var(--surface) 55%, var(--f)); border: 3px dashed var(--f2); box-shadow: none; }
 .folder.add .tab { background: var(--f2); min-width: 50%; }
@@ -453,14 +454,16 @@ body:not(.lib-mode) .library { display: none; }
 .up-files .ftile > a { display: grid; aspect-ratio: 3 / 4; }
 .fpdf { display: grid; place-items: center; height: 100%; }
 .fnum { position: absolute; top: 4px; left: 4px; min-width: 20px; height: 20px; border-radius: 10px; background: rgba(22,50,79,.85); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; padding: 0 5px; }
+.up-files.edit .ftile { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+.up-files.edit .ftile img { -webkit-user-drag: none; pointer-events: none; }
+.ftile.held > a { transform: scale(.94); transition: transform .15s; }
+.fdel { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); border: 2px solid #fff; border-radius: 999px; background: #c8372d; color: #fff;
+  font-weight: 700; font-size: 13px; padding: 6px 12px; box-shadow: 0 4px 12px rgba(0,0,0,.3); animation: popIn .18s ease-out; z-index: 2; }
+@keyframes popIn { from { transform: translate(-50%, -50%) scale(.6); opacity: 0; } }
 .fx { position: absolute; top: -6px; right: -6px; width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; background: #c8372d; color: #fff; font-size: 16px; line-height: 1; display: grid; place-items: center; padding: 0; box-shadow: 0 2px 6px rgba(0,0,0,.25); }
 .fmove { display: flex; justify-content: space-between; gap: 4px; margin-top: 4px; }
 .fmove button, .fmove i { flex: 1; height: 28px; }
 .fmove button { border: 0; border-radius: 8px; background: var(--paper-2); color: var(--ink); font-size: 20px; font-weight: 700; line-height: 1; padding: 0; }
-.fask { position: absolute; inset: 0 0 32px; border-radius: 8px; background: rgba(255,255,255,.93); display: grid; place-content: center; gap: 6px; text-align: center; font-weight: 700; font-size: 13px; color: #b0412c; }
-.fask span { display: flex; gap: 6px; }
-.fask button { border: 0; border-radius: 8px; padding: 5px 9px; font-weight: 700; background: #c8372d; color: #fff; }
-.fask button + button { background: var(--paper-2); color: var(--ink); }
 .up-files a { display: grid; place-items: center; aspect-ratio: 3 / 4; border-radius: 8px; overflow: hidden; background: var(--paper); color: var(--ink); font-size: 12px; text-align: center; text-decoration: none; padding: 4px; }
 .up-files img { width: 100%; height: 100%; object-fit: cover; }
 .up-form { display: grid; gap: 10px; }
@@ -1505,33 +1508,44 @@ $("#shelf").addEventListener("click", e => {
   if (b.ready && b.id === "history6") return switchBook(b.id);
   openBookSheet(b);
 });
-// files in a folder: tap ‹ › to change the order, × to delete (asks first)
+// files in a folder: tap ‹ › to change the order; hold a file to show a small «Видалити»
 function fileTiles(doc, bookId) {
   const fs = doc.files || [];
   return `<div class="up-files${bookId ? " edit" : ""}" data-fbook="${esc(bookId || "")}">${fs.map((f, i) => `<div class="ftile">
     <a href="${blobUrl(f.id)}" target="_blank" rel="noopener">${/^image\//.test(f.type) ? `<img src="${blobUrl(f.id)}" alt="${esc(f.name)}">` : `<span class="fpdf">PDF<br>${esc(f.name)}</span>`}</a>
     ${bookId ? `<span class="fnum">${i + 1}</span>
-    <button class="fx" data-fact="del" data-fi="${i}" aria-label="Видалити файл ${i + 1}">×</button>
     <span class="fmove">${i > 0 ? `<button data-fact="left" data-fi="${i}" aria-label="Перемістити раніше">‹</button>` : "<i></i>"}${i < fs.length - 1 ? `<button data-fact="right" data-fi="${i}" aria-label="Перемістити далі">›</button>` : "<i></i>"}</span>` : ""}
   </div>`).join("")}</div>`;
 }
 let fileRerender = null;   // reopens the current folder sheet after a change
+let fTimer = 0, fFired = false, fX = 0, fY = 0;
+const hideFdel = () => sheetIn.querySelectorAll(".fdel").forEach(x => { x.closest(".ftile").classList.remove("held"); x.remove(); });
+sheetIn.addEventListener("pointerdown", e => {
+  const tile = e.target.closest(".up-files.edit .ftile");
+  if (!tile || e.target.closest("button")) return;
+  fFired = false; fX = e.clientX; fY = e.clientY; clearTimeout(fTimer);
+  fTimer = setTimeout(() => {
+    fFired = true; hideFdel();
+    const i = [...tile.parentNode.children].indexOf(tile);
+    tile.classList.add("held");
+    tile.insertAdjacentHTML("beforeend", `<button class="fdel" data-fact="yes" data-fi="${i}">Видалити</button>`);
+    if (navigator.vibrate) navigator.vibrate(20);
+  }, 550);
+});
+["pointerup", "pointercancel", "pointerleave"].forEach(t => sheetIn.addEventListener(t, () => clearTimeout(fTimer)));
+sheetIn.addEventListener("pointermove", e => { if (Math.hypot(e.clientX - fX, e.clientY - fY) > 8) clearTimeout(fTimer); });
+sheetIn.addEventListener("contextmenu", e => { if (e.target.closest(".up-files.edit")) e.preventDefault(); });
+sheetIn.addEventListener("click", e => {
+  if (e.target.closest(".fdel")) return;
+  if (fFired && e.target.closest(".ftile")) { e.preventDefault(); e.stopPropagation(); fFired = false; return; }
+  if (sheetIn.querySelector(".fdel")) { hideFdel(); if (e.target.closest(".ftile > a")) e.preventDefault(); }
+}, true);
 sheetIn.addEventListener("click", async e => {
   const btn = e.target.closest("[data-fact]"); if (!btn) return;
   e.preventDefault(); e.stopPropagation();
   const id = btn.closest("[data-fbook]").dataset.fbook, i = +btn.dataset.fi;
   const doc = uploaded[id]; if (!doc || !dbRef) return;
   const files = [...(doc.files || [])];
-  if (btn.dataset.fact === "del") {
-    const tile = btn.closest(".ftile");
-    if (!tile.classList.contains("ask")) {
-      tile.classList.add("ask");
-      tile.insertAdjacentHTML("beforeend", `<span class="fask">Видалити?<span><button data-fact="yes" data-fi="${i}">Так</button><button data-fact="no" data-fi="${i}">Ні</button></span></span>`);
-      return;
-    }
-    return;
-  }
-  if (btn.dataset.fact === "no") { const t = btn.closest(".ftile"); t.classList.remove("ask"); t.querySelector(".fask").remove(); return; }
   let removed = null;
   if (btn.dataset.fact === "yes") removed = files.splice(i, 1)[0];
   else { const j = btn.dataset.fact === "left" ? i - 1 : i + 1; [files[i], files[j]] = [files[j], files[i]]; }
