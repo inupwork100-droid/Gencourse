@@ -171,7 +171,7 @@ figure.blk { margin: 18px 0; max-width: none; }
 figure img { display: block; width: 100%; border-radius: 6px; border: 3px solid var(--surface); box-shadow: 0 2px 10px rgba(0,0,0,.12); }
 figcaption { font-size: 16px; margin-top: 8px; color: var(--ink); }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 14px; color: var(--muted); }
-.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend > span { display: inline-flex; align-items: center; gap: 6px; }
 .legend i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; flex: none; }
 .legend .lt { font-weight: 700; width: 100%; color: var(--ink); }
 
@@ -185,6 +185,17 @@ figcaption { font-size: 16px; margin-top: 8px; color: var(--ink); }
 .box.activities { border-color: var(--green); } .box.activities h3 { background: var(--green); }
 .box.challenge { border-color: var(--red); } .box.challenge h3 { background: var(--red); }
 .box.know { border-color: var(--pink); } .box.know h3 { background: var(--pink); }
+.box.goals { border-color: #3d8f98; background: color-mix(in srgb, #3d8f98 8%, var(--surface)); } .box.goals h3 { background: #3d8f98; }
+.box.think { border-color: var(--red); } .box.think h3 { background: var(--red); font-size: 24px; padding-block: 2px; }
+.box.historian { border-color: #2c3e6b; } .box.historian h3 { background: #2c3e6b; }
+.box.plain { border-color: var(--line); } .box.plain h3 { background: var(--muted); font-size: 16px; }
+.box.timeline { border-color: #5b6fa8; } .box.timeline h3 { background: #5b6fa8; }
+.box.timeline .item { grid-template-columns: 70px minmax(0, 1fr); }
+.box.timeline .item .n { color: #5b6fa8; white-space: nowrap; }
+.box.review { border-color: var(--red); } .box.review h3 { background: var(--red); }
+.box.review .ansbtn { color: var(--yellow); }
+.box.review .ansbtn svg { stroke-width: 3; }
+.item .n { white-space: nowrap; }
 body.mode-ua .box h3 .en, body.mode-ua .gloss h3 .en { display: none; }
 .box h3 { display: flex; align-items: center; gap: 8px; }
 .ansbtn { margin-left: auto; border: 0; background: #fff; color: #2f6fd6; width: 52px; height: 34px; border-radius: 50%;
@@ -198,7 +209,7 @@ body.mode-ua .box h3 .en, body.mode-ua .gloss h3 .en { display: none; }
 .sheet.blue .grab, .sheet.yellow .grab { background: var(--acc); }
 .sheet.blue .card, .sheet.blue .btn, .sheet.yellow .card, .sheet.yellow .btn { background: var(--acc-soft); }
 .ans { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: start; }
-.ans .num { width: 30px; height: 30px; border-radius: 50%; background: var(--acc); color: var(--acc-ink); font-size: 14px; font-weight: 700; display: grid; place-items: center; }
+.ans .num { min-width: 30px; height: 30px; padding: 0 6px; border-radius: 15px; background: var(--acc); color: var(--acc-ink); font-size: 14px; font-weight: 700; display: grid; place-items: center; }
 .ans .q { font-weight: 700; }
 .ans .qua { color: var(--muted); font-size: 15px; }
 .ans .a, .ans .ua { white-space: pre-line; }
@@ -370,8 +381,8 @@ const SVG = {
 };
 
 /* ---------- words: how a few tokens should sound ---------- */
-const SAY = { "ce": "C E", "1100": "eleven hundred", "700": "seven hundred" };
-const WORD_RE = /[A-Za-z0-9]+(?:['’][A-Za-z]+)?/g;
+const SAY = { "ce": "C E", "c": "circa", "1100": "eleven hundred", "700": "seven hundred" };
+const WORD_RE = /[A-Za-z\u00C0-\u017F0-9]+(?:['’][A-Za-z]+)?/g;
 
 /* ---------- build sentence model + DOM ---------- */
 const sentences = [];   // {en, ua, words:[{t, el}], el, uaEl, speech, starts:[]}
@@ -433,7 +444,7 @@ if (TOC) {
   out += `<article class="page toc" id="contents"><div class="banner"><h1>${esc(TOC.title[0])}</h1><div class="uah1">${esc(TOC.title[1])}</div></div>
     <div class="pagemark" id="page-${TOC.page}" data-page="${TOC.page}">Page <b>${TOC.page}</b></div>
     <div class="toc-grid">` + TOC.units.map(u => `<section class="toc-unit" style="--u:${u.color}">
-      <button class="toc-head" data-goto="${u.items[0][3]}"><span class="toc-c">${u.n}</span><span><span>${esc(u.title[0])}</span><small>${esc(u.title[1])}</small></span></button>
+      <button class="toc-head" data-goto="${u.start || u.items[0][3]}"><span class="toc-c">${u.n}</span><span><span>${esc(u.title[0])}</span><small>${esc(u.title[1])}</small></span></button>
       <div class="toc-list">${u.items.map(it => row(it[0], it[1], it[2], it[3], it[4])).join("")}</div></section>`).join("") +
     `<section class="toc-unit toc-extra" style="--u:var(--sea)"><div class="toc-list">${TOC.extra.map(x => row("", x[0], x[1], x[2])).join("")}</div></section></div>
     <p class="toc-hint">Натисни на тему або номер сторінки, щоб перейти туди. Яскраві номери — сторінки, які вже є в застосунку.</p></article>`;
@@ -441,7 +452,7 @@ if (TOC) {
 const paraBlocks = []; // elements that can show a UA paragraph
 LESSONS.forEach((L, li) => {
 const t = renderSentences([L.title]);
-out += `<article class="page" id="lesson-${li}" data-li="${li}"><div class="banner"><div class="unit">${esc(L.unit)} · pages ${esc(L.pages)}</div><h1>${t.en}${uaHtml(t.sis).replace('class="ua"', 'class="ua uah1"')}</h1></div>`;
+out += `<article class="page" id="lesson-${li}" data-li="${li}"${L.color ? ` style="--red:${L.color};--banner:${L.color}"` : ""}><div class="banner"><div class="unit">${esc(L.unit)} · pages ${esc(L.pages)}</div><h1>${t.en}${uaHtml(t.sis).replace('class="ua"', 'class="ua uah1"')}</h1></div>`;
 let curPage = null;
 L.blocks.forEach((b, bi) => {
   if (b.page && b.page !== curPage) {
@@ -458,7 +469,7 @@ L.blocks.forEach((b, bi) => {
     const r = renderSentences(b.s);
     let legend = "";
     if (b.legend) {
-      legend = `<div class="legend"><span class="lt">Viking settlements · Viking raids</span>` +
+      legend = `<div class="legend"><span class="lt">${esc(b.legendTitle || "Viking settlements · Viking raids")}</span>` +
         b.legend.map(l => `<span><i style="background:${l[0]}"></i><span class="lg" title="${esc(l[2])}">${tokenSpans(l[1]).html}</span></span>`).join("") + `</div>`;
     }
     out += `<figure class="blk" data-bi="${li}:${bi}"><img src="${IMG[b.src]}" alt="${esc(b.alt)}"><figcaption>${r.en}${uaHtml(r.sis)}</figcaption>${legend}</figure>`;
@@ -846,7 +857,7 @@ function openAnswers(b) {
       <div class="q">${esc(x.q[0])}</div><div class="qua">${esc(x.q[1])}</div>
       <button class="say-a" data-say="${esc(x.a[0].replace(/\n/g, " "))}">${SVG.speak} Слухати відповідь</button>
       <div class="a">${esc(x.a[0])}</div><span class="ua">${esc(x.a[1])}</span></div></div>`).join("");
-  openSheet(h, null, b.kind === "activities" ? "yellow" : "blue");
+  openSheet(h, null, b.kind === "activities" || b.kind === "review" ? "yellow" : "blue");
 }
 
 /* ---------- saved words sheet + quiz ---------- */
@@ -928,7 +939,7 @@ let curPg = 0;
 function placeThumb(p, keepInView) {
   curPg = p;
   const L = LESSONS[PAGE_LESSON[p]];
-  $("#topSub").textContent = L ? `Урок ${L.id} · с. ${p}` : `Зміст · с. ${p}`;
+  $("#topSub").textContent = L ? `${L.label || "Урок " + L.id} · с. ${p}` : `Зміст · с. ${p}`;
   rthumb.style.left = (PAD + (p - 1) * TICK) + "px";
   rthumb.setAttribute("aria-valuenow", p); rthumb.setAttribute("aria-valuetext", "Сторінка " + p);
   rtrack.querySelectorAll(".rt.on").forEach(b => b.classList.remove("on"));
