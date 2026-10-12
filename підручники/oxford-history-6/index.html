@@ -217,6 +217,14 @@ figcaption { font-size: 16px; margin-top: 8px; color: var(--ink); }
 .owl-say.small .x { top: 4px; right: 10px; font-size: 16px; }
 .owl-say.small .en { font-size: 18px; }
 .owl-say.small .uk { font-size: 12px; }
+.owl-say .cta { margin-top: 3px; font-weight: 700; color: #7a3fc4;
+  background: linear-gradient(90deg, #5a1fa6, #8f4ee6, #6a2fb8, #a565f0, #5a1fa6); background-size: 300% 100%;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: cta-flow 3s linear infinite; }
+.owl-say .uk.cta { margin-top: 0; }
+@keyframes cta-flow { from { background-position: 0% 0; } to { background-position: 300% 0; } }
+.owl-say.popin { transform-origin: 85% 100%; animation: bubble-pop .9s cubic-bezier(.3,1.6,.5,1); }
+@keyframes bubble-pop { 0% { transform: scale(.4); opacity: 0; } 35% { transform: scale(1.12); opacity: 1; } 55% { transform: scale(.94); } 75% { transform: scale(1.05); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .owl-say .cta, .owl-say.popin { animation: none; } }
 .owl-say .notice { background: rgba(225,225,225,.85); border-radius: 22px; padding: 8px 12px; display: grid; gap: 2px; }
 .owl-say .notice .nenv { color: #c79a00; }
 .owl-say .notice .nenv svg { width: 24px; height: 18px; }
@@ -3852,7 +3860,7 @@ function chooseOpt(o) {
   if (optLocked[qid]) {
     const env = o.closest(".box").querySelector(".ansbtn");
     o.classList.remove("flash"); void o.offsetWidth; o.classList.add("flash");
-    owlNotice("Look in the envelope first to continue.", "Спершу зазирни в конвертик, щоб продовжити відповідати.");
+    owlNotice("Wait a moment!|Look in the envelope first, then try again!", "Зачекай!|Спершу зазирни в конвертик, а тоді пробуй знову!");
     if (env) { env.classList.remove("nudge"); void env.offsetWidth; env.classList.add("nudge"); }
     return;
   }
@@ -4134,20 +4142,29 @@ function markRead(i) {
     if (oneGo && !sessRead[li].counted) { sessRead[li].counted = true; day.oneGo++; msg = [`You finished ${lessonNameEn(li)} in one go!`, `${lessonName(li)}: ти пройшла його за один раз!`]; }
   }
   const j = saveDay();
-  if (j >= 0) owlSay(pick(CHEERS), starEn(j, msg), starUa(j, msg), j);
-  else if (msg) owlSay(pick(CHEERS), msg[0], msg[1], -1, true);
+  if (j >= 0) { const [e, u] = withCta(starEn(j, msg), starUa(j, msg)); owlSay(pick(CHEERS), e, u, j); }
+  else if (msg) { const [e, u] = withCta(msg[0], msg[1]); owlSay(pick(CHEERS), e, u, -1, true); }
 }
 const starEn = (j, pre) => (pre ? pre[0] + " " : "") + `A new star for ${STAR_NAMES_EN[j]}: ${STAR_WHY_EN[j]}.`;
 const starUa = (j, pre) => (pre ? pre[1] + " " : "") + `Нова зірочка за ${STAR_NAMES[j].toLowerCase()}: ${STAR_WHY[j]}.`;
 const STAR_NAMES_EN = ["attention", "focus", "order", "tasks", "a lesson"];
-function noteLook() { day.looks++; const j = saveDay(); if (j >= 0) owlSay(pick(CHEERS), starEn(j), starUa(j), j); }
-function noteTask() { day.tasks++; const j = saveDay(); if (j >= 0) owlSay(pick(CHEERS), starEn(j), starUa(j), j); }
+const CTAS = [["Can you get the next star?", "Чи зможеш отримати наступну зірочку?"], ["Keep going, you can do more!", "Продовжуй, ти можеш більше!"], ["Collect all five stars today!", "Збери сьогодні всі п'ять зірочок!"], ["Now check yourself in the tasks!", "А тепер перевір себе в завданнях!"]];
+let lastCta = null;
+function withCta(en, ua) { const c = pick(CTAS); lastCta = c; return [en + "|" + c[0], ua + "|" + c[1]]; }
+function noteLook() { day.looks++; const j = saveDay(); if (j >= 0) { const [e, u] = withCta(starEn(j), starUa(j)); owlSay(pick(CHEERS), e, u, j); } }
+function noteTask() { day.tasks++; const j = saveDay(); if (j >= 0) { const [e, u] = withCta(starEn(j), starUa(j)); owlSay(pick(CHEERS), e, u, j); } }
 
 /* ---------- owl ---------- */
 const STAR_SVG = '<svg viewBox="0 0 24 24" stroke-width="1.4" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6-4.9-4.5 6.6-.8z"/></svg>';
 const plural = (n, one, few, many) => n % 10 === 1 && n % 100 !== 11 ? one : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? few : many;
 let owlT, partyT;
 const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="#2fa84f" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg>';
+// "text|call to action": the part after | goes on its own line in shimmering purple
+function ctaHtml(text, cls) {
+  const [main, cta] = String(text).split("|");
+  return (main ? `<span class="${cls}">${esc(main)}</span>` : "") + (cta ? `<span class="${cls} cta">${esc(cta)}</span>` : "");
+}
+function popBubble(box) { box.classList.remove("popin"); void box.offsetWidth; box.classList.add("popin"); }
 function owlSay(hi, en, ua, newStar = -1, party = false) {
   const st = starsToday();
   const pages = day.pages.length, done = Object.keys(doneLessons).length;
@@ -4156,7 +4173,7 @@ function owlSay(hi, en, ua, newStar = -1, party = false) {
   box.innerHTML = `<div class="panel"><button class="x" aria-label="Закрити">×</button>
     <div class="stars" aria-label="Зірочки за сьогодні">${st.map((on, j) => `<span class="star${on ? " on" : ""}${j === newStar ? " new" : ""}">${STAR_SVG}${STAR_LABELS[j]}</span>`).join("")}</div>
     <div class="hi">${esc(hi)}</div>
-    <span class="en">${esc(en)}</span><span class="uk">${esc(ua)}</span>
+    ${ctaHtml(en, "en")}${ctaHtml(ua, "uk")}
     <div class="tiles">
       <div class="tile"><small><span>Прочитано</span><span>сьогодні</span><span>сторінок</span></small><strong>${pages}${CHECK}</strong></div>
       <div class="tile"><small><span>Всього</span><span>прочитано</span><span>розділів</span></small><strong>${done}${CHECK}</strong></div>
@@ -4170,9 +4187,9 @@ function owlSay(hi, en, ua, newStar = -1, party = false) {
 function owlNotice(en, ua) {
   const box = $("#owlSay");
   box.innerHTML = `<button class="x" aria-label="Закрити">×</button>
-    <div class="notice"><span class="nenv">${SVG.mail}</span><span class="en">${esc(en)}</span><span class="uk">${esc(ua)}</span></div>`;
+    <div class="notice"><span class="nenv">${SVG.mail}</span>${ctaHtml(en, "en")}${ctaHtml(ua, "uk")}</div>`;
   box.classList.add("small");
-  box.hidden = false;
+  box.hidden = false; popBubble(box);
   const o = $("#owl"); o.classList.remove("talk", "party"); void o.offsetWidth; o.classList.add("talk", "big");
   clearTimeout(owlT); owlT = setTimeout(hideOwlSay, 5000);
 }
@@ -4182,13 +4199,13 @@ function owlGreet() {
   const yp = yest ? hist[yest] : 0;
   const n = day.read, pg = day.pages.length, stars = starsToday().filter(Boolean).length;
   const lines = n === 0
-    ? [yp ? [`Last time you read ${yp} ${yp === 1 ? "page" : "pages"}. Can you read more today?`, `Минулого разу ти прочитала ${yp} ${plural(yp, "сторінку", "сторінки", "сторінок")}. Чи зможеш сьогодні більше?`]
-          : ["How much can you improve your result today?", "Цікаво, наскільки сьогодні ти зможеш збільшити свій результат?"],
-       ["Today you can be even better than yesterday. Let's start!", "Сьогодні ти можеш бути ще кращою, ніж учора. Почнемо!"],
-       ["Try to finish one lesson in one go and get a star!", "Спробуй пройти один розділ за один раз — і отримаєш зірочку!"]]
-    : [[`Today you have already listened to ${n} ${n === 1 ? "sentence" : "sentences"}. Now read them on your own!`, `Сьогодні ти вже прослухала ${n} ${plural(n, "речення", "речення", "речень")}. Тепер прочитай їх самостійно!`],
-       [`${pg} ${pg === 1 ? "page" : "pages"} today! How far can you go?`, `Сьогодні вже ${pg} ${plural(pg, "сторінка", "сторінки", "сторінок")}! Скільки ще зможеш?`],
-       [`You have ${stars} of 5 stars. Can you collect them all?`, `У тебе вже ${stars} з 5 зірочок. Збереш усі?`]];
+    ? [yp ? [`Last time you read ${yp} ${yp === 1 ? "page" : "pages"}.|Can you read more today?`, `Минулого разу ти прочитала ${yp} ${plural(yp, "сторінку", "сторінки", "сторінок")}.|Чи зможеш сьогодні більше?`]
+          : ["A new day, a new chance!|How much can you improve your result today?", "Новий день — нова нагода!|Наскільки сьогодні ти зможеш збільшити свій результат?"],
+       ["Today you can be even better than yesterday.|Let's start!", "Сьогодні ти можеш бути ще кращою, ніж учора.|Почнемо!"],
+       ["One lesson in one go gives you a star.|Try it today!", "Один розділ за один раз — це зірочка.|Спробуй сьогодні!"]]
+    : [[`Today you have already listened to ${n} ${n === 1 ? "sentence" : "sentences"}.|Now read them on your own!`, `Сьогодні ти вже прослухала ${n} ${plural(n, "речення", "речення", "речень")}.|Тепер прочитай їх самостійно!`],
+       [`${pg} ${pg === 1 ? "page" : "pages"} today!|How far can you go?`, `Сьогодні вже ${pg} ${plural(pg, "сторінка", "сторінки", "сторінок")}!|Скільки ще зможеш?`],
+       [`You have ${stars} of 5 stars.|Can you collect them all?`, `У тебе вже ${stars} з 5 зірочок.|Збереш усі?`]];
   const [en, ua] = pick(lines);
   owlSay("Hello!", en, ua, -1, true);
 }
