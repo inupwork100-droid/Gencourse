@@ -375,13 +375,9 @@ select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; borde
 .lib-star svg { width: 26px; height: 26px; fill: #f6c419; stroke: #b88a00; filter: drop-shadow(0 0 6px rgba(246,196,25,.55)); }
 .lib-star.shine svg { animation: star-shine 1s ease-out; }
 @keyframes star-shine { 0% { transform: scale(1) rotate(0); } 35% { transform: scale(1.35) rotate(-14deg); } 70% { transform: scale(.95) rotate(6deg); } 100% { transform: none; } }
-/* "today you are …": a small note under the star */
-.lib-q { position: absolute; right: 12px; top: calc(100% - 6px); max-width: min(300px, calc(100vw - 24px)); background: #fff; color: #1b1715; border: 2px solid #f2d33a; border-radius: 18px; padding: 8px 14px 9px; box-shadow: 0 8px 20px rgba(0,0,0,.2); transform-origin: 90% 0; animation: bubble-pop .7s cubic-bezier(.3,1.6,.5,1); }
-.lib-q::before { content: ""; position: absolute; top: -8px; right: 46px; width: 12px; height: 12px; background: #fff; border-left: 2px solid #f2d33a; border-top: 2px solid #f2d33a; transform: rotate(45deg); }
-.lib-q .en { display: block; font-family: "Caveat", "Segoe Script", cursive; font-weight: 700; font-size: 22px; line-height: 1.1; color: #1a3a6b; }
-.lib-q .en b { color: #7a3fc4; }
-.lib-q .uk { display: block; font-size: 13px; margin-top: 3px; }
-.lib-q .uk b { color: #7a3fc4; }
+/* one word for today's star: a tiny purple-outlined cell next to it */
+.lib-q { margin-right: -8px; padding: 2px 8px 3px; border: 1.5px solid #b98af5; border-radius: 8px; background: transparent; color: #e3d2ff; font-size: 12px; font-weight: 600; letter-spacing: .03em; line-height: 1.2; white-space: nowrap; animation: q-in .5s cubic-bezier(.3,1.6,.5,1); }
+@keyframes q-in { from { transform: scale(.4); opacity: 0; } }
 .lib-add::before { content: ""; position: absolute; inset: -12px; }   /* bigger target for a finger */
 .lib-add svg { width: 13px; height: 13px; }
 .minis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 10px; }
@@ -569,9 +565,8 @@ body:not(.lib-mode) .library { display: none; }
 
 <section class="library" id="library" aria-label="My books">
   <div class="lib-top"><div class="lib-top-in"><h1>My books</h1><span class="lib-motto">Efficiency</span>
-    <span class="lib-acts"><button class="lib-star" id="libStar" aria-label="Які ти сьогодні" title="Які ти сьогодні"><svg viewBox="0 0 24 24" stroke-width="1.4" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6-4.9-4.5 6.6-.8z"/></svg></button>
-    <button class="lib-add" id="libAdd" aria-label="Додати файли в папку" title="Додати файли"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v18M3 12h18"/></svg></button></span></div>
-    <div class="lib-q" id="libQ" hidden aria-live="polite"></div></div>
+    <span class="lib-acts"><span class="lib-q" id="libQ" hidden aria-live="polite"></span><button class="lib-star" id="libStar" aria-label="Які ти сьогодні" title="Які ти сьогодні"><svg viewBox="0 0 24 24" stroke-width="1.4" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6-4.9-4.5 6.6-.8z"/></svg></button>
+    <button class="lib-add" id="libAdd" aria-label="Додати файли в папку" title="Додати файли"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v18M3 12h18"/></svg></button></span></div></div>
   <div class="lib-in">
     <div class="shelf" id="shelf"></div>
     <p class="lib-note" id="libNote"></p>
@@ -4391,7 +4386,11 @@ function owlGreet(first) {
     : [[`You've already listened to ${n} ${n === 1 ? "sentence" : "sentences"} today. Wow!|Want to read them by yourself now?`, `Сьогодні ти вже прослухала ${n} ${plural(n, "речення", "речення", "речень")}. Ого!|Хочеш тепер прочитати їх сама?`],
        ...(pg ? [[`${pg} ${pg === 1 ? "page" : "pages"} today! You're amazing!|How far shall we go?`, `Уже ${pg} ${plural(pg, "сторінка", "сторінки", "сторінок")} сьогодні! Ти неймовірна!|Як далеко зайдемо?`]] : []),
        [`You have ${stars} of 5 stars already!|Let's get them all together!`, `У тебе вже ${stars} з 5 зірочок!|Зберімо всі разом!`]];
-  const [en, ua] = pick(lines);
+  const q = todayQualities();
+  const list = (a, and) => a.length < 2 ? a[0] : a.slice(0, -1).join(", ") + and + a[a.length - 1];
+  const [en, ua] = q.length
+    ? [`Today you're ${list(q.map(x => x[0]), " and ")}!|I'm so proud of you!`, `Сьогодні ти ${list(q.map(x => x[1]), " і ")}!|Я так тобою пишаюся!`]
+    : pick(lines);
   owlSay(pick(["Hi!", "Hey, it's me!", "Hey, friend!"]), en, ua, -1, true);
   if (first) { const box = $("#owlSay"); box.classList.remove("flyin"); void box.offsetWidth; box.classList.add("flyin"); clearTimeout(owlT); owlT = setTimeout(hideOwlSay, 5000); }
 }
@@ -4454,25 +4453,20 @@ function todayQualities() {
   return q;
 }
 let qT = 0, qTurn = 0;
-function showQuality(all) {
+function showQuality() {
   const box = $("#libQ"), q = todayQualities();
-  const list = a => a.length < 2 ? a[0] : a.slice(0, -1).join(", ") + " & " + a[a.length - 1];
-  const listUa = a => a.length < 2 ? a[0] : a.slice(0, -1).join(", ") + " і " + a[a.length - 1];
-  let en, ua;
-  if (!q.length) { en = "Today you can be <b>attentive</b> and <b>focused</b>! Let's go!"; ua = "Сьогодні ти можеш бути <b>уважною</b> і <b>зосередженою</b>! Уперед!"; }
-  else if (all) { en = `Today you're ${list(q.map(x => `<b>${x[0]}</b>`))}!`; ua = `Сьогодні ти ${listUa(q.map(x => `<b>${x[1]}</b>`))}!`; }
-  else { const x = q[qTurn++ % q.length]; en = `Today you're <b>${x[0]}</b>!`; ua = `Сьогодні ти <b>${x[1]}</b>!`; }
-  box.innerHTML = `<span class="en">${en}</span><span class="uk">${ua}</span>`;
+  const x = q.length ? q[qTurn++ % q.length] : ["let's go!", "уперед!"];
+  box.textContent = x[0]; box.title = x[1];
   box.hidden = false; box.style.animation = "none"; void box.offsetWidth; box.style.animation = "";
   const st = $("#libStar"); st.classList.remove("shine"); void st.offsetWidth; st.classList.add("shine");
-  clearTimeout(qT); qT = setTimeout(() => { box.hidden = true; }, all ? 5000 : 3500);
+  clearTimeout(qT); qT = setTimeout(() => { box.hidden = true; }, 3500);
 }
-$("#libStar").addEventListener("click", e => { e.stopPropagation(); if (!$("#libQ").hidden) { $("#libQ").hidden = true; return; } showQuality(true); });
+$("#libStar").addEventListener("click", e => { e.stopPropagation(); showQuality(); });
 $("#libQ").addEventListener("click", () => { $("#libQ").hidden = true; });
 // now and then, while the shelf is open, the star reminds her how she did today
 setInterval(() => {
   if (!document.body.classList.contains("lib-mode") || document.hidden || !$("#owlSay").hidden || !sheet.hidden) return;
-  if (todayQualities().length) showQuality(false);
+  if (todayQualities().length) showQuality();
 }, 30000);
 function showLibrary() { if (playing) pause(); closeSheet(); renderShelf(); document.body.classList.add("lib-mode"); store.set("view", "lib"); scrollTo({ top: 0 }); }
 function openReader() { document.body.classList.remove("lib-mode"); store.set("view", "reader"); }
