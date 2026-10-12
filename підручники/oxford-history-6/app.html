@@ -454,7 +454,15 @@ let voices = [], voice = null;
 const RATES = [0.6, 0.7, 0.8, 0.9, 1];
 // Default: Samantha voice at 0.6× until the user picks something else.
 // One-time reset so earlier saved choices give way to these defaults.
-if (store.get("defaults", 0) < 2) { store.set("voice", null); store.set("rate", 0.6); store.set("defaults", 2); }
+if (store.get("defaults", 0) < 3) { store.set("voice", "samantha2"); store.set("rate", 0.6); store.set("defaults", 3); }
+// "Samantha 2": the best-quality Samantha on the device, a little higher and quieter, so it sounds softer.
+const SAM2 = "samantha2", SAM2_TUNE = { pitch: 1.12, volume: 0.85 };
+let voiceKey = store.get("voice", SAM2) || SAM2;
+const tune = () => voiceKey === SAM2 ? SAM2_TUNE : { pitch: 1, volume: 1 };
+function bestSamantha() {
+  const q = v => (/premium/i.test(v.name + v.voiceURI) ? 3 : /enhanced|siri/i.test(v.name + v.voiceURI) ? 2 : 1) * 2 + (v.localService ? 1 : 0);
+  return voices.filter(v => /samantha/i.test(v.name)).sort((a, b) => q(b) - q(a))[0] || null;
+}
 let rate = RATES.includes(+store.get("rate", 0.6)) ? +store.get("rate", 0.6) : 0.6;
 // The chosen voice is remembered by its voiceURI (names repeat on iPhone: "Daniel" exists in several qualities).
 function pickVoices() {
@@ -462,8 +470,7 @@ function pickVoices() {
   const list = synth.getVoices().filter(v => /^en/i.test(v.lang));
   if (!list.length) return;
   voices = list;
-  const want = store.get("voice", null);
-  const exact = want && (voices.find(v => v.voiceURI === want) || voices.find(v => v.name === want));
+  const exact = voiceKey === SAM2 ? bestSamantha() : (voices.find(v => v.voiceURI === voiceKey) || voices.find(v => v.name === voiceKey));
   if (exact) { voice = exact; return; }
   const score = v => (/^Samantha\b/i.test(v.name) ? 100 : 0) + (/en[-_]US/i.test(v.lang) ? 20 : 0) + (/en[-_]GB/i.test(v.lang) ? 10 : 0) +
     (/(Daniel|Kate|Serena|Martha|Arthur|Google UK|Libby|Sonia|Ryan|Natural|Enhanced|Premium)/i.test(v.name) ? 8 : 0) + (v.localService ? 1 : 0);
@@ -526,7 +533,7 @@ function speakSentence(i, fromWord = 0) {
   const u = new SpeechSynthesisUtterance(s.speech.slice(off));
   ensureVoice();
   u.lang = voice ? voice.lang : "en-GB"; if (voice) u.voice = voice;
-  u.rate = rate; u.pitch = 1;
+  u.rate = rate; u.pitch = tune().pitch; u.volume = tune().volume;
   let gotBoundary = false;
   setWord(fromWord);
   // Fallback: some voices never send word boundaries — move the highlight by estimate.
@@ -566,7 +573,7 @@ function sayOnce(text) {
   token++; synth.cancel();
   const u = new SpeechSynthesisUtterance(text);
   ensureVoice();
-  u.lang = voice ? voice.lang : "en-GB"; if (voice) u.voice = voice; u.rate = rate;
+  u.lang = voice ? voice.lang : "en-GB"; if (voice) u.voice = voice; u.rate = rate; u.pitch = tune().pitch; u.volume = tune().volume;
   synth.speak(u);
 }
 
@@ -808,18 +815,19 @@ function startQuiz() {
 /* ---------- settings sheet ---------- */
 $("#openSettings").addEventListener("click", () => {
   pickVoices();
-  const opts = voices.map(v => `<option value="${esc(v.voiceURI)}"${voice && v.voiceURI === voice.voiceURI ? " selected" : ""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("");
+  const opts = `<option value="${SAM2}"${voiceKey === SAM2 ? " selected" : ""}>Samantha 2 — ніжний (стандартний)</option>` +
+    voices.map(v => `<option value="${esc(v.voiceURI)}"${voiceKey !== SAM2 && voice && v.voiceURI === voice.voiceURI ? " selected" : ""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("");
   openSheet(`<div class="head"><div class="word ttl">Голос і швидкість</div></div>
-    ${canSpeak ? `<label class="row" for="voiceSel">Англійський голос (стандартний — Samantha)<select id="voiceSel">${opts || "<option>Голоси ще завантажуються…</option>"}</select></label>` : `<p class="empty">Цей браузер не підтримує озвучення.</p>`}
+    ${canSpeak ? `<label class="row" for="voiceSel">Англійський голос (стандартний — Samantha 2)<select id="voiceSel">${opts}</select></label>` : `<p class="empty">Цей браузер не підтримує озвучення.</p>`}
     <label class="row" for="rateSel">Швидкість читання<select id="rateSel">${RATES.map(r => `<option value="${r}"${r === rate ? " selected" : ""}>${r}× ${r <= .7 ? "— повільно" : r === 1 ? "— звичайна" : ""}</option>`).join("")}</select></label>
-    <div class="btns"><button class="btn" data-say="The Vikings were great explorers.">${SVG.speak} Прослухати голос</button><button class="btn" id="resetVoice">Стандартні: Samantha, 0.6×</button><button class="btn" id="resetPos">Почати урок спочатку</button></div>
-    <p class="hint">Порада: на iPhone кращі голоси можна завантажити в Параметри → Універсальний доступ → Усний контент → Голоси → English (UK).</p>`, el => {
+    <div class="btns"><button class="btn" data-say="The Vikings were great explorers.">${SVG.speak} Прослухати голос</button><button class="btn" id="resetVoice">Стандартні: Samantha 2, 0.6×</button><button class="btn" id="resetPos">Почати урок спочатку</button></div>
+    <p class="hint">Щоб Samantha 2 звучала природніше, на iPhone завантаж покращену версію: Параметри → Універсальний доступ → Усний контент → Голоси → English → Samantha → «Samantha (покращений)». Застосунок сам візьме найкращу версію.</p>`, el => {
     const vs = $("#voiceSel", el);
-    vs && vs.addEventListener("change", () => { voice = voices.find(v => v.voiceURI === vs.value) || voice; store.set("voice", voice && voice.voiceURI); toast("Голос збережено"); sayOnce("The Vikings were great explorers."); });
+    vs && vs.addEventListener("change", () => { voiceKey = vs.value; store.set("voice", voiceKey); voice = null; pickVoices(); toast("Голос збережено"); sayOnce("The Vikings were great explorers."); });
     $("#rateSel", el).addEventListener("change", ev => { rate = +ev.target.value; $("#speed").textContent = rate + "×"; store.set("rate", rate); toast("Швидкість збережено"); });
     $("#resetVoice", el).addEventListener("click", () => {
-      store.set("voice", null); rate = 0.6; store.set("rate", 0.6); $("#speed").textContent = "0.6×"; voice = null; pickVoices();
-      closeSheet(); toast("Повернуто: " + (voice ? voice.name : "Samantha") + ", 0.6×");
+      voiceKey = SAM2; store.set("voice", SAM2); rate = 0.6; store.set("rate", 0.6); $("#speed").textContent = "0.6×"; voice = null; pickVoices();
+      closeSheet(); toast("Повернуто: Samantha 2, 0.6×");
     });
     $("#resetPos", el).addEventListener("click", () => { pause(); cur = 0; curWord = 0; store.set("pos", 0); markDone(0, 0); clearMarks(); closeSheet(); scrollTo({ top: 0 }); });
   });
