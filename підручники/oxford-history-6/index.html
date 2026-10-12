@@ -191,7 +191,7 @@ body.mode-ua .box h3 .en, body.mode-ua .gloss h3 .en { display: none; }
 .ans .qua { color: var(--muted); font-size: 15px; }
 .ans .a, .ans .ua { white-space: pre-line; }
 .ans .a { margin-top: 8px; background: var(--surface); border-radius: 8px; padding: 8px 12px; line-height: 1.5; }
-.ans .say-a { border: 0; background: transparent; color: var(--acc-text); padding: 0; margin-top: 6px; font-weight: 700; font-size: 14px; display: inline-flex; gap: 4px; align-items: center; }
+.ans .say-a { border: 0; background: transparent; color: var(--acc-text); padding: 4px 0 0; margin-top: 2px; font-weight: 700; font-size: 14px; display: inline-flex; gap: 4px; align-items: center; }
 .ans .say-a svg { width: 16px; height: 16px; }
 .box h3 .h3ua { font-family: var(--f-body); font-size: 14px; opacity: .9; margin-left: 8px; }
 body.mode-ua .box h3 .h3ua { font-family: var(--f-display); font-size: inherit; margin: 0; opacity: 1; }
@@ -1710,8 +1710,8 @@ function openAnswers(b) {
   const h = `<div class="head"><div class="word ttl">Відповіді · ${esc(b.title[0])}</div></div>` +
     b.answers.map((x, i) => `<div class="card ans"><span class="num">${esc(x.n || i + 1)}</span><div style="min-width:0">
       <div class="q">${esc(x.q[0])}</div><div class="qua">${esc(x.q[1])}</div>
-      <div class="a">${esc(x.a[0])}</div><span class="ua">${esc(x.a[1])}</span>
-      <button class="say-a" data-say="${esc(x.a[0].replace(/\n/g, " "))}">${SVG.speak} Слухати відповідь</button></div></div>`).join("");
+      <button class="say-a" data-say="${esc(x.a[0].replace(/\n/g, " "))}">${SVG.speak} Слухати відповідь</button>
+      <div class="a">${esc(x.a[0])}</div><span class="ua">${esc(x.a[1])}</span></div></div>`).join("");
   openSheet(h, null, b.kind === "activities" ? "yellow" : "blue");
 }
 
