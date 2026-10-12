@@ -3972,7 +3972,7 @@ function chooseOpt(o) {
   if (optLocked[qid]) {
     const env = o.closest(".box").querySelector(".ansbtn");
     o.classList.remove("flash"); void o.offsetWidth; o.classList.add("flash");
-    owlNotice("Wait a moment!|Look in the envelope first, then try again!", "Зачекай!|Спершу зазирни в конвертик, а тоді пробуй знову!");
+    owlNotice("Oops, wait a sec!|Peek in the envelope first, then try again!", "Ой, зачекай секундочку!|Спершу зазирни в конвертик, а тоді ще раз!");
     if (env) { env.classList.remove("nudge"); void env.offsetWidth; env.classList.add("nudge"); }
     return;
   }
@@ -4217,7 +4217,7 @@ function progress() {
 // five stars for today
 const STAR_NAMES = ["Уважність", "Зосередженість", "Послідовність", "Завдання", "Розділ"];
 const STAR_LABELS = ["Уваж\u00ADність", "Зосеред\u00ADженість", "Послідов\u00ADність", "Завдан\u00ADня", "Розділ"];
-const STAR_WHY = ["ти перевіряєш незнайомі слова", "ти слухаєш довго й зосереджено", "ти слухаєш по порядку, речення за реченням", "ти перевіряєш відповіді до завдань", "ти пройшла цілий розділ за один раз"];
+const STAR_WHY = ["ти шукаєш нові слова", "уважно ти слухаєш", "ти йдеш речення за реченням", "ти перевіряєш свої відповіді", "ти пройшла цілий розділ за один раз"];
 function starsToday() {
   return [day.looks >= 3, day.read >= 20, day.seq >= 15, day.tasks >= 1, day.oneGo >= 1];
 }
@@ -4230,10 +4230,12 @@ function saveDay() {
   return j;
 }
 const pick = a => a[Math.floor(Math.random() * a.length)];
-const CHEERS = ["Hooray!", "You did it!", "Well done!", "Great job!", "You won!", "Super!", "Amazing!"];
+const CHEERS = ["Wow!", "Yay!", "No way!", "You rock!", "So cool!", "Woohoo!", "Amazing!"];
 const lessonName = li => LESSONS[li].label || "Розділ " + LESSONS[li].id;
 const lessonNameEn = li => /Повторення/.test(LESSONS[li].label || "") ? "Review " + LESSONS[li].id.replace(/\D.*/, "") : /Розділ/.test(LESSONS[li].label || "") ? "Unit " + LESSONS[li].id : "Lesson " + LESSONS[li].id;
-const STAR_WHY_EN = ["you look up new words", "you listen with focus for a long time", "you listen in order, sentence by sentence", "you check the answers to the tasks", "you finished a whole lesson in one go"];
+const STAR_WHY_EN = ["you look up new words", "carefully you listen", "you go sentence by sentence", "you check your answers", "you did a whole lesson in one go"];
+// the owl talks like a friend who is amazed by you, not like a teacher
+const ADMIRE = [["You're so clever!", "Ти така розумничка!"], ["I'm so proud of you!", "Я так тобою пишаюся!"], ["You're a real star yourself!", "Ти й сама справжня зірочка!"], ["Nothing can stop you!", "Тебе ніщо не зупинить!"], ["You're my hero!", "Ти моя героїня!"]];
 function markRead(i) {
   const s = sentences[i], k = keyOf(s);
   if (!readSet[k]) { readSet[k] = 1; store.set("read", readSet); }
@@ -4249,21 +4251,20 @@ function markRead(i) {
     const lid = LESSONS[li].id;
     if (!doneLessons[lid] && sentences.every(x => x.li !== li || readSet[keyOf(x)])) {
       doneLessons[lid] = 1; store.set("done", doneLessons);
-      msg = [`${lessonNameEn(li)} is finished!`, `${lessonName(li)} пройдено!`];
+      msg = [`You finished ${lessonNameEn(li)}! So cool!`, `Ура, ${lessonName(li)} пройдено! Круто!`];
     }
-    if (oneGo && !sessRead[li].counted) { sessRead[li].counted = true; day.oneGo++; msg = [`You finished ${lessonNameEn(li)} in one go!`, `${lessonName(li)}: ти пройшла його за один раз!`]; }
+    if (oneGo && !sessRead[li].counted) { sessRead[li].counted = true; day.oneGo++; msg = [`You did ${lessonNameEn(li)} in one go! I can't believe it!`, `${lessonName(li)} за один раз! Не можу повірити!`]; }
   }
   store.set("pct:" + BOOK_ID, progress().pct);
   const j = saveDay();
   if (j >= 0) owlSay(pick(CHEERS), starEn(j, msg), starUa(j, msg), j);
   else if (msg) { const [e, u] = withCta(msg[0], msg[1]); owlSay(pick(CHEERS), e, u, -1, true); }
 }
-const up = t => t.charAt(0).toUpperCase() + t.slice(1);
 // the praised behaviour goes after | so it shows as the purple line
-const starEn = (j, pre) => (pre ? pre[0] + " " : "") + `A new star for ${STAR_NAMES_EN[j]}!|${up(STAR_WHY_EN[j])}. Keep it up!`;
-const starUa = (j, pre) => (pre ? pre[1] + " " : "") + `Нова зірочка за ${STAR_NAMES[j].toLowerCase()}!|${up(STAR_WHY[j])}. Так тримати!`;
+const starEn = (j, pre) => (pre ? pre[0] + " " : "") + `You got a star for ${STAR_NAMES_EN[j]}! I love how ${STAR_WHY_EN[j]}.|${ADMIRE[j][0]}`;
+const starUa = (j, pre) => (pre ? pre[1] + " " : "") + `Зірочка за ${STAR_NAMES[j].toLowerCase()}! Мені так подобається, як ${STAR_WHY[j]}.|${ADMIRE[j][1]}`;
 const STAR_NAMES_EN = ["attention", "focus", "order", "tasks", "a lesson"];
-const CTAS = [["Can you get the next star?", "Чи зможеш отримати наступну зірочку?"], ["Keep going, you can do more!", "Продовжуй, ти можеш більше!"], ["Collect all five stars today!", "Збери сьогодні всі п'ять зірочок!"], ["Now check yourself in the tasks!", "А тепер перевір себе в завданнях!"]];
+const CTAS = [["I can't wait to see your next star!", "Не можу дочекатися твоєї наступної зірочки!"], ["You're on fire today!", "Ти сьогодні просто вогонь!"], ["Five stars today? I believe in you!", "П'ять зірочок сьогодні? Я в тебе вірю!"], ["Shall we try the tasks together?", "Спробуємо завдання разом?"]];
 let lastCta = null;
 function withCta(en, ua) { const c = pick(CTAS); lastCta = c; return [en + "|" + c[0], ua + "|" + c[1]]; }
 function noteLook() { day.looks++; const j = saveDay(); if (j >= 0) owlSay(pick(CHEERS), starEn(j), starUa(j), j); }
@@ -4314,15 +4315,15 @@ function owlGreet() {
   const yp = yest ? hist[yest] : 0;
   const n = day.read, pg = day.pages.length, stars = starsToday().filter(Boolean).length;
   const lines = n === 0
-    ? [yp ? [`Last time you read ${yp} ${yp === 1 ? "page" : "pages"}.|Can you read more today?`, `Минулого разу ти прочитала ${yp} ${plural(yp, "сторінку", "сторінки", "сторінок")}.|Чи зможеш сьогодні більше?`]
-          : ["A new day, a new chance!|How much can you improve your result today?", "Новий день — нова нагода!|Наскільки сьогодні ти зможеш збільшити свій результат?"],
-       ["Today you can be even better than yesterday.|Let's start!", "Сьогодні ти можеш бути ще кращою, ніж учора.|Почнемо!"],
-       ["One lesson in one go gives you a star.|Try it today!", "Один розділ за один раз — це зірочка.|Спробуй сьогодні!"]]
-    : [[`Today you have already listened to ${n} ${n === 1 ? "sentence" : "sentences"}.|Now read them on your own!`, `Сьогодні ти вже прослухала ${n} ${plural(n, "речення", "речення", "речень")}.|Тепер прочитай їх самостійно!`],
-       ...(pg ? [[`${pg} ${pg === 1 ? "page" : "pages"} today!|How far can you go?`, `Сьогодні вже ${pg} ${plural(pg, "сторінка", "сторінки", "сторінок")}!|Скільки ще зможеш?`]] : []),
-       [`You have ${stars} of 5 stars.|Can you collect them all?`, `У тебе вже ${stars} з 5 зірочок.|Збереш усі?`]];
+    ? [yp ? [`Last time you read ${yp} ${yp === 1 ? "page" : "pages"}, that was awesome!|Shall we read a bit more today?`, `Минулого разу ти прочитала ${yp} ${plural(yp, "сторінку", "сторінки", "сторінок")}, це було класно!|Почитаємо сьогодні ще трошки?`]
+          : ["I missed you! A new day is here.|What shall we read today?", "Я скучила за тобою! Настав новий день.|Що почитаємо сьогодні?"],
+       ["You get better every day, I can see it!|Let's start together!", "Ти щодня стаєш кращою, я це бачу!|Почнімо разом!"],
+       ["Did you know? One lesson in one go gives you a star.|I bet you can do it!", "А ти знала? Один розділ за раз — це зірочка.|Я впевнена, у тебе вийде!"]]
+    : [[`You've already listened to ${n} ${n === 1 ? "sentence" : "sentences"} today. Wow!|Want to read them by yourself now?`, `Сьогодні ти вже прослухала ${n} ${plural(n, "речення", "речення", "речень")}. Ого!|Хочеш тепер прочитати їх сама?`],
+       ...(pg ? [[`${pg} ${pg === 1 ? "page" : "pages"} today! You're amazing!|How far shall we go?`, `Уже ${pg} ${plural(pg, "сторінка", "сторінки", "сторінок")} сьогодні! Ти неймовірна!|Як далеко зайдемо?`]] : []),
+       [`You have ${stars} of 5 stars already!|Let's get them all together!`, `У тебе вже ${stars} з 5 зірочок!|Зберімо всі разом!`]];
   const [en, ua] = pick(lines);
-  owlSay("Hello!", en, ua, -1, true);
+  owlSay(pick(["Hi!", "Hey, it's me!", "Hey, friend!"]), en, ua, -1, true);
 }
 $("#owl").addEventListener("click", () => { if (!$("#owlSay").hidden) { hideOwlSay(); return; } owlGreet(); });
 $("#owlSay").addEventListener("click", e => { if (e.target.closest(".x")) hideOwlSay(); });
@@ -4701,7 +4702,7 @@ async function runMagic(b, el) {
     const ids = new Set(files.map(f => f.id));
     await dbRef.doc("books/" + b.id).update({ magic: true, lessons: all.length, range, files: (doc.files || []).map(f => ids.has(f.id) ? { ...f, magicDone: true } : f) });
     say(made.length ? `Готово! Уроків у книжці: ${all.length}.` : "Не вийшло зробити жодного уроку.", made.length ? "ok big" : "bad");
-    if (made.length) { owlSay("You did it!", "Your new book is ready!|Open it and start reading!", "Твоя нова книжка готова!|Відкрий її й почни читати!", -1, true); btn.outerHTML = `<button class="btn primary" id="openNow">Відкрити книжку</button>`; $("#openNow", el).addEventListener("click", () => switchBook(b.id)); }
+    if (made.length) { owlSay("Woohoo!", "Your new book is ready!|Let's open it together!", "Твоя нова книжка готова!|Відкриймо її разом!", -1, true); btn.outerHTML = `<button class="btn primary" id="openNow">Відкрити книжку</button>`; $("#openNow", el).addEventListener("click", () => switchBook(b.id)); }
   } catch (e) {
     const why = { cancelled: "Магію зупинено.", not_granted: "Без дозволу Claude не може прочитати сторінки. Натисни кнопку ще раз і дозволь.", rate_limited: "Забагато запитів — спробуй за кілька хвилин.", invalid_json: "Claude відповів не так, як треба — спробуй ще раз.", image_rejected: "Фото не підходить — зроби його чіткішим або меншим.", prompt_too_large: "Забагато тексту за раз — додай менше сторінок." }[e && e.code] || "Щось пішло не так. Спробуй ще раз.";
     say(why, "bad"); console.error("magic", e && (e.code || e.message || e));
