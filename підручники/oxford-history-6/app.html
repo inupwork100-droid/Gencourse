@@ -1239,17 +1239,19 @@ function markRead(i) {
     if (oneGo && !sessRead[li].counted) { sessRead[li].counted = true; day.oneGo++; msg = [`You finished ${lessonNameEn(li)} in one go!`, `${lessonName(li)}: ти пройшла його за один раз!`]; }
   }
   const j = saveDay();
-  if (j >= 0) { const [e, u] = withCta(starEn(j, msg), starUa(j, msg)); owlSay(pick(CHEERS), e, u, j); }
+  if (j >= 0) owlSay(pick(CHEERS), starEn(j, msg), starUa(j, msg), j);
   else if (msg) { const [e, u] = withCta(msg[0], msg[1]); owlSay(pick(CHEERS), e, u, -1, true); }
 }
-const starEn = (j, pre) => (pre ? pre[0] + " " : "") + `A new star for ${STAR_NAMES_EN[j]}: ${STAR_WHY_EN[j]}.`;
-const starUa = (j, pre) => (pre ? pre[1] + " " : "") + `Нова зірочка за ${STAR_NAMES[j].toLowerCase()}: ${STAR_WHY[j]}.`;
+const up = t => t.charAt(0).toUpperCase() + t.slice(1);
+// the praised behaviour goes after | so it shows as the purple line
+const starEn = (j, pre) => (pre ? pre[0] + " " : "") + `A new star for ${STAR_NAMES_EN[j]}!|${up(STAR_WHY_EN[j])}. Keep it up!`;
+const starUa = (j, pre) => (pre ? pre[1] + " " : "") + `Нова зірочка за ${STAR_NAMES[j].toLowerCase()}!|${up(STAR_WHY[j])}. Так тримати!`;
 const STAR_NAMES_EN = ["attention", "focus", "order", "tasks", "a lesson"];
 const CTAS = [["Can you get the next star?", "Чи зможеш отримати наступну зірочку?"], ["Keep going, you can do more!", "Продовжуй, ти можеш більше!"], ["Collect all five stars today!", "Збери сьогодні всі п'ять зірочок!"], ["Now check yourself in the tasks!", "А тепер перевір себе в завданнях!"]];
 let lastCta = null;
 function withCta(en, ua) { const c = pick(CTAS); lastCta = c; return [en + "|" + c[0], ua + "|" + c[1]]; }
-function noteLook() { day.looks++; const j = saveDay(); if (j >= 0) { const [e, u] = withCta(starEn(j), starUa(j)); owlSay(pick(CHEERS), e, u, j); } }
-function noteTask() { day.tasks++; const j = saveDay(); if (j >= 0) { const [e, u] = withCta(starEn(j), starUa(j)); owlSay(pick(CHEERS), e, u, j); } }
+function noteLook() { day.looks++; const j = saveDay(); if (j >= 0) owlSay(pick(CHEERS), starEn(j), starUa(j), j); }
+function noteTask() { day.tasks++; const j = saveDay(); if (j >= 0) owlSay(pick(CHEERS), starEn(j), starUa(j), j); }
 
 /* ---------- owl ---------- */
 const STAR_SVG = '<svg viewBox="0 0 24 24" stroke-width="1.4" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6-4.9-4.5 6.6-.8z"/></svg>';
@@ -1301,7 +1303,7 @@ function owlGreet() {
        ["Today you can be even better than yesterday.|Let's start!", "Сьогодні ти можеш бути ще кращою, ніж учора.|Почнемо!"],
        ["One lesson in one go gives you a star.|Try it today!", "Один розділ за один раз — це зірочка.|Спробуй сьогодні!"]]
     : [[`Today you have already listened to ${n} ${n === 1 ? "sentence" : "sentences"}.|Now read them on your own!`, `Сьогодні ти вже прослухала ${n} ${plural(n, "речення", "речення", "речень")}.|Тепер прочитай їх самостійно!`],
-       [`${pg} ${pg === 1 ? "page" : "pages"} today!|How far can you go?`, `Сьогодні вже ${pg} ${plural(pg, "сторінка", "сторінки", "сторінок")}!|Скільки ще зможеш?`],
+       ...(pg ? [[`${pg} ${pg === 1 ? "page" : "pages"} today!|How far can you go?`, `Сьогодні вже ${pg} ${plural(pg, "сторінка", "сторінки", "сторінок")}!|Скільки ще зможеш?`]] : []),
        [`You have ${stars} of 5 stars.|Can you collect them all?`, `У тебе вже ${stars} з 5 зірочок.|Збереш усі?`]];
   const [en, ua] = pick(lines);
   owlSay("Hello!", en, ua, -1, true);
