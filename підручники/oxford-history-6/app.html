@@ -196,6 +196,19 @@ figcaption { font-size: 16px; margin-top: 8px; color: var(--ink); }
 .box.review .ansbtn { color: var(--yellow); }
 .box.review .ansbtn svg { stroke-width: 3; }
 .item .n { white-space: nowrap; }
+.item.opt { cursor: pointer; border-radius: 12px; margin-left: 16px; padding: 4px 40px 4px 6px; transition: background-color .3s; }
+.item.opt.subq { padding-left: 6px; }
+.item.opt:hover { background: color-mix(in srgb, var(--lime) 12%, transparent); }
+.item.opt .w { cursor: pointer; }
+.item.opt.right { background: color-mix(in srgb, var(--lime) 45%, var(--surface)); box-shadow: 0 0 0 2px var(--lime), 0 0 16px color-mix(in srgb, var(--lime) 70%, transparent); animation: opt-glow 1.6s ease-in-out 3; }
+.item.opt.right .n { color: #2f8a1f; font-weight: 800; }
+.item.opt.wrong { background: linear-gradient(270deg, #f2cfc4, #e6c3a2, #f5ddd5, #e6c3a2, #f2cfc4); background-size: 300% 100%; animation: opt-flow 2.4s linear infinite; }
+.item.opt.wrong .n { color: #a0482f; font-weight: 800; }
+@keyframes opt-glow { 50% { box-shadow: 0 0 0 3px var(--lime), 0 0 26px var(--lime); } }
+@keyframes opt-flow { from { background-position: 0% 0; } to { background-position: 150% 0; } }
+.ansbtn.nudge { animation: env-nudge .5s ease-in-out 3; }
+@keyframes env-nudge { 25% { transform: rotate(-12deg) scale(1.15); } 75% { transform: rotate(12deg) scale(1.15); } }
+@media (prefers-reduced-motion: reduce) { .item.opt.right, .item.opt.wrong, .ansbtn.nudge { animation: none; } }
 body.mode-ua .box h3 .en, body.mode-ua .gloss h3 .en { display: none; }
 .box h3 { display: flex; align-items: center; gap: 8px; }
 .ansbtn { margin-left: auto; border: 0; background: #fff; color: #2f6fd6; width: 52px; height: 34px; border-radius: 50%;
@@ -588,10 +601,17 @@ L.blocks.forEach((b, bi) => {
       b.words.map(w => `<li><button data-gloss="${esc(w[0])}">${esc(w[0])}</button></li>`).join("") + `</ul></div>`;
   } else if (b.type === "box") {
     out += `<div class="box blk ${b.kind}"><h3><span class="en">${esc(b.title[0])}</span><span class="h3ua">${esc(b.title[1])}</span>${b.answers ? `<button class="ansbtn" data-answers="${li}:${bi}" aria-label="Відповіді на запитання" title="Відповіді">${SVG.mail}</button>` : ""}</h3><div class="items">` +
-      b.items.map(it => {
+      (() => {
+        // answer choices a/b/c under a numbered question become tappable when one of them is marked ok
+        let q = null; const groups = {};
+        b.items.forEach((it, k) => { if (!it.sub) q = k; else if (/^[a-c]$/.test(it.n) && q != null) (groups[q] = groups[q] || []).push(it); });
+        q = null;
+        return b.items.map((it, k) => {
+        if (!it.sub) q = k;
+        const isOpt = it.sub && /^[a-c]$/.test(it.n) && q != null && groups[q].some(x => x.ok);
         const r = renderSentences(it.s);
-        return `<div class="item${it.sub ? " subq" : ""}"><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div><button class="ua-tog" data-tog aria-label="Переклад">UA</button></div>`;
-      }).join("") + `</div></div>`;
+        return `<div class="item${it.sub ? " subq" : ""}${isOpt ? " opt" : ""}"${isOpt ? ` data-q="${li}:${bi}:${q}" data-box="${li}:${bi}"${it.ok ? ' data-ok="1"' : ""} role="button" tabindex="0"` : ""}><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div><button class="ua-tog" data-tog aria-label="Переклад">UA</button></div>`;
+      }).join(""); })() + `</div></div>`;
   }
 });
 out += `</article>`;
@@ -909,12 +929,33 @@ function showPop(wEl) {
 }
 addEventListener("scroll", () => { if (!pop.hidden) hidePop(); }, { passive: true });
 
+/* ---------- answer choices: one try, then check in the envelope ---------- */
+const optLocked = {};   // question id -> true after a try, until the envelope of that box is opened
+function chooseOpt(o) {
+  const qid = o.dataset.q;
+  if (optLocked[qid]) {
+    const env = o.closest(".box").querySelector(".ansbtn");
+    toast("Спочатку перевір себе в конвертику");
+    if (env) { env.classList.remove("nudge"); void env.offsetWidth; env.classList.add("nudge"); }
+    return;
+  }
+  book.querySelectorAll(`.opt[data-q="${qid}"]`).forEach(x => x.classList.remove("right", "wrong"));
+  const ok = !!o.dataset.ok;
+  o.classList.add(ok ? "right" : "wrong");
+  optLocked[qid] = true;
+  if (ok) noteTask();
+}
+function unlockBox(boxId) { book.querySelectorAll(`.opt[data-box="${boxId}"]`).forEach(x => { delete optLocked[x.dataset.q]; }); }
+book.addEventListener("keydown", e => { const o = e.target.closest && e.target.closest(".opt"); if (o && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); chooseOpt(o); } });
+
 let tapT = null, tapEl = null;
 book.addEventListener("click", e => {
+  const opt = e.target.closest(".opt");
+  if (opt && !e.target.closest("[data-tog]")) { chooseOpt(opt); return; }
   const gl = e.target.closest("[data-gloss]");
   if (gl) { const w = gl.dataset.gloss; openSheet(wordCard(w)); sayOnce(w); return; }
   const ab = e.target.closest("[data-answers]");
-  if (ab) { const [li, bi] = ab.dataset.answers.split(":").map(Number); openAnswers(LESSONS[li].blocks[bi]); return; }
+  if (ab) { const [li, bi] = ab.dataset.answers.split(":").map(Number); unlockBox(ab.dataset.answers); openAnswers(LESSONS[li].blocks[bi]); return; }
   const wEl = e.target.closest(".w");
   if (!wEl) { hidePop(); return; }
   if (tapT && tapEl === wEl) {            // second tap on the same word → tooltip
