@@ -115,7 +115,18 @@ textarea.note { width: 100%; margin-top: 12px; border: 1px solid var(--line); ba
 .gpill .x { border: 0; background: none; color: var(--muted); padding: 2px 6px; font-size: 16px; line-height: 1; }
 .field { display: grid; gap: 6px; }
 .field label { font-size: 12px; font-weight: 700; color: var(--muted); }
-select, input[type="text"] { width: 100%; border: 1px solid var(--line); background: var(--surface-2); border-radius: 12px; padding: 10px 12px; }
+.gwin { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 8px; margin-bottom: 8px; }
+.gwin input { min-width: 0; max-width: 100%; }
+.seg3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 3px; }
+.seg3 button { border: 0; background: none; border-radius: 9px; padding: 7px 2px; font-size: 11.5px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.seg3 button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.gwnav { display: flex; align-items: center; gap: 8px; margin: 2px 0 8px; }
+.gwslide { flex: 1; min-width: 0; display: grid; gap: 2px; text-align: center; }
+.gwslide b { font-size: 12px; color: var(--muted); font-weight: 700; }
+input[type="range"] { width: 100%; accent-color: var(--accent); height: 28px; }
+.gfields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 8px; }
+.gfields input, .gfields select { min-width: 0; max-width: 100%; }
+select, input[type="text"], input[type="date"] { width: 100%; border: 1px solid var(--line); background: var(--surface-2); border-radius: 12px; padding: 10px 12px; }
 .gradegrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
 .gradegrid button { border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 9px 0; font-weight: 800; font-variant-numeric: tabular-nums; }
 .gradegrid button:hover { border-color: var(--gc); }
@@ -708,16 +719,21 @@ function viewDay() {
       '</div></section>';
 
     const sel = S.subject && subs.find(s => s.id === S.subject) ? S.subject : subs[0].id;
-    html += `<section class="card"><div class="card-head"><h2>Оцінки</h2><span class="meta">шкала 1–6</span></div>`;
-    if (day.grades.length) {
-      html += '<div class="gradelist">' + day.grades.map((g, i) => {
+    const gd = S.gradeDate || d, gday = getDay(gd);
+    html += `<section class="card"><div class="card-head"><h2>Оцінки</h2><span class="meta">шкала 1–6</span></div>
+      <div class="gfields">
+        <div class="field"><label for="gdate">Дата оцінки</label><input type="date" id="gdate" data-act="grade-date" value="${gd}" max="${t}"></div>
+        <div class="field"><label for="gsub">Предмет</label><select id="gsub" data-act="grade-subject">${subs.map(s => `<option value="${esc(s.id)}" ${s.id === sel ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select></div>
+      </div>
+      <p class="meta" style="margin:8px 0 10px">${gday.grades.length ? `Оцінки за ${fmtDM(gd)}:` : `За ${fmtDM(gd)} оцінок ще немає.`}</p>`;
+    if (gday.grades.length) {
+      html += '<div class="gradelist">' + gday.grades.map((g, i) => {
         const s = subs.find(x => x.id === g.s);
         return `<span class="gpill" style="--gc:${gradeColor(g.v)}"><span class="gv">${g.v}</span>${esc(s ? s.name : 'Предмет')}<button class="x" data-act="grade-del" data-i="${i}" aria-label="Видалити оцінку">×</button></span>`;
       }).join('') + '</div>';
     }
-    html += `<div class="field"><label for="gsub">Предмет</label><select id="gsub" data-act="grade-subject">${subs.map(s => `<option value="${esc(s.id)}" ${s.id === sel ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select></div>
-      <div class="gradegrid">${[1, 2, 3, 4, 5, 6].map(v => `<button style="--gc:${gradeColor(v)}" data-act="grade-add" data-v="${v}" aria-label="Оцінка ${v}, ${GRADES[v].label}"><b>${v}</b></button>`).join('')}</div>
-      <p class="scale-note">Натисни оцінку, щоб додати її з цієї дати.</p>
+    html += `<div class="gradegrid">${[1, 2, 3, 4, 5, 6].map(v => `<button style="--gc:${gradeColor(v)}" data-act="grade-add" data-v="${v}" aria-label="Оцінка ${v}, ${GRADES[v].label}"><b>${v}</b></button>`).join('')}</div>
+      <p class="scale-note">Вибери дату й предмет, потім натисни оцінку.</p>
       <div class="gscale">${[6, 5, 4, 3, 2, 1].map(v => `<div><i style="background:${GRADES[v].c}">${v}</i><b>${cap(GRADES[v].label)}</b><span>${GRADES[v].say}</span></div>`).join('')}</div>
     </section>`;
   }
@@ -841,6 +857,58 @@ function gradeChart(grades, subs, ds, focus, hidden) {
   return s + '</svg>';
 }
 
+/* ---------- grade chart window (own date + slider) ---------- */
+function gradesInRange(start, end) {
+  const out = {};
+  (prof().subjects || []).forEach(x => { out[x.id] = []; });
+  Object.entries(daysOf()).forEach(([d, v]) => {
+    if (d < start || d > end) return;
+    (v.grades || []).forEach(g => { if (out[g.s]) out[g.s].push({ d, v: g.v }); });
+  });
+  return out;
+}
+function daysDiff(a, b) { return Math.round((parse(b) - parse(a)) / 864e5); }
+function gradeWindow(r) {
+  if (!S.gWin) {
+    S.gWin = { start: r.start, len: S.period === 'week' ? 7 : 'm' };
+  }
+  const t = today(), firstGrade = Object.keys(daysOf()).filter(d => (daysOf()[d].grades || []).length).sort()[0];
+  const sy = parse(t).getMonth() >= 8 ? parse(t).getFullYear() : parse(t).getFullYear() - 1;
+  let base = iso(new Date(sy, 8, 1));
+  if (firstGrade && firstGrade < base) base = firstGrade;
+  if (S.gWin.start < base) base = S.gWin.start;
+  const maxOff = Math.max(0, daysDiff(base, t));
+  const off = Math.min(maxOff, Math.max(0, daysDiff(base, S.gWin.start)));
+  const start = addDays(base, off);
+  // «Місяць» means up to the same date next month (1–30 вересня, 15 вересня – 14 жовтня)
+  const sd = parse(start);
+  const n = S.gWin.len === 'm' ? daysDiff(start, iso(new Date(sd.getFullYear(), sd.getMonth() + 1, sd.getDate()))) : S.gWin.len;
+  return { base, maxOff, off, start, end: addDays(start, n - 1), len: S.gWin.len, n };
+}
+function gwLabel(w) {
+  const a = parse(w.start), b = parse(w.end);
+  return a.getMonth() === b.getMonth() ? `${a.getDate()}–${b.getDate()} ${MONTH_GEN[b.getMonth()]}`
+    : `${a.getDate()} ${MONTH_GEN[a.getMonth()]} – ${b.getDate()} ${MONTH_GEN[b.getMonth()]}`;
+}
+function gwChartHtml(w) {
+  const focus = S.gradeSubject && (prof().subjects || []).find(x => x.id === S.gradeSubject) ? S.gradeSubject : null;
+  return gradeChart(gradesInRange(w.start, w.end), prof().subjects || [], dates(w.start, w.end), focus, S.hiddenSubjects || new Set());
+}
+function gwEmptyHtml(w) {
+  const g = gradesInRange(w.start, w.end);
+  if (Object.values(g).some(a => a.length)) return '';
+  const last = Object.keys(daysOf()).filter(d => d < w.start && (daysOf()[d].grades || []).length).sort().pop();
+  return last ? `У цих днях оцінок немає. <button class="linkbtn" data-act="gw-jump" data-d="${last}">До останніх оцінок (${fmtDM(last)}) →</button>` : 'У цих днях оцінок немає.';
+}
+function gwRefresh() {
+  // update only the chart while the slider moves, so the slider keeps working under the finger
+  const r = range(S.period, S.anchor), w = gradeWindow(r);
+  const box = $('#gchart'); if (box) box.innerHTML = gwChartHtml(w);
+  const inp = $('#gwstart'); if (inp) inp.value = w.start;
+  const lab = $('#gwlabel'); if (lab) lab.textContent = gwLabel(w);
+  const em = $('#gwempty'); if (em) em.innerHTML = gwEmptyHtml(w);
+}
+
 function viewStats() {
   const p = prof(), r = range(S.period, S.anchor);
   const pr = range(S.period, shiftAnchor(S.period, S.anchor, -1));
@@ -931,10 +999,18 @@ function viewStats() {
         const a = avg(cur.grades[sub.id].map(g => g.v)), b = avg(prev.grades[sub.id].map(g => g.v));
         return { s: sub, i, a, b, n: cur.grades[sub.id].length };
       });
-      let lastGrade = null;
-      if (!cur.gradeCount) Object.entries(daysOf()).forEach(([d, v]) => { if (d < r.start && (v.grades || []).length && (!lastGrade || d > lastGrade)) lastGrade = d; });
-      html += `${gradeChart(cur.grades, subs, cur.ds, focus, hidden)}
-        ${lastGrade ? `<p class="meta" style="margin:4px 0 6px">У цьому періоді оцінок ще немає. <button class="linkbtn" data-act="goto-date" data-d="${lastGrade}">Показати ${S.period === 'week' ? 'тиждень' : S.period === 'month' ? MONTH_NOM[parse(lastGrade).getMonth()] : 'період'} з останніми оцінками →</button></p>` : ''}
+      const w = gradeWindow(r);
+      html += `<div class="gwin">
+          <div class="field"><label for="gwstart">Графік з дати</label><input type="date" id="gwstart" data-act="gw-start" value="${w.start}" max="${t}"></div>
+          <div class="field"><label>Скільки днів</label><div class="seg3">${[[7, 'Тиждень'], [14, '2 тижні'], ['m', 'Місяць']].map(([n, l]) => `<button data-act="gw-len" data-n="${n}" aria-pressed="${String(w.len) === String(n)}">${l}</button>`).join('')}</div></div>
+        </div>
+        <div id="gchart">${gwChartHtml(w)}</div>
+        <div class="gwnav">
+          <button class="iconbtn" data-act="gw-step" data-n="-1" aria-label="Раніше">${ICON_L}</button>
+          <div class="gwslide"><input type="range" id="gwslider" min="0" max="${w.maxOff}" step="1" value="${w.off}" aria-label="Прокрутити графік по днях"><b id="gwlabel">${gwLabel(w)}</b></div>
+          <button class="iconbtn" data-act="gw-step" data-n="1" aria-label="Пізніше">${ICON_R}</button>
+        </div>
+        <p class="meta" id="gwempty" style="margin:0 0 6px">${gwEmptyHtml(w)}</p>
         <div class="hlegend">${subs.map((sub, i) => `<button data-act="subj-toggle" data-id="${esc(sub.id)}" aria-pressed="${!hidden.has(sub.id)}"><i style="--c:${subjColor(sub, i)}"></i>${esc(sub.name)}</button>`).join('')}</div>
         <p class="meta" style="margin:6px 0 14px">Кольорова смуга й кружечок ліворуч показують оцінку, штрих-пунктирна лінія з'єднує оцінки одного предмета. Назви предметів під графіком ховають і показують лінії, а натискання на предмет у списку виділяє його лінію.</p>`;
       html += '<div>' + ranked.map(({ s: sub, i, a, b, n }) => `<button class="subj" data-act="grade-pick" data-id="${esc(sub.id)}" aria-pressed="${sub.id === focus}">
@@ -1049,26 +1125,33 @@ document.addEventListener('click', e => {
     case 'pick-profile':
       if (id !== S.pid) { S.pid = id; S.subject = null; S.gradeSubject = null; savePrefs(); Store.watchDays(id); }
       break;
-    case 'day-shift': { const n = +el.dataset.n, d = addDays(S.date, n); if (d <= today()) S.date = d; break; }
-    case 'day-today': S.date = today(); break;
+    case 'day-shift': { const n = +el.dataset.n, d = addDays(S.date, n); if (d <= today()) { S.date = d; S.gradeDate = null; } break; }
+    case 'day-today': S.date = today(); S.gradeDate = null; break;
     case 'mood': { const d = day(), v = +el.dataset.v; d.mood = d.mood === v ? null : v; saveDay(S.date, d); break; }
     case 'habit': { const d = day(); d.habits[id] = !d.habits[id]; if (!d.habits[id]) delete d.habits[id]; saveDay(S.date, d); break; }
     case 'hw': { const d = day(), k = el.dataset.k; if (d.hw[id] === k) delete d.hw[id]; else d.hw[id] = k; saveDay(S.date, d); break; }
     case 'grade-add': {
-      const d = day(), sel = $('#gsub') ? $('#gsub').value : null; if (!sel) break;
-      S.subject = sel; d.grades.push({ s: sel, v: +el.dataset.v }); saveDay(S.date, d);
+      const gd = S.gradeDate || S.date, d = getDay(gd), sel = $('#gsub') ? $('#gsub').value : null; if (!sel) break;
+      S.subject = sel; d.grades.push({ s: sel, v: +el.dataset.v }); saveDay(gd, d);
       const s = (prof().subjects || []).find(x => x.id === sel);
-      toast(`Додано ${el.dataset.v} · ${s ? s.name : ''}`);
+      toast(`Додано ${el.dataset.v} · ${s ? s.name : ''} · ${fmtDM(gd)}`);
       break;
     }
-    case 'grade-del': { const d = day(); d.grades.splice(+el.dataset.i, 1); saveDay(S.date, d); break; }
-    case 'period': S.period = el.dataset.k; S.anchor = today(); savePrefs(); break;
-    case 'period-shift': { const a = shiftAnchor(S.period, S.anchor, +el.dataset.n); if (range(S.period, a).start <= today()) S.anchor = a; break; }
-    case 'goto-date': S.anchor = el.dataset.d; break;
+    case 'grade-del': { const gd = S.gradeDate || S.date, d = getDay(gd); d.grades.splice(+el.dataset.i, 1); saveDay(gd, d); break; }
+    case 'period': S.period = el.dataset.k; S.anchor = today(); S.gWin = null; savePrefs(); break;
+    case 'period-shift': { const a = shiftAnchor(S.period, S.anchor, +el.dataset.n); if (range(S.period, a).start <= today()) { S.anchor = a; S.gWin = null; } break; }
+    case 'goto-date': S.anchor = el.dataset.d; S.gWin = null; break;
+    case 'gw-len': { const w = gradeWindow(range(S.period, S.anchor)); S.gWin = { start: w.start, len: el.dataset.n === 'm' ? 'm' : +el.dataset.n }; break; }
+    case 'gw-step': {
+      const w = gradeWindow(range(S.period, S.anchor)), k = +el.dataset.n, sd = parse(w.start);
+      const start = w.len === 'm' ? iso(new Date(sd.getFullYear(), sd.getMonth() + k, sd.getDate())) : addDays(w.start, w.len * k);
+      S.gWin = { start, len: w.len }; break;
+    }
+    case 'gw-jump': { const w = gradeWindow(range(S.period, S.anchor)); S.gWin = { start: addDays(el.dataset.d, -(w.n - 1)), len: w.len }; break; }
     case 'grade-pick': S.gradeSubject = S.gradeSubject === id ? null : id; break;
     case 'subj-toggle': { const h = S.hiddenSubjects || (S.hiddenSubjects = new Set()); if (h.has(id)) h.delete(id); else h.add(id); break; }
     case 'cal-shift': { const [y, m] = S.calMonth.split('-').map(Number); S.calMonth = iso(new Date(y, m - 1 + +el.dataset.n, 1)).slice(0, 7); break; }
-    case 'open-day': S.date = el.dataset.d; setView('day'); return;
+    case 'open-day': S.date = el.dataset.d; S.gradeDate = null; setView('day'); return;
     case 'create-defaults':
       Object.entries(DEFAULT_PROFILES).forEach(([k, v]) => saveProfile(k, JSON.parse(JSON.stringify(v))));
       S.pid = 'donia'; Store.watchDays('donia'); break;
@@ -1135,6 +1218,12 @@ document.addEventListener('submit', e => {
 
 let noteTimer;
 document.addEventListener('input', e => {
+  if (e.target.id === 'gwslider') {
+    const w = gradeWindow(range(S.period, S.anchor));
+    S.gWin = { start: addDays(w.base, +e.target.value), len: w.len };
+    gwRefresh();
+    return;
+  }
   if (e.target.id === 'note') {
     const v = e.target.value, date = S.date, pid = S.pid;
     clearTimeout(noteTimer);
@@ -1145,6 +1234,8 @@ document.addEventListener('change', e => {
   const el = e.target, act = el.dataset && el.dataset.act;
   if (!act) return;
   if (act === 'grade-subject') { S.subject = el.value; return; }
+  if (act === 'gw-start') { if (el.value) { const w = gradeWindow(range(S.period, S.anchor)); S.gWin = { start: el.value, len: w.len }; } render(); return; }
+  if (act === 'grade-date') { if (el.value && el.value <= today()) S.gradeDate = el.value; render(); return; }
   const p = JSON.parse(JSON.stringify(prof())), v = el.value.trim();
   if (act === 'p-name') { if (!v) return; p.name = v; }
   else if (act === 'p-emoji') p.emoji = v || '🙂';
