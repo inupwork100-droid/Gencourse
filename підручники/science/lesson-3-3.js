@@ -1,16 +1,16 @@
-// Урок 3.3 «The Human Circulatory System» — сторінки 32–40 книжки Science (слайди).
+// Урок 3.3 «The Human Circulatory System» — сторінки 46–54 книжки Science (слайди).
 (window.SCI = window.SCI || { lessons: [], dict: {} }).lessons.push({
   id: "3.3",
   unit: "3 The Human Body",
   color: "#2f9a6a",
   title: ["3.3 The Human Circulatory System: Your Body's Transportation Network", "3.3 Кровоносна система людини: транспортна мережа твого тіла"],
-  pages: "32–40",
+  pages: "46–54",
   blocks: [
-    { type: "h2", page: 32, s: [
+    { type: "h2", page: 46, s: [
       ["The Human Circulatory System: Your Body's Transportation Network", "Кровоносна система людини: транспортна мережа твого тіла"]
     ]},
 
-    { type: "h2", page: 33, s: [["What is the Circulatory System?", "Що таке кровоносна система?"]] },
+    { type: "h2", page: 47, s: [["What is the Circulatory System?", "Що таке кровоносна система?"]] },
     { type: "p", s: [
       ["Your *circulatory system* is like a highway network that delivers important materials throughout your body.", "Твоя *кровоносна система* схожа на мережу швидкісних доріг, яка розвозить важливі речовини по всьому тілу."],
       ["It consists of your *heart*, *blood vessels*, and *blood* working together as a team.", "Вона складається із *серця*, *кровоносних судин* і *крові*, які працюють разом, як одна команда."],
@@ -30,7 +30,7 @@
       ["The heart, arteries and veins of the human circulatory system.", "Серце, артерії й вени кровоносної системи людини."]
     ]},
 
-    { type: "h2", page: 34, s: [["The Heart: Your Body's Powerful Pump", "Серце: потужний насос твого тіла"]] },
+    { type: "h2", page: 48, s: [["The Heart: Your Body's Powerful Pump", "Серце: потужний насос твого тіла"]] },
     { type: "p", s: [
       ["Your heart is a muscular *pump* about the size of your fist.", "Твоє серце — це м'язовий *насос*, розміром приблизно з твій кулак."],
       ["It has four *chambers* that work together to push blood throughout your body.", "У ньому чотири *камери*, які разом проштовхують кров по всьому тілу."],
@@ -52,7 +52,7 @@
       ["Inside the heart: you can see its chambers.", "Усередині серця: видно його камери."]
     ]},
 
-    { type: "h2", page: 35, s: [["Arteries: The Express Highways", "Артерії: швидкісні магістралі"]] },
+    { type: "h2", page: 49, s: [["Arteries: The Express Highways", "Артерії: швидкісні магістралі"]] },
     { type: "p", s: [
       ["*Arteries* are thick, strong blood vessels that carry blood away from your heart.", "*Артерії* — це товсті, міцні кровоносні судини, які несуть кров від серця."],
       ["They transport *oxygen*-rich blood to all parts of your body.", "Вони переносять багату на *кисень* кров до всіх частин тіла."],
@@ -70,7 +70,7 @@
       ]
     },
 
-    { type: "h2", page: 36, s: [["Capillaries: The Tiny Delivery Trucks", "Капіляри: крихітні вантажівки-доставники"]] },
+    { type: "h2", page: 50, s: [["Capillaries: The Tiny Delivery Trucks", "Капіляри: крихітні вантажівки-доставники"]] },
     { type: "p", s: [
       ["*Capillaries* are the smallest blood vessels in your body - thinner than a human hair!", "*Капіляри* — найменші кровоносні судини в тілі, тонші за людську волосину!"],
       ["This is where the real work happens - oxygen and *nutrients* are delivered to your *cells*.", "Саме тут відбувається справжня робота — кисень і *поживні речовини* доставляються до твоїх *клітин*."],
@@ -91,7 +91,7 @@
       ["Red blood cells travelling inside a blood vessel.", "Червоні кров'яні клітини рухаються всередині кровоносної судини."]
     ]},
 
-    { type: "h2", page: 37, s: [["Veins: The Return Journey", "Вени: дорога назад"]] },
+    { type: "h2", page: 51, s: [["Veins: The Return Journey", "Вени: дорога назад"]] },
     { type: "p", s: [
       ["*Veins* carry blood back to your heart after it has delivered oxygen and nutrients.", "*Вени* несуть кров назад до серця після того, як вона доставила кисень і поживні речовини."],
       ["This blood is now carrying waste products that need to be removed.", "Тепер ця кров несе відходи, які треба вивести з організму."],
@@ -113,7 +113,7 @@
       ["Blue shows deoxygenated blood and red shows oxygenated blood.", "Синім показано кров без кисню, а червоним — кров, багату на кисень."]
     ]},
 
-    { type: "h2", page: 38, s: [["What Does Your Blood Transport?", "Що переносить твоя кров?"]] },
+    { type: "h2", page: 52, s: [["What Does Your Blood Transport?", "Що переносить твоя кров?"]] },
     { type: "p", s: [
       ["Oxygen: Your blood picks up oxygen from your *lungs* and delivers it to every cell.", "Кисень: твоя кров забирає кисень у *легенях* і доставляє його до кожної клітини."],
       ["Nutrients: Food you eat gets broken down and transported to cells for *energy*.", "Поживні речовини: їжа, яку ти їси, розщеплюється й переноситься до клітин, щоб дати *енергію*."],
@@ -130,7 +130,7 @@
       ]
     },
 
-    { type: "h2", page: 39, s: [["Vertebrates: We're Not Alone!", "Хребетні: ми не самі!"]] },
+    { type: "h2", page: 53, s: [["Vertebrates: We're Not Alone!", "Хребетні: ми не самі!"]] },
     { type: "p", s: [
       ["Many *vertebrates* (animals with backbones) have circulatory systems similar to ours.", "Багато *хребетних* (тварин із хребтом) мають кровоносну систему, схожу на нашу."],
       ["Fish, birds, reptiles, amphibians, and other mammals all pump blood through their bodies.", "Риби, птахи, плазуни, земноводні й інші ссавці — усі вони качають кров по своєму тілу."],
@@ -150,7 +150,7 @@
       ["Circulatory systems of other animals: a fish, a frog and a bird.", "Кровоносні системи інших тварин: риби, жаби й птаха."]
     ]},
 
-    { type: "h2", page: 40, s: [["Your Amazing Circulatory System", "Твоя дивовижна кровоносна система"]] },
+    { type: "h2", page: 54, s: [["Your Amazing Circulatory System", "Твоя дивовижна кровоносна система"]] },
     { type: "p", s: [
       ["Your circulatory system works 24/7 to keep you alive and healthy.", "Твоя кровоносна система працює цілодобово, без вихідних, щоб ти була жива й здорова."],
       ["*Exercise* makes your heart stronger and improves *circulation* throughout your body.", "*Фізичні вправи* роблять серце сильнішим і покращують *кровообіг* у всьому тілі."],

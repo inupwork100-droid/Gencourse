@@ -1,12 +1,12 @@
-// Урок 3.2 «Parts of the Respiratory System» — сторінка 31 книжки «Science» (схема з підписами).
+// Урок 3.2 «Parts of the Respiratory System» — сторінка 45 книжки «Science» (схема з підписами).
 (window.SCI = window.SCI || { lessons: [], dict: {} }).lessons.push({
   id: "3.2",
   unit: "3 The Human Body",
   color: "#2f9a6a",
   title: ["3.2 Parts of the Respiratory System", "3.2 Частини дихальної системи"],
-  pages: "31",
+  pages: "45",
   blocks: [
-    { type: "h2", page: 31, s: [["Parts of the Respiratory System", "Частини дихальної системи"]] },
+    { type: "h2", page: 45, s: [["Parts of the Respiratory System", "Частини дихальної системи"]] },
     { type: "img", src: "s32-respiratory-diagram", alt: "Схема дихальної системи людини з підписами", s: [
       ["The parts of the human respiratory system.", "Частини дихальної системи людини."]
     ]},

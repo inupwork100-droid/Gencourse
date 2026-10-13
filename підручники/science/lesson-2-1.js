@@ -1,4 +1,4 @@
-// Урок 2.1 «Our Solar System: Planets, Moon and Sun in Motion» — сторінки 11–19 книжки «Science».
+// Урок 2.1 «Our Solar System: Planets, Moon and Sun in Motion» — сторінки 25–33 книжки «Science».
 // Кожна сторінка PDF (слайд) = одна сторінка книжки. Кожне речення — [англійською, українською].
 // *слово* — жирне ключове слово.
 (window.SCI = window.SCI || { lessons: [], dict: {} }).lessons.push({
@@ -6,13 +6,13 @@
   unit: "2 Planets and Space",
   color: "#3b5bd9",
   title: ["2.1 Our Solar System: Planets, Moon and Sun in Motion", "2.1 Наша Сонячна система: планети, Місяць і Сонце в русі"],
-  pages: "11–19",
+  pages: "25–33",
   blocks: [
     // Сторінка 11 — титульний слайд
-    { type: "h2", page: 11, s: [["Our Solar System: Planets, Moon, and Sun in Motion", "Наша Сонячна система: планети, Місяць і Сонце в русі"]] },
+    { type: "h2", page: 25, s: [["Our Solar System: Planets, Moon, and Sun in Motion", "Наша Сонячна система: планети, Місяць і Сонце в русі"]] },
 
     // Сторінка 12
-    { type: "h2", page: 12, s: [["Introduction to Our Solar System", "Знайомство з нашою Сонячною системою"]] },
+    { type: "h2", page: 26, s: [["Introduction to Our Solar System", "Знайомство з нашою Сонячною системою"]] },
     { type: "p", s: [
       ["Our *Solar System* consists of the Sun, 8 *planets*, and many other objects.", "Наша Сонячна система складається із Сонця, 8 планет і багатьох інших об'єктів."],
       ["The Sun is at the center, and everything *orbits* around it.", "Сонце — у центрі, і все обертається навколо нього по орбітах."],
@@ -33,7 +33,7 @@
     ]},
 
     // Сторінка 13
-    { type: "h2", page: 13, s: [["The Sun: Our Central Star", "Сонце — наша центральна зоря"]] },
+    { type: "h2", page: 27, s: [["The Sun: Our Central Star", "Сонце — наша центральна зоря"]] },
     { type: "p", s: [
       ["The Sun is a massive ball of hot gas at the center of our Solar System.", "Сонце — це величезна куля з гарячого газу в центрі нашої Сонячної системи."],
       ["It's about 93 million miles away from Earth.", "Воно розташоване приблизно за 93 мільйони миль від Землі (це близько 150 мільйонів кілометрів)."],
@@ -54,7 +54,7 @@
     ]},
 
     // Сторінка 14
-    { type: "h2", page: 14, s: [["Inner Planets: Mercury, Venus, Earth, and Mars", "Внутрішні планети: Меркурій, Венера, Земля і Марс"]] },
+    { type: "h2", page: 28, s: [["Inner Planets: Mercury, Venus, Earth, and Mars", "Внутрішні планети: Меркурій, Венера, Земля і Марс"]] },
     { type: "p", s: [
       ["The four planets closest to the Sun are called the *Inner Planets*.", "Чотири планети, найближчі до Сонця, називають внутрішніми планетами."],
       ["They are smaller and made of rock and metal.", "Вони менші й складаються з каменю та металу."],
@@ -72,7 +72,7 @@
     },
 
     // Сторінка 15
-    { type: "h2", page: 15, s: [["Outer Planets: Jupiter, Saturn, Uranus, and Neptune", "Зовнішні планети: Юпітер, Сатурн, Уран і Нептун"]] },
+    { type: "h2", page: 29, s: [["Outer Planets: Jupiter, Saturn, Uranus, and Neptune", "Зовнішні планети: Юпітер, Сатурн, Уран і Нептун"]] },
     { type: "p", s: [
       ["The four planets farthest from the Sun are called the *Outer Planets*.", "Чотири планети, найдальші від Сонця, називають зовнішніми планетами."],
       ["They are larger and made mostly of gases.", "Вони більші й складаються переважно з газів."],
@@ -93,7 +93,7 @@
     ]},
 
     // Сторінка 16
-    { type: "h2", page: 16, s: [["Earth's Moon: Our Closest Neighbor", "Місяць Землі — наш найближчий сусід"]] },
+    { type: "h2", page: 30, s: [["Earth's Moon: Our Closest Neighbor", "Місяць Землі — наш найближчий сусід"]] },
     { type: "p", s: [
       ["The Moon is Earth's only natural *satellite*.", "Місяць — єдиний природний супутник Землі."],
       ["It orbits around Earth about once every 27 days.", "Він робить один оберт навколо Землі приблизно раз на 27 днів."],
@@ -114,7 +114,7 @@
     ]},
 
     // Сторінка 17
-    { type: "h2", page: 17, s: [["Planetary Motion: Orbits and Rotations", "Рух планет: орбіти й обертання"]] },
+    { type: "h2", page: 31, s: [["Planetary Motion: Orbits and Rotations", "Рух планет: орбіти й обертання"]] },
     { type: "p", s: [
       ["Planets move in two ways: *orbit* and *rotation*.", "Планети рухаються двома способами: по орбіті та обертаючись навколо себе."],
       ["Orbit: The path a planet takes around the Sun.", "Орбіта — це шлях, яким планета рухається навколо Сонця."],
@@ -123,7 +123,7 @@
     ]},
 
     // Сторінка 18
-    { type: "h2", page: 18, s: [["The Solar System in Motion", "Сонячна система в русі"]] },
+    { type: "h2", page: 32, s: [["The Solar System in Motion", "Сонячна система в русі"]] },
     { type: "p", s: [
       ["All planets orbit the Sun in the same direction.", "Усі планети обертаються навколо Сонця в одному напрямку."],
       ["Planets closer to the Sun orbit faster than those farther away.", "Планети, ближчі до Сонця, рухаються орбітою швидше, ніж ті, що далі."],
@@ -142,7 +142,7 @@
     },
 
     // Сторінка 19
-    { type: "h2", page: 19, s: [["Review and Reflection", "Повторення й роздуми"]] },
+    { type: "h2", page: 33, s: [["Review and Reflection", "Повторення й роздуми"]] },
     { type: "p", s: [
       ["We've explored the positions and movements of objects in our Solar System.", "Ми дослідили, де розташовані й як рухаються об'єкти нашої Сонячної системи."],
       ["The Sun is at the center, with planets orbiting around it.", "Сонце — у центрі, а планети обертаються навколо нього."],

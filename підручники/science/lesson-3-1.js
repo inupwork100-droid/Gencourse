@@ -1,14 +1,14 @@
-// Урок 3.1 «The Human Respiratory System: How We Breathe» — сторінки 22–30 книжки «Science» (слайди PDF).
+// Урок 3.1 «The Human Respiratory System: How We Breathe» — сторінки 36–44 книжки «Science» (слайди PDF).
 (window.SCI = window.SCI || { lessons: [], dict: {} }).lessons.push({
   id: "3.1",
   unit: "3 The Human Body",
   color: "#2f9a6a",
   title: ["3.1 The Human Respiratory System: How We Breathe", "3.1 Дихальна система людини: як ми дихаємо"],
-  pages: "22–30",
+  pages: "36–44",
   blocks: [
-    { type: "h2", page: 22, s: [["The Human Respiratory System: How We Breathe", "Дихальна система людини: як ми дихаємо"]] },
+    { type: "h2", page: 36, s: [["The Human Respiratory System: How We Breathe", "Дихальна система людини: як ми дихаємо"]] },
 
-    { type: "h2", page: 23, s: [["What is the Respiratory System?", "Що таке дихальна система?"]] },
+    { type: "h2", page: 37, s: [["What is the Respiratory System?", "Що таке дихальна система?"]] },
     { type: "p", s: [
       ["Your *respiratory system* is like a delivery service that brings *oxygen* to your body.", "Твоя *дихальна система* — це ніби служба доставки, яка приносить *кисень* до твого тіла."],
       ["It includes your nose, mouth, throat, *windpipe*, and *lungs*.", "До неї входять ніс, рот, горло, *дихальне горло* (трахея) і *легені*."],
@@ -28,7 +28,7 @@
       ["The parts of the lungs and airways.", "Частини легень і дихальних шляхів."]
     ]},
 
-    { type: "h2", page: 24, s: [["The Journey of Air: From Nose to Lungs", "Подорож повітря: від носа до легень"]] },
+    { type: "h2", page: 38, s: [["The Journey of Air: From Nose to Lungs", "Подорож повітря: від носа до легень"]] },
     { type: "p", s: [
       ["Air enters through your nose or mouth and gets filtered and warmed.", "Повітря заходить крізь ніс або рот, де його очищено (відфільтровано) й зігріто."],
       ["It travels down your throat and through your windpipe (*trachea*).", "Воно рухається вниз горлом і крізь дихальне горло (*трахею*)."],
@@ -49,7 +49,7 @@
       ["The lungs and the diaphragm.", "Легені й діафрагма."]
     ]},
 
-    { type: "h2", page: 25, s: [["Amazing Alveoli: Where the Magic Happens", "Дивовижні альвеоли: де стається диво"]] },
+    { type: "h2", page: 39, s: [["Amazing Alveoli: Where the Magic Happens", "Дивовижні альвеоли: де стається диво"]] },
     { type: "p", s: [
       ["At the end of the smallest tubes are tiny air sacs called *alveoli*.", "На кінцях найменших трубочок є крихітні повітряні мішечки, які називають *альвеолами*."],
       ["You have about 300 million alveoli in your lungs - that's like having 300 million tiny balloons.", "У твоїх легенях приблизно 300 мільйонів альвеол — це ніби 300 мільйонів крихітних повітряних кульок."],
@@ -57,7 +57,7 @@
       ["The walls are so thin that gases can pass through them easily.", "Їхні стінки такі тонкі, що гази легко проходять крізь них."]
     ]},
 
-    { type: "h2", page: 26, s: [["Gas Exchange: Oxygen In, Carbon Dioxide Out", "Газообмін: кисень — усередину, вуглекислий газ — назовні"]] },
+    { type: "h2", page: 40, s: [["Gas Exchange: Oxygen In, Carbon Dioxide Out", "Газообмін: кисень — усередину, вуглекислий газ — назовні"]] },
     { type: "p", s: [
       ["When you breathe in, oxygen from the air moves through the alveoli walls into your blood.", "Коли ти вдихаєш, кисень із повітря проходить крізь стінки альвеол у твою кров."],
       ["At the same time, *carbon dioxide* (waste gas) moves from your blood into the alveoli.", "Водночас *вуглекислий газ* (непотрібний газ, відходи) переходить із крові в альвеоли."],
@@ -68,7 +68,7 @@
       ["Gas exchange between an alveolus and a red blood cell.", "Газообмін між альвеолою та червоною кров'яною клітиною."]
     ]},
 
-    { type: "h2", page: 27, s: [["Your Breathing Muscles at Work", "Твої дихальні м'язи за роботою"]] },
+    { type: "h2", page: 41, s: [["Your Breathing Muscles at Work", "Твої дихальні м'язи за роботою"]] },
     { type: "p", s: [
       ["Your *diaphragm* is a large muscle under your lungs that helps you breathe.", "Твоя *діафрагма* — це великий м'яз під легенями, який допомагає тобі дихати."],
       ["When it moves down, it creates space for your lungs to fill with air.", "Коли вона опускається вниз, з'являється місце, щоб легені наповнилися повітрям."],
@@ -89,7 +89,7 @@
       ["Breathing in (the diaphragm moves down) and breathing out (the diaphragm moves up).", "Вдих (діафрагма опускається) і видих (діафрагма піднімається)."]
     ]},
 
-    { type: "h2", page: 28, s: [["Vertebrates: We're Not Alone", "Хребетні: ми не самі"]] },
+    { type: "h2", page: 42, s: [["Vertebrates: We're Not Alone", "Хребетні: ми не самі"]] },
     { type: "p", s: [
       ["Many *vertebrates* (animals with backbones) have respiratory systems similar to ours.", "Багато *хребетних* (тварин із хребтом) мають дихальну систему, схожу на нашу."],
       ["*Mammals* like dogs, cats, and whales all have lungs that work like human lungs.", "*Ссавці*, як-от собаки, коти й кити, мають легені, які працюють так само, як людські."],
@@ -107,7 +107,7 @@
       ]
     },
 
-    { type: "h2", page: 29, s: [["Keeping Your Respiratory System Healthy", "Як берегти дихальну систему здоровою"]] },
+    { type: "h2", page: 43, s: [["Keeping Your Respiratory System Healthy", "Як берегти дихальну систему здоровою"]] },
     { type: "p", s: [
       ["Exercise regularly to keep your lungs strong and your breathing muscles fit.", "Регулярно займайся спортом, щоб легені були сильними, а дихальні м'язи — у формі."],
       ["Avoid smoking and *secondhand smoke*, which can damage your alveoli.", "Уникай куріння і *пасивного куріння* (чужого диму), бо вони можуть пошкодити твої альвеоли."],
@@ -128,7 +128,7 @@
       ["Look Out for Your Lungs: 5 Steps to Keep Your Lungs Healthy.", "Бережи свої легені: 5 кроків, щоб легені були здоровими."]
     ]},
 
-    { type: "h2", page: 30, s: [["Breathing: A Life-Long Partnership", "Дихання: дружба на все життя"]] },
+    { type: "h2", page: 44, s: [["Breathing: A Life-Long Partnership", "Дихання: дружба на все життя"]] },
     { type: "p", s: [
       ["Your respiratory system works 24/7 without you having to think about it.", "Твоя дихальна система працює цілодобово, і тобі не треба про це думати."],
       ["Every breath brings life-giving oxygen to trillions of *cells* in your body.", "Кожен вдих приносить життєдайний кисень трильйонам *клітин* твого тіла."],

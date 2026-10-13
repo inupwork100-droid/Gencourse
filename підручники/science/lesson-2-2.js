@@ -1,12 +1,12 @@
-// Урок 2.2 «Planets Presentation» — сторінки 20–21 книжки Science (завдання для групової презентації про планету).
+// Урок 2.2 «Planets Presentation» — сторінки 34–35 книжки Science (завдання для групової презентації про планету).
 (window.SCI = window.SCI || { lessons: [], dict: {} }).lessons.push({
   id: "2.2",
   unit: "2 Planets and Space",
   color: "#3b5bd9",
   title: ["2.2 Planets Presentation", "2.2 Презентація про планету"],
-  pages: "20–21",
+  pages: "34–35",
   blocks: [
-    { type: "h2", page: 20, s: [["Learning Success Event: Planets Presentation", "Подія навчального успіху: презентація про планету"]] },
+    { type: "h2", page: 34, s: [["Learning Success Event: Planets Presentation", "Подія навчального успіху: презентація про планету"]] },
     { type: "h2", s: [["Your mission", "Твоя місія"]] },
     { type: "p", s: [
       ["Your group has been given a planet.", "Твоїй групі дали планету."],
@@ -68,7 +68,7 @@
       ["And be able to answer 1-2 questions about your planet.", "І будь готова відповісти на 1–2 запитання про свою планету."]
     ]},
 
-    { type: "h2", page: 21, s: [["Presenting", "Як виступати"]] },
+    { type: "h2", page: 35, s: [["Presenting", "Як виступати"]] },
     { type: "p", s: [
       ["Speak clearly and loudly enough for everyone to hear.", "Говори чітко й достатньо голосно, щоб усі чули."],
       ["Look at your audience, not only at the screen.", "Дивися на *слухачів*, а не лише на екран."],
