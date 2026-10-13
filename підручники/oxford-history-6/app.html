@@ -380,15 +380,16 @@ a.ext { color: var(--ua); font-weight: 700; }
 label.row { display: grid; gap: 4px; font-size: 15px; }
 select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); width: 100%; }
 /* double-tap tooltip: short translation above the word */
-.pop { position: absolute; z-index: 35; background: var(--surface); color: var(--ink); border: 3px solid var(--lime);
+.pop { position: absolute; z-index: 35; color: #1f3a0d; border: 2px solid var(--lime);
+  background: linear-gradient(135deg, rgba(240,255,220,.78), rgba(205,240,160,.62) 45%, rgba(244,255,230,.82) 60%, rgba(200,236,150,.62)); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
   border-radius: 12px; padding: 4px 12px; font-size: 17px; font-weight: 700; line-height: 1.3; white-space: nowrap;
   max-width: calc(100vw - 32px); overflow: hidden; text-overflow: ellipsis; box-shadow: 0 6px 16px rgba(0,0,0,.18);
   transform: translate(-50%, -100%); pointer-events: none; }
 .pop::after { content: ""; position: absolute; left: var(--tip, 50%); bottom: -9px; width: 12px; height: 12px; margin-left: -6px;
-  background: var(--surface); border-right: 3px solid var(--lime); border-bottom: 3px solid var(--lime); transform: rotate(45deg); }
+  background: rgba(214,243,175,.95); border-right: 2px solid var(--lime); border-bottom: 2px solid var(--lime); transform: rotate(45deg); }
 .pop.below { transform: translate(-50%, 0); }
 .pop.below::after { bottom: auto; top: -9px; transform: rotate(225deg); }
-.w.popped { background: var(--lime-soft); box-shadow: 0 0 0 2px var(--lime); }
+.w.popped { background: var(--lime-soft); color: #1f3a0d; box-shadow: 0 0 0 2px var(--lime); }
 /* ---------- library: books as folders with photos ---------- */
 .library { min-height: 100%; background: var(--ground); }
 .lib-top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--sea); color: #fff; padding: 14px 16px; }
@@ -1266,6 +1267,14 @@ book.addEventListener("click", e => {
   if (ab) { const [li, bi] = ab.dataset.answers.split(":").map(Number); unlockBox(ab.dataset.answers); openAnswers(LESSONS[li].blocks[bi]); return; }
   const wEl = e.target.closest(".w");
   if (!wEl) { hidePop(); return; }
+  if (Date.now() - lastWordTap < 600) return;   // already handled on touch/pointer up
+  wordTap(wEl);
+});
+// one tap → word card; two quick taps → small translation bubble.
+// Taps are read on pointerup (phones can delay or swallow the second click).
+let lastWordTap = 0, pdX = 0, pdY = 0, pdT = 0;
+function wordTap(wEl) {
+  lastWordTap = Date.now();
   if (tapT && tapEl === wEl) {            // second tap on the same word → tooltip
     clearTimeout(tapT); tapT = null; tapEl = null;
     showPop(wEl);
@@ -1273,7 +1282,14 @@ book.addEventListener("click", e => {
   }
   clearTimeout(tapT); hidePop();
   tapEl = wEl;
-  tapT = setTimeout(() => { tapT = null; tapEl = null; openWord(wEl); }, 300);
+  tapT = setTimeout(() => { tapT = null; tapEl = null; openWord(wEl); }, 420);
+}
+book.addEventListener("pointerdown", e => { pdX = e.clientX; pdY = e.clientY; pdT = Date.now(); });
+book.addEventListener("pointerup", e => {
+  const wEl = e.target.closest(".w");
+  if (!wEl || e.target.closest(".opt, [data-tog], .qa-ans, button")) return;
+  if (Math.hypot(e.clientX - pdX, e.clientY - pdY) > 10 || Date.now() - pdT > 600) return;   // a scroll or a long press
+  wordTap(wEl);
 });
 book.addEventListener("dblclick", e => { if (e.target.closest(".w")) e.preventDefault(); });
 
