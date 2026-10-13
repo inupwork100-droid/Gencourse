@@ -6633,6 +6633,12 @@ addEventListener("scroll", () => { if (!pop.hidden) hidePop(); }, { passive: tru
 const optLocked = {};   // question id -> true after a try, until the envelope of that box is opened
 function chooseOpt(o) {
   const qid = o.dataset.q;
+  // tapping the same answer again repeats its own message
+  if (optLocked[qid] && (o.classList.contains("right") || o.classList.contains("wrong"))) {
+    if (o.classList.contains("right")) owlNotice("Keep it up!|Go on, you're doing great!", "Так тримати!|Продовжуй, у тебе чудово виходить!", "Wow!", "wow", 3000);
+    else owlNotice("Not this one.|Peek in the envelope and try again!", "Не ця відповідь.|Зазирни в конвертик і спробуй ще раз!", "Oops!", "oops", 3000);
+    return;
+  }
   if (optLocked[qid]) {
     const env = o.closest(".box").querySelector(".ansbtn");
     o.classList.remove("flash"); void o.offsetWidth; o.classList.add("flash");
