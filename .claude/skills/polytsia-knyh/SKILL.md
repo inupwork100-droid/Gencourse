@@ -14,6 +14,7 @@ description: «Полиця книг» — застосунок-читанка �
   - `python3 build.py --artifact <scratchpad>/vikings-reader.html` → файл для публікації.
 - History 6: `lesson-*.js` (`window.LESSONS.push`), `dictionary.js` (`window.DICT`), `contents.js`, `images/`, `images/pages/` (фото розворотів для вікна «Редагувати»).
 - Geography 6: `підручники/oxford-geography-6/` — `lesson-*.js` і `dict-*.js` (обгортка `window.GEO`), `quiz.js` (рамки «Check yourself»), `contents.js`, `images/g<урок>-*.jpg`, `pages/`.
+- Science: `підручники/science/` — уроки з PDF-слайдів (кожна сторінка PDF = сторінка книжки, зміст на с. 1), `lesson-*.js`/`dict-*.js` (обгортка `window.SCI`), `contents.js`, `images/s<урок>-*.jpg`, обкладинка `sci-cover.jpg`. Підключення — `SCI_JS` у build.py, `EXTRA_BOOK` у app.html.
 - Книжки з «Магії у книгу» живуть у db артефакту: `books/<id>`, `books/<id>/lessons/lNNN` (`{lesson}`), `books/<id>/extra/dict`.
 
 ## Формат уроку

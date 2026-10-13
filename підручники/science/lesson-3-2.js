@@ -88,6 +88,7 @@
     ["at the end of", "на кінці"],
     ["the smallest tubes", "найменші трубочки"],
     ["what it does", "що робить"],
-    ["rib muscles", "міжреберні м'язи"]
+    ["rib muscles", "міжреберні м'язи"],
+    ["one of the", "один із"]
   ]
 });
