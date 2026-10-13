@@ -217,9 +217,18 @@ figcaption { font-size: 16px; margin-top: 8px; color: var(--ink); }
 .chip.opt.right { background: color-mix(in srgb, var(--lime) 45%, var(--surface)); border-color: var(--lime); box-shadow: 0 0 12px color-mix(in srgb, var(--lime) 70%, transparent); animation: opt-glow 1.6s ease-in-out 3; }
 .chip.opt.wrong { border-color: #e0b3a3; background: linear-gradient(270deg, #f2cfc4, #e6c3a2, #f5ddd5, #e6c3a2, #f2cfc4); background-size: 300% 100%; animation: opt-flow 2.4s linear infinite; }
 .chip.opt.flash { animation: opt-flash .6s ease-out; }
-.item.tq { cursor: pointer; border-radius: 12px; transition: background-color .3s, box-shadow .3s; }
-.item.tq.tq-done { background: color-mix(in srgb, var(--lime) 40%, var(--surface)); box-shadow: 0 0 0 2px var(--lime), 0 0 14px color-mix(in srgb, var(--lime) 60%, transparent); }
-.item.tq.tq-done > .n { color: #2f8a1f; font-weight: 800; }
+.item.has-plus { padding-right: 84px; }
+.ans-plus { position: absolute; right: 46px; top: 0; width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid #e2b93b; background: #fff8dc; color: #b8860b; font-size: 20px; font-weight: 700; line-height: 1; padding: 0; display: grid; place-items: center; }
+.ans-plus.on { background: #f6c419; color: #fff; border-color: #f6c419; }
+.qa-ans { margin: 2px 0 8px 28px; padding: 8px 12px 10px; border-radius: 12px; background: #fffdf3; border: 2px solid #f2d33a; display: grid; gap: 6px; animation: qb-in .3s ease-out; }
+.qa-ans .say-a { border: 0; background: transparent; color: #b8860b; padding: 0; font-weight: 700; font-size: 14px; display: inline-flex; gap: 4px; align-items: center; justify-self: start; }
+.qa-ans .say-a svg { width: 16px; height: 16px; }
+.ap { position: relative; padding-right: 46px; line-height: 1.45; white-space: pre-line; }
+.ap + .ap { margin-top: 6px; }
+.ap-tog { position: absolute; right: 0; top: 0; border: 1px solid var(--line); background: var(--paper-2); color: var(--ua); border-radius: 999px; font-size: 12px; font-weight: 700; padding: 3px 8px; }
+.ap-tog.on { background: var(--ua-soft); }
+.apu { display: block; margin-top: 4px; background: var(--ua-soft); color: var(--ua); border-radius: 8px; padding: 6px 10px; font-size: .94em; }
+.apu[hidden] { display: none; }
 .item.opt { cursor: pointer; border-radius: 12px; margin-left: 16px; padding: 4px 40px 4px 6px; transition: background-color .3s; }
 .item.opt.subq { padding-left: 6px; }
 .item.opt.ch { margin-left: 44px; }
@@ -6204,8 +6213,6 @@ function renderSentences(list) {
 }
 
 const book = $("#book");
-const tqKey = t => { let h = 7; for (const c of t) h = (h * 31 + c.charCodeAt(0)) | 0; return "t" + (h >>> 0).toString(36); };
-const tqDone = store.get("tdone", {});   // book tasks she marked as done
 let out = "";
 const TOC = window.CONTENTS;
 const LESSON_PAGES = new Set(ALL_BLOCKS.filter(b => b.page).map(b => b.page));
@@ -6269,15 +6276,20 @@ L.blocks.forEach((b, bi) => {
         let q = null; const groups = {};
         b.items.forEach((it, k) => { if (!it.sub) q = k; else if (/^[a-c]$/.test(it.n) && q != null) (groups[q] = groups[q] || []).push(it); });
         q = null;
+        const norm = x => String(x || "").replace(/\s+/g, "").toLowerCase();
+        const ansAt = {}; (b.answers || []).forEach((a, i) => { if (a.n) ansAt[norm(a.n)] = i; });
+        let num = "";
         return b.items.map((it, k) => {
         if (!it.sub) q = k;
         const isOpt = it.sub && /^[a-c]$/.test(it.n) && q != null && groups[q].some(x => x.ok);
-        // a book task (1, 2, a, b…) in Activities / Challenge: tap it when it is done — it lights up green
-        const isTq = !isOpt && ["activities", "challenge", "think"].includes(b.kind) && it.n && it.n !== "•" && it.s.length;
+        // a book task (1, 2, a, b…) with its own answer in the envelope gets a «+» that opens the answer right under it
+        if (!it.sub) { const m = /^\d+/.exec(String(it.n || "").trim()); if (m) num = m[0]; }
+        const key = it.sub ? num + norm(it.n) : norm(it.n);
+        const ai = isOpt || !it.n || !it.s.length ? -1 : key in ansAt ? ansAt[key] : it.sub && num in ansAt ? ansAt[num] : -1;
         const r = renderSentences(it.s);
         // a word in place of the number (e.g. a suffix "-ful") is shown as a term with its meaning
         const isTerm = it.n && String(it.n).length > 1 && !/^\d+\s?[a-z]?[.)]?$/i.test(it.n);
-        return `<div class="item${it.sub ? " subq" : ""}${isOpt ? " opt" : ""}${isTerm ? " term" : ""}${it.choices ? " has-ch" : ""}${isTq ? " tq" + (tqDone[tqKey(it.s[0][0])] ? " tq-done" : "") : ""}"${isTq ? ` data-tq="${tqKey(it.s[0][0])}" role="button" tabindex="0"` : ""}${isOpt ? ` data-q="${li}:${bi}:${q}" data-box="${li}:${bi}"${it.ok ? ' data-ok="1"' : ""} role="button" tabindex="0"` : ""}><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div>${it.s.length ? `<button class="ua-tog" data-tog aria-label="Переклад">UA</button>` : ""}</div>` +
+        return `<div class="item${it.sub ? " subq" : ""}${isOpt ? " opt" : ""}${isTerm ? " term" : ""}${it.choices ? " has-ch" : ""}${ai >= 0 ? " has-plus" : ""}"${isOpt ? ` data-q="${li}:${bi}:${q}" data-box="${li}:${bi}"${it.ok ? ' data-ok="1"' : ""} role="button" tabindex="0"` : ""}><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div>${it.s.length ? `<button class="ua-tog" data-tog aria-label="Переклад">UA</button>` : ""}${ai >= 0 ? `<button class="ans-plus" data-ansplus="${li}:${bi}:${ai}"${it.sub && !(key in ansAt) ? ` data-ansl="${esc(norm(it.n))}"` : ""} aria-label="Показати відповідь">+</button>` : ""}</div>` +
           // answer options for this question: rows a/b/c that glow right/wrong, like «Check yourself»
           (it.choices ? it.choices.map((c, j) => { const cr = renderSentences([c]); return `<div class="item subq opt ch" data-q="${li}:${bi}:c${k}" data-box="${li}:${bi}"${j === it.cok ? ' data-ok="1"' : ""} role="button" tabindex="0"><span class="n">${"abc"[j]}</span><div>${cr.en}${uaHtml(cr.sis)}</div><button class="ua-tog" data-tog aria-label="Переклад">UA</button></div>`; }).join("") : "");
       }).join(""); })() + `</div></div>`;
@@ -6545,6 +6557,8 @@ function wordCard(word, opts) {
 
 document.addEventListener("click", e => { const x = e.target.closest(".wt-ex"); if (x) sayOnce(x.dataset.say); });
 sheetIn.addEventListener("click", e => {
+  const at = e.target.closest("[data-aptog]");
+  if (at) { const u = at.parentNode.querySelector(".apu"); u.hidden = !u.hidden; at.classList.toggle("on", !u.hidden); return; }
   const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.say != null) sayOnce(b.dataset.say);
   else if (b.dataset.saySel != null) sayOnce(b.dataset.saySel);
@@ -6617,6 +6631,29 @@ function chooseOpt(o) {
   optLocked[qid] = true;
   if (ok) noteTask();
 }
+// an answer split into paragraphs; every paragraph has its own UA button for the translation
+function ansParas(a) {
+  let en = String(a[0]).split("\n").filter(x => x.trim()), ua = String(a[1] || "").split("\n").filter(x => x.trim());
+  if (en.length !== ua.length) { en = [en.join("\n")]; ua = [ua.join("\n")]; }   // lines don't match: one paragraph
+  return en.map((t, i) => `<div class="ap"><span class="ape">${esc(t)}</span><button type="button" class="ap-tog" data-aptog aria-label="Переклад">UA</button><span class="apu" hidden>${esc(ua[i])}</span></div>`).join("");
+}
+// «+» next to UA: the task's answer opens under it; «−» closes it
+function toggleAnsPlus(btn) {
+  const item = btn.closest(".item"), next = item.nextElementSibling;
+  if (next && next.classList.contains("qa-ans")) { next.remove(); btn.textContent = "+"; btn.classList.remove("on"); return; }
+  const [li, bi, ai] = btn.dataset.ansplus.split(":").map(Number);
+  let a = LESSONS[li].blocks[bi].answers[ai];
+  // one answer for several letters: show only the line for this letter, when the lines are marked "a …", "b …"
+  const l = btn.dataset.ansl;
+  if (l) {
+    const pick = t => String(t).split("\n").filter(x => new RegExp("^\\s*\\(?" + l + "[).:\\s–-]", "i").test(x));
+    const en = pick(a.a[0]), ua = pick(a.a[1]);
+    if (en.length) a = { ...a, a: [en.join("\n"), ua.join("\n")] };
+  }
+  btn.textContent = "−"; btn.classList.add("on");
+  item.insertAdjacentHTML("afterend", `<div class="qa-ans"><button class="say-a" data-say-a="${esc(a.a[0].replace(/\n/g, " "))}">${SVG.speak} Слухати відповідь</button>${ansParas(a.a)}</div>`);
+}
+book.addEventListener("click", e => { const b = e.target.closest("[data-say-a]"); if (b) { e.stopPropagation(); sayOnce(b.dataset.sayA); } }, true);
 function unlockBox(boxId) { book.querySelectorAll(`.opt[data-box="${boxId}"]`).forEach(x => { delete optLocked[x.dataset.q]; }); }
 book.addEventListener("keydown", e => { const o = e.target.closest && e.target.closest(".opt"); if (o && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); chooseOpt(o); } });
 
@@ -6624,12 +6661,11 @@ let tapT = null, tapEl = null;
 book.addEventListener("click", e => {
   const opt = e.target.closest(".opt");
   if (opt && !e.target.closest("[data-tog]")) { chooseOpt(opt); return; }
-  const tq = e.target.closest(".tq");
-  if (tq && !e.target.closest("[data-tog]")) {
-    const on = tq.classList.toggle("tq-done");
-    if (on) { tqDone[tq.dataset.tq] = 1; noteTask(); } else delete tqDone[tq.dataset.tq];
-    store.set("tdone", tqDone); return;
-  }
+  const ap = e.target.closest("[data-ansplus]");
+  if (ap) { toggleAnsPlus(ap); return; }
+  const at = e.target.closest("[data-aptog]");
+  if (at) { const u = at.parentNode.querySelector(".apu"); u.hidden = !u.hidden; at.classList.toggle("on", !u.hidden); return; }
+  if (e.target.closest(".qa-ans")) return;
   const gl = e.target.closest("[data-gloss]");
   if (gl) { const w = gl.dataset.gloss; openSheet(wordCard(w)); sayOnce(w); return; }
   const ab = e.target.closest("[data-answers]");
@@ -6686,7 +6722,7 @@ function openAnswers(b) {
     b.answers.map((x, i) => `<div class="card ans"><span class="num">${esc(x.n || i + 1)}</span><div style="min-width:0">
       <div class="q">${esc(x.q[0])}</div><div class="qua">${esc(x.q[1])}</div>
       <button class="say-a" data-say="${esc(x.a[0].replace(/\n/g, " "))}">${SVG.speak} Слухати відповідь</button>
-      <div class="a">${esc(x.a[0])}</div><span class="ua">${esc(x.a[1])}</span></div></div>`).join("");
+      <div class="a">${ansParas(x.a)}</div></div></div>`).join("");
   openSheet(h, null, b.kind === "activities" || b.kind === "review" ? "yellow" : "blue");
 }
 
