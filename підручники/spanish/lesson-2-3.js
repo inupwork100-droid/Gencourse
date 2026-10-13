@@ -1,0 +1,213 @@
+// Урок 2.3 «Nuestro barrio · Vamos a casa de Elena» — сторінки 20–21 книжки «Español» (Colega vuelve 3).
+// Кожне речення — [іспанською, українською]. *слово* — жирне ключове слово.
+(window.ESP = window.ESP || { lessons: [], dict: {} }).lessons.push({
+  id: "2.3",
+  unit: "2 ¿A qué hora quedamos?",
+  color: "#e0418f",
+  title: ["2.3 Nuestro barrio · Vamos a casa de Elena", "2.3 Наш район · Ідемо до Олени"],
+  pages: "20–21",
+  blocks: [
+    { type: "h2", page: 20, s: [["Unidad 2. Nuestro barrio", "Розділ 2. Наш район"]] },
+
+    { type: "h2", s: [["1. Observa el plano y escucha.", "1. Розглянь план і послухай."]] },
+    { type: "img", src: "s20-plano", alt: "План району: ратуша, бібліотека, вулиці, парк і двоє дітей із картою", s: [
+      ["El plano del barrio.", "План району."]
+    ]},
+    { type: "p", s: [
+      ["Mira.", "Дивись."],
+      ["Vamos *todo recto* por la calle Salvia, luego *giramos* la primera *a la izquierda* y después la segunda *a la derecha*.", "Ідемо прямо вулицею Сальвія, потім повертаємо на першому повороті ліворуч, а потім на другому — праворуч."],
+      ["La casa de Elena está *enfrente del* centro cultural.", "Будинок Олени — навпроти культурного центру."]
+    ]},
+    { type: "img", src: "s20-plano-ayuntamiento", alt: "Частина плану: ратуша, поліція, культурний центр, поліклініка, бібліотека, супермаркет, музична школа", s: [
+      ["Ayuntamiento · Comisaría · Centro cultural · Centro de salud · Biblioteca · Supermercado · Escuela de Música · Avenida de los Encuartes", "Ратуша · Поліцейська дільниця · Культурний центр · Поліклініка · Бібліотека · Супермаркет · Музична школа · Авеню де лос Енкуартес"]
+    ]},
+    { type: "img", src: "s20-plano-comercio", alt: "Частина плану: вокзал, ресторан, банк, готель, будинки, м'ясна крамниця, аптека, кав'ярня, пекарня", s: [
+      ["Estación de Tren · Restaurante · Banco · Hotel · Carnicería · Farmacia · Cafetería · Panadería", "Залізничний вокзал · Ресторан · Банк · Готель · М'ясна крамниця · Аптека · Кав'ярня · Пекарня"],
+      ["Avenida del Comercio · Calle de la Luna · Calle Laurel · Avenida del Parque", "Торгова авеню · вулиця Місяця · вулиця Лаврова · Паркова авеню"]
+    ]},
+    { type: "img", src: "s20-plano-parque", alt: "Частина плану: діти з картою, парк і перукарня", s: [
+      ["Parque · Peluquería", "Парк · Перукарня"]
+    ]},
+    { type: "p", s: [
+      ["Lugares del plano: el *ayuntamiento*, la *comisaría*, el *centro cultural*, el *centro de salud*, la *biblioteca*, el *supermercado*, la *escuela de música*.", "Місця на плані: ратуша, поліцейська дільниця, культурний центр, поліклініка, бібліотека, супермаркет, музична школа."],
+      ["El *restaurante*, el *banco*, la *estación de tren*, el *hotel*, la *carnicería*, la *farmacia*, la *cafetería*, la *panadería*, el *parque*, la *peluquería*.", "Ресторан, банк, залізничний вокзал, готель, м'ясна крамниця, аптека, кав'ярня, пекарня, парк, перукарня."]
+    ]},
+
+    { type: "h2", s: [["2. Practica con tus compañeros.", "2. Потренуйся з однокласниками."]] },
+    { type: "p", s: [
+      ["–¿*Dónde hay un* restaurante?", "– Де є ресторан?"],
+      ["–En la avenida del Comercio, *al lado del* banco.", "– На Торговій авеню, поруч із банком."],
+      ["–¿*Dónde está el* banco?", "– Де банк?"],
+      ["–*Enfrente del* centro de salud.", "– Навпроти поліклініки."]
+    ]},
+    { type: "img", src: "s20-preposiciones", alt: "Будиночки й машинки показують: поруч, навпроти, між", s: [
+      ["*al lado de* · *enfrente de* · *entre*", "поруч із · навпроти · між"]
+    ]},
+    { type: "box", kind: "activities", title: ["Actividades", "Завдання"], items: [
+      { n: "a", s: [["¿Dónde está la comisaría?", "Де поліцейська дільниця?"]] },
+      { n: "b", s: [["¿Dónde está el supermercado?", "Де супермаркет?"]] },
+      { n: "c", s: [["¿Dónde está el banco?", "Де банк?"]] },
+      { n: "d", s: [["¿Dónde hay un parque?", "Де є парк?"]] },
+      { n: "e", s: [["¿Dónde está el centro de salud?", "Де поліклініка?"]] }
+    ], answers: [
+      { n: "a", q: ["¿Dónde está la comisaría?", "Де поліцейська дільниця?"], a: ["Al lado del ayuntamiento.", "Поруч із ратушею."] },
+      { n: "b", q: ["¿Dónde está el supermercado?", "Де супермаркет?"], a: ["Entre la biblioteca y la escuela de música.", "Між бібліотекою і музичною школою."] },
+      { n: "c", q: ["¿Dónde está el banco?", "Де банк?"], a: ["En la avenida del Comercio, al lado del restaurante.", "На Торговій авеню, поруч із рестораном."] },
+      { n: "d", q: ["¿Dónde hay un parque?", "Де є парк?"], a: ["En la avenida del Parque, al lado de la peluquería.", "На Парковій авеню, поруч із перукарнею."] },
+      { n: "e", q: ["¿Dónde está el centro de salud?", "Де поліклініка?"], a: ["Al lado del centro cultural, enfrente del banco.", "Поруч із культурним центром, навпроти банку."] }
+    ]},
+
+    { type: "h2", page: 21, s: [["Vamos a casa de Elena · Lección 3", "Ідемо до Олени · Урок 3"]] },
+    { type: "img", src: "s21-plano", alt: "Другий план: стоянка, торговий центр із кінотеатром, лікарня, пошта, школа, басейн, спорткомплекс, крамниці й церква", s: [
+      ["Aparcamiento · Centro Comercial · Cine · Hospital · Correos · Colegio · Patio · Piscina · Polideportivo · Tienda de Ropa · Frutería · Iglesia", "Автостоянка · Торговий центр · Кінотеатр · Лікарня · Пошта · Школа · Шкільне подвір'я · Басейн · Спорткомплекс · Магазин одягу · Овочева крамниця · Церква"],
+      ["Calle de la Estación · Calle Salvia · Calle de la Iglesia", "Вокзальна вулиця · вулиця Сальвія · Церковна вулиця"]
+    ]},
+
+    { type: "h2", s: [["3. Escucha y canta.", "3. Послухай і заспівай."]] },
+    { type: "p", s: [
+      ["Vamos, chicos,", "Гайда, хлопці,"],
+      ["vamos, chicas, a bailar,", "гайда, дівчата, танцювати,"],
+      ["vamos todos juntos,", "ходімо всі разом,"],
+      ["vamos a bailar.", "ходімо танцювати."],
+      ["Esto es muy fácil", "Це дуже легко,"],
+      ["y lo hacemos así.", "і ми робимо це так."],
+      ["Esta es la yenka,", "Це єнка (танець),"],
+      ["que se baila así.", "яку танцюють отак."],
+      ["*Izquierda*, *izquierda*,", "Ліворуч, ліворуч,"],
+      ["*derecha*, *derecha*,", "праворуч, праворуч,"],
+      ["*delante*, *detrás*,", "вперед, назад,"],
+      ["un, dos, tres. (Bis)", "раз, два, три. (Ще раз)"]
+    ]},
+
+    { type: "h2", s: [["4. Aprende.", "4. Вивчи."]] },
+    { type: "img", src: "s21-direcciones", alt: "Стрілки між будиночками: прямо, поверни праворуч, поверни ліворуч", s: [
+      ["*todo recto* · *gira a la derecha* · *gira a la izquierda*", "прямо · поверни праворуч · поверни ліворуч"]
+    ]},
+    { type: "p", s: [
+      ["*todo recto*", "весь час прямо"],
+      ["*gira a la derecha*", "поверни праворуч"],
+      ["*gira a la izquierda*", "поверни ліворуч"]
+    ]},
+
+    { type: "h2", s: [["5. Estás en el ayuntamiento. Di cómo ir a:", "5. Ти біля ратуші. Скажи, як дійти до:"]] },
+    { type: "p", s: [
+      ["a. el restaurante · b. la panadería · c. el cine · d. la piscina", "a. ресторану · b. пекарні · c. кінотеатру · d. басейну"],
+      ["Por la avenida de los Encuartes y *giras* la primera a la izquierda.", "Ідеш авеню де лос Енкуартес і повертаєш на першому повороті ліворуч."]
+    ]},
+    { type: "box", kind: "activities", title: ["Actividades", "Завдання"], items: [
+      { n: "a", s: [["el restaurante", "до ресторану"]] },
+      { n: "b", s: [["la panadería", "до пекарні"]] },
+      { n: "c", s: [["el cine", "до кінотеатру"]] },
+      { n: "d", s: [["la piscina", "до басейну"]] }
+    ], answers: [
+      { n: "a", q: ["¿Cómo voy al restaurante?", "Як дійти до ресторану?"], a: ["Por la avenida de los Encuartes y giras la primera a la izquierda. El restaurante está al lado del banco.", "Ідеш авеню де лос Енкуартес і повертаєш на першому повороті ліворуч. Ресторан — поруч із банком."] },
+      { n: "b", q: ["¿Cómo voy a la panadería?", "Як дійти до пекарні?"], a: ["Por la avenida de los Encuartes, giras la primera a la izquierda y vas todo recto por la avenida del Comercio. La panadería está después de la cafetería.", "Ідеш авеню де лос Енкуартес, повертаєш на першому повороті ліворуч і йдеш прямо Торговою авеню. Пекарня — після кав'ярні."] },
+      { n: "c", q: ["¿Cómo voy al cine?", "Як дійти до кінотеатру?"], a: ["Vas todo recto por la calle Salvia y giras a la derecha en la calle de la Estación. El cine está en el centro comercial.", "Ідеш прямо вулицею Сальвія і повертаєш праворуч на Вокзальну вулицю. Кінотеатр — у торговому центрі (приклад відповіді)."] },
+      { n: "d", q: ["¿Cómo voy a la piscina?", "Як дійти до басейну?"], a: ["Vas todo recto por la calle Salvia y giras a la izquierda en la calle de la Iglesia. La piscina está al lado del polideportivo, enfrente del colegio.", "Ідеш прямо вулицею Сальвія і повертаєш ліворуч на Церковну вулицю. Басейн — поруч зі спорткомплексом, навпроти школи (приклад відповіді)."] }
+    ]},
+
+    { type: "box", kind: "review", title: ["¡Practica más!", "Потренуйся ще!"],
+      answers: [
+        { n: "1", q: ["El restaurante está ____ banco.", "Ресторан ____ банку."], a: ["b: El restaurante está al lado del banco.", "b: Ресторан поруч із банком."] },
+        { n: "2", q: ["El banco está ____ centro de salud.", "Банк ____ поліклініки."], a: ["a: El banco está enfrente del centro de salud.", "a: Банк навпроти поліклініки."] },
+        { n: "3", q: ["Compramos pan en la ____.", "Хліб ми купуємо в ____."], a: ["c: Compramos pan en la panadería.", "c: Хліб ми купуємо в пекарні."] },
+        { n: "4", q: ["Vemos una película en el ____.", "Фільм ми дивимося в ____."], a: ["a: Vemos una película en el cine.", "a: Фільм ми дивимося в кінотеатрі."] },
+        { n: "5", q: ["→ = gira a la ____", "→ = поверни ____"], a: ["c: gira a la derecha", "c: поверни праворуч"] },
+        { n: "6", q: ["El supermercado está ____ la biblioteca y la escuela de música.", "Супермаркет ____ бібліотекою і музичною школою."], a: ["b: El supermercado está entre la biblioteca y la escuela de música.", "b: Супермаркет між бібліотекою і музичною школою."] }
+      ],
+      items: [
+        { n: "1", s: [["El restaurante está ____ banco.", "Ресторан ____ банку."]] },
+        { n: "a", sub: true, s: [["entre el", "між"]] },
+        { n: "b", sub: true, ok: true, s: [["al lado del", "поруч із"]] },
+        { n: "c", sub: true, s: [["al lado de el", "(неправильно: de + el = del)"]] },
+        { n: "2", s: [["El banco está ____ centro de salud.", "Банк ____ поліклініки."]] },
+        { n: "a", sub: true, ok: true, s: [["enfrente del", "навпроти"]] },
+        { n: "b", sub: true, s: [["enfrente de la", "(неправильно: centro — чоловічого роду)"]] },
+        { n: "c", sub: true, s: [["entre del", "(неправильно)"]] },
+        { n: "3", s: [["Compramos pan en la ____.", "Хліб ми купуємо в ____."]] },
+        { n: "a", sub: true, s: [["farmacia", "аптеці"]] },
+        { n: "b", sub: true, s: [["peluquería", "перукарні"]] },
+        { n: "c", sub: true, ok: true, s: [["panadería", "пекарні"]] },
+        { n: "4", s: [["Vemos una película en el ____.", "Фільм ми дивимося в ____."]] },
+        { n: "a", sub: true, ok: true, s: [["cine", "кінотеатрі"]] },
+        { n: "b", sub: true, s: [["hospital", "лікарні"]] },
+        { n: "c", sub: true, s: [["banco", "банку"]] },
+        { n: "5", s: [["→ = gira a la ____", "→ = поверни ____"]] },
+        { n: "a", sub: true, s: [["izquierda", "ліворуч"]] },
+        { n: "b", sub: true, s: [["todo recto", "прямо"]] },
+        { n: "c", sub: true, ok: true, s: [["derecha", "праворуч"]] },
+        { n: "6", s: [["El supermercado está ____ la biblioteca y la escuela de música.", "Супермаркет ____ бібліотекою і музичною школою."]] },
+        { n: "a", sub: true, s: [["enfrente", "навпроти"]] },
+        { n: "b", sub: true, ok: true, s: [["entre", "між"]] },
+        { n: "c", sub: true, s: [["al lado", "поруч"]] }
+      ]
+    },
+
+    { type: "box", kind: "review", title: ["Check yourself", "Перевір себе"],
+      answers: [
+        { n: "1", q: ["¿Dónde está la casa de Elena?", "Де будинок Олени?"], a: ["c: Enfrente del centro cultural.", "c: Навпроти культурного центру."] },
+        { n: "2", q: ["¿Dónde hay un restaurante?", "Де є ресторан?"], a: ["a: En la avenida del Comercio, al lado del banco.", "a: На Торговій авеню, поруч із банком."] },
+        { n: "3", q: ["¿Cómo se llama el baile de la canción?", "Як називається танець із пісні?"], a: ["b: La yenka.", "b: Єнка."] },
+        { n: "4", q: ["¿Qué significa «todo recto»?", "Що означає «todo recto»?"], a: ["a: Ir sin girar.", "a: Іти не повертаючи (прямо)."] },
+        { n: "5", q: ["¿Dónde está el cine?", "Де кінотеатр?"], a: ["c: En el centro comercial.", "c: У торговому центрі."] }
+      ],
+      items: [
+        { n: "1", s: [["¿Dónde está la casa de Elena?", "Де будинок Олени?"]] },
+        { n: "a", sub: true, s: [["Al lado del banco.", "Поруч із банком."]] },
+        { n: "b", sub: true, s: [["Enfrente del hotel.", "Навпроти готелю."]] },
+        { n: "c", sub: true, ok: true, s: [["Enfrente del centro cultural.", "Навпроти культурного центру."]] },
+        { n: "2", s: [["¿Dónde hay un restaurante?", "Де є ресторан?"]] },
+        { n: "a", sub: true, ok: true, s: [["En la avenida del Comercio, al lado del banco.", "На Торговій авеню, поруч із банком."]] },
+        { n: "b", sub: true, s: [["En la avenida del Parque.", "На Парковій авеню."]] },
+        { n: "c", sub: true, s: [["Enfrente del centro de salud.", "Навпроти поліклініки."]] },
+        { n: "3", s: [["¿Cómo se llama el baile de la canción?", "Як називається танець із пісні?"]] },
+        { n: "a", sub: true, s: [["La siesta.", "Сієста."]] },
+        { n: "b", sub: true, ok: true, s: [["La yenka.", "Єнка."]] },
+        { n: "c", sub: true, s: [["La tumba.", "Могила."]] },
+        { n: "4", s: [["¿Qué significa «todo recto»?", "Що означає «todo recto»?"]] },
+        { n: "a", sub: true, ok: true, s: [["Ir sin girar.", "Іти не повертаючи (прямо)."]] },
+        { n: "b", sub: true, s: [["Girar a la derecha.", "Повернути праворуч."]] },
+        { n: "c", sub: true, s: [["Girar a la izquierda.", "Повернути ліворуч."]] },
+        { n: "5", s: [["¿Dónde está el cine?", "Де кінотеатр?"]] },
+        { n: "a", sub: true, s: [["En el polideportivo.", "У спорткомплексі."]] },
+        { n: "b", sub: true, s: [["Al lado de la iglesia.", "Поруч із церквою."]] },
+        { n: "c", sub: true, ok: true, s: [["En el centro comercial.", "У торговому центрі."]] }
+      ]
+    }
+  ],
+  phrases: [
+    ["nuestro barrio", "наш район"],
+    ["Vamos a casa de Elena.", "Ідемо до Олени додому."],
+    ["Observa el plano.", "Розглянь план."],
+    ["¿Dónde hay un restaurante?", "Де є ресторан?"],
+    ["¿Dónde está el banco?", "Де банк?"],
+    ["al lado de", "поруч із"],
+    ["al lado del banco", "поруч із банком"],
+    ["enfrente de", "навпроти"],
+    ["enfrente del centro de salud", "навпроти поліклініки"],
+    ["entre", "між"],
+    ["todo recto", "весь час прямо"],
+    ["gira a la derecha", "поверни праворуч"],
+    ["gira a la izquierda", "поверни ліворуч"],
+    ["giramos la primera a la izquierda", "повертаємо на першому повороті ліворуч"],
+    ["la segunda a la derecha", "другий поворот праворуч"],
+    ["por la calle Salvia", "вулицею Сальвія"],
+    ["por la avenida de los Encuartes", "авеню де лос Енкуартес"],
+    ["la casa de Elena", "будинок Олени"],
+    ["Estás en el ayuntamiento.", "Ти біля ратуші."],
+    ["Di cómo ir a…", "Скажи, як дійти до…"],
+    ["el centro cultural", "культурний центр"],
+    ["el centro de salud", "поліклініка"],
+    ["la estación de tren", "залізничний вокзал"],
+    ["la escuela de música", "музична школа"],
+    ["el centro comercial", "торговий центр"],
+    ["la tienda de ropa", "магазин одягу"],
+    ["vamos a bailar", "ходімо танцювати"],
+    ["vamos todos juntos", "ходімо всі разом"],
+    ["Esto es muy fácil.", "Це дуже легко."],
+    ["lo hacemos así", "ми робимо це так"],
+    ["izquierda, derecha", "ліворуч, праворуч"],
+    ["delante, detrás", "вперед, назад"],
+    ["un, dos, tres", "раз, два, три"]
+  ]
+});
