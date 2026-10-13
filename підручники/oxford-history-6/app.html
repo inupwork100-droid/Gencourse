@@ -222,6 +222,8 @@ figcaption { font-size: 16px; margin-top: 8px; color: var(--ink); }
 .ap-say { border: 0; background: transparent; color: #c9a227; padding: 0; width: 20px; height: 22px; display: grid; place-items: center; }
 .ap-say svg { width: 15px; height: 15px; }
 .ap.ap-h .ape { font-weight: 800; letter-spacing: .02em; }
+.ap.ap-h .ape::before { content: ""; display: inline-block; width: 11px; height: 11px; border-radius: 50%; background: #a23fd6; margin: 0 8px 2px 0; vertical-align: middle; }
+.ap.ap-h:not(:first-of-type) { margin-top: 22px; }
 
 .ap .ape b, .apu b { font-weight: 800; }
 .ap-tog { border: 1px solid #f0dc9a; background: #fdf3cf; color: #9a7a14; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 2px 7px; }
@@ -256,6 +258,9 @@ figcaption { font-size: 16px; margin-top: 8px; color: var(--ink); }
 @media (prefers-reduced-motion: reduce) { .owl-say .cta, .owl-say.popin, .owl-say.flyin { animation: none; } }
 .owl-say .notice { background: rgba(225,225,225,.85); border-radius: 22px; padding: 8px 12px; display: grid; gap: 2px; }
 .owl-say .notice .nenv { color: #c79a00; }
+.owl-say .nbig { display: block; font-family: "Caveat", "Segoe Script", cursive; font-weight: 700; font-size: 40px; line-height: 1; }
+.owl-say .nbig.oops { color: #e0262b; }
+.owl-say .nbig.wow { background: linear-gradient(90deg, #ff3b30, #ff9500, #ffcc00, #34c759, #00a2ff, #5856d6, #af52de, #ff3b30); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: cta-flow 2.4s linear infinite; }
 .owl-say .notice .nenv svg { width: 24px; height: 18px; }
 .item.opt.right { background: color-mix(in srgb, var(--lime) 45%, var(--surface)); box-shadow: 0 0 0 2px var(--lime), 0 0 16px color-mix(in srgb, var(--lime) 70%, transparent); animation: opt-glow 1.6s ease-in-out 3; }
 .item.opt.right .n { color: #2f8a1f; font-weight: 800; }
@@ -859,7 +864,7 @@ L.blocks.forEach((b, bi) => {
         // a book task (1, 2, a, b…) with its own answer in the envelope gets a «+» that opens the answer right under it
         if (!it.sub) { const m = /^\d+/.exec(String(it.n || "").trim()); if (m) num = m[0]; }
         const key = it.sub ? num + norm(it.n) : norm(it.n);
-        const ai = isOpt || !it.n || !it.s.length ? -1 : key in ansAt ? ansAt[key] : it.sub && num in ansAt ? ansAt[num] : -1;
+        const ai = isOpt || !it.n || !it.s.length || (!it.sub && groups[k] && groups[k].some(x => x.ok)) ? -1 : key in ansAt ? ansAt[key] : it.sub && num in ansAt ? ansAt[num] : -1;
         const r = renderSentences(it.s);
         // a word in place of the number (e.g. a suffix "-ful") is shown as a term with its meaning
         const isTerm = it.n && String(it.n).length > 1 && !/^\d+\s?[a-z]?[.)]?$/i.test(it.n);
@@ -1197,7 +1202,7 @@ function chooseOpt(o) {
   if (optLocked[qid]) {
     const env = o.closest(".box").querySelector(".ansbtn");
     o.classList.remove("flash"); void o.offsetWidth; o.classList.add("flash");
-    owlNotice("Oops, wait a sec!|Peek in the envelope first, then try again!", "Ой, зачекай секундочку!|Спершу зазирни в конвертик, а тоді ще раз!");
+    owlNotice("Wait a sec!|Peek in the envelope first, then try again!", "Ой, зачекай секундочку!|Спершу зазирни в конвертик, а тоді ще раз!", "Oops!", "oops");
     if (env) { env.classList.remove("nudge"); void env.offsetWidth; env.classList.add("nudge"); }
     return;
   }
@@ -1205,7 +1210,8 @@ function chooseOpt(o) {
   const ok = !!o.dataset.ok;
   o.classList.add(ok ? "right" : "wrong");
   optLocked[qid] = true;
-  if (ok) noteTask();
+  if (ok) { if (noteTask() < 0) owlNotice("Keep it up!|Go on, you're doing great!", "Так тримати!|Продовжуй, у тебе чудово виходить!", "Wow!", "wow", 3000); }
+  else owlNotice("Not this one.|Peek in the envelope and try again!", "Не ця відповідь.|Зазирни в конвертик і спробуй ще раз!", "Oops!", "oops", 3000);
 }
 // an answer split into paragraphs; every paragraph has its own UA button for the translation
 function ansParas(a) {
@@ -1527,7 +1533,7 @@ const CTAS = [["I can't wait to see your next star!", "Не можу дочек�
 let lastCta = null;
 function withCta(en, ua) { const c = pick(CTAS); lastCta = c; return [en + "|" + c[0], ua + "|" + c[1]]; }
 function noteLook() { day.looks++; const j = saveDay(); if (j >= 0) owlSay(pick(CHEERS), starEn(j), starUa(j), j); }
-function noteTask() { day.tasks++; const j = saveDay(); if (j >= 0) owlSay(pick(CHEERS), starEn(j), starUa(j), j); }
+function noteTask() { day.tasks++; const j = saveDay(); if (j >= 0) owlSay("Wow!", starEn(j), starUa(j), j); return j; }
 
 /* ---------- owl ---------- */
 const STAR_SVG = '<svg viewBox="0 0 24 24" stroke-width="1.4" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6-4.9-4.5 6.6-.8z"/></svg>';
@@ -1547,7 +1553,7 @@ function owlSay(hi, en, ua, newStar = -1, party = false) {
   box.classList.remove("small");
   box.innerHTML = `<div class="panel"><button class="x" aria-label="Закрити">×</button>
     <div class="stars" aria-label="Зірочки за сьогодні">${st.map((on, j) => `<span class="star${on ? " on" : ""}${j === newStar ? " new" : ""}">${STAR_SVG}${STAR_LABELS[j]}</span>`).join("")}</div>
-    <div class="hi">${esc(hi)}</div>
+    <div class="hi${hi === "Wow!" ? " nbig wow" : ""}">${esc(hi)}</div>
     ${ctaHtml(en, "en")}${ctaHtml(ua, "uk")}
     <div class="tiles">
       <div class="tile"><small><span>Прочитано</span><span>сьогодні</span><span>сторінок</span></small><strong>${pages}${CHECK}</strong></div>
@@ -1559,14 +1565,15 @@ function owlSay(hi, en, ua, newStar = -1, party = false) {
   clearTimeout(owlT); owlT = setTimeout(hideOwlSay, 10000);
 }
 // a gentle reminder: white bubble with a grey panel, no stars or tiles
-function owlNotice(en, ua) {
+// big = a loud first word ("Oops!" in red, "Wow!" in rainbow); mood = "oops" | "wow"
+function owlNotice(en, ua, big, mood, ms) {
   const box = $("#owlSay");
   box.innerHTML = `<button class="x" aria-label="Закрити">×</button>
-    <div class="notice"><span class="nenv">${SVG.mail}</span>${ctaHtml(en, "en")}${ctaHtml(ua, "uk")}</div>`;
+    <div class="notice">${mood === "wow" ? "" : `<span class="nenv">${SVG.mail}</span>`}${big ? `<span class="nbig ${mood || ""}">${esc(big)}</span>` : ""}${ctaHtml(en, "en")}${ctaHtml(ua, "uk")}</div>`;
   box.classList.add("small");
   box.hidden = false; popBubble(box);
   const o = $("#owl"); o.classList.remove("talk", "party"); void o.offsetWidth; o.classList.add("talk", "big");
-  clearTimeout(owlT); owlT = setTimeout(hideOwlSay, 5000);
+  clearTimeout(owlT); owlT = setTimeout(hideOwlSay, ms || 5000);
 }
 function hideOwlSay() { $("#owlSay").hidden = true; $("#owlSay").classList.remove("flyin"); $("#owl").classList.remove("big", "party"); }
 function owlGreet(first) {
