@@ -80,3 +80,63 @@
     lesson.blocks.push({ type: "box", kind: "review", title: ["Check yourself", "Перевір себе"], answers, items });
   }
 })();
+
+// Варіанти відповіді (кружечки під запитанням) для завдань Activities, де є одна правильна відповідь.
+// Ключ — номер завдання, як у книжці («1a», «2c»), або «?» для запитання без номера. [варіанти, номер правильного].
+(function () {
+  const G = window.GEO;
+  const C = {
+    "1.1": { activities: {
+      "1a": [[["in the oceans and seas", "в океанах і морях"], ["in rivers and lakes", "у річках і озерах"], ["in ice and snow", "у льоді й снігу"]], 0],
+      "1b": [[["it condenses into clouds", "конденсується в хмари"], ["it evaporates into water vapour", "випаровується у водяну пару"], ["it flows downhill", "стікає вниз"]], 1],
+      "1c": [[["it falls as rain, hail, sleet or snow", "випадає дощем, градом, мокрим снігом чи снігом"], ["it evaporates", "випаровується"], ["it soaks into rocks", "просочується в породи"]], 0],
+      "1d": [[["the wind blows it", "її переносить вітер"], ["it flows downhill in rivers and as groundwater", "стікає вниз річками й підземними водами"], ["it evaporates", "випаровується"]], 1],
+      "2a": [[["1 litre", "1 літр"], ["10 litres", "10 літрів"], ["100 litres", "100 літрів"]], 1],
+      "2b": [[["1 kilogram", "1 кілограм"], ["10 kilograms", "10 кілограмів"], ["100 kilograms", "100 кілограмів"]], 1]
+    }},
+    "1.2": { activities: {
+      "3a": [[["they give water for drinking and farming", "дають воду для пиття й полів"], ["they flood houses", "затоплюють будинки"], ["they carry pollution", "несуть забруднення"]], 0],
+      "3b": [[["people must build bridges to cross them", "щоб їх перетнути, треба будувати мости"], ["they give fish", "дають рибу"], ["they make electricity", "дають електрику"]], 0],
+      "3c": [[["they are good for canoeing", "на них добре веслувати"], ["floods and strong currents", "повені й сильні течії"], ["they water crops", "поливають поля"]], 1]
+    }},
+    "1.3": { activities: {
+      "2a": [[["source", "витік"], ["mouth (estuary)", "гирло (естуарій)"], ["meander", "меандр"]], 1],
+      "2b": [[["waterfall", "водоспад"], ["delta", "дельта"], ["tributary", "притока"]], 0],
+      "2c": [[["mouth", "гирло"], ["floodplain", "заплава"], ["source", "витік"]], 2],
+      "2d": [[["valley", "долина"], ["floodplain", "заплава"], ["oxbow lake", "стариця"]], 1],
+      "2e": [[["tributary", "притока"], ["estuary", "естуарій"], ["meander", "меандр"]], 0],
+      "2f": [[["delta", "дельта"], ["waterfall", "водоспад"], ["meander", "меандр"]], 2]
+    }},
+    "1.4": { think: {
+      "?": [[["Switzerland, Liechtenstein, Austria, Germany and France", "Швейцарія, Ліхтенштейн, Австрія, Німеччина й Франція"], ["Spain, Portugal and Italy", "Іспанія, Португалія та Італія"], ["Poland and Ukraine", "Польща й Україна"]], 0]
+    }},
+    "1.5": { activities: {
+      "2a": [[["Egypt would have much less water for people and farms", "в Єгипті було б значно менше води для людей і полів"], ["Egypt would get more floods", "в Єгипті було б більше повеней"], ["nothing would change", "нічого б не змінилося"]], 0],
+      "2b": [[["it left fertile mud for growing crops", "залишала родючий мул для вирощування врожаю"], ["it washed the fields away", "змивала поля"], ["it made the water salty", "робила воду солоною"]], 0],
+      "3a": [[["from north to south", "з півночі на південь"], ["from south to north", "з півдня на північ"], ["from east to west", "зі сходу на захід"]], 1]
+    }},
+    "1.7": { activities: {
+      "1c": [[["Lake Eyre (Kati Thanda) in South Australia", "озеро Ейр (Каті-Танда) у Південній Австралії"], ["Lake Victoria in Africa", "озеро Вікторія в Африці"], ["Lake Nasser in Egypt", "озеро Насер у Єгипті"]], 0]
+    }},
+    "1.8": { activities: {
+      "1b": [[["down the drains to a sewage works, then back to a river", "у каналізацію до очисних споруд, а потім назад у річку"], ["straight up into the clouds", "просто в хмари"], ["it stays in the pipes", "лишається в трубах"]], 0]
+    }},
+    "2.1": { activities: {
+      "1a": [[["with signs showing the slope, e.g. 10% or 1:10", "знаками, які показують крутизну, напр. 10% або 1:10"], ["with green paint on the road", "зеленою фарбою на дорозі"], ["slopes are never marked", "схили ніколи не позначають"]], 0]
+    }}
+  };
+  for (const id in C) {
+    const lesson = G.lessons.find(l => l.id === id); if (!lesson) continue;
+    for (const kind in C[id]) {
+      const box = lesson.blocks.find(b => b.type === "box" && b.kind === kind); if (!box) continue;
+      let num = "";
+      box.items.forEach(it => {
+        const n = String(it.n || "").replace(/\s+/g, "");
+        if (!it.sub) { const m = /^\d+/.exec(n); if (m) num = m[0]; }
+        const key = !n || n === "-" ? "?" : it.sub ? num + n : n;
+        const c = C[id][kind][key];
+        if (c) { it.choices = c[0]; it.cok = c[1]; }
+      });
+    }
+  }
+})();
