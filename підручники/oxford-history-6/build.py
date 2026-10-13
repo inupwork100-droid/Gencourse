@@ -11,11 +11,16 @@ import json
 uri = lambda f: "data:image/jpeg;base64," + base64.b64encode(f.read_bytes()).decode()
 app = app.replace("{{IMG_cover}}", uri(here / "images" / "cover.jpg"))
 images = {f.stem: uri(f) for f in sorted((here / "images").glob("*.jpg")) if f.stem != "cover"}
+# the second built-in textbook: Oxford International Primary Geography 6 (sits next to this folder)
+geo = here.parent / "oxford-geography-6"
+images.update({f.stem: uri(f) for f in sorted((geo / "images").glob("*.jpg"))})
 app = app.replace("{{IMAGES_JSON}}", json.dumps(images))
 # photos of the textbook spreads the book was made from (shown in the folder's edit sheet)
 app = app.replace("{{PAGES_JSON}}", json.dumps([uri(f) for f in sorted((here / "images" / "pages").glob("*.jpg"))]))
 # усі уроки по черзі: lesson-1-1.js, lesson-1-2.js, …
 lessons = sorted(here.glob("lesson-*.js"), key=lambda f: [int(x) for x in f.stem.split("-")[1:]])
+geo_js = sorted(geo.glob("lesson-*.js"), key=lambda f: [int(x) for x in f.stem.split("-")[1:]]) + sorted(geo.glob("dict-*.js")) + [geo / "contents.js"]
+app = app.replace("{{GEO_JS}}", "\n".join(f.read_text(encoding="utf-8") for f in geo_js if f.exists()))
 app = app.replace("{{LESSON_JS}}", "\n".join(f.read_text(encoding="utf-8") for f in lessons))
 app = app.replace("{{CONTENTS_JS}}", (here / "contents.js").read_text(encoding="utf-8"))
 app = app.replace("{{DICT_JS}}", (here / "dictionary.js").read_text(encoding="utf-8"))

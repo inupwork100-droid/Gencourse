@@ -654,6 +654,7 @@ body:not(.lib-mode) .library { display: none; }
 </button>
 
 <script>{{LESSON_JS}}</script>
+<script>{{GEO_JS}}</script>
 <script>{{DICT_JS}}</script>
 <script>{{CONTENTS_JS}}</script>
 <script>
@@ -675,8 +676,15 @@ async function loadMagicBook(id) {
 (async () => {
 "use strict";
 const BOOK_ID = (() => { try { return JSON.parse(localStorage.getItem("vk:book")) || "history6"; } catch (e) { return "history6"; } })();
-const MAGIC = BOOK_ID !== "history6" ? await loadMagicBook(BOOK_ID) : null;
-if (BOOK_ID !== "history6" && !MAGIC) { try { localStorage.setItem("vk:book", JSON.stringify("history6")); localStorage.setItem("vk:view", JSON.stringify("lib")); } catch (e) {} location.reload(); return; }
+// built-in textbooks live in this file; any other book comes from the db
+const BUILTIN = { history6: 1, geography: 1 };
+const MAGIC = !BUILTIN[BOOK_ID] ? await loadMagicBook(BOOK_ID) : null;
+if (BOOK_ID === "geography" && window.GEO) {
+  const num = id => String(id).split(".").map(Number);
+  window.LESSONS = window.GEO.lessons.slice().sort((a, b) => { const x = num(a.id), y = num(b.id); return x[0] - y[0] || (x[1] || 0) - (y[1] || 0); });
+  Object.assign(window.DICT, window.GEO.dict); window.CONTENTS = window.GEO.contents;
+}
+if (!BUILTIN[BOOK_ID] && !MAGIC) { try { localStorage.setItem("vk:book", JSON.stringify("history6")); localStorage.setItem("vk:view", JSON.stringify("lib")); } catch (e) {} location.reload(); return; }
 if (MAGIC) { document.body.classList.add("magic-book"); window.LESSONS = MAGIC.lessons; Object.assign(window.DICT, MAGIC.dict); window.CONTENTS = null; }
 const LESSONS = window.LESSONS, D = window.DICT;
 const ALL_BLOCKS = LESSONS.flatMap(l => l.blocks);
@@ -686,8 +694,8 @@ const IMG_COVER = "{{IMG_cover}}";
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const store = {
-  get(k, d) { if (k === "pos" && BOOK_ID !== "history6") k = "pos:" + BOOK_ID; try { const v = localStorage.getItem("vk:" + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
-  set(k, v) { if (k === "pos" && BOOK_ID !== "history6") k = "pos:" + BOOK_ID; try { localStorage.setItem("vk:" + k, JSON.stringify(v)); } catch (e) {} }
+  get(k, d) { if ((k === "pos" || k === "done") && BOOK_ID !== "history6") k += ":" + BOOK_ID; try { const v = localStorage.getItem("vk:" + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { if ((k === "pos" || k === "done") && BOOK_ID !== "history6") k += ":" + BOOK_ID; try { localStorage.setItem("vk:" + k, JSON.stringify(v)); } catch (e) {} }
 };
 const SVG = {
   speak: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>',
@@ -820,7 +828,7 @@ L.blocks.forEach((b, bi) => {
         const r = renderSentences(it.s);
         // a word in place of the number (e.g. a suffix "-ful") is shown as a term with its meaning
         const isTerm = it.n && String(it.n).length > 1 && !/^\d+[a-z]?[.)]?$/i.test(it.n);
-        return `<div class="item${it.sub ? " subq" : ""}${isOpt ? " opt" : ""}${isTerm ? " term" : ""}"${isOpt ? ` data-q="${li}:${bi}:${q}" data-box="${li}:${bi}"${it.ok ? ' data-ok="1"' : ""} role="button" tabindex="0"` : ""}><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div><button class="ua-tog" data-tog aria-label="Переклад">UA</button></div>`;
+        return `<div class="item${it.sub ? " subq" : ""}${isOpt ? " opt" : ""}${isTerm ? " term" : ""}"${isOpt ? ` data-q="${li}:${bi}:${q}" data-box="${li}:${bi}"${it.ok ? ' data-ok="1"' : ""} role="button" tabindex="0"` : ""}><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div>${it.s.length ? `<button class="ua-tog" data-tog aria-label="Переклад">UA</button>` : ""}</div>`;
       }).join(""); })() + `</div></div>`;
   }
 });
@@ -1512,7 +1520,7 @@ $("#owlSay").addEventListener("click", e => { if (e.target.closest(".x")) hideOw
 /* ---------- library (shelf of books) ---------- */
 // Books on the shelf. "ready" books open the reader; others collect photos/PDFs for Claude to process.
 const PAGE_RANGE = (() => { const ps = [...new Set([...(TOC ? [TOC.page] : []), ...ALL_BLOCKS.filter(b => b.page).map(b => b.page)])]; return Math.min(...ps) + "–" + Math.max(...ps); })();
-if (!MAGIC) store.set("range:history6", PAGE_RANGE);
+if (!MAGIC) store.set("range:" + BOOK_ID, PAGE_RANGE);
 const pctOf = id => id === BOOK_ID ? progress().pct : store.get("pct:" + id, 0);
 function switchBook(id) {
   if (id === BOOK_ID) return openReader();
@@ -1521,8 +1529,8 @@ function switchBook(id) {
   setTimeout(() => location.reload(), 150);
 }
 const BOOKS = [
-  { id: "history6", title: "Oxford International Primary History 6", sub: "History · Історія", color: "#c8372d", cover: IMG_COVER, ready: true, pages: MAGIC ? store.get("range:history6", "3–23") : PAGE_RANGE },
-  { id: "geography", title: "Oxford International Primary Geography 6", sub: "Geography · Географія", color: "#1f6fb0", cover: IMG["geo-cover"] }
+  { id: "history6", title: "Oxford International Primary History 6", sub: "History · Історія", color: "#c8372d", cover: IMG_COVER, ready: true, pages: BOOK_ID === "history6" ? PAGE_RANGE : store.get("range:history6", "3–23") },
+  { id: "geography", title: "Oxford International Primary Geography 6", sub: "Geography · Географія", color: "#1f6fb0", cover: IMG["geo-cover"], ready: !!window.GEO, pages: BOOK_ID === "geography" ? PAGE_RANGE : store.get("range:geography", "3–21") }
 ];
 const GLOBE = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c6 6 6 30 0 36M24 6c-6 6-6 30 0 36"/></svg>';
 const BOOK_ICON = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M10 8h22a6 6 0 0 1 6 6v26H16a6 6 0 0 1-6-6z"/><path d="M10 34a6 6 0 0 1 6-6h22"/></svg>';
@@ -1636,7 +1644,7 @@ function openEditFolder(b) {
     </div>` : `<div class="ed-files">
       <div class="lbl">Файли в папці: <span data-fcount="${esc(b.id)}">${nf}</span></div>
       ${nf ? `<p class="hint">Потримай фото — з'явиться «Видалити». Потримай і посунь — зміниш порядок.</p>${fileTiles(doc, b.id)}` : ""}
-      <div class="btns"><button class="btn" id="edAdd">Додати фото або PDF</button>${nf ? `<button class="btn magicbtn" id="magicGo">${MAGIC_SVG} Магія у книгу</button>` : ""}</div>
+      <div class="btns"><button class="btn" id="edAdd">Додати фото або PDF</button>${nf && !b.ready ? `<button class="btn magicbtn" id="magicGo">${MAGIC_SVG} Магія у книгу</button>` : ""}</div>
       <div class="magic-log" id="magicLog" aria-live="polite" hidden></div>
     </div>`}`, el => {
     const ea = $("#edAdd", el); if (ea) ea.addEventListener("click", () => openUpload(b));
@@ -1669,7 +1677,7 @@ $("#shelf").addEventListener("click", e => {
   if (lpFired) { lpFired = false; e.preventDefault(); return; }
   if (f.dataset.add) return openUploadTo(null);
   const b = allBooks().find(x => x.id === f.dataset.book);
-  if (b.ready && b.id === "history6") return switchBook(b.id);
+  if (b.ready) return switchBook(b.id);
   if (uploaded[b.id] && uploaded[b.id].magic) return switchBook(b.id);   // finished book: open it straight away
   openBookSheet(b);
 });
@@ -2111,6 +2119,7 @@ renderShelf();
 if (store.get("view", "lib") === "lib") document.body.classList.add("lib-mode");
 setTimeout(() => owlGreet(true), 900);
 
+if (BOOK_ID === "geography") { $(".top .t b").textContent = "Oxford Primary Geography 6"; $(".top .cover").src = IMG["geo-cover"]; }
 if (MAGIC) {
   $(".top .t b").textContent = MAGIC.meta.title || "Моя книжка";
   const mc = MAGIC.meta.cover || ((MAGIC.meta.files || []).find(f => /^image\//.test(f.type)) || {}).id;
