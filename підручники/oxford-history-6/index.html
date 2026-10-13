@@ -219,6 +219,8 @@ figcaption { font-size: 16px; margin-top: 8px; color: var(--ink); }
 .chip.opt.flash { animation: opt-flash .6s ease-out; }
 .item.opt { cursor: pointer; border-radius: 12px; margin-left: 16px; padding: 4px 40px 4px 6px; transition: background-color .3s; }
 .item.opt.subq { padding-left: 6px; }
+.item.opt.ch { margin-left: 44px; }
+.item.has-ch > div { font-weight: 700; }
 @media (hover: hover) { .item.opt:hover { background: color-mix(in srgb, var(--lime) 12%, transparent); } }
 .item.opt .w:hover { background: transparent; }
 .item.opt .w { cursor: pointer; }
@@ -6327,7 +6329,9 @@ L.blocks.forEach((b, bi) => {
         const r = renderSentences(it.s);
         // a word in place of the number (e.g. a suffix "-ful") is shown as a term with its meaning
         const isTerm = it.n && String(it.n).length > 1 && !/^\d+\s?[a-z]?[.)]?$/i.test(it.n);
-        return `<div class="item${it.sub ? " subq" : ""}${isOpt ? " opt" : ""}${isTerm ? " term" : ""}"${isOpt ? ` data-q="${li}:${bi}:${q}" data-box="${li}:${bi}"${it.ok ? ' data-ok="1"' : ""} role="button" tabindex="0"` : ""}><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}${it.choices ? `<div class="chips">${it.choices.map((c, j) => `<button type="button" class="chip opt" data-q="${li}:${bi}:c${k}" data-box="${li}:${bi}"${j === it.cok ? ' data-ok="1"' : ""}><span class="ce">${esc(c[0])}</span><span class="cu">${esc(c[1])}</span></button>`).join("")}</div>` : ""}</div>${it.s.length ? `<button class="ua-tog" data-tog aria-label="Переклад">UA</button>` : ""}</div>`;
+        return `<div class="item${it.sub ? " subq" : ""}${isOpt ? " opt" : ""}${isTerm ? " term" : ""}${it.choices ? " has-ch" : ""}"${isOpt ? ` data-q="${li}:${bi}:${q}" data-box="${li}:${bi}"${it.ok ? ' data-ok="1"' : ""} role="button" tabindex="0"` : ""}><span class="n">${esc(it.n || "")}</span><div>${r.en}${uaHtml(r.sis)}</div>${it.s.length ? `<button class="ua-tog" data-tog aria-label="Переклад">UA</button>` : ""}</div>` +
+          // answer options for this question: rows a/b/c that glow right/wrong, like «Check yourself»
+          (it.choices ? it.choices.map((c, j) => { const cr = renderSentences([c]); return `<div class="item subq opt ch" data-q="${li}:${bi}:c${k}" data-box="${li}:${bi}"${j === it.cok ? ' data-ok="1"' : ""} role="button" tabindex="0"><span class="n">${"abc"[j]}</span><div>${cr.en}${uaHtml(cr.sis)}</div><button class="ua-tog" data-tog aria-label="Переклад">UA</button></div>`; }).join("") : "");
       }).join(""); })() + `</div></div>`;
   }
 });
