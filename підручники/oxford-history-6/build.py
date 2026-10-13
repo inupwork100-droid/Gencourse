@@ -20,6 +20,9 @@ images.update({f.stem: uri(f) for f in sorted((sci / "images").glob("*.jpg"))})
 # the fourth built-in book: English (grammar, word building, writing, speeches)
 eng = here.parent / "english"
 images.update({f.stem: uri(f) for f in sorted((eng / "images").glob("*.jpg"))})
+# the fifth built-in book: Español (Colega vuelve 3, photos of the printed book)
+esp = here.parent / "spanish"
+images.update({f.stem: uri(f) for f in sorted((esp / "images").glob("*.jpg"))})
 app = app.replace("{{IMAGES_JSON}}", json.dumps(images))
 # photos of the textbook spreads the book was made from (shown in the folder's edit sheet)
 app = app.replace("{{PAGES_JSON}}", json.dumps([uri(f) for f in sorted((here / "images" / "pages").glob("*.jpg"))]))
@@ -29,6 +32,8 @@ geo_js = sorted(geo.glob("lesson-*.js"), key=lambda f: [int(x) for x in f.stem.s
 sci_js = sorted(sci.glob("lesson-*.js"), key=lambda f: [int(x) for x in f.stem.split("-")[1:]]) + sorted(sci.glob("dict-*.js")) + [sci / "contents.js"]
 eng_js = sorted(eng.glob("lesson-*.js"), key=lambda f: [int(x) for x in f.stem.split("-")[1:]]) + sorted(eng.glob("dict-*.js")) + [eng / "contents.js"]
 app = app.replace("{{ENG_JS}}", "\n".join(f.read_text(encoding="utf-8") for f in eng_js if f.exists()))
+esp_js = sorted(esp.glob("lesson-*.js"), key=lambda f: [int(x) for x in f.stem.split("-")[1:]]) + sorted(esp.glob("dict-*.js")) + [esp / "contents.js"]
+app = app.replace("{{ESP_JS}}", "\n".join(f.read_text(encoding="utf-8") for f in esp_js if f.exists()))
 app = app.replace("{{SCI_JS}}", "\n".join(f.read_text(encoding="utf-8") for f in sci_js if f.exists()))
 app = app.replace("{{GEO_JS}}", "\n".join(f.read_text(encoding="utf-8") for f in geo_js if f.exists()))
 app = app.replace("{{LESSON_JS}}", "\n".join(f.read_text(encoding="utf-8") for f in lessons))
