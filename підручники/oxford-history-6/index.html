@@ -376,6 +376,9 @@ a.ext { color: var(--ua); font-weight: 700; }
 .wt-say { position: absolute; right: -2px; top: 2px; width: 20px; height: 22px; display: grid; place-items: center; color: #c9a227; }
 .wt-say svg { width: 15px; height: 15px; }
 .wt-prefix .wt-ex b { color: #1fb24a; }
+.wt-prefix .wt-title, .wt-suffix .wt-title { display: inline-block; padding: 4px 14px; border-radius: 12px; }
+.wt-prefix .wt-title { background: #e3f9c4; }
+.wt-suffix .wt-title { background: #ffdcd8; }
 .wt-suffix .wt-ex b { color: #e2322b; }
 .wt-prefix .wt-ex u, .wt-suffix .wt-ex u { text-decoration: underline 2.5px #8a3fe0; text-underline-offset: 4px; }
 .wt-spell { border-color: var(--g); box-shadow: inset 0 0 0 8px color-mix(in srgb, var(--g) 16%, white); padding: 16px 18px 8px; }
@@ -413,6 +416,9 @@ a.ext { color: var(--ua); font-weight: 700; }
 .st-w { border: 2px solid #f0cf4a; background: #fff8d6; color: #4a2a8a; border-radius: 12px; padding: 7px 12px; font: inherit; font-size: 16px; font-weight: 700; display: flex; flex-direction: column; align-items: flex-start; cursor: pointer; }
 .st-w i { font-style: normal; color: #6a2fb0; }
 .st-w small { font-size: 12.5px; font-weight: 300; color: #3b3330; }
+.st-w { transition: transform .25s, background .25s, border-color .25s, box-shadow .25s; }
+.st-w.say { transform: scale(1.12); background: #efffd0; border-color: #8fd400; box-shadow: 0 0 16px rgba(143, 212, 0, .75); }
+.st-w.say span, .st-w.say i { color: #4c9e00; }
 .st-w:active { transform: scale(.96); }
 .st-foot { text-align: center; font-weight: 700; margin: 12px 4px 0; position: relative; padding-right: 40px; }
 .st-foot .ua-tog { position: absolute; right: 0; top: 0; }
@@ -11506,6 +11512,21 @@ $("#play").addEventListener("click", () => playing ? pause() : play());
 $("#prev").addEventListener("click", () => { const was = playing; pause(); cur = Math.max(0, curWord > 1 ? cur : cur - 1); curWord = 0; showSentence(cur, 0); scrollIntoViewIfNeeded(sentences[cur].el); if (was) play(0); });
 $("#next").addEventListener("click", () => { const was = playing; pause(); cur = Math.min(sentences.length - 1, cur + 1); curWord = 0; showSentence(cur, 0); scrollIntoViewIfNeeded(sentences[cur].el); if (was) play(0); });
 
+// speaks word buttons one after another; the word being spoken glows lime and grows a little
+function sayWords(btns) {
+  if (!canSpeak) return toast("Озвучення недоступне в цьому браузері");
+  if (playing) pause();
+  token++; synth.cancel(); ensureVoice();
+  const my = token, off = () => document.querySelectorAll(".st-w.say").forEach(x => x.classList.remove("say"));
+  off();
+  btns.forEach(b => {
+    const u = new SpeechSynthesisUtterance(b.dataset.say);
+    u.lang = voice ? voice.lang : "en-GB"; if (voice) u.voice = voice; u.rate = rate;
+    u.onstart = () => { if (my !== token) return; off(); b.classList.add("say"); };
+    u.onend = u.onerror = () => b.classList.remove("say");
+    synth.speak(u);
+  });
+}
 function sayOnce(text) {
   if (!canSpeak) return toast("Озвучення недоступне в цьому браузері");
   if (playing) pause();
@@ -11611,7 +11632,7 @@ function wordCard(word, opts) {
 
 document.addEventListener("click", e => { const x = e.target.closest(".wt-ex"); if (x) sayOnce(x.dataset.say); });
 document.addEventListener("click", e => {
-  const w = e.target.closest(".st-w"); if (w) { sayOnce(w.dataset.say); return; }
+  const w = e.target.closest(".st-w"); if (w) { sayWords([w]); return; }
   const st = e.target.closest(".st-star"); if (!st) return;
   const box = st.closest(".stars"), [li, bi] = box.dataset.bi.split(":").map(Number), it = LESSONS[li].blocks[bi].items[+st.dataset.star];
   const panel = box.querySelector(".st-words"), was = st.classList.contains("on");
@@ -11625,7 +11646,7 @@ document.addEventListener("click", e => {
   // open the words right under the row of the tapped star
   let last = st; for (let n = st.nextElementSibling; n && n.classList.contains("st-star") && n.offsetTop === st.offsetTop; n = n.nextElementSibling) last = n;
   last.after(panel); panel.hidden = false; scrollIntoViewIfNeeded(panel);
-  sayOnce(it.words.map(w => w[0]).join(", "));
+  sayWords([...panel.querySelectorAll(".st-w")]);
 });
 sheetIn.addEventListener("click", e => {
   const at = e.target.closest("[data-aptog]");
