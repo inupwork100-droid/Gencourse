@@ -39,7 +39,6 @@
       { t: "over-", m: ["too much", "Занадто, понад міру"], ex: ["sleep → oversleep", "спати → проспати"] },
       { t: "inter-", m: ["among or between", "Серед або між"], ex: ["national → international", "національний → міжнародний"] }
     ] },
-    { type: "img", src: "e22-prefix-poster", alt: "Плакат «Префікси»", s: [["The Prefixes poster", "Плакат «Префікси»"]] },
 
     { type: "h2", page: 23, s: [["Suffixes", "Суфікси"]] },
     { type: "lead", s: [["Tap a star to see words with this *suffix*.", "Натисни на зірочку — і побачиш слова з цим *суфіксом*."], ["Tap a word to hear it.", "Натисни на слово, щоб його почути."]] },
@@ -68,10 +67,8 @@
       { t: "-ise", m: ["to create a verb", "Може утворювати дієслово: зробити певним"], ex: ["modern → modernise", "сучасний → модернізувати"] },
       { t: "-ify", m: ["to create a verb", "Може утворювати дієслово: зробити певним"], ex: ["simple → simplify", "простий → спростити"] }
     ] },
-    { type: "img", src: "e22-suffix-poster", alt: "Плакат «Суфікси»", s: [["The Suffixes poster", "Плакат «Суфікси»"]] },
 
     { type: "h2", page: 24, s: [["Make new words", "Утвори нові слова"]] },
-    { type: "img", src: "e22-notebook", alt: "Плакат із суфіксами в зошиті", s: [["The suffix stars in my exercise book", "Зірочки суфіксів у моєму зошиті"]] },
     { type: "box", kind: "activities", title: ["Activities", "Завдання"], items: [
       { n: "1", s: [["Add a prefix to make the opposite: happy, agree, visible, lock.", "Додай префікс, щоб утворити протилежне слово: happy, agree, visible, lock."]] },
       { n: "2", s: [["Add a suffix to make a new word: hope, fear, move, dark.", "Додай суфікс, щоб утворити нове слово: hope, fear, move, dark."]] },
