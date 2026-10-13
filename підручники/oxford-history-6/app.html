@@ -370,7 +370,7 @@ a.ext { color: var(--ua); font-weight: 700; }
 .wt-prefix .wt-ex b { color: #1fb24a; }
 .wt-suffix .wt-ex b { color: #e2322b; }
 .wt-prefix .wt-ex u, .wt-suffix .wt-ex u { text-decoration: underline 2.5px #8a3fe0; text-underline-offset: 4px; }
-.wt-spell { border-color: var(--g); }
+.wt-spell { border-color: var(--g); box-shadow: inset 0 0 0 8px color-mix(in srgb, var(--g) 16%, white); padding: 16px 18px 8px; }
 .wt-spell .wt-head { border-bottom-color: var(--g); }
 .wt-spell .wt-head, .wt-spell .wt-row { grid-template-columns: 6.3em minmax(0, 1fr); column-gap: 10px; }
 .wt-spell .wt-row b.wt-t { font-size: .98em; }
@@ -383,8 +383,8 @@ a.ext { color: var(--ua); font-weight: 700; }
 .wt-group .gw { font-size: 1em; }
 .wt-group .gn { font-size: 3em; line-height: .8; font-weight: 900; color: var(--g); text-shadow: 2px 3px 0 rgba(0,0,0,.12); }
 .wt-group .gu { font-size: .55em; font-weight: 400; color: #6b625d; margin-left: auto; }
-.shim { background: linear-gradient(90deg, #7a3fe0, #f2c200, #7a3fe0, #f2c200); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shim 3s linear infinite; }
-@keyframes shim { to { background-position: 300% 0; } }
+.shim { background: linear-gradient(105deg, #6a2fb0 0%, #6a2fb0 44%, #ffd21a 50%, #6a2fb0 56%, #6a2fb0 100%); background-size: 400% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shim 9s ease-in-out infinite; }
+@keyframes shim { from { background-position: 100% 0; } to { background-position: 0% 0; } }
 /* star posters: tap a star → example-word buttons */
 .stars { margin: 18px 0 22px; background: #fff; border: 2px solid #9b6cf0; border-radius: 16px; padding: 12px 10px 14px; }
 .stars .wt-title { margin: 2px 0 8px; text-align: center; }
@@ -907,7 +907,7 @@ L.blocks.forEach((b, bi) => {
       return esc(en);
     };
     out += `<div class="wtable blk${mk ? " wt-" + mk : ""}" data-bi="${li}:${bi}"${gn ? ` style="--g:${GROUP_COLORS[(gn - 1) % GROUP_COLORS.length]}"` : ""}>` +
-      (gn ? `<h2 class="wt-title wt-group"><span class="gw">Group</span><span class="gn">${gn}</span><span class="gu">Група ${gn}</span></h2>` :
+      (gn ? `<h2 class="wt-title wt-group"><span class="gn">${gn}</span><span class="gw">Group</span><span class="gu">${gn} група</span></h2>` :
         tt ? `<h2 class="wt-title">${tt.en}${uaHtml(tt.sis)}</h2>` : "") +
       (nt ? `<p class="wt-note">${nt.en}<button class="ua-tog" data-tog aria-label="Переклад">UA</button>${uaHtml(nt.sis)}</p>` : "") +
       `<div class="wt-head"><span>${esc((hd[0] || [])[1] || "")}</span><span>${esc((hd[1] || [])[1] || "")}</span></div>` +
