@@ -14,21 +14,19 @@
         ["This resource is a curriculum-aligned selection based on Stage 6 spelling expectations, including challenging vocabulary, spelling patterns, prefixes/suffixes and commonly confused words.", "Цей посібник — добірка за програмою, складена на основі того, що учні 6 класу мають уміти писати: тут є складні слова, типові правописні моделі, префікси й суфікси та слова, які часто плутають."]
       ]}
     ]},
-    { type: "h2", s: [["Group 1", "Група 1"]] },
-    { type: "wordtable", title: [["Group 1", "Група 1"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
-      { t: "accommodate", m: ["", "розміщувати, вміщати"], ex: ["The hotel can accommodate 200 guests.", "Готель може розмістити 200 гостей."] },
+    { type: "wordtable", mark: "spell", title: [["Group 1", "Група 1"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+      { t: "accommodate", m: ["", "розміщувати, вміщати"], ex: ["This hotel can accommodate us.", "Цей готель може нас розмістити."] },
       { t: "accompany", m: ["", "супроводжувати"], ex: ["My mum will accompany me to the doctor.", "Мама супроводжуватиме мене до лікаря."] },
       { t: "according", m: ["", "згідно з, за словами (according to)"], ex: ["According to the map, the park is near here.", "Згідно з мапою, парк десь поруч."] },
       { t: "achievement", m: ["", "досягнення"], ex: ["Winning the race was a big achievement.", "Перемога в забігу була великим досягненням."] },
       { t: "aggressive", m: ["", "агресивний, злий"], ex: ["The dog was aggressive, so we stayed away.", "Собака був агресивний, тож ми трималися подалі."] },
-      { t: "amateur", m: ["", "аматор, любитель"], ex: ["She is an amateur painter, not a professional.", "Вона художниця-аматорка, а не професіоналка."] },
+      { t: "amateur", m: ["", "аматор, любитель"], ex: ["She is an amateur painter.", "Вона художниця-аматорка."] },
       { t: "ancient", m: ["", "стародавній, давній"], ex: ["We saw an ancient castle on the hill.", "Ми побачили стародавній замок на пагорбі."] },
       { t: "apparent", m: ["", "очевидний, явний"], ex: ["It was apparent that he was tired.", "Було очевидно, що він утомився."] },
       { t: "appreciate", m: ["", "цінувати, бути вдячним"], ex: ["I appreciate your help.", "Я ціную твою допомогу."] },
       { t: "awkward", m: ["", "незграбний, ніяковий"], ex: ["I felt awkward at the new school.", "Я почувалася ніяково в новій школі."] }
     ]},
-    { type: "h2", s: [["Group 2", "Група 2"]] },
-    { type: "wordtable", title: [["Group 2", "Група 2"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 2", "Група 2"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "beautiful", m: ["", "гарний, красивий"], ex: ["The garden is beautiful in spring.", "Навесні сад дуже гарний."] },
       { t: "beginning", m: ["", "початок"], ex: ["The beginning of the film was funny.", "Початок фільму був смішний."] },
       { t: "believe", m: ["", "вірити"], ex: ["I believe you.", "Я тобі вірю."] },
@@ -40,8 +38,7 @@
       { t: "category", m: ["", "категорія"], ex: ["Cats and dogs are in the same category: pets.", "Коти й собаки в одній категорії — домашні тварини."] },
       { t: "cemetery", m: ["", "цвинтар, кладовище"], ex: ["There is an old cemetery near the church.", "Біля церкви є старий цвинтар."] }
     ]},
-    { type: "h2", s: [["Group 3", "Група 3"]] },
-    { type: "wordtable", title: [["Group 3", "Група 3"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 3", "Група 3"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "committee", m: ["", "комітет"], ex: ["The school committee planned the party.", "Шкільний комітет спланував свято."] },
       { t: "communicate", m: ["", "спілкуватися"], ex: ["We communicate by phone.", "Ми спілкуємося телефоном."] },
       { t: "community", m: ["", "громада, спільнота"], ex: ["Our community has a big library.", "У нашій громаді є велика бібліотека."] },
@@ -53,8 +50,7 @@
       { t: "correspond", m: ["", "листуватися; відповідати"], ex: ["I correspond with a friend in Canada.", "Я листуюся з подругою з Канади."] },
       { t: "criticise", m: ["", "критикувати"], ex: ["Please do not criticise my drawing.", "Будь ласка, не критикуй мій малюнок."] }
     ]},
-    { type: "h2", s: [["Group 4", "Група 4"]] },
-    { type: "wordtable", title: [["Group 4", "Група 4"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 4", "Група 4"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "curiosity", m: ["", "цікавість"], ex: ["Her curiosity made her open the box.", "Через цікавість вона відкрила коробку."] },
       { t: "definite", m: ["", "певний, точний"], ex: ["We need a definite answer.", "Нам потрібна точна відповідь."] },
       { t: "desperate", m: ["", "відчайдушний, у відчаї"], ex: ["The lost cat was desperate for food.", "Загублений кіт відчайдушно хотів їсти."] },
@@ -66,8 +62,7 @@
       { t: "especially", m: ["", "особливо"], ex: ["I love fruit, especially apples.", "Я люблю фрукти, особливо яблука."] },
       { t: "exaggerate", m: ["", "перебільшувати"], ex: ["Don't exaggerate — it was only a small spider!", "Не перебільшуй — це був лише маленький павучок!"] }
     ]},
-    { type: "h2", s: [["Group 5", "Група 5"]] },
-    { type: "wordtable", title: [["Group 5", "Група 5"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 5", "Група 5"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "excellent", m: ["", "чудовий, відмінний"], ex: ["You did an excellent job.", "Ти чудово впоралася."] },
       { t: "existence", m: ["", "існування"], ex: ["Do you believe in the existence of dragons?", "Ти віриш в існування драконів?"] },
       { t: "experience", m: ["", "досвід; пригода"], ex: ["The trip was a great experience.", "Ця подорож була чудовою пригодою."] },
@@ -79,8 +74,7 @@
       { t: "government", m: ["", "уряд"], ex: ["The government makes the laws.", "Уряд ухвалює закони."] },
       { t: "guarantee", m: ["", "гарантія; гарантувати"], ex: ["I guarantee you will like this book.", "Гарантую, що тобі сподобається ця книжка."] }
     ]},
-    { type: "h2", s: [["Group 6", "Група 6"]] },
-    { type: "wordtable", title: [["Group 6", "Група 6"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 6", "Група 6"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "harass", m: ["", "докучати, переслідувати"], ex: ["Please don't harass the cat.", "Будь ласка, не чіпляйся до кота."] },
       { t: "hindrance", m: ["", "перешкода, завада"], ex: ["The rain was a hindrance to our game.", "Дощ завадив нашій грі."] },
       { t: "identity", m: ["", "особа, ідентичність"], ex: ["The spy hid his identity.", "Шпигун приховав свою особу."] },
@@ -92,8 +86,7 @@
       { t: "leisure", m: ["", "дозвілля, вільний час"], ex: ["I read books in my leisure time.", "У вільний час я читаю книжки."] },
       { t: "lightning", m: ["", "блискавка"], ex: ["We saw lightning in the sky.", "Ми побачили блискавку в небі."] }
     ]},
-    { type: "h2", s: [["Group 7", "Група 7"]] },
-    { type: "wordtable", title: [["Group 7", "Група 7"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 7", "Група 7"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "marvellous", m: ["", "дивовижний, чудовий"], ex: ["We had a marvellous holiday.", "У нас були чудові канікули."] },
       { t: "mischievous", m: ["", "пустотливий, бешкетний"], ex: ["The mischievous kitten hid my sock.", "Пустотливе кошеня сховало мою шкарпетку."] },
       { t: "necessary", m: ["", "потрібний, необхідний"], ex: ["Water is necessary for life.", "Вода необхідна для життя."] },
@@ -105,21 +98,19 @@
       { t: "parliament", m: ["", "парламент"], ex: ["The parliament meets in the capital.", "Парламент засідає в столиці."] },
       { t: "persuade", m: ["", "переконувати, умовляти"], ex: ["Can you persuade Dad to buy a cake?", "Ти можеш умовити тата купити торт?"] }
     ]},
-    { type: "h2", s: [["Group 8", "Група 8"]] },
-    { type: "wordtable", title: [["Group 8", "Група 8"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 8", "Група 8"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "physical", m: ["", "фізичний, тілесний"], ex: ["Running is good physical exercise.", "Біг — гарна фізична вправа."] },
       { t: "possess", m: ["", "мати, володіти"], ex: ["He does not possess a car.", "У нього немає машини."] },
       { t: "possession", m: ["", "власність, річ, що належить"], ex: ["This old book is my favourite possession.", "Ця стара книжка — моя найулюбленіша річ."] },
       { t: "possible", m: ["", "можливий"], ex: ["Is it possible to finish today?", "Чи можна закінчити сьогодні?"] },
       { t: "practise", m: ["", "тренуватися, вправлятися"], ex: ["I practise the piano every day.", "Я щодня тренуюся грати на піаніно."] },
-      { t: "prejudice", m: ["", "упередження"], ex: ["We should not have prejudice against new people.", "Ми не повинні мати упереджень щодо нових людей."] },
+      { t: "prejudice", m: ["", "упередження"], ex: ["Prejudice is not fair.", "Упередження — це несправедливо."] },
       { t: "privilege", m: ["", "привілей, честь"], ex: ["It is a privilege to meet you.", "Для мене честь зустріти тебе."] },
       { t: "profession", m: ["", "професія"], ex: ["Teaching is a good profession.", "Учителювання — гарна професія."] },
-      { t: "programme", m: ["", "програма, передача"], ex: ["We watched a programme about animals.", "Ми дивилися передачу про тварин."] },
-      { t: "pronunciation", m: ["", "вимова"], ex: ["Her English pronunciation is very good.", "У неї дуже гарна англійська вимова."] }
+      { t: "programme", m: ["", "програма, передача"], ex: ["I like this TV programme.", "Мені подобається ця телепередача."] },
+      { t: "pronunciation", m: ["", "вимова"], ex: ["Her pronunciation is good.", "У неї гарна вимова."] }
     ]},
-    { type: "h2", s: [["Group 9", "Група 9"]] },
-    { type: "wordtable", title: [["Group 9", "Група 9"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 9", "Група 9"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "queue", m: ["", "черга"], ex: ["We stood in a long queue.", "Ми стояли в довгій черзі."] },
       { t: "recognise", m: ["", "впізнавати"], ex: ["I didn't recognise you with glasses!", "Я не впізнала тебе в окулярах!"] },
       { t: "recommend", m: ["", "радити, рекомендувати"], ex: ["I recommend this film.", "Раджу тобі цей фільм."] },
@@ -131,8 +122,7 @@
       { t: "shoulder", m: ["", "плече"], ex: ["My bag hurts my shoulder.", "Від сумки болить плече."] },
       { t: "signature", m: ["", "підпис"], ex: ["Put your signature at the bottom.", "Постав свій підпис унизу."] }
     ]},
-    { type: "h2", s: [["Group 10", "Група 10"]] },
-    { type: "wordtable", title: [["Group 10", "Група 10"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 10", "Група 10"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "sincerely", m: ["", "щиро"], ex: ["I sincerely hope you get better.", "Я щиро сподіваюся, що тобі покращає."] },
       { t: "soldier", m: ["", "солдат, воїн"], ex: ["The soldier stood at the gate.", "Солдат стояв біля воріт."] },
       { t: "stomach", m: ["", "шлунок, живіт"], ex: ["My stomach hurts.", "У мене болить живіт."] },
@@ -144,8 +134,7 @@
       { t: "twelfth", m: ["", "дванадцятий"], ex: ["Today is my twelfth birthday.", "Сьогодні мій дванадцятий день народження."] },
       { t: "variety", m: ["", "різноманітність, вибір"], ex: ["The shop has a variety of toys.", "У крамниці великий вибір іграшок."] }
     ]},
-    { type: "h2", s: [["Group 11", "Група 11"]] },
-    { type: "wordtable", title: [["Group 11", "Група 11"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 11", "Група 11"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "vegetable", m: ["", "овоч"], ex: ["A carrot is a vegetable.", "Морква — це овоч."] },
       { t: "vehicle", m: ["", "транспортний засіб"], ex: ["A bus is a big vehicle.", "Автобус — великий транспортний засіб."] },
       { t: "yacht", m: ["", "яхта"], ex: ["We sailed on a white yacht.", "Ми пливли на білій яхті."] },
@@ -153,14 +142,13 @@
       { t: "architecture", m: ["", "архітектура"], ex: ["I like the architecture of old towns.", "Мені подобається архітектура старих міст."] },
       { t: "authority", m: ["", "влада, повноваження"], ex: ["The police have the authority to stop cars.", "Поліція має право зупиняти машини."] },
       { t: "character", m: ["", "персонаж; характер"], ex: ["Who is your favourite character in the book?", "Хто твій улюблений персонаж у книжці?"] },
-      { t: "circumference", m: ["", "довжина кола, обвід"], ex: ["Measure the circumference of the circle.", "Виміряй довжину кола."] },
+      { t: "circumference", m: ["", "довжина кола, обвід"], ex: ["Measure the circumference.", "Виміряй довжину кола."] },
       { t: "consequence", m: ["", "наслідок"], ex: ["Every action has a consequence.", "Кожна дія має наслідок."] },
       { t: "controversy", m: ["", "суперечка, дискусія"], ex: ["The new rule caused a lot of controversy.", "Нове правило викликало багато суперечок."] }
     ]},
-    { type: "h2", s: [["Group 12", "Група 12"]] },
-    { type: "wordtable", title: [["Group 12", "Група 12"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 12", "Група 12"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "disastrous", m: ["", "катастрофічний, жахливий"], ex: ["The storm was disastrous for the farm.", "Буря була катастрофою для ферми."] },
-      { t: "embarrass", m: ["", "соромити, бентежити"], ex: ["Please don't embarrass me in front of my friends.", "Будь ласка, не присоромлюй мене перед друзями."] },
+      { t: "embarrass", m: ["", "соромити, бентежити"], ex: ["Please don't embarrass me.", "Будь ласка, не присоромлюй мене."] },
       { t: "enthusiasm", m: ["", "захоплення, ентузіазм"], ex: ["She sings with great enthusiasm.", "Вона співає з великим захопленням."] },
       { t: "essential", m: ["", "дуже потрібний, необхідний"], ex: ["Sleep is essential for health.", "Сон необхідний для здоров'я."] },
       { t: "evidence", m: ["", "доказ, докази"], ex: ["The detective found new evidence.", "Детектив знайшов нові докази."] },
@@ -170,8 +158,7 @@
       { t: "influence", m: ["", "вплив; впливати"], ex: ["Friends have a big influence on us.", "Друзі сильно на нас впливають."] },
       { t: "knowledge", m: ["", "знання"], ex: ["Books give us knowledge.", "Книжки дають нам знання."] }
     ]},
-    { type: "h2", page: 26, s: [["Group 13", "Група 13"]] },
-    { type: "wordtable", title: [["Group 13", "Група 13"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", page: 26, title: [["Group 13", "Група 13"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "magnificent", m: ["", "чудовий, величний"], ex: ["The palace is magnificent.", "Палац величний."] },
       { t: "maintenance", m: ["", "догляд, обслуговування"], ex: ["The bike needs some maintenance.", "Велосипед потребує обслуговування."] },
       { t: "muscle", m: ["", "м'яз"], ex: ["The heart is a muscle.", "Серце — це м'яз."] },
@@ -183,8 +170,7 @@
       { t: "persistent", m: ["", "наполегливий; тривалий"], ex: ["She is persistent and never gives up.", "Вона наполеглива й ніколи не здається."] },
       { t: "persuasive", m: ["", "переконливий"], ex: ["He wrote a persuasive letter.", "Він написав переконливого листа."] }
     ]},
-    { type: "h2", s: [["Group 14", "Група 14"]] },
-    { type: "wordtable", title: [["Group 14", "Група 14"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 14", "Група 14"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "potential", m: ["", "можливий; потенціал"], ex: ["She has the potential to be a great singer.", "Вона може стати чудовою співачкою."] },
       { t: "preference", m: ["", "перевага, те, що більше подобається"], ex: ["My preference is tea, not coffee.", "Я віддаю перевагу чаю, а не каві."] },
       { t: "previous", m: ["", "попередній"], ex: ["I liked the previous lesson.", "Мені сподобався попередній урок."] },
@@ -196,8 +182,7 @@
       { t: "significant", m: ["", "важливий, значний"], ex: ["This is a significant day for our school.", "Це важливий день для нашої школи."] },
       { t: "spacious", m: ["", "просторий"], ex: ["Our new flat is spacious.", "Наша нова квартира простора."] }
     ]},
-    { type: "h2", s: [["Group 15", "Група 15"]] },
-    { type: "wordtable", title: [["Group 15", "Група 15"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 15", "Група 15"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "stubborn", m: ["", "упертий"], ex: ["The donkey was too stubborn to move.", "Віслюк був такий упертий, що не рушав з місця."] },
       { t: "substantial", m: ["", "значний, чималий"], ex: ["We ate a substantial breakfast.", "Ми ситно поснідали."] },
       { t: "successful", m: ["", "успішний"], ex: ["The show was very successful.", "Вистава була дуже успішною."] },
@@ -209,8 +194,7 @@
       { t: "valuable", m: ["", "цінний"], ex: ["This ring is very valuable.", "Ця каблучка дуже цінна."] },
       { t: "accessible", m: ["", "доступний"], ex: ["The museum is accessible by bus.", "До музею можна дістатися автобусом."] }
     ]},
-    { type: "h2", s: [["Group 16", "Група 16"]] },
-    { type: "wordtable", title: [["Group 16", "Група 16"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 16", "Група 16"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "advisable", m: ["", "доцільний, бажаний"], ex: ["It is advisable to wear a coat today.", "Сьогодні варто вдягти пальто."] },
       { t: "available", m: ["", "доступний, вільний"], ex: ["Is this seat available?", "Це місце вільне?"] },
       { t: "capable", m: ["", "здатний, вмілий"], ex: ["She is capable of doing it alone.", "Вона здатна зробити це сама."] },
@@ -219,11 +203,10 @@
       { t: "dependable", m: ["", "надійний"], ex: ["My friend is very dependable.", "Моя подруга дуже надійна."] },
       { t: "enjoyable", m: ["", "приємний"], ex: ["We had an enjoyable day at the zoo.", "Ми приємно провели день у зоопарку."] },
       { t: "fashionable", m: ["", "модний"], ex: ["She wears fashionable clothes.", "Вона носить модний одяг."] },
-      { t: "knowledgeable", m: ["", "обізнаний, знаючий"], ex: ["Grandpa is knowledgeable about birds.", "Дідусь добре знається на птахах."] },
+      { t: "knowledgeable", m: ["", "обізнаний, знаючий"], ex: ["Grandpa is knowledgeable.", "Дідусь багато знає."] },
       { t: "manageable", m: ["", "посильний, з яким можна впоратися"], ex: ["The homework is manageable.", "Домашнє завдання цілком посильне."] }
     ]},
-    { type: "h2", s: [["Group 17", "Група 17"]] },
-    { type: "wordtable", title: [["Group 17", "Група 17"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 17", "Група 17"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "noticeable", m: ["", "помітний"], ex: ["The stain is not very noticeable.", "Пляма не дуже помітна."] },
       { t: "reasonable", m: ["", "розумний, слушний"], ex: ["That is a reasonable price.", "Це розумна ціна."] },
       { t: "reliable", m: ["", "надійний"], ex: ["Our old car is still reliable.", "Наша стара машина досі надійна."] },
@@ -235,8 +218,7 @@
       { t: "legible", m: ["", "розбірливий"], ex: ["Please make your writing legible.", "Будь ласка, пиши розбірливо."] },
       { t: "terrible", m: ["", "жахливий"], ex: ["The food was terrible.", "Їжа була жахлива."] }
     ]},
-    { type: "h2", s: [["Group 18", "Група 18"]] },
-    { type: "wordtable", title: [["Group 18", "Група 18"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 18", "Група 18"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "horrible", m: ["", "жахливий, огидний"], ex: ["The medicine tastes horrible.", "Ці ліки огидні на смак."] },
       { t: "incredible", m: ["", "неймовірний"], ex: ["The view from the top was incredible.", "Краєвид згори був неймовірний."] },
       { t: "reversible", m: ["", "двосторонній; оборотний"], ex: ["My jacket is reversible.", "Моя куртка двостороння."] },
@@ -248,8 +230,7 @@
       { t: "cautious", m: ["", "обережний"], ex: ["Be cautious when you cross the road.", "Будь обережна, коли переходиш дорогу."] },
       { t: "delicious", m: ["", "смачний"], ex: ["This cake is delicious!", "Цей торт дуже смачний!"] }
     ]},
-    { type: "h2", s: [["Group 19", "Група 19"]] },
-    { type: "wordtable", title: [["Group 19", "Група 19"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 19", "Група 19"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "ferocious", m: ["", "лютий, жорстокий"], ex: ["The lion looked ferocious.", "Лев мав лютий вигляд."] },
       { t: "gracious", m: ["", "люб'язний, ввічливий"], ex: ["The queen was gracious to everyone.", "Королева була люб'язна з усіма."] },
       { t: "infectious", m: ["", "заразний"], ex: ["A cold is infectious.", "Застуда заразна."] },
@@ -261,8 +242,7 @@
       { t: "courteous", m: ["", "ввічливий, чемний"], ex: ["The waiter was very courteous.", "Офіціант був дуже чемний."] },
       { t: "curious", m: ["", "допитливий, цікавий"], ex: ["Cats are curious animals.", "Коти — допитливі тварини."] }
     ]},
-    { type: "h2", s: [["Group 20", "Група 20"]] },
-    { type: "wordtable", title: [["Group 20", "Група 20"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 20", "Група 20"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "famous", m: ["", "відомий, славетний"], ex: ["She wants to be a famous singer.", "Вона хоче стати відомою співачкою."] },
       { t: "generous", m: ["", "щедрий"], ex: ["My grandma is very generous.", "Моя бабуся дуже щедра."] },
       { t: "glamorous", m: ["", "розкішний, ефектний"], ex: ["The actress wore a glamorous dress.", "Акторка вбралася в розкішну сукню."] },
@@ -272,10 +252,9 @@
       { t: "poisonous", m: ["", "отруйний"], ex: ["Some snakes are poisonous.", "Деякі змії отруйні."] },
       { t: "serious", m: ["", "серйозний"], ex: ["This is a serious problem.", "Це серйозна проблема."] },
       { t: "various", m: ["", "різні, різноманітні"], ex: ["We saw various animals at the zoo.", "У зоопарку ми бачили різних тварин."] },
-      { t: "adventurous", m: ["", "сміливий, любить пригоди"], ex: ["My brother is adventurous and loves climbing.", "Мій брат любить пригоди й обожнює лазити по скелях."] }
+      { t: "adventurous", m: ["", "сміливий, любить пригоди"], ex: ["My brother is adventurous.", "Мій брат любить пригоди."] }
     ]},
-    { type: "h2", s: [["Group 21", "Група 21"]] },
-    { type: "wordtable", title: [["Group 21", "Група 21"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 21", "Група 21"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "dangerous", m: ["", "небезпечний"], ex: ["It is dangerous to play near the road.", "Гратися біля дороги небезпечно."] },
       { t: "enormous", m: ["", "величезний"], ex: ["An elephant is enormous.", "Слон величезний."] },
       { t: "jealous", m: ["", "заздрісний, ревнивий"], ex: ["He was jealous of his sister's new bike.", "Він заздрив новому велосипеду сестри."] },
@@ -287,8 +266,7 @@
       { t: "intelligent", m: ["", "розумний"], ex: ["Dolphins are intelligent animals.", "Дельфіни — розумні тварини."] },
       { t: "impatient", m: ["", "нетерплячий"], ex: ["Don't be impatient — wait your turn.", "Не будь нетерплячою — чекай своєї черги."] }
     ]},
-    { type: "h2", s: [["Group 22", "Група 22"]] },
-    { type: "wordtable", title: [["Group 22", "Група 22"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 22", "Група 22"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "impossible", m: ["", "неможливий"], ex: ["It is impossible to fly like a bird.", "Літати як птах неможливо."] },
       { t: "inaccurate", m: ["", "неточний"], ex: ["The old map is inaccurate.", "Стара мапа неточна."] },
       { t: "inappropriate", m: ["", "недоречний"], ex: ["Shouting in class is inappropriate.", "Кричати на уроці недоречно."] },
@@ -300,8 +278,7 @@
       { t: "reconsider", m: ["", "переглянути, ще раз обміркувати"], ex: ["Please reconsider your answer.", "Будь ласка, ще раз обміркуй свою відповідь."] },
       { t: "submarine", m: ["", "підводний човен"], ex: ["The submarine went deep under the sea.", "Підводний човен занурився глибоко в море."] }
     ]},
-    { type: "h2", s: [["Group 23", "Група 23"]] },
-    { type: "wordtable", title: [["Group 23", "Група 23"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 23", "Група 23"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "transportation", m: ["", "транспорт, перевезення"], ex: ["Buses are cheap transportation.", "Автобуси — дешевий транспорт."] },
       { t: "uncomfortable", m: ["", "незручний"], ex: ["These shoes are uncomfortable.", "Це взуття незручне."] },
       { t: "unpredictable", m: ["", "непередбачуваний"], ex: ["The weather is unpredictable today.", "Сьогодні погода непередбачувана."] },
@@ -313,8 +290,7 @@
       { t: "geography", m: ["", "географія"], ex: ["Geography is my favourite subject.", "Географія — мій улюблений предмет."] },
       { t: "microscope", m: ["", "мікроскоп"], ex: ["We looked at a leaf under a microscope.", "Ми роздивлялися листок під мікроскопом."] }
     ]},
-    { type: "h2", s: [["Group 24", "Група 24"]] },
-    { type: "wordtable", title: [["Group 24", "Група 24"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 24", "Група 24"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "photograph", m: ["", "фотографія"], ex: ["This is a photograph of my family.", "Це фотографія моєї родини."] },
       { t: "telephone", m: ["", "телефон"], ex: ["The telephone is ringing.", "Дзвонить телефон."] },
       { t: "transport", m: ["", "транспорт; перевозити"], ex: ["Trucks transport food to shops.", "Вантажівки перевозять їжу до крамниць."] },
@@ -326,15 +302,14 @@
       { t: "description", m: ["", "опис"], ex: ["Write a description of your room.", "Напиши опис своєї кімнати."] },
       { t: "discussion", m: ["", "обговорення"], ex: ["We had a discussion about pets.", "Ми обговорювали домашніх тварин."] }
     ]},
-    { type: "h2", s: [["Group 25", "Група 25"]] },
-    { type: "wordtable", title: [["Group 25", "Група 25"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
+    { type: "wordtable", mark: "spell", title: [["Group 25", "Група 25"]], head: [["Word", "Слово"], ["Meaning", "Значення"]], rows: [
       { t: "equipment", m: ["", "обладнання, спорядження"], ex: ["We need sports equipment for the game.", "Для гри нам потрібне спортивне спорядження."] },
       { t: "examination", m: ["", "іспит; огляд"], ex: ["I passed my music examination.", "Я склала іспит з музики."] },
       { t: "imagination", m: ["", "уява"], ex: ["Use your imagination to write a story.", "Скористайся уявою, щоб написати історію."] },
       { t: "information", m: ["", "інформація"], ex: ["The website has useful information.", "На сайті є корисна інформація."] },
       { t: "investigation", m: ["", "розслідування, дослідження"], ex: ["The police started an investigation.", "Поліція почала розслідування."] },
       { t: "measurement", m: ["", "вимірювання, розмір"], ex: ["Write the measurement in centimetres.", "Запиши розмір у сантиметрах."] },
-      { t: "observation", m: ["", "спостереження"], ex: ["We made an observation of the birds.", "Ми спостерігали за птахами."] },
+      { t: "observation", m: ["", "спостереження"], ex: ["We made an observation.", "Ми провели спостереження."] },
       { t: "organisation", m: ["", "організація"], ex: ["She works for a big organisation.", "Вона працює у великій організації."] },
       { t: "recommendation", m: ["", "порада, рекомендація"], ex: ["Thank you for the book recommendation.", "Дякую за пораду щодо книжки."] },
       { t: "research", m: ["", "дослідження; досліджувати"], ex: ["I did some research about whales.", "Я трохи дослідила китів."] }

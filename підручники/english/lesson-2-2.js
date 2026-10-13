@@ -24,7 +24,7 @@
       { t: "over-", c: "#d8b21e", m: ["too much", "занадто"], words: [["overeat", "переїдати"], ["oversleep", "проспати"], ["overload", "перевантажити"], ["overcook", "переварити, пересмажити"], ["overflow", "переливатися через край"]] },
       { t: "inter-", c: "#1f8f4a", m: ["among or between", "серед або між"], words: [["international", "міжнародний"], ["internet", "інтернет"], ["interact", "взаємодіяти"], ["interview", "інтерв'ю"], ["intercity", "міжміський"]] }
     ] },
-    { type: "wordtable", title: [["Prefixes", "Префікси"]], note: [["A prefix is added to the beginning of a word. The spelling of the root word does not change.", "Префікс додається на початку слова. Написання основи не змінюється."]],
+    { type: "wordtable", mark: "prefix", title: [["Prefixes", "Префікси"]], note: [["A prefix is added to the beginning of a word. The spelling of the root word does not change.", "Префікс додається на початку слова. Написання основи не змінюється."]],
       head: [["Prefix and meaning", "Префікс і значення"], ["How the word is formed", "Як утворюється слово"]], rows: [
       { t: "dis-", m: ["opposite of", "Протилежне значення"], ex: ["agree → disagree", "погоджуватися → не погоджуватися"] },
       { t: "re-", m: ["again", "Знову, ще раз"], ex: ["play → replay", "грати → переграти"] },
@@ -55,7 +55,7 @@
       { t: "-ise", c: "#5a4fc8", m: ["to create a verb", "утворює дієслово"], words: [["modernise", "модернізувати"], ["apologise", "вибачатися"], ["realise", "усвідомлювати"], ["organise", "організовувати"], ["memorise", "запам'ятовувати"]] },
       { t: "-ify", c: "#2b9ad8", m: ["to create a verb", "утворює дієслово"], words: [["simplify", "спростити"], ["classify", "класифікувати"], ["purify", "очистити"], ["identify", "впізнати, визначити"], ["terrify", "налякати"]] }
     ] },
-    { type: "wordtable", title: [["Suffixes", "Суфікси"]], note: [["A suffix is added to the end of a word. Sometimes the spelling of the root changes.", "Суфікс додається в кінці слова. Іноді написання основи змінюється."]],
+    { type: "wordtable", mark: "suffix", title: [["Suffixes", "Суфікси"]], note: [["A suffix is added to the end of a word. Sometimes the spelling of the root changes.", "Суфікс додається в кінці слова. Іноді написання основи змінюється."]],
       head: [["Suffix and meaning", "Суфікс і значення"], ["How the word is formed", "Як утворюється слово"]], rows: [
       { t: "-ful", m: ["full of", "Сповнений чогось, має певну рису"], ex: ["care → careful", "турбота → обережний, уважний"] },
       { t: "-less", m: ["without", "Без чогось"], ex: ["care → careless", "турбота → необережний, недбалий"] },

@@ -364,6 +364,27 @@ a.ext { color: var(--ua); font-weight: 700; }
 .wt-ex { display: block; align-self: start; border: 0; background: transparent; padding: 0; text-align: left; font: inherit; color: inherit; }
 .wt-ex b { font-size: 1.08em; }
 .wt-ex:active b { color: #8a4fe0; }
+.wt-ex { position: relative; padding-right: 22px; }
+.wt-say { position: absolute; right: -2px; top: 2px; width: 20px; height: 22px; display: grid; place-items: center; color: #c9a227; }
+.wt-say svg { width: 15px; height: 15px; }
+.wt-prefix .wt-ex b { color: #1fb24a; }
+.wt-suffix .wt-ex b { color: #e2322b; }
+.wt-prefix .wt-ex u, .wt-suffix .wt-ex u { text-decoration: underline 2.5px #e2322b; text-underline-offset: 4px; }
+.wt-spell { border-color: var(--g); }
+.wt-spell .wt-head { border-bottom-color: var(--g); }
+.wt-spell .wt-head, .wt-spell .wt-row { grid-template-columns: 6.3em minmax(0, 1fr); column-gap: 10px; }
+.wt-spell .wt-row b.wt-t { font-size: .98em; }
+.wt-spell .wt-row b.wt-t.lw { font-size: .86em; }
+.wt-spell .wt-row b.wt-t.lw2 { font-size: .74em; }
+.wt-spell .wt-ex { padding-right: 19px; }
+.wt-spell .wt-row small { font-size: .82em; overflow-wrap: anywhere; }
+.wt-spell .wt-ex b { font-size: .88em; font-weight: 700; line-height: 1.3; }
+.wt-group { display: flex; align-items: baseline; gap: 8px; color: var(--g) !important; }
+.wt-group .gw { font-size: 1em; }
+.wt-group .gn { font-size: 3em; line-height: .8; font-weight: 900; color: var(--g); text-shadow: 2px 3px 0 rgba(0,0,0,.12); }
+.wt-group .gu { font-size: .55em; font-weight: 400; color: #6b625d; margin-left: auto; }
+.shim { background: linear-gradient(90deg, #7a3fe0, #f2c200, #7a3fe0, #f2c200); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shim 3s linear infinite; }
+@keyframes shim { to { background-position: 300% 0; } }
 /* star posters: tap a star → example-word buttons */
 .stars { margin: 18px 0 22px; background: #fff; border: 2px solid #9b6cf0; border-radius: 16px; padding: 12px 10px 14px; }
 .stars .wt-title { margin: 2px 0 8px; text-align: center; }
@@ -761,6 +782,8 @@ const store = {
   get(k, d) { if ((k === "pos" || k === "done") && BOOK_ID !== "history6") k += ":" + BOOK_ID; try { const v = localStorage.getItem("vk:" + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
   set(k, v) { if ((k === "pos" || k === "done") && BOOK_ID !== "history6") k += ":" + BOOK_ID; try { localStorage.setItem("vk:" + k, JSON.stringify(v)); } catch (e) {} }
 };
+// colours of the spelling groups: 1 red, 2 light blue, 3 pink, 4 lime, …
+const GROUP_COLORS = ["#e2453a", "#2fa8e6", "#ec4fa0", "#7cc242", "#f08a1c", "#8a4fe0", "#16a89a", "#e0b310", "#2f6fe0", "#c2368a", "#3aa84a", "#ff6a5a", "#5a7fd8"];
 const SVG = {
   speak: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>',
   play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>',
@@ -864,15 +887,31 @@ L.blocks.forEach((b, bi) => {
     }
     out += `<figure class="blk" data-bi="${li}:${bi}"><img src="${IMG[b.src] || esc(b.src)}" alt="${esc(b.alt)}"><figcaption>${r.en}${uaHtml(r.sis)}</figcaption>${legend}</figure>`;
   } else if (b.type === "wordtable") {
-    // two columns: the word part with its meaning | how a new word is made (tap a row to hear it)
-    const hd = b.head || [];
+    // two columns: the word part with its meaning | how a new word is made (tap a row or its speaker to hear it)
+    // mark: "prefix" / "suffix" — underline the word part in the new word; "spell" — the studied word shimmers in its sentence
+    const hd = b.head || [], mk = b.mark || "";
     const tt = b.title && b.title.length ? renderSentences(b.title) : null, nt = b.note && b.note.length ? renderSentences(b.note) : null;
-    out += `<div class="wtable blk" data-bi="${li}:${bi}">` +
-      (tt ? `<h2 class="wt-title">${tt.en}${uaHtml(tt.sis)}</h2>` : "") +
+    const gn = mk === "spell" ? +((String((b.title || [[""]])[0][0]).match(/\d+/) || [0])[0]) : 0;
+    const exHtml = (r) => {
+      const en = String((r.ex || [])[0] || "");
+      if (mk === "prefix" || mk === "suffix") {
+        const parts = String(r.t).split(/[\s\/]+/).map(x => x.replace(/^-|-$/g, "")).filter(Boolean).join("|");
+        const re = new RegExp(mk === "prefix" ? "^(" + parts + ")" : "(" + parts + ")$", "i");
+        return en.split(/\s*→\s*/).map((w, k) => k ? esc(w).replace(re, '<u>$1</u>') : esc(w)).join(" → ");
+      }
+      if (mk === "spell") {
+        const stem = String(r.t).toLowerCase().replace(/e$/, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        return esc(en).replace(new RegExp("\\b(" + stem + "[a-z'’-]*)", "i"), '<span class="shim">$1</span>');
+      }
+      return esc(en);
+    };
+    out += `<div class="wtable blk${mk ? " wt-" + mk : ""}" data-bi="${li}:${bi}"${gn ? ` style="--g:${GROUP_COLORS[(gn - 1) % GROUP_COLORS.length]}"` : ""}>` +
+      (gn ? `<h2 class="wt-title wt-group"><span class="gw">Group</span><span class="gn">${gn}</span><span class="gu">Група ${gn}</span></h2>` :
+        tt ? `<h2 class="wt-title">${tt.en}${uaHtml(tt.sis)}</h2>` : "") +
       (nt ? `<p class="wt-note">${nt.en}<button class="ua-tog" data-tog aria-label="Переклад">UA</button>${uaHtml(nt.sis)}</p>` : "") +
       `<div class="wt-head"><span>${esc((hd[0] || [])[1] || "")}</span><span>${esc((hd[1] || [])[1] || "")}</span></div>` +
-      b.rows.map(r => `<div class="wt-row"><div><b class="wt-t">${esc(r.t)}</b><small>${esc((r.m || [])[1] || (r.m || [])[0] || "")}</small></div>` +
-        `<button class="wt-ex" data-say="${esc(String((r.ex || [])[0] || "").replace(/→/g, ","))}"><b>${esc((r.ex || [])[0] || "")}</b><small>${esc((r.ex || [])[1] || "")}</small></button></div>`).join("") + `</div>`;
+      b.rows.map(r => `<div class="wt-row"><div><b class="wt-t${mk === "spell" && String(r.t).length > 11 ? " lw2" : mk === "spell" && String(r.t).length > 9 ? " lw" : ""}">${esc(r.t)}</b><small>${esc((r.m || [])[1] || (r.m || [])[0] || "")}</small></div>` +
+        `<button class="wt-ex" data-say="${esc(String((r.ex || [])[0] || "").replace(/→/g, ","))}"><b>${exHtml(r)}</b><small>${esc((r.ex || [])[1] || "")}</small><span class="wt-say" aria-hidden="true">${SVG.speak}</span></button></div>`).join("") + `</div>`;
   } else if (b.type === "stars") {
     // a star poster: every star is a button; tapping it shows example words as buttons (tap a word to hear it)
     const tt = b.title && b.title.length ? renderSentences(b.title) : null, nt = b.note && b.note.length ? renderSentences(b.note) : null;
