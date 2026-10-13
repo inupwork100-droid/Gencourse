@@ -1,0 +1,152 @@
+// Урок 1.5 «¡A leer! · ¡A escribir!» — сторінки 12–13 підручника Colega vuelve 3.
+// Кожне речення — [іспанською, українською]. *слово* — жирне ключове слово.
+(window.ESP = window.ESP || { lessons: [], dict: {} }).lessons.push({
+  id: "1.5",
+  unit: "1 Somos la pandilla",
+  color: "#6fb43f",
+  title: ["1.5 ¡A leer! · ¡A escribir!", "1.5 Читаймо! · Пишімо!"],
+  pages: "12–13",
+  blocks: [
+    { type: "h2", page: 12, s: [["Unidad 1. ¡A leer!", "Розділ 1. Читаймо!"]] },
+    { type: "h2", s: [["El conde Rocke", "Граф Роке"]] },
+
+    { type: "h2", s: [["1. Lee el capítulo 1: Un sobre en blanco.", "1. Прочитай розділ 1: «Порожній конверт»."]] },
+    { type: "img", src: "s12-comic-1", alt: "Комікс: Ана говорить телефоном удома; друзі біля театру", s: [["TEATRO · Audiciones", "ТЕАТР · Прослуховування"]] },
+    { type: "p", s: [
+      ["Hola, Ana.", "Привіт, Ано."],
+      ["*Estoy* en casa con Chema y Elena.", "Я вдома з Чемою та Оленою."],
+      ["*Ya vamos*.", "Ми вже йдемо."]
+    ]},
+    { type: "img", src: "s12-comic-2", alt: "Комікс: гурт грає на сцені, чоловік із рупором", s: [["Audiciones para Festival de Música", "Прослуховування для музичного фестивалю"]] },
+    { type: "p", s: [
+      ["*Somos* el grupo Sistema Solar y *escribimos* nuestras *canciones*.", "Ми — гурт «Сонячна система», і ми самі пишемо наші *пісні*."],
+      ["¿*Cuántos años tenéis*?", "*Скільки вам років*?"],
+      ["Si no *tocáis* con alguien *mayor de 18 años*, no *podéis* participar en el festival.", "Якщо ви не *граєте* з кимось *старшим за 18 років*, ви не *можете* брати участь у фестивалі."]
+    ]},
+    { type: "img", src: "s12-comic-3", alt: "Комікс: засмучені друзі; дівчинка відкриває конверт із запискою", s: [["¿Queréis tocar en el festival?", "Хочете грати на фестивалі?"]] },
+    { type: "p", s: [
+      ["¡*No es justo*!", "*Це несправедливо*!"],
+      ["¡*Mirad*!", "*Дивіться*!"],
+      ["¿*Queréis* tocar en el festival?", "*Хочете* грати на фестивалі?"],
+      ["*Venid* a la calle de la Niebla, 99.", "*Приходьте* на вулицю Туману, 99."],
+      ["C. R.", "К. Р."],
+      ["*Continúa*…", "*Далі буде*…"]
+    ]},
+    { type: "box", kind: "activities", title: ["Actividades", "Завдання"], items: [
+      { n: "a", s: [["¿Cómo se llama el grupo de los amigos?", "Як називається гурт друзів?"]] },
+      { n: "b", s: [["¿Qué escriben los amigos?", "Що пишуть друзі?"]] },
+      { n: "c", s: [["¿Pueden participar en el festival? ¿Por qué?", "Чи можуть вони взяти участь у фестивалі? Чому?"]] },
+      { n: "d", s: [["¿Qué hay en el sobre?", "Що є в конверті?"]] }
+    ], answers: [
+      { n: "a", q: ["¿Cómo se llama el grupo de los amigos?", "Як називається гурт друзів?"], a: ["El grupo se llama Sistema Solar.", "Гурт називається «Сонячна система» (Sistema Solar)."] },
+      { n: "b", q: ["¿Qué escriben los amigos?", "Що пишуть друзі?"], a: ["Escriben sus canciones.", "Вони пишуть свої пісні."] },
+      { n: "c", q: ["¿Pueden participar en el festival? ¿Por qué?", "Чи можуть вони взяти участь у фестивалі? Чому?"], a: ["No, porque no tocan con alguien mayor de 18 años.", "Ні, бо вони не грають з кимось старшим за 18 років."] },
+      { n: "d", q: ["¿Qué hay en el sobre?", "Що є в конверті?"], a: ["Hay una nota: ¿Queréis tocar en el festival? Venid a la calle de la Niebla, 99.", "Там записка: «Хочете грати на фестивалі? Приходьте на вулицю Туману, 99»."] }
+    ]},
+
+    { type: "h2", page: 13, s: [["¡A escribir!", "Пишімо!"]] },
+    { type: "h2", s: [["Vamos a chatear", "Поспілкуймося в чаті"]] },
+    { type: "h2", s: [["1. Lee este mensaje de intercambio escolar y escribe en tu cuaderno.", "1. Прочитай це повідомлення для шкільного обміну й напиши відповідь у зошиті."]] },
+    { type: "img", src: "s13-marco", alt: "Сторінка соцмережі «Nosotros en red» з повідомленням Марко", s: [
+      ["Nosotros en red", "Ми в мережі"],
+      ["Inicio · Fotos · Grupos · Amigos · Enlaces · Publicaciones · Noticias · Buscar", "Головна · Фото · Групи · Друзі · Посилання · Публікації · Новини · Пошук"],
+      ["70 me gusta · 53 me gusta", "70 вподобань · 53 вподобання"]
+    ]},
+    { type: "p", s: [
+      ["Marco", "Марко"],
+      ["¡Hola!", "Привіт!"],
+      ["*Me llamo* Marco y *tengo* 10 años.", "Мене звати Марко, мені 10 років."],
+      ["*Busco* un amigo o una amiga *en red*.", "Я *шукаю* друга або подругу *в мережі*."],
+      ["*Soy* español y *vivo* en Madrid.", "Я іспанець і живу в Мадриді."],
+      ["*Vivo* con mi padre, mi madre y mi abuelo Luis.", "Я живу з татом, мамою і дідусем Луїсом."],
+      ["No *tengo* hermanos.", "У мене немає братів і сестер."],
+      ["*Tengo* un perro que se llama Tabú, es muy *inteligente*.", "У мене є собака, його звати Табу, він дуже *розумний*."]
+    ]},
+    { type: "p", s: [
+      ["*Hablo* español y un *poquito* de inglés.", "Я розмовляю іспанською і *трішки* англійською."],
+      ["*Me gustan* mucho los *ordenadores*.", "Мені дуже *подобаються комп'ютери*."],
+      ["También *me gusta* hacer deporte: *juego* al fútbol y *hago* natación.", "Ще мені подобається займатися спортом: я *граю* у футбол і *займаюся* плаванням."]
+    ]},
+    { type: "p", s: [
+      ["En el colegio *estoy* en 5.º *curso* de primaria.", "У школі я в 5-му *класі* початкової школи."],
+      ["Mi *mejor amiga* se llama Sofía.", "Мою *найкращу подругу* звати Софія."]
+    ]},
+    { type: "p", s: [
+      ["Los *fines de semana* vamos al *pueblo* de mi abuelo.", "На *вихідних* ми їздимо в *село* до мого дідуся."],
+      ["El pueblo se llama Pedrezuela y allí *tengo* muchos amigos.", "Село називається Педресуела, і там у мене багато друзів."],
+      ["¿*Quieres* ser mi amigo o amiga en red?", "*Хочеш* бути моїм другом або подругою в мережі?"],
+      ["Marco", "Марко"]
+    ]},
+    { type: "box", kind: "activities", title: ["Actividades", "Завдання"], items: [
+      { n: "a", s: [["¿Cuántos años tiene Marco?", "Скільки років Марко?"]] },
+      { n: "b", s: [["¿Con quién vive Marco?", "З ким живе Марко?"]] },
+      { n: "c", s: [["¿Cómo se llama su perro?", "Як звати його собаку?"]] },
+      { n: "d", s: [["¿Qué deporte hace Marco?", "Яким спортом займається Марко?"]] },
+      { n: "e", s: [["Escribe tu mensaje para Marco.", "Напиши своє повідомлення для Марко."]] }
+    ], answers: [
+      { n: "a", q: ["¿Cuántos años tiene Marco?", "Скільки років Марко?"], a: ["Marco tiene 10 años.", "Марко 10 років."] },
+      { n: "b", q: ["¿Con quién vive Marco?", "З ким живе Марко?"], a: ["Vive con su padre, su madre y su abuelo Luis.", "Він живе з татом, мамою і дідусем Луїсом."] },
+      { n: "c", q: ["¿Cómo se llama su perro?", "Як звати його собаку?"], a: ["Su perro se llama Tabú.", "Його собаку звати Табу."] },
+      { n: "d", q: ["¿Qué deporte hace Marco?", "Яким спортом займається Марко?"], a: ["Juega al fútbol y hace natación.", "Він грає у футбол і займається плаванням."] },
+      { n: "e", q: ["Escribe tu mensaje para Marco.", "Напиши своє повідомлення для Марко."], a: [
+        "¡Hola, Marco!\nTengo 11 años. Soy ucraniana y vivo en Varsovia, en Polonia. Vivo en un piso con mi familia.\nHablo ucraniano, polaco, un poco de inglés y un poquito de español. Estudio en casa.\nMe gustan mucho los libros y los animales. También me gusta dibujar.\nSí, quiero ser tu amiga en red. ¿Me escribes?\nTu amiga de Varsovia",
+        "Привіт, Марко!\nМені 11 років. Я українка і живу у Варшаві, у Польщі. Я живу у квартирі зі своєю родиною.\nЯ розмовляю українською, польською, трохи англійською і трішки іспанською. Я навчаюся вдома.\nМені дуже подобаються книжки і тварини. А ще я люблю малювати.\nТак, я хочу бути твоєю подругою в мережі. Напишеш мені?\nТвоя подруга з Варшави"
+      ] }
+    ]},
+
+    { type: "box", kind: "review", title: ["¡Practica más!", "Потренуйся ще!"], items: [
+      { n: "1", s: [["¿Cuántos años ____ (vosotros)?", "Скільки вам ____ років?"]] },
+      { n: "a", sub: true, s: [["tienen", "мають"]] }, { n: "b", sub: true, ok: true, s: [["tenéis", "маєте"]] }, { n: "c", sub: true, s: [["tenemos", "маємо"]] },
+      { n: "2", s: [["Nosotros ____ nuestras canciones.", "Ми ____ наші пісні."]] },
+      { n: "a", sub: true, ok: true, s: [["escribimos", "пишемо"]] }, { n: "b", sub: true, s: [["escribís", "пишете"]] }, { n: "c", sub: true, s: [["escriben", "пишуть"]] },
+      { n: "3", s: [["Marco ____ un perro.", "У Марко ____ собака."]] },
+      { n: "a", sub: true, s: [["tengo", "маю"]] }, { n: "b", sub: true, s: [["tienes", "маєш"]] }, { n: "c", sub: true, ok: true, s: [["tiene", "має"]] },
+      { n: "4", s: [["Me ____ los ordenadores.", "Мені ____ комп'ютери."]] },
+      { n: "a", sub: true, s: [["gusta", "подобається"]] }, { n: "b", sub: true, ok: true, s: [["gustan", "подобаються"]] }, { n: "c", sub: true, s: [["gusto", "смак"]] },
+      { n: "5", s: [["Yo ____ al fútbol.", "Я ____ у футбол."]] },
+      { n: "a", sub: true, ok: true, s: [["juego", "граю"]] }, { n: "b", sub: true, s: [["juega", "грає"]] }, { n: "c", sub: true, s: [["jugamos", "граємо"]] },
+      { n: "6", s: [["Los ____ de semana vamos al pueblo.", "На ____ ми їздимо в село."]] },
+      { n: "a", sub: true, s: [["días", "дні"]] }, { n: "b", sub: true, s: [["años", "роки"]] }, { n: "c", sub: true, ok: true, s: [["fines", "кінці (вихідні)"]] }
+    ], answers: [
+      { n: "1", q: ["¿Cuántos años ____ (vosotros)?", "Скільки вам ____ років?"], a: ["b: ¿Cuántos años tenéis?", "b: Скільки вам років?"] },
+      { n: "2", q: ["Nosotros ____ nuestras canciones.", "Ми ____ наші пісні."], a: ["a: Nosotros escribimos nuestras canciones.", "a: Ми пишемо наші пісні."] },
+      { n: "3", q: ["Marco ____ un perro.", "У Марко ____ собака."], a: ["c: Marco tiene un perro.", "c: У Марко є собака."] },
+      { n: "4", q: ["Me ____ los ordenadores.", "Мені ____ комп'ютери."], a: ["b: Me gustan los ordenadores.", "b: Мені подобаються комп'ютери."] },
+      { n: "5", q: ["Yo ____ al fútbol.", "Я ____ у футбол."], a: ["a: Yo juego al fútbol.", "a: Я граю у футбол."] },
+      { n: "6", q: ["Los ____ de semana vamos al pueblo.", "На ____ ми їздимо в село."], a: ["c: Los fines de semana vamos al pueblo.", "c: На вихідних ми їздимо в село."] }
+    ]},
+
+    { type: "box", kind: "review", title: ["Check yourself", "Перевір себе"], items: [
+      { n: "1", s: [["¿Cómo se llama el capítulo 1?", "Як називається розділ 1?"]] },
+      { n: "a", sub: true, ok: true, s: [["Un sobre en blanco", "Порожній конверт"]] }, { n: "b", sub: true, s: [["El conde Rocke", "Граф Роке"]] }, { n: "c", sub: true, s: [["Sistema Solar", "Сонячна система"]] },
+      { n: "2", s: [["Para participar en el festival, tocan con alguien mayor de…", "Щоб узяти участь у фестивалі, треба грати з кимось старшим за…"]] },
+      { n: "a", sub: true, s: [["10 años", "10 років"]] }, { n: "b", sub: true, s: [["15 años", "15 років"]] }, { n: "c", sub: true, ok: true, s: [["18 años", "18 років"]] },
+      { n: "3", s: [["¿Dónde vive Marco?", "Де живе Марко?"]] },
+      { n: "a", sub: true, s: [["En Pedrezuela", "У Педресуелі"]] }, { n: "b", sub: true, ok: true, s: [["En Madrid", "У Мадриді"]] }, { n: "c", sub: true, s: [["En Varsovia", "У Варшаві"]] },
+      { n: "4", s: [["¿Cómo se llama la mejor amiga de Marco?", "Як звати найкращу подругу Марко?"]] },
+      { n: "a", sub: true, s: [["Ana", "Ана"]] }, { n: "b", sub: true, s: [["Elena", "Олена"]] }, { n: "c", sub: true, ok: true, s: [["Sofía", "Софія"]] },
+      { n: "5", s: [["¿Qué idiomas habla Marco?", "Якими мовами розмовляє Марко?"]] },
+      { n: "a", sub: true, ok: true, s: [["Español y un poquito de inglés", "Іспанською і трішки англійською"]] }, { n: "b", sub: true, s: [["Español y francés", "Іспанською і французькою"]] }, { n: "c", sub: true, s: [["Solo inglés", "Тільки англійською"]] }
+    ], answers: [
+      { n: "1", q: ["¿Cómo se llama el capítulo 1?", "Як називається розділ 1?"], a: ["a: Un sobre en blanco.", "a: «Порожній конверт»."] },
+      { n: "2", q: ["Para participar en el festival, tocan con alguien mayor de…", "Щоб узяти участь у фестивалі, треба грати з кимось старшим за…"], a: ["c: 18 años.", "c: 18 років."] },
+      { n: "3", q: ["¿Dónde vive Marco?", "Де живе Марко?"], a: ["b: En Madrid.", "b: У Мадриді."] },
+      { n: "4", q: ["¿Cómo se llama la mejor amiga de Marco?", "Як звати найкращу подругу Марко?"], a: ["c: Sofía.", "c: Софія."] },
+      { n: "5", q: ["¿Qué idiomas habla Marco?", "Якими мовами розмовляє Марко?"], a: ["a: Español y un poquito de inglés.", "a: Іспанською і трішки англійською."] }
+    ]}
+  ],
+  phrases: [
+    ["¡A leer!", "Читаймо!"], ["¡A escribir!", "Пишімо!"], ["Vamos a chatear.", "Поспілкуймося в чаті."],
+    ["Lee el capítulo 1.", "Прочитай розділ 1."], ["un sobre en blanco", "порожній конверт"], ["Estoy en casa.", "Я вдома."],
+    ["Ya vamos.", "Ми вже йдемо."], ["el grupo Sistema Solar", "гурт «Сонячна система»"], ["escribimos nuestras canciones", "ми пишемо наші пісні"],
+    ["¿Cuántos años tenéis?", "Скільки вам років?"], ["mayor de 18 años", "старший за 18 років"], ["participar en el festival", "брати участь у фестивалі"],
+    ["¡No es justo!", "Це несправедливо!"], ["¡Mirad!", "Дивіться!"], ["¿Queréis tocar en el festival?", "Хочете грати на фестивалі?"],
+    ["Venid a la calle…", "Приходьте на вулицю…"], ["Continúa…", "Далі буде…"], ["un mensaje de intercambio escolar", "повідомлення для шкільного обміну"],
+    ["Escribe en tu cuaderno.", "Напиши в зошиті."], ["Me llamo Marco.", "Мене звати Марко."], ["Tengo 10 años.", "Мені 10 років."],
+    ["Busco un amigo o una amiga en red.", "Шукаю друга або подругу в мережі."], ["No tengo hermanos.", "У мене немає братів і сестер."], ["es muy inteligente", "він дуже розумний"],
+    ["un poquito de inglés", "трішки англійської"], ["Me gustan mucho los ordenadores.", "Мені дуже подобаються комп'ютери."], ["Me gusta hacer deporte.", "Я люблю займатися спортом."],
+    ["Juego al fútbol.", "Я граю у футбол."], ["Hago natación.", "Я займаюся плаванням."], ["en 5.º curso de primaria", "у 5-му класі початкової школи"],
+    ["mi mejor amiga", "моя найкраща подруга"], ["los fines de semana", "на вихідних"], ["el pueblo de mi abuelo", "дідусеве село"],
+    ["¿Quieres ser mi amigo o amiga en red?", "Хочеш бути моїм другом або подругою в мережі?"], ["me gusta", "мені подобається"]
+  ]
+});

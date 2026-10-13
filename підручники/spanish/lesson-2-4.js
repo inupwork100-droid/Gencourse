@@ -42,7 +42,7 @@
       ["*las cortinas*, *la estantería*, *la mesa*, *el armario*, *la silla*, *la cama*", "штори, полиця (стелаж), стіл, шафа, стілець, ліжко"]
     ]},
     { type: "wordtable", title: [["La casa: habitaciones y muebles", "Дім: кімнати й меблі"]],
-      note: [["Tap a word to hear it. The words *el* and *la* show if the word is masculine or feminine.", "Натисни на слово, щоб почути його. Слова *el* і *la* показують, чоловічого чи жіночого роду слово."]],
+      note: [["Las palabras *el* y *la* dicen si la palabra es masculina o femenina.", "Слова *el* і *la* показують, чоловічого чи жіночого роду слово."]],
       head: [["Habitación", "Кімната"], ["Objeto", "Предмет"]], rows: [
       { t: "el salón comedor", m: ["", "вітальня-їдальня"], ex: ["la televisión", "телевізор"] },
       { t: "el salón comedor", m: ["", "вітальня-їдальня"], ex: ["el cuadro", "картина"] },
@@ -115,7 +115,7 @@
       ["Celia cena *pizza* y zumo de manzana.", "Селія вечеряє піцою і яблучним соком."]
     ]},
     { type: "wordtable", title: [["Z y C", "Літери Z і C"]],
-      note: [["We write *z* before a, o, u, and *c* before e, i. They sound the same.", "Перед a, o, u пишемо *z*, а перед e, i — *c*. Звучать вони однаково."]],
+      note: [["Escribimos *z* antes de a, o, u, y *c* antes de e, i. Suenan igual.", "Перед a, o, u пишемо *z*, а перед e, i — *c*. Звучать вони однаково."]],
       head: [["Sílaba", "Склад"], ["Palabra", "Слово"]], rows: [
       { t: "za", m: ["", "z + a"], ex: ["manzana", "яблуко"] },
       { t: "zo", m: ["", "z + o"], ex: ["zorro", "лис"] },

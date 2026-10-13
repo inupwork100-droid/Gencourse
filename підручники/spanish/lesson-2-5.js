@@ -1,0 +1,205 @@
+// Урок 2.5 «¡A leer! · ¡A escribir!» — сторінки 24–25 підручника «Colega vuelve 3».
+// Кожне речення — [іспанською, українською]. *слово* — жирне ключове слово.
+(window.ESP = window.ESP || { lessons: [], dict: {} }).lessons.push({
+  id: "2.5",
+  unit: "2 ¿A qué hora quedamos?",
+  color: "#e0418f",
+  title: ["2.5 ¡A leer! · ¡A escribir!", "2.5 Читаймо! · Пишімо!"],
+  pages: "24–25",
+  blocks: [
+    { type: "h2", page: 24, s: [["Unidad 2. ¡A leer! El conde Rocke", "Розділ 2. Читаймо! Граф Роке"]] },
+
+    { type: "h2", s: [["1. Lee el capítulo 2: *La casa de la calle de la Niebla*.", "1. Прочитай розділ 2: «Будинок на вулиці Туману»."]] },
+    { type: "img", src: "s24-vinetas-1", alt: "Діти біля театру з інструментами; потім вони біля ратуші розпитують дорогу", s: [["Quedamos en el ayuntamiento a la una y media.", "Зустрічаємося біля ратуші о пів на другу."]] },
+    { type: "p", s: [
+      ["¿Qué hacemos?", "Що робимо?"],
+      ["Primero, dejar los instrumentos en casa.", "Спочатку — залишити інструменти вдома."],
+      ["*Quedamos* en el *ayuntamiento* a la *una y media*.", "*Зустрічаємося* біля *ратуші* *о пів на другу*."],
+      ["Media hora más tarde.", "Через пів години."],
+      ["¿Sabes dónde está la *calle* de la Niebla?", "Ти знаєш, де *вулиця* Туману?"]
+    ]},
+    { type: "img", src: "s24-vinetas-2", alt: "Таксист, бабуся і чоловік у капелюсі показують дітям дорогу", s: [["Seguid todo recto.", "Ідіть увесь час прямо."]] },
+    { type: "p", s: [
+      ["La *segunda* calle a la *derecha*.", "*Друга* вулиця *праворуч*."],
+      ["La *primera* calle a la *izquierda*.", "*Перша* вулиця *ліворуч*."],
+      ["¿Calle de la Niebla?, es esta.", "Вулиця Туману? Ось ця."],
+      ["Seguid *todo recto*.", "Ідіть увесь час *прямо*."]
+    ]},
+    { type: "img", src: "s24-vinetas-3", alt: "Діти шукають будинок номер 99; Матео показує на будинок серед дерев", s: [["¡Hay una casa entre los árboles!", "Там будинок серед дерев!"]] },
+    { type: "p", s: [
+      ["93, 95… y 97.", "93, 95… і 97."],
+      ["¿Dónde está el *número* 99?", "Де *номер* 99?"],
+      ["¡Mirad allí!", "Подивіться туди!"],
+      ["¡*Hay* una casa *entre* los árboles!", "Там *є* будинок *серед* дерев!"],
+      ["Continúa…", "Далі буде…"]
+    ]},
+    { type: "box", kind: "activities", title: ["Actividades", "Завдання"], items: [
+      { s: [["Contesta a las preguntas sobre el capítulo 2.", "Дай відповіді на запитання до розділу 2."]] },
+      { n: "a", s: [["¿Dónde quedan los chicos?", "Де домовляються зустрітися діти?"]] },
+      { n: "b", s: [["¿A qué hora quedan?", "О котрій вони домовляються зустрітися?"]] },
+      { n: "c", s: [["¿Qué calle buscan?", "Яку вулицю вони шукають?"]] },
+      { n: "d", s: [["¿Qué número buscan?", "Який номер будинку вони шукають?"]] },
+      { n: "e", s: [["¿Dónde está la casa?", "Де стоїть будинок?"]] }
+    ], answers: [
+      { n: "a", q: ["¿Dónde quedan los chicos?", "Де домовляються зустрітися діти?"], a: ["Quedan en el ayuntamiento.", "Біля ратуші."] },
+      { n: "b", q: ["¿A qué hora quedan?", "О котрій вони домовляються зустрітися?"], a: ["A la una y media.", "О пів на другу."] },
+      { n: "c", q: ["¿Qué calle buscan?", "Яку вулицю вони шукають?"], a: ["La calle de la Niebla.", "Вулицю Туману."] },
+      { n: "d", q: ["¿Qué número buscan?", "Який номер будинку вони шукають?"], a: ["El número 99.", "Номер 99."] },
+      { n: "e", q: ["¿Dónde está la casa?", "Де стоїть будинок?"], a: ["Está entre los árboles.", "Він стоїть серед дерев."] }
+    ]},
+
+    { type: "h2", page: 25, s: [["¡A escribir! Vamos a chatear", "Пишімо! Давай поспілкуємося в чаті"]] },
+    { type: "h2", s: [["1. Lee este mensaje de intercambio escolar y escribe en tu cuaderno.", "1. Прочитай це повідомлення з учнівського обміну й напиши відповідь у зошиті."]] },
+    { type: "p", s: [
+      ["Nosotros en red", "Ми в мережі"],
+      ["Buscar · Inicio · Fotos · Grupos · Amigos · Enlaces · Publicaciones · Noticias", "Пошук · Головна · Фото · Групи · Друзі · Посилання · Публікації · Новини"]
+    ]},
+    { type: "img", src: "s25-claudia", alt: "Клаудія сидить за ноутбуком біля глобуса", s: [["Claudia · 80 me gusta", "Клаудія · 80 вподобань"]] },
+    { type: "p", s: [
+      ["¡Hola, Marco!", "Привіт, Марко!"],
+      ["*Me llamo* Claudia y *tengo* 9 años.", "Мене звати Клаудія, мені 9 років."],
+      ["Quiero ser tu amiga por chat.", "Я хочу бути твоєю подругою в чаті."],
+      ["*Vivo* en Barcelona.", "Я живу в Барселоні."],
+      ["*Hablo* catalán y castellano.", "Я розмовляю каталанською та кастильською (іспанською)."],
+      ["Vivo con mis padres y mi hermana pequeña, Sandra.", "Я живу з батьками й молодшою сестричкою Сандрою."],
+      ["Mi casa está *cerca de* un parque y *enfrente de* un supermercado.", "Мій дім *біля* парку і *навпроти* супермаркету."],
+      ["Tiene jardín y tres dormitorios.", "У ньому є сад і три спальні."]
+    ]},
+    { type: "p", s: [
+      ["Esta es mi *rutina diaria*: *me levanto* a las ocho, *desayuno* y *me voy* al colegio.", "Ось мій *розпорядок дня*: я *встаю* о восьмій, *снідаю* і *йду* до школи."],
+      ["*Como* en el colegio.", "Обідаю я в школі."],
+      ["Las clases *terminan* a las cuatro.", "Уроки *закінчуються* о четвертій."]
+    ]},
+    { type: "p", s: [
+      ["Por las tardes, *hago los deberes* y *toco la guitarra*.", "Після обіду я *роблю домашнє завдання* і *граю на гітарі*."],
+      ["*Ceno* a las ocho y *me acuesto* a las nueve y media.", "Я *вечеряю* о восьмій і *лягаю спати* о пів на десяту."]
+    ]},
+    { type: "p", s: [
+      ["*Me gusta* mucho *leer*.", "Я дуже *люблю читати*."],
+      ["¿Y a ti?", "А ти?"],
+      ["Lee este libro: *El comité secreto*.", "Прочитай цю книжку: «Таємний комітет»."],
+      ["¡Está muy bien!", "Вона дуже гарна!"],
+      ["¡Un abrazo!", "Обіймаю!"],
+      ["Claudia", "Клаудія"]
+    ]},
+    { type: "img", src: "s25-libro", alt: "Обкладинка книжки «El comité secreto» (видавництво Edelsa)", s: [["El comité secreto. Elena G. Hortelano. Ilustradora: Estrella Fages.", "«Таємний комітет». Олена Г. Ортелано. Ілюстраторка: Естрелья Фахес."]] },
+
+    { type: "box", kind: "activities", title: ["Actividades", "Завдання"], items: [
+      { s: [["Contesta a Claudia. Escribe sobre ti y tu rutina diaria.", "Дай відповідь Клаудії. Напиши про себе і свій розпорядок дня."]] },
+      { n: "a", s: [["¿Cómo te llamas y cuántos años tienes?", "Як тебе звати і скільки тобі років?"]] },
+      { n: "b", s: [["¿Dónde vives? ¿Qué lenguas hablas?", "Де ти живеш? Якими мовами розмовляєш?"]] },
+      { n: "c", s: [["¿Con quién vives? ¿Cómo es tu casa?", "З ким ти живеш? Який у тебе дім?"]] },
+      { n: "d", s: [["¿A qué hora te levantas? ¿Qué haces por la mañana?", "О котрій ти встаєш? Що робиш уранці?"]] },
+      { n: "e", s: [["¿Qué haces por la tarde?", "Що ти робиш після обіду?"]] },
+      { n: "f", s: [["¿A qué hora cenas y a qué hora te acuestas?", "О котрій ти вечеряєш і о котрій лягаєш спати?"]] },
+      { n: "g", s: [["¿Qué te gusta hacer?", "Що ти любиш робити?"]] }
+    ], answers: [
+      { n: "a", q: ["¿Cómo te llamas y cuántos años tienes?", "Як тебе звати і скільки тобі років?"], a: ["¡Hola, Claudia! Me llamo Sofía y tengo 11 años.", "Привіт, Клаудіє! Мене звати Софія, мені 11 років."] },
+      { n: "b", q: ["¿Dónde vives? ¿Qué lenguas hablas?", "Де ти живеш? Якими мовами розмовляєш?"], a: ["Vivo en Varsovia, en Polonia. Hablo ucraniano, polaco, un poco de inglés y un poco de español.", "Я живу у Варшаві, в Польщі. Розмовляю українською, польською, трохи англійською і трохи іспанською."] },
+      { n: "c", q: ["¿Con quién vives? ¿Cómo es tu casa?", "З ким ти живеш? Який у тебе дім?"], a: ["Vivo con mi familia. Mi casa está cerca de un parque. Tiene un salón, una cocina y dos dormitorios.", "Я живу з родиною. Мій дім біля парку. У ньому є вітальня, кухня і дві спальні."] },
+      { n: "d", q: ["¿A qué hora te levantas? ¿Qué haces por la mañana?", "О котрій ти встаєш? Що робиш уранці?"], a: ["Me levanto a las ocho y desayuno. Estudio en casa por la mañana.", "Я встаю о восьмій і снідаю. Уранці я навчаюся вдома."] },
+      { n: "e", q: ["¿Qué haces por la tarde?", "Що ти робиш після обіду?"], a: ["Por las tardes, hago los deberes y leo libros.", "Після обіду я роблю домашнє завдання і читаю книжки."] },
+      { n: "f", q: ["¿A qué hora cenas y a qué hora te acuestas?", "О котрій ти вечеряєш і о котрій лягаєш спати?"], a: ["Ceno a las siete y me acuesto a las diez.", "Я вечеряю о сьомій і лягаю спати о десятій."] },
+      { n: "g", q: ["¿Qué te gusta hacer?", "Що ти любиш робити?"], a: ["Me gusta mucho leer y aprender español. ¡Un abrazo!", "Я дуже люблю читати й вивчати іспанську. Обіймаю!"] }
+    ]},
+
+    { type: "box", kind: "review", title: ["¡Practica más!", "Потренуйся ще!"], items: [
+      { n: "1", s: [["Por la mañana, ____ a las ocho.", "Уранці я ____ о восьмій."]] },
+      { n: "a", sub: true, s: [["me acuesto", "лягаю спати"]] },
+      { n: "b", sub: true, ok: true, s: [["me levanto", "встаю"]] },
+      { n: "c", sub: true, s: [["ceno", "вечеряю"]] },
+      { n: "2", s: [["Por las tardes, ____ los deberes.", "Після обіду я ____ домашнє завдання."]] },
+      { n: "a", sub: true, ok: true, s: [["hago", "роблю"]] },
+      { n: "b", sub: true, s: [["toco", "граю"]] },
+      { n: "c", sub: true, s: [["como", "їм"]] },
+      { n: "3", s: [["Claudia ____ la guitarra.", "Клаудія ____ на гітарі."]] },
+      { n: "a", sub: true, s: [["hace", "робить"]] },
+      { n: "b", sub: true, s: [["lee", "читає"]] },
+      { n: "c", sub: true, ok: true, s: [["toca", "грає"]] },
+      { n: "4", s: [["La casa de Claudia está ____ de un supermercado.", "Дім Клаудії ____ супермаркету."]] },
+      { n: "a", sub: true, s: [["entre", "між"]] },
+      { n: "b", sub: true, ok: true, s: [["enfrente", "навпроти"]] },
+      { n: "c", sub: true, s: [["todo recto", "прямо"]] },
+      { n: "5", s: [["La segunda calle a la ____. (→)", "Друга вулиця ____. (→)"]] },
+      { n: "a", sub: true, ok: true, s: [["derecha", "праворуч"]] },
+      { n: "b", sub: true, s: [["izquierda", "ліворуч"]] },
+      { n: "c", sub: true, s: [["primera", "перша"]] },
+      { n: "6", s: [["Las clases ____ a las cuatro.", "Уроки ____ о четвертій."]] },
+      { n: "a", sub: true, s: [["termina", "закінчується"]] },
+      { n: "b", sub: true, s: [["terminamos", "закінчуємо"]] },
+      { n: "c", sub: true, ok: true, s: [["terminan", "закінчуються"]] }
+    ], answers: [
+      { n: "1", q: ["Por la mañana, ____ a las ocho.", "Уранці я ____ о восьмій."], a: ["b: Por la mañana, me levanto a las ocho.", "b: Уранці я встаю о восьмій."] },
+      { n: "2", q: ["Por las tardes, ____ los deberes.", "Після обіду я ____ домашнє завдання."], a: ["a: Por las tardes, hago los deberes.", "a: Після обіду я роблю домашнє завдання."] },
+      { n: "3", q: ["Claudia ____ la guitarra.", "Клаудія ____ на гітарі."], a: ["c: Claudia toca la guitarra.", "c: Клаудія грає на гітарі."] },
+      { n: "4", q: ["La casa de Claudia está ____ de un supermercado.", "Дім Клаудії ____ супермаркету."], a: ["b: La casa de Claudia está enfrente de un supermercado.", "b: Дім Клаудії навпроти супермаркету."] },
+      { n: "5", q: ["La segunda calle a la ____.", "Друга вулиця ____."], a: ["a: La segunda calle a la derecha.", "a: Друга вулиця праворуч."] },
+      { n: "6", q: ["Las clases ____ a las cuatro.", "Уроки ____ о четвертій."], a: ["c: Las clases terminan a las cuatro.", "c: Уроки закінчуються о четвертій."] }
+    ]},
+
+    { type: "box", kind: "review", title: ["Check yourself", "Перевір себе"], items: [
+      { n: "1", s: [["¿Qué calle buscan los chicos?", "Яку вулицю шукають діти?"]] },
+      { n: "a", sub: true, s: [["La calle del Sol.", "Вулицю Сонця."]] },
+      { n: "b", sub: true, s: [["La calle Mayor.", "Головну вулицю."]] },
+      { n: "c", sub: true, ok: true, s: [["La calle de la Niebla.", "Вулицю Туману."]] },
+      { n: "2", s: [["¿Dónde está la casa número 99?", "Де будинок номер 99?"]] },
+      { n: "a", sub: true, ok: true, s: [["Entre los árboles.", "Серед дерев."]] },
+      { n: "b", sub: true, s: [["En el ayuntamiento.", "У ратуші."]] },
+      { n: "c", sub: true, s: [["Enfrente del teatro.", "Навпроти театру."]] },
+      { n: "3", s: [["¿Qué lenguas habla Claudia?", "Якими мовами розмовляє Клаудія?"]] },
+      { n: "a", sub: true, s: [["Inglés y francés.", "Англійською і французькою."]] },
+      { n: "b", sub: true, ok: true, s: [["Catalán y castellano.", "Каталанською і кастильською."]] },
+      { n: "c", sub: true, s: [["Polaco y ucraniano.", "Польською і українською."]] },
+      { n: "4", s: [["¿A qué hora se acuesta Claudia?", "О котрій лягає спати Клаудія?"]] },
+      { n: "a", sub: true, s: [["A las ocho.", "О восьмій."]] },
+      { n: "b", sub: true, s: [["A las cuatro.", "О четвертій."]] },
+      { n: "c", sub: true, ok: true, s: [["A las nueve y media.", "О пів на десяту."]] },
+      { n: "5", s: [["¿Qué libro recomienda Claudia?", "Яку книжку радить Клаудія?"]] },
+      { n: "a", sub: true, ok: true, s: [["El comité secreto.", "«Таємний комітет»."]] },
+      { n: "b", sub: true, s: [["El conde Rocke.", "«Граф Роке»."]] },
+      { n: "c", sub: true, s: [["Nosotros en red.", "«Ми в мережі»."]] }
+    ], answers: [
+      { n: "1", q: ["¿Qué calle buscan los chicos?", "Яку вулицю шукають діти?"], a: ["c: La calle de la Niebla.", "c: Вулицю Туману."] },
+      { n: "2", q: ["¿Dónde está la casa número 99?", "Де будинок номер 99?"], a: ["a: Entre los árboles.", "a: Серед дерев."] },
+      { n: "3", q: ["¿Qué lenguas habla Claudia?", "Якими мовами розмовляє Клаудія?"], a: ["b: Catalán y castellano.", "b: Каталанською і кастильською."] },
+      { n: "4", q: ["¿A qué hora se acuesta Claudia?", "О котрій лягає спати Клаудія?"], a: ["c: A las nueve y media.", "c: О пів на десяту."] },
+      { n: "5", q: ["¿Qué libro recomienda Claudia?", "Яку книжку радить Клаудія?"], a: ["a: El comité secreto.", "a: «Таємний комітет»."] }
+    ]}
+  ],
+  phrases: [
+    ["¡A leer!", "Читаймо!"],
+    ["¡A escribir!", "Пишімо!"],
+    ["Vamos a chatear.", "Поспілкуймося в чаті."],
+    ["¿Qué hacemos?", "Що робимо?"],
+    ["Quedamos en el ayuntamiento.", "Зустрічаємося біля ратуші."],
+    ["a la una y media", "о пів на другу"],
+    ["Media hora más tarde.", "Через пів години."],
+    ["¿Sabes dónde está…?", "Ти знаєш, де…?"],
+    ["la segunda calle a la derecha", "друга вулиця праворуч"],
+    ["la primera calle a la izquierda", "перша вулиця ліворуч"],
+    ["Seguid todo recto.", "Ідіть увесь час прямо."],
+    ["¡Mirad allí!", "Подивіться туди!"],
+    ["entre los árboles", "серед дерев"],
+    ["Continúa…", "Далі буде…"],
+    ["Me llamo Claudia.", "Мене звати Клаудія."],
+    ["Tengo 9 años.", "Мені 9 років."],
+    ["Quiero ser tu amiga por chat.", "Я хочу бути твоєю подругою в чаті."],
+    ["Vivo en Barcelona.", "Я живу в Барселоні."],
+    ["mi hermana pequeña", "моя молодша сестра"],
+    ["cerca de un parque", "біля парку"],
+    ["enfrente de un supermercado", "навпроти супермаркету"],
+    ["mi rutina diaria", "мій розпорядок дня"],
+    ["Me levanto a las ocho.", "Я встаю о восьмій."],
+    ["Me voy al colegio.", "Я йду до школи."],
+    ["Como en el colegio.", "Я обідаю в школі."],
+    ["Las clases terminan a las cuatro.", "Уроки закінчуються о четвертій."],
+    ["por las tardes", "після обіду, вечорами"],
+    ["hacer los deberes", "робити домашнє завдання"],
+    ["tocar la guitarra", "грати на гітарі"],
+    ["Me acuesto a las nueve y media.", "Я лягаю спати о пів на десяту."],
+    ["Me gusta mucho leer.", "Я дуже люблю читати."],
+    ["¿Y a ti?", "А тобі?"],
+    ["¡Está muy bien!", "Це дуже гарно!"],
+    ["¡Un abrazo!", "Обіймаю!"]
+  ]
+});

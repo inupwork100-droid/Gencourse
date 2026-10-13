@@ -1,0 +1,235 @@
+// Урок 2.2 «Nos levantamos pronto · Rutina diaria» — сторінки 18–19 книжки «Español» (Colega vuelve 3).
+// Кожне речення — [іспанською, українською]. *слово* — жирне ключове слово.
+(window.ESP = window.ESP || { lessons: [], dict: {} }).lessons.push({
+  id: "2.2",
+  unit: "2 ¿A qué hora quedamos?",
+  color: "#e0418f",
+  title: ["2.2 Nos levantamos pronto · Rutina diaria", "2.2 Ми рано встаємо · Розпорядок дня"],
+  pages: "18–19",
+  blocks: [
+    { type: "h2", page: 18, s: [["Unidad 2. Nos levantamos pronto", "Розділ 2. Ми рано встаємо"]] },
+
+    { type: "h2", s: [["1. Lee y aprende.", "1. Прочитай і вивчи."]] },
+    { type: "p", s: [
+      ["Nosotros, los días de colegio *nos levantamos* a las siete y media.", "У шкільні дні ми встаємо о пів на восьму (7:30)."],
+      ["Los días que no hay colegio *nos levantamos* a las nueve.", "У дні, коли немає школи, ми встаємо о дев'ятій."],
+      ["*Nos acostamos* a las nueve y media de la noche.", "Лягаємо спати о пів на десяту вечора (21:30)."],
+      ["Pero en verano dormimos la siesta y por la noche *nos acostamos* más tarde.", "Але влітку ми спимо вдень (сієста), а ввечері лягаємо пізніше."]
+    ]},
+    { type: "img", src: "s18-amigos", alt: "Хлопчик і дівчинка з собакою розповідають, коли встають", s: [
+      ["Nos levantamos a las siete y media.", "Ми встаємо о пів на восьму."]
+    ]},
+    { type: "h2", s: [["Verbos reflexivos", "Зворотні дієслова (з -se)"]] },
+    { type: "wordtable", title: [["LEVANTARSE", "LEVANTARSE — вставати"]], head: [["Persona", "Особа"], ["Forma", "Форма"]], rows: [
+      { t: "(yo)", m: ["", "я"], ex: ["*me levanto*", "я встаю"] },
+      { t: "(tú)", m: ["", "ти"], ex: ["*te levantas*", "ти встаєш"] },
+      { t: "(él/ella/usted)", m: ["", "він / вона / Ви"], ex: ["*se levanta*", "він / вона встає, Ви встаєте"] },
+      { t: "(nosotros/as)", m: ["", "ми"], ex: ["*nos levantamos*", "ми встаємо"] },
+      { t: "(vosotros/as)", m: ["", "ви"], ex: ["*os levantáis*", "ви встаєте"] },
+      { t: "(ellos/ellas/ustedes)", m: ["", "вони / Ви (багато людей)"], ex: ["*se levantan*", "вони встають"] }
+    ]},
+    { type: "wordtable", title: [["ACOSTARSE", "ACOSTARSE — лягати спати"]], head: [["Persona", "Особа"], ["Forma", "Форма"]], rows: [
+      { t: "(yo)", m: ["", "я"], ex: ["*me acuesto*", "я лягаю спати"] },
+      { t: "(tú)", m: ["", "ти"], ex: ["*te acuestas*", "ти лягаєш спати"] },
+      { t: "(él/ella/usted)", m: ["", "він / вона / Ви"], ex: ["*se acuesta*", "він / вона лягає спати"] },
+      { t: "(nosotros/as)", m: ["", "ми"], ex: ["*nos acostamos*", "ми лягаємо спати"] },
+      { t: "(vosotros/as)", m: ["", "ви"], ex: ["*os acostáis*", "ви лягаєте спати"] },
+      { t: "(ellos/ellas/ustedes)", m: ["", "вони / Ви (багато людей)"], ex: ["*se acuestan*", "вони лягають спати"] }
+    ]},
+    { type: "wordtable", title: [["LAVARSE", "LAVARSE — митися"]], head: [["Persona", "Особа"], ["Forma", "Форма"]], rows: [
+      { t: "(yo)", m: ["", "я"], ex: ["*me lavo*", "я миюся"] },
+      { t: "(tú)", m: ["", "ти"], ex: ["*te lavas*", "ти миєшся"] },
+      { t: "(él/ella/usted)", m: ["", "він / вона / Ви"], ex: ["*se lava*", "він / вона миється"] },
+      { t: "(nosotros/as)", m: ["", "ми"], ex: ["*nos lavamos*", "ми миємося"] },
+      { t: "(vosotros/as)", m: ["", "ви"], ex: ["*os laváis*", "ви миєтеся"] },
+      { t: "(ellos/ellas/ustedes)", m: ["", "вони / Ви (багато людей)"], ex: ["*se lavan*", "вони миються"] }
+    ]},
+
+    { type: "h2", s: [["2. Completa estos verbos reflexivos.", "2. Доповни ці зворотні дієслова."]] },
+    { type: "p", s: [["LLAMARSE • PEINARSE • DUCHARSE", "називатися • причісуватися • приймати душ"]] },
+    { type: "box", kind: "activities", title: ["Actividades", "Завдання"], items: [
+      { n: "a", s: [["(yo) ____ llam____ · ____ pein____ · ____ duch____", "(я) звуся · причісуюся · приймаю душ"]] },
+      { n: "b", s: [["(tú) ____ llam____ · ____ pein____ · ____ duch____", "(ти) звешся · причісуєшся · приймаєш душ"]] },
+      { n: "c", s: [["(él/ella/usted) ____ llam____ · ____ pein____ · ____ duch____", "(він/вона/Ви) зветься · причісується · приймає душ"]] },
+      { n: "d", s: [["(nosotros/as) ____ llam____ · ____ pein____ · ____ duch____", "(ми) звемося · причісуємося · приймаємо душ"]] },
+      { n: "e", s: [["(vosotros/as) ____ llam____ · ____ pein____ · ____ duch____", "(ви) зветеся · причісуєтеся · приймаєте душ"]] },
+      { n: "f", s: [["(ellos/ellas/ustedes) ____ llam____ · ____ pein____ · ____ duch____", "(вони) звуться · причісуються · приймають душ"]] }
+    ], answers: [
+      { n: "a", q: ["(yo) llamarse · peinarse · ducharse", "(я)"], a: ["me llamo · me peino · me ducho", "я звуся · я причісуюся · я приймаю душ"] },
+      { n: "b", q: ["(tú) llamarse · peinarse · ducharse", "(ти)"], a: ["te llamas · te peinas · te duchas", "ти звешся · ти причісуєшся · ти приймаєш душ"] },
+      { n: "c", q: ["(él/ella/usted) llamarse · peinarse · ducharse", "(він/вона/Ви)"], a: ["se llama · se peina · se ducha", "він/вона зветься · причісується · приймає душ"] },
+      { n: "d", q: ["(nosotros/as) llamarse · peinarse · ducharse", "(ми)"], a: ["nos llamamos · nos peinamos · nos duchamos", "ми звемося · причісуємося · приймаємо душ"] },
+      { n: "e", q: ["(vosotros/as) llamarse · peinarse · ducharse", "(ви)"], a: ["os llamáis · os peináis · os ducháis", "ви зветеся · причісуєтеся · приймаєте душ"] },
+      { n: "f", q: ["(ellos/ellas/ustedes) llamarse · peinarse · ducharse", "(вони)"], a: ["se llaman · se peinan · se duchan", "вони звуться · причісуються · приймають душ"] }
+    ]},
+
+    { type: "h2", s: [["3. ¿A qué hora te levantas tú?", "3. О котрій встаєш ти?"]] },
+    { type: "box", kind: "activities", title: ["Ahora yo", "Тепер я"], items: [
+      { n: "a", s: [["¿A qué hora te levantas tú?", "О котрій ти встаєш?"]] }
+    ], answers: [
+      { n: "a", q: ["¿A qué hora te levantas tú?", "О котрій ти встаєш?"], a: ["Me levanto a las siete y media.", "Я встаю о пів на восьму."] }
+    ]},
+
+    { type: "h2", page: 19, s: [["Rutina diaria · Lección 2", "Розпорядок дня · Урок 2"]] },
+    { type: "h2", s: [["4. Escucha y lee.", "4. Послухай і прочитай."]] },
+    { type: "p", s: [
+      ["Yo *me levanto* a las ocho.", "Я встаю о восьмій."],
+      ["*Desayuno* a las ocho y cuarto.", "Снідаю о чверть на дев'яту (8:15)."]
+    ]},
+    { type: "img", src: "s19-manana", alt: "Ранок: хлопчик встає о 8:00 і снідає о 8:15", s: [
+      ["Yo me levanto a las ocho. Desayuno a las ocho y cuarto.", "Я встаю о восьмій. Снідаю о 8:15."]
+    ]},
+    { type: "p", s: [
+      ["A las nueve menos cuarto *voy al colegio*.", "За чверть дев'ята (8:45) я йду до школи."],
+      ["*Como* en el colegio a la una.", "Обідаю в школі о першій."],
+      ["A las cuatro y media *voy a casa*.", "О пів на п'яту (16:30) я йду додому."]
+    ]},
+    { type: "img", src: "s19-tarde", alt: "Хлопчик іде до школи о 8:45, обідає о 13:00 і повертається додому о 16:30", s: [
+      ["Voy al colegio, como en el colegio y voy a casa.", "Іду до школи, обідаю в школі й іду додому."]
+    ]},
+    { type: "p", s: [
+      ["A las cinco *meriendo*.", "О п'ятій я полуднаю."],
+      ["A las cinco y media *hago los deberes*.", "О пів на шосту (17:30) роблю домашнє завдання."],
+      ["A las siete *veo la tele*.", "О сьомій дивлюся телевізор."],
+      ["A las ocho menos cuarto *me ducho*.", "За чверть восьма (19:45) я приймаю душ."]
+    ]},
+    { type: "img", src: "s19-tarde-noche", alt: "Вечір: душ о 19:45, телевізор о 19:00, домашнє завдання о 17:30, підвечірок о 17:00", s: [
+      ["Meriendo, hago los deberes, veo la tele y me ducho.", "Полуднаю, роблю уроки, дивлюся телевізор і приймаю душ."]
+    ]},
+    { type: "p", s: [
+      ["A las ocho *ceno*.", "О восьмій я вечеряю."],
+      ["A las ocho y media *leo*.", "О пів на дев'яту (20:30) читаю."],
+      ["A las nueve y media *me acuesto*.", "О пів на десяту (21:30) лягаю спати."]
+    ]},
+    { type: "img", src: "s19-noche", alt: "Ніч: вечеря о 20:00, читання о 20:30, сон о 21:30", s: [
+      ["Ceno, leo y me acuesto.", "Вечеряю, читаю і лягаю спати."]
+    ]},
+
+    { type: "h2", s: [["5. Practica con tu compañero.", "5. Потренуйся з однокласником."]] },
+    { type: "box", kind: "activities", title: ["Ahora yo", "Тепер я"], items: [
+      { n: "a", s: [["¿A qué hora te levantas?", "О котрій ти встаєш?"]] },
+      { n: "b", s: [["¿A qué hora desayunas?", "О котрій ти снідаєш?"]] },
+      { n: "c", s: [["¿A qué hora vas al colegio?", "О котрій ти йдеш до школи?"]] },
+      { n: "d", s: [["¿A qué hora comes?", "О котрій ти обідаєш?"]] },
+      { n: "e", s: [["¿A qué hora meriendas?", "О котрій ти полуднаєш?"]] },
+      { n: "f", s: [["¿Cuándo haces los deberes?", "Коли ти робиш домашнє завдання?"]] },
+      { n: "g", s: [["¿Cuándo te duchas?", "Коли ти приймаєш душ?"]] },
+      { n: "h", s: [["¿Cuándo lees?", "Коли ти читаєш?"]] },
+      { n: "i", s: [["¿A qué hora te acuestas?", "О котрій ти лягаєш спати?"]] }
+    ], answers: [
+      { n: "a", q: ["¿A qué hora te levantas?", "О котрій ти встаєш?"], a: ["Me levanto a las siete y media.", "Я встаю о пів на восьму."] },
+      { n: "b", q: ["¿A qué hora desayunas?", "О котрій ти снідаєш?"], a: ["Desayuno a las ocho.", "Я снідаю о восьмій."] },
+      { n: "c", q: ["¿A qué hora vas al colegio?", "О котрій ти йдеш до школи?"], a: ["No voy al colegio, estudio en casa. Empiezo a las nueve.", "Я не ходжу до школи, навчаюся вдома. Починаю о дев'ятій."] },
+      { n: "d", q: ["¿A qué hora comes?", "О котрій ти обідаєш?"], a: ["Como a las dos.", "Я обідаю о другій."] },
+      { n: "e", q: ["¿A qué hora meriendas?", "О котрій ти полуднаєш?"], a: ["Meriendo a las cinco.", "Я полуднаю о п'ятій."] },
+      { n: "f", q: ["¿Cuándo haces los deberes?", "Коли ти робиш домашнє завдання?"], a: ["Hago los deberes a las cuatro.", "Я роблю домашнє завдання о четвертій."] },
+      { n: "g", q: ["¿Cuándo te duchas?", "Коли ти приймаєш душ?"], a: ["Me ducho a las ocho y media de la noche.", "Я приймаю душ о пів на дев'яту вечора."] },
+      { n: "h", q: ["¿Cuándo lees?", "Коли ти читаєш?"], a: ["Leo antes de dormir.", "Я читаю перед сном."] },
+      { n: "i", q: ["¿A qué hora te acuestas?", "О котрій ти лягаєш спати?"], a: ["Me acuesto a las diez menos cuarto.", "Я лягаю спати за чверть десята."] }
+    ]},
+
+    { type: "box", kind: "review", title: ["¡Practica más!", "Потренуйся ще!"],
+      answers: [
+        { n: "1", q: ["Yo ____ a las siete.", "Я ____ о сьомій."], a: ["c: Yo me levanto a las siete.", "c: Я встаю о сьомій."] },
+        { n: "2", q: ["¿Vosotros ____ a las diez?", "Ви ____ о десятій?"], a: ["a: ¿Vosotros os acostáis a las diez?", "a: Ви лягаєте спати о десятій?"] },
+        { n: "3", q: ["Mi hermana ____ Elena.", "Мою сестру ____ Олена."], a: ["b: Mi hermana se llama Elena.", "b: Мою сестру звати Олена."] },
+        { n: "4", q: ["Nosotros ____ por la mañana.", "Ми ____ вранці."], a: ["b: Nosotros nos duchamos por la mañana.", "b: Ми приймаємо душ уранці."] },
+        { n: "5", q: ["Ellos ____ los dientes.", "Вони ____ зуби."], a: ["c: Ellos se lavan los dientes.", "c: Вони чистять зуби."] },
+        { n: "6", q: ["¿A qué hora ____ los deberes?", "О котрій ти ____ домашнє завдання?"], a: ["a: ¿A qué hora haces los deberes?", "a: О котрій ти робиш домашнє завдання?"] }
+      ],
+      items: [
+        { n: "1", s: [["Yo ____ a las siete.", "Я ____ о сьомій."]] },
+        { n: "a", sub: true, s: [["te levantas", "ти встаєш"]] },
+        { n: "b", sub: true, s: [["se levanta", "він встає"]] },
+        { n: "c", sub: true, ok: true, s: [["me levanto", "я встаю"]] },
+        { n: "2", s: [["¿Vosotros ____ a las diez?", "Ви ____ о десятій?"]] },
+        { n: "a", sub: true, ok: true, s: [["os acostáis", "лягаєте спати"]] },
+        { n: "b", sub: true, s: [["nos acostamos", "лягаємо спати"]] },
+        { n: "c", sub: true, s: [["se acuestan", "лягають спати"]] },
+        { n: "3", s: [["Mi hermana ____ Elena.", "Мою сестру ____ Олена."]] },
+        { n: "a", sub: true, s: [["me llamo", "мене звати"]] },
+        { n: "b", sub: true, ok: true, s: [["se llama", "звати (її)"]] },
+        { n: "c", sub: true, s: [["te llamas", "тебе звати"]] },
+        { n: "4", s: [["Nosotros ____ por la mañana.", "Ми ____ вранці."]] },
+        { n: "a", sub: true, s: [["os ducháis", "приймаєте душ"]] },
+        { n: "b", sub: true, ok: true, s: [["nos duchamos", "приймаємо душ"]] },
+        { n: "c", sub: true, s: [["se ducha", "приймає душ"]] },
+        { n: "5", s: [["Ellos ____ los dientes.", "Вони ____ зуби."]] },
+        { n: "a", sub: true, s: [["nos lavamos", "миємо (ми)"]] },
+        { n: "b", sub: true, s: [["se lava", "миє (він)"]] },
+        { n: "c", sub: true, ok: true, s: [["se lavan", "миють (вони)"]] },
+        { n: "6", s: [["¿A qué hora ____ los deberes?", "О котрій ти ____ домашнє завдання?"]] },
+        { n: "a", sub: true, ok: true, s: [["haces", "робиш"]] },
+        { n: "b", sub: true, s: [["hago", "роблю"]] },
+        { n: "c", sub: true, s: [["veo", "дивлюся"]] }
+      ]
+    },
+
+    { type: "box", kind: "review", title: ["Check yourself", "Перевір себе"],
+      answers: [
+        { n: "1", q: ["Los días de colegio, ¿a qué hora se levantan los chicos?", "О котрій встають діти в шкільні дні?"], a: ["b: A las siete y media.", "b: О пів на восьму."] },
+        { n: "2", q: ["¿Qué hacen en verano?", "Що вони роблять улітку?"], a: ["a: Duermen la siesta.", "a: Сплять удень (сієста)."] },
+        { n: "3", q: ["¿A qué hora va el chico al colegio?", "О котрій хлопчик іде до школи?"], a: ["c: A las nueve menos cuarto.", "c: За чверть дев'ята."] },
+        { n: "4", q: ["¿Qué hace el chico a las siete?", "Що робить хлопчик о сьомій?"], a: ["c: Ve la tele.", "c: Дивиться телевізор."] },
+        { n: "5", q: ["¿A qué hora se acuesta el chico?", "О котрій хлопчик лягає спати?"], a: ["a: A las nueve y media.", "a: О пів на десяту."] }
+      ],
+      items: [
+        { n: "1", s: [["Los días de colegio, ¿a qué hora se levantan los chicos?", "О котрій встають діти в шкільні дні?"]] },
+        { n: "a", sub: true, s: [["A las nueve.", "О дев'ятій."]] },
+        { n: "b", sub: true, ok: true, s: [["A las siete y media.", "О пів на восьму."]] },
+        { n: "c", sub: true, s: [["A las ocho y cuarto.", "О чверть на дев'яту."]] },
+        { n: "2", s: [["¿Qué hacen en verano?", "Що вони роблять улітку?"]] },
+        { n: "a", sub: true, ok: true, s: [["Duermen la siesta.", "Сплять удень (сієста)."]] },
+        { n: "b", sub: true, s: [["Van al colegio.", "Ходять до школи."]] },
+        { n: "c", sub: true, s: [["Se acuestan a las siete.", "Лягають спати о сьомій."]] },
+        { n: "3", s: [["¿A qué hora va el chico al colegio?", "О котрій хлопчик іде до школи?"]] },
+        { n: "a", sub: true, s: [["A la una.", "О першій."]] },
+        { n: "b", sub: true, s: [["A las cuatro y media.", "О пів на п'яту."]] },
+        { n: "c", sub: true, ok: true, s: [["A las nueve menos cuarto.", "За чверть дев'ята."]] },
+        { n: "4", s: [["¿Qué hace el chico a las siete?", "Що робить хлопчик о сьомій?"]] },
+        { n: "a", sub: true, s: [["Merienda.", "Полуднає."]] },
+        { n: "b", sub: true, s: [["Se ducha.", "Приймає душ."]] },
+        { n: "c", sub: true, ok: true, s: [["Ve la tele.", "Дивиться телевізор."]] },
+        { n: "5", s: [["¿A qué hora se acuesta el chico?", "О котрій хлопчик лягає спати?"]] },
+        { n: "a", sub: true, ok: true, s: [["A las nueve y media.", "О пів на десяту."]] },
+        { n: "b", sub: true, s: [["A las ocho.", "О восьмій."]] },
+        { n: "c", sub: true, s: [["A las ocho y media.", "О пів на дев'яту."]] }
+      ]
+    }
+  ],
+  phrases: [
+    ["nos levantamos pronto", "ми рано встаємо"],
+    ["rutina diaria", "розпорядок дня"],
+    ["los días de colegio", "у шкільні дні"],
+    ["los días que no hay colegio", "у дні, коли немає школи"],
+    ["de la noche", "вечора, ночі"],
+    ["por la noche", "увечері, вночі"],
+    ["por la mañana", "вранці"],
+    ["en verano", "улітку"],
+    ["dormir la siesta", "спати вдень (сієста)"],
+    ["más tarde", "пізніше"],
+    ["verbos reflexivos", "зворотні дієслова"],
+    ["me levanto", "я встаю"],
+    ["me acuesto", "я лягаю спати"],
+    ["me lavo", "я миюся"],
+    ["me llamo", "мене звати"],
+    ["me peino", "я причісуюся"],
+    ["me ducho", "я приймаю душ"],
+    ["¿A qué hora te levantas?", "О котрій ти встаєш?"],
+    ["¿A qué hora te acuestas?", "О котрій ти лягаєш спати?"],
+    ["¿A qué hora vas al colegio?", "О котрій ти йдеш до школи?"],
+    ["¿A qué hora meriendas?", "О котрій ти полуднаєш?"],
+    ["¿Cuándo haces los deberes?", "Коли ти робиш домашнє завдання?"],
+    ["¿Cuándo te duchas?", "Коли ти приймаєш душ?"],
+    ["¿Cuándo lees?", "Коли ти читаєш?"],
+    ["ir al colegio", "іти до школи"],
+    ["ir a casa", "іти додому"],
+    ["hacer los deberes", "робити домашнє завдання"],
+    ["ver la tele", "дивитися телевізор"],
+    ["a las nueve menos cuarto", "за чверть дев'ята"],
+    ["a las ocho menos cuarto", "за чверть восьма"],
+    ["a las cinco y media", "о пів на шосту"],
+    ["a las nueve y media de la noche", "о пів на десяту вечора"],
+    ["Practica con tu compañero.", "Потренуйся з однокласником."]
+  ]
+});

@@ -1,0 +1,145 @@
+// Урок 1.6 «Colega por el mundo: Bolivia · Nuestro proyecto» — сторінки 14–15 підручника Colega vuelve 3.
+// Кожне речення — [іспанською, українською]. *слово* — жирне ключове слово.
+(window.ESP = window.ESP || { lessons: [], dict: {} }).lessons.push({
+  id: "1.6",
+  unit: "1 Somos la pandilla",
+  color: "#6fb43f",
+  title: ["1.6 Colega por el mundo: Bolivia · Nuestro proyecto", "1.6 Колега мандрує світом: Болівія · Наш проєкт"],
+  pages: "14–15",
+  blocks: [
+    { type: "h2", page: 14, s: [["#Colega por el mundo", "#Колега мандрує світом"]] },
+    { type: "img", src: "s14-colega", alt: "Песик Колега з рюкзаком і телефоном махає лапою", s: [["Colega", "Колега"]] },
+
+    { type: "h2", s: [["1. Observa y lee.", "1. Подивися і прочитай."]] },
+    { type: "h2", s: [["Bolivia", "Болівія"]] },
+    { type: "p", s: [
+      ["*Aquí está* Bolivia.", "*Ось тут* Болівія."],
+      ["*Este es su mapa*.", "*Це її мапа*."]
+    ]},
+    { type: "img", src: "s14-mapa", alt: "Мапа світу і мапа Південної Америки, де позначено Болівію", s: [
+      ["Aquí está Bolivia.", "Ось тут Болівія."],
+      ["Este es su mapa.", "Це її мапа."]
+    ]},
+    { type: "p", s: [
+      ["*Esta es su bandera*: es *roja*, *amarilla* y *verde*.", "*Це її прапор*: він *червоний*, *жовтий* і *зелений*."]
+    ]},
+    { type: "img", src: "s14-bandera", alt: "Прапор Болівії: червона, жовта і зелена смуги", s: [["La bandera de Bolivia: roja, amarilla y verde.", "Прапор Болівії: червоний, жовтий і зелений."]] },
+    { type: "p", s: [
+      ["En esta *foto* estoy en Bolivia.", "На цьому *фото* я в Болівії."]
+    ]},
+    { type: "img", src: "s14-titicaca", alt: "Озеро Тітікака з острова Сонця, човен на воді", s: [["El lago Titicaca desde la isla del Sol", "Озеро Тітікака з острова Сонця"]] },
+
+    { type: "h2", s: [["2. Escucha y lee.", "2. Послухай і прочитай."]] },
+    { type: "p", s: [
+      ["Bolivia está en *América del Sur*.", "Болівія розташована в *Південній Америці*."],
+      ["Su *capital* es Sucre, pero el *gobierno* está en La Paz.", "Її *столиця* — Сукре, але *уряд* знаходиться в Ла-Пасі."],
+      ["En Bolivia hablan español y también otras *lenguas* como aymara, guaraní o quechua.", "У Болівії розмовляють іспанською, а також іншими *мовами*, як-от аймара, гуарані чи кечуа."]
+    ]},
+    { type: "p", s: [
+      ["Entre Bolivia y Perú está el *antiguo* y *misterioso* *lago* Titicaca.", "Між Болівією і Перу лежить *давнє* й *таємниче* *озеро* Тітікака."],
+      ["Es un lago *navegable* muy grande, el más *alto* del mundo.", "Це дуже велике *судноплавне* озеро, найвище у світі."],
+      ["Dentro del lago hay muchas *islas*, como la isla del Sol, que tiene muchos *yacimientos* incas.", "Усередині озера є багато *островів*, як-от острів Сонця, де багато *пам'яток* інків."]
+    ]},
+    { type: "p", s: [
+      ["En Bolivia puedes ver *llamas*, ¡son animales *domésticos*!", "У Болівії можна побачити *лам* — це *свійські* тварини!"]
+    ]},
+    { type: "img", src: "s14-llama", alt: "Лама біля води", s: [["Llama", "Лама"]] },
+    { type: "p", s: [
+      ["Puedes comer *silpancho*, una *comida* que tiene *arroz*, *papa*, *carne* y *huevo frito*.", "Можна скуштувати *сільпанчо* — *страву*, у якій є *рис*, *картопля*, *м'ясо* і *смажене яйце*."]
+    ]},
+    { type: "img", src: "s14-silpancho", alt: "Тарілка сільпанчо: рис, картопля, м'ясо, смажене яйце й овочі", s: [["Silpancho", "Сільпанчо"]] },
+    { type: "box", kind: "activities", title: ["Actividades", "Завдання"], items: [
+      { n: "a", s: [["¿Dónde está Bolivia?", "Де розташована Болівія?"]] },
+      { n: "b", s: [["¿Cuál es su capital?", "Яка її столиця?"]] },
+      { n: "c", s: [["¿Qué lenguas hablan en Bolivia?", "Якими мовами розмовляють у Болівії?"]] },
+      { n: "d", s: [["¿De qué colores es la bandera de Bolivia?", "Якого кольору прапор Болівії?"]] },
+      { n: "e", s: [["¿Qué tiene el silpancho?", "Що є в сільпанчо?"]] }
+    ], answers: [
+      { n: "a", q: ["¿Dónde está Bolivia?", "Де розташована Болівія?"], a: ["Bolivia está en América del Sur.", "Болівія розташована в Південній Америці."] },
+      { n: "b", q: ["¿Cuál es su capital?", "Яка її столиця?"], a: ["Su capital es Sucre, pero el gobierno está en La Paz.", "Її столиця — Сукре, але уряд у Ла-Пасі."] },
+      { n: "c", q: ["¿Qué lenguas hablan en Bolivia?", "Якими мовами розмовляють у Болівії?"], a: ["Hablan español, aymara, guaraní y quechua.", "Там розмовляють іспанською, аймара, гуарані й кечуа."] },
+      { n: "d", q: ["¿De qué colores es la bandera de Bolivia?", "Якого кольору прапор Болівії?"], a: ["Es roja, amarilla y verde.", "Він червоний, жовтий і зелений."] },
+      { n: "e", q: ["¿Qué tiene el silpancho?", "Що є в сільпанчо?"], a: ["Tiene arroz, papa, carne y huevo frito.", "У ньому рис, картопля, м'ясо і смажене яйце."] }
+    ]},
+
+    { type: "h2", page: 15, s: [["Nuestro proyecto 1", "Наш проєкт 1"]] },
+    { type: "h2", s: [["1. Hacemos una insignia.", "1. Робимо значок."]] },
+    { type: "img", src: "s15-insignia", alt: "Готовий кольоровий значок: усміхнена Земля, навколо діти тримаються за руки", s: [["Ciudadanos del mundo", "Громадяни світу"]] },
+    { type: "p", s: [
+      ["*Necesitamos*:", "Нам *потрібно*:"],
+      ["*pinturas*, *tijeras*, *cartulina*, *celo*,", "*фарби (олівці)*, *ножиці*, *кольоровий картон*, *скотч*,"],
+      ["*pegamento*, *imperdible*, *papel adhesivo transparente*.", "*клей*, *шпилька (англійка)*, *прозора самоклейна плівка*."]
+    ]},
+    { type: "img", src: "s15-materiales", alt: "Матеріали: фарби, ножиці, картон, скотч, клей, шпилька, плівка", s: [
+      ["pinturas, tijeras, cartulina, celo", "фарби, ножиці, картон, скотч"],
+      ["pegamento, imperdible, papel adhesivo transparente", "клей, шпилька, прозора самоклейна плівка"]
+    ]},
+    { type: "img", src: "s15-plantilla", alt: "Чорно-білий шаблон значка «Ciudadanos del mundo»", s: [
+      ["Plantilla fotocopiable", "Шаблон для ксерокопії"],
+      ["Recurso descargable", "Матеріал можна завантажити"]
+    ]},
+    { type: "img", src: "s15-paso1", alt: "Крок 1: дівчинка розфарбовує шаблон значка", s: [["1.", "1."]] },
+    { type: "img", src: "s15-pasos", alt: "Кроки 2–5: вирізаємо, наклеюємо на картон, покриваємо плівкою, прикріплюємо шпильку", s: [["2. 3. 4. 5.", "2. 3. 4. 5."]] },
+    { type: "box", kind: "plain", title: ["Paso a paso (en el libro hay solo fotos)", "Крок за кроком (у книжці тільки фото)"], items: [
+      { n: "1", s: [["*Pintamos* la plantilla.", "*Розфарбовуємо* шаблон."]] },
+      { n: "2", s: [["*Recortamos* la insignia y la *pegamos* en la cartulina.", "*Вирізаємо* значок і *приклеюємо* його на картон."]] },
+      { n: "3", s: [["Recortamos el círculo de cartulina.", "Вирізаємо кружечок із картону."]] },
+      { n: "4", s: [["*Ponemos* papel adhesivo transparente.", "*Накладаємо* прозору самоклейну плівку."]] },
+      { n: "5", s: [["Pegamos el imperdible *detrás* con celo.", "Приклеюємо шпильку *ззаду* скотчем."]] }
+    ]},
+
+    { type: "box", kind: "review", title: ["¡Practica más!", "Потренуйся ще!"], items: [
+      { n: "1", s: [["Bolivia está en ____.", "Болівія розташована в ____."]] },
+      { n: "a", sub: true, s: [["Europa", "Європі"]] }, { n: "b", sub: true, ok: true, s: [["América del Sur", "Південній Америці"]] }, { n: "c", sub: true, s: [["África", "Африці"]] },
+      { n: "2", s: [["La capital de Bolivia es ____.", "Столиця Болівії — ____."]] },
+      { n: "a", sub: true, ok: true, s: [["Sucre", "Сукре"]] }, { n: "b", sub: true, s: [["Lima", "Ліма"]] }, { n: "c", sub: true, s: [["Madrid", "Мадрид"]] },
+      { n: "3", s: [["El lago Titicaca está entre Bolivia y ____.", "Озеро Тітікака лежить між Болівією і ____."]] },
+      { n: "a", sub: true, s: [["México", "Мексикою"]] }, { n: "b", sub: true, s: [["Argentina", "Аргентиною"]] }, { n: "c", sub: true, ok: true, s: [["Perú", "Перу"]] },
+      { n: "4", s: [["Para cortar papel necesitamos ____.", "Щоб різати папір, нам потрібні ____."]] },
+      { n: "a", sub: true, ok: true, s: [["tijeras", "ножиці"]] }, { n: "b", sub: true, s: [["pegamento", "клей"]] }, { n: "c", sub: true, s: [["pinturas", "фарби"]] },
+      { n: "5", s: [["En Bolivia ____ ver llamas.", "У Болівії ____ побачити лам."]] },
+      { n: "a", sub: true, s: [["puedo", "можу"]] }, { n: "b", sub: true, ok: true, s: [["puedes", "можеш"]] }, { n: "c", sub: true, s: [["pueden", "можуть"]] },
+      { n: "6", s: [["Nosotros ____ una insignia.", "Ми ____ значок."]] },
+      { n: "a", sub: true, s: [["hacen", "роблять"]] }, { n: "b", sub: true, s: [["hacéis", "робите"]] }, { n: "c", sub: true, ok: true, s: [["hacemos", "робимо"]] }
+    ], answers: [
+      { n: "1", q: ["Bolivia está en ____.", "Болівія розташована в ____."], a: ["b: Bolivia está en América del Sur.", "b: Болівія розташована в Південній Америці."] },
+      { n: "2", q: ["La capital de Bolivia es ____.", "Столиця Болівії — ____."], a: ["a: La capital de Bolivia es Sucre.", "a: Столиця Болівії — Сукре."] },
+      { n: "3", q: ["El lago Titicaca está entre Bolivia y ____.", "Озеро Тітікака лежить між Болівією і ____."], a: ["c: El lago Titicaca está entre Bolivia y Perú.", "c: Озеро Тітікака лежить між Болівією і Перу."] },
+      { n: "4", q: ["Para cortar papel necesitamos ____.", "Щоб різати папір, нам потрібні ____."], a: ["a: Para cortar papel necesitamos tijeras.", "a: Щоб різати папір, нам потрібні ножиці."] },
+      { n: "5", q: ["En Bolivia ____ ver llamas.", "У Болівії ____ побачити лам."], a: ["b: En Bolivia puedes ver llamas.", "b: У Болівії можна (ти можеш) побачити лам."] },
+      { n: "6", q: ["Nosotros ____ una insignia.", "Ми ____ значок."], a: ["c: Nosotros hacemos una insignia.", "c: Ми робимо значок."] }
+    ]},
+
+    { type: "box", kind: "review", title: ["Check yourself", "Перевір себе"], items: [
+      { n: "1", s: [["¿Dónde está el gobierno de Bolivia?", "Де знаходиться уряд Болівії?"]] },
+      { n: "a", sub: true, s: [["En Sucre", "У Сукре"]] }, { n: "b", sub: true, ok: true, s: [["En La Paz", "У Ла-Пасі"]] }, { n: "c", sub: true, s: [["En la isla del Sol", "На острові Сонця"]] },
+      { n: "2", s: [["El lago Titicaca es el lago navegable más…", "Озеро Тітікака — найбільш… судноплавне озеро"]] },
+      { n: "a", sub: true, ok: true, s: [["alto del mundo", "високо розташоване у світі"]] }, { n: "b", sub: true, s: [["pequeño del mundo", "маленьке у світі"]] }, { n: "c", sub: true, s: [["nuevo del mundo", "нове у світі"]] },
+      { n: "3", s: [["La llama es un animal…", "Лама — це… тварина"]] },
+      { n: "a", sub: true, s: [["marino", "морська"]] }, { n: "b", sub: true, s: [["peligroso", "небезпечна"]] }, { n: "c", sub: true, ok: true, s: [["doméstico", "свійська"]] },
+      { n: "4", s: [["¿Qué lengua NO hablan en Bolivia?", "Якою мовою НЕ розмовляють у Болівії?"]] },
+      { n: "a", sub: true, ok: true, s: [["francés", "французькою"]] }, { n: "b", sub: true, s: [["quechua", "кечуа"]] }, { n: "c", sub: true, s: [["aymara", "аймара"]] },
+      { n: "5", s: [["¿Cómo se llama la insignia del proyecto?", "Як називається значок із проєкту?"]] },
+      { n: "a", sub: true, s: [["Colega por el mundo", "Колега мандрує світом"]] }, { n: "b", sub: true, ok: true, s: [["Ciudadanos del mundo", "Громадяни світу"]] }, { n: "c", sub: true, s: [["Nosotros en red", "Ми в мережі"]] }
+    ], answers: [
+      { n: "1", q: ["¿Dónde está el gobierno de Bolivia?", "Де знаходиться уряд Болівії?"], a: ["b: En La Paz.", "b: У Ла-Пасі."] },
+      { n: "2", q: ["El lago Titicaca es el lago navegable más…", "Озеро Тітікака — найбільш… судноплавне озеро"], a: ["a: alto del mundo.", "a: найвище у світі."] },
+      { n: "3", q: ["La llama es un animal…", "Лама — це… тварина"], a: ["c: doméstico.", "c: свійська."] },
+      { n: "4", q: ["¿Qué lengua NO hablan en Bolivia?", "Якою мовою НЕ розмовляють у Болівії?"], a: ["a: francés.", "a: французькою."] },
+      { n: "5", q: ["¿Cómo se llama la insignia del proyecto?", "Як називається значок із проєкту?"], a: ["b: Ciudadanos del mundo.", "b: «Громадяни світу»."] }
+    ]}
+  ],
+  phrases: [
+    ["Colega por el mundo", "Колега мандрує світом"], ["Observa y lee.", "Подивися і прочитай."], ["Aquí está Bolivia.", "Ось тут Болівія."],
+    ["Este es su mapa.", "Це її мапа."], ["Esta es su bandera.", "Це її прапор."], ["roja, amarilla y verde", "червоний, жовтий і зелений"],
+    ["En esta foto estoy en Bolivia.", "На цьому фото я в Болівії."], ["el lago Titicaca", "озеро Тітікака"], ["la isla del Sol", "острів Сонця"],
+    ["América del Sur", "Південна Америка"], ["Su capital es Sucre.", "Її столиця — Сукре."], ["el gobierno está en La Paz", "уряд у Ла-Пасі"],
+    ["otras lenguas", "інші мови"], ["entre Bolivia y Perú", "між Болівією і Перу"], ["antiguo y misterioso", "давній і таємничий"],
+    ["el más alto del mundo", "найвищий у світі"], ["dentro del lago", "усередині озера"], ["muchas islas", "багато островів"],
+    ["yacimientos incas", "пам'ятки (розкопки) інків"], ["puedes ver llamas", "можна побачити лам"], ["animales domésticos", "свійські тварини"],
+    ["Puedes comer silpancho.", "Можна скуштувати сільпанчо."], ["huevo frito", "смажене яйце"], ["arroz, papa, carne", "рис, картопля, м'ясо"],
+    ["Nuestro proyecto", "Наш проєкт"], ["Hacemos una insignia.", "Робимо значок."], ["Ciudadanos del mundo", "Громадяни світу"],
+    ["Necesitamos…", "Нам потрібно…"], ["papel adhesivo transparente", "прозора самоклейна плівка"], ["plantilla fotocopiable", "шаблон для ксерокопії"],
+    ["recurso descargable", "матеріал, який можна завантажити"], ["paso a paso", "крок за кроком"]
+  ]
+});
