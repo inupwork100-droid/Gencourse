@@ -250,6 +250,10 @@ figcaption { font-size: 16px; margin-top: 8px; color: var(--ink); }
 @keyframes opt-flash { 0% { opacity: 0; background: #b9b9b9; } 12% { opacity: 1; background: #b9b9b9; } 55% { opacity: .8; background: #e2e2e2; } 100% { opacity: 0; background: #f2f2f2; } }
 .owl-say.small { width: min(230px, calc(100vw - 24px)); padding: 7px; border-radius: 30px; background: rgba(255,255,255,.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 0 0 4px rgba(255,255,255,.55), 0 8px 20px rgba(0,0,0,.15); }
 .owl-say.small::after { background: rgba(255,255,255,.55); right: 30px; }
+.owl-say.fade, .owl-say.fade::after, .owl-say.fade .panel, .owl-say.fade .notice, .owl-say.fade .tile { transition: background-color var(--fd, 2s) linear, box-shadow var(--fd, 2s) linear, border-color var(--fd, 2s) linear; }
+.owl-say.fade { background-color: transparent; box-shadow: 0 0 0 4px transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.owl-say.fade::after { background-color: transparent; }
+.owl-say.fade .panel, .owl-say.fade .notice, .owl-say.fade .tile { background-color: transparent; }
 .owl-say.small .x { top: 4px; right: 10px; font-size: 16px; }
 .owl-say.small .en { font-size: 22px; }
 .owl-say.small .uk { font-size: 12px; }
@@ -388,16 +392,16 @@ a.ext { color: var(--ua); font-weight: 700; }
 label.row { display: grid; gap: 4px; font-size: 15px; }
 select { font: inherit; font-size: 15px; padding: 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); width: 100%; }
 /* double-tap tooltip: short translation above the word */
-.pop { position: absolute; z-index: 35; color: #1f3a0d; border: 2px solid var(--lime);
-  background: linear-gradient(135deg, rgba(240,255,220,.78), rgba(205,240,160,.62) 45%, rgba(244,255,230,.82) 60%, rgba(200,236,150,.62)); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-  border-radius: 12px; padding: 4px 12px; font-size: 17px; font-weight: 700; line-height: 1.3; white-space: nowrap;
+.pop { position: absolute; z-index: 35; color: var(--ink); border: 3px solid var(--lime);
+  background: rgba(255,255,255,.82); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
+  border-radius: 12px; padding: 4px 12px; font-size: 17px; font-weight: 300; line-height: 1.3; white-space: nowrap;
   max-width: calc(100vw - 32px); overflow: hidden; text-overflow: ellipsis; box-shadow: 0 6px 16px rgba(0,0,0,.18);
   transform: translate(-50%, -100%); pointer-events: none; }
 .pop::after { content: ""; position: absolute; left: var(--tip, 50%); bottom: -9px; width: 12px; height: 12px; margin-left: -6px;
-  background: rgba(214,243,175,.95); border-right: 2px solid var(--lime); border-bottom: 2px solid var(--lime); transform: rotate(45deg); }
+  background: rgba(255,255,255,.92); border-right: 3px solid var(--lime); border-bottom: 3px solid var(--lime); transform: rotate(45deg); }
 .pop.below { transform: translate(-50%, 0); }
 .pop.below::after { bottom: auto; top: -9px; transform: rotate(225deg); }
-.w.popped { background: var(--lime-soft); color: #1f3a0d; box-shadow: 0 0 0 2px var(--lime); }
+.w.popped { background: #e4e4e4; color: var(--ink); box-shadow: 0 0 0 1px var(--lime); }
 /* ---------- library: books as folders with photos ---------- */
 .library { min-height: 100%; background: var(--ground); }
 .lib-top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--sea); color: #fff; padding: 14px 16px; }
@@ -7018,7 +7022,7 @@ function owlSay(hi, en, ua, newStar = -1, party = false) {
   box.hidden = false;
   const o = $("#owl"); o.classList.remove("talk"); void o.offsetWidth; o.classList.add("talk", "big");
   if (newStar >= 0 || party) { o.classList.add("party"); clearTimeout(partyT); partyT = setTimeout(() => o.classList.remove("party"), 4000); }
-  clearTimeout(owlT); owlT = setTimeout(hideOwlSay, 10000);
+  owlAutoHide(10000);
 }
 // a gentle reminder: white bubble with a grey panel, no stars or tiles
 // big = a loud first word ("Oops!" in red, "Wow!" in rainbow); mood = "oops" | "wow"
@@ -7029,9 +7033,18 @@ function owlNotice(en, ua, big, mood, ms) {
   box.classList.add("small");
   box.hidden = false; popBubble(box);
   const o = $("#owl"); o.classList.remove("talk", "party"); void o.offsetWidth; o.classList.add("talk", "big");
-  clearTimeout(owlT); owlT = setTimeout(hideOwlSay, ms || 5000);
+  owlAutoHide(ms || 5000);
 }
-function hideOwlSay() { $("#owlSay").hidden = true; $("#owlSay").classList.remove("flyin"); $("#owl").classList.remove("big", "party"); }
+// the bubble stays solid for the first half of its time; in the second half only its background fades away
+let owlFadeT = 0;
+function owlAutoHide(ms) {
+  const box = $("#owlSay");
+  box.classList.remove("fade"); box.style.setProperty("--fd", ms / 2 + "ms");
+  clearTimeout(owlT); clearTimeout(owlFadeT);
+  owlFadeT = setTimeout(() => box.classList.add("fade"), ms / 2);
+  owlT = setTimeout(hideOwlSay, ms);
+}
+function hideOwlSay() { clearTimeout(owlFadeT); $("#owlSay").classList.remove("fade"); $("#owlSay").hidden = true; $("#owlSay").classList.remove("flyin"); $("#owl").classList.remove("big", "party"); }
 function owlGreet(first) {
   const yest = Object.keys(hist).filter(d => d < today()).sort().pop();
   const yp = yest ? hist[yest] : 0;
@@ -7050,7 +7063,7 @@ function owlGreet(first) {
     ? [`Today you're ${list(q.map(x => x[0].toLowerCase()), " and ")}!|I'm so proud of you!`, `Сьогодні ти ${list(q.map(x => x[1].toLowerCase()), " і ")}!|Я так тобою пишаюся!`]
     : pick(lines);
   owlSay(pick(["Hi!", "Hey, it's me!", "Hey, friend!"]), en, ua, -1, true);
-  if (first) { const box = $("#owlSay"); box.classList.remove("flyin"); void box.offsetWidth; box.classList.add("flyin"); clearTimeout(owlT); owlT = setTimeout(hideOwlSay, 5000); }
+  if (first) { const box = $("#owlSay"); box.classList.remove("flyin"); void box.offsetWidth; box.classList.add("flyin"); owlAutoHide(5000); }
 }
 $("#owl").addEventListener("click", () => { if (!$("#owlSay").hidden) { hideOwlSay(); return; } owlGreet(false); });
 $("#owlSay").addEventListener("click", e => { if (e.target.closest(".x")) hideOwlSay(); });
