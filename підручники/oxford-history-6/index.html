@@ -11291,8 +11291,9 @@ L.blocks.forEach((b, bi) => {
     // two columns: the word part with its meaning | how a new word is made (tap a row or its speaker to hear it)
     // mark: "prefix" / "suffix" — underline the word part in the new word; "spell" — the studied word shimmers in its sentence
     const hd = b.head || [], mk = b.mark || "";
-    const tt = b.title && b.title.length ? renderSentences(b.title) : null, nt = b.note && b.note.length ? renderSentences(b.note) : null;
+    // a spelling group shows its number as a big coloured title (no readable sentence, so it is not registered)
     const gn = mk === "spell" ? +((String((b.title || [[""]])[0][0]).match(/\d+/) || [0])[0]) : 0;
+    const tt = !gn && b.title && b.title.length ? renderSentences(b.title) : null, nt = b.note && b.note.length ? renderSentences(b.note) : null;
     const exHtml = (r) => {
       const en = String((r.ex || [])[0] || "");
       if (mk === "prefix" || mk === "suffix") {
