@@ -15,6 +15,8 @@ description: «Полиця книг» — застосунок-читанка �
 - History 6: `lesson-*.js` (`window.LESSONS.push`), `dictionary.js` (`window.DICT`), `contents.js`, `images/`, `images/pages/` (фото розворотів для вікна «Редагувати»).
 - Geography 6: `підручники/oxford-geography-6/` — `lesson-*.js` і `dict-*.js` (обгортка `window.GEO`), `quiz.js` (рамки «Check yourself»), `contents.js`, `images/g<урок>-*.jpg`, `pages/`.
 - Science: `підручники/science/` — уроки з PDF-слайдів (кожна сторінка PDF = сторінка книжки, зміст на с. 1), `lesson-*.js`/`dict-*.js` (обгортка `window.SCI`), `contents.js`, `images/s<урок>-*.jpg`, обкладинка `sci-cover.jpg`. Підключення — `SCI_JS` у build.py, `EXTRA_BOOK` у app.html.
+- English: `підручники/english/` — та сама схема, що Science (обгортка `window.ENG`, зміст на с. 1, 52 с.; обкладинка `eng-cover.jpg`, картинки `e<урок>-*.jpg`). Підключення — `ENG_JS` у build.py, `english` у `BUILTIN`/`EXTRA_BOOK` і в `BOOKS`.
+- Блок `stars` (плакат-зірочки): `{type:"stars", title:[[en,ua]], note:[[en,ua]], items:[{t:"dis-", c:"#29a8e0", m:[en,ua], words:[[en,ua],…]}]}`. Натискання на зірочку відкриває під її рядком кнопки зі словами (жовті, слово озвучується); `t` із пробілами («in- im- il-») показується в кілька рядків. Білі таблички префіксів/суфіксів — блок `wordtable` (точно як Suffixes_UA).
 - Книжки з «Магії у книгу» живуть у db артефакту: `books/<id>`, `books/<id>/lessons/lNNN` (`{lesson}`), `books/<id>/extra/dict`.
 
 ## Формат уроку
