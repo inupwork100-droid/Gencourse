@@ -64,6 +64,7 @@
 
     { type: "h2", s: [["4. Escucha y lee.", "4. Послухай і прочитай."]] },
     { type: "p", s: [
+      ["¿De dónde *eres*?", "Звідки ти?"],
       ["*Soy* de Perú.", "Я з Перу."],
       ["*Soy* peruana.", "Я перуанка."]
     ]},
@@ -72,6 +73,7 @@
       ["*Soy* mexicano.", "Я мексиканець."]
     ]},
     { type: "p", s: [
+      ["¿De dónde *sois*?", "Звідки ви?"],
       ["*Somos* de Argentina.", "Ми з Аргентини."],
       ["*Somos* argentinos.", "Ми аргентинці."]
     ]},
