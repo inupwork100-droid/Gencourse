@@ -693,6 +693,7 @@ body:not(.lib-mode) .library { display: none; }
 
 <script>{{LESSON_JS}}</script>
 <script>{{GEO_JS}}</script>
+<script>{{SCI_JS}}</script>
 <script>{{DICT_JS}}</script>
 <script>{{CONTENTS_JS}}</script>
 <script>
@@ -715,12 +716,13 @@ async function loadMagicBook(id) {
 "use strict";
 const BOOK_ID = (() => { try { return JSON.parse(localStorage.getItem("vk:book")) || "history6"; } catch (e) { return "history6"; } })();
 // built-in textbooks live in this file; any other book comes from the db
-const BUILTIN = { history6: 1, geography: 1 };
+const BUILTIN = { history6: 1, geography: 1, science: 1 };
 const MAGIC = !BUILTIN[BOOK_ID] ? await loadMagicBook(BOOK_ID) : null;
-if (BOOK_ID === "geography" && window.GEO) {
+const EXTRA_BOOK = BOOK_ID === "geography" ? window.GEO : BOOK_ID === "science" ? window.SCI : null;
+if (EXTRA_BOOK) {
   const num = id => String(id).split(".").map(Number);
-  window.LESSONS = window.GEO.lessons.slice().sort((a, b) => { const x = num(a.id), y = num(b.id); return x[0] - y[0] || (x[1] || 0) - (y[1] || 0); });
-  Object.assign(window.DICT, window.GEO.dict); window.CONTENTS = window.GEO.contents;
+  window.LESSONS = EXTRA_BOOK.lessons.slice().sort((a, b) => { const x = num(a.id), y = num(b.id); return x[0] - y[0] || (x[1] || 0) - (y[1] || 0); });
+  Object.assign(window.DICT, EXTRA_BOOK.dict); window.CONTENTS = EXTRA_BOOK.contents;
 }
 if (!BUILTIN[BOOK_ID] && !MAGIC) { try { localStorage.setItem("vk:book", JSON.stringify("history6")); localStorage.setItem("vk:view", JSON.stringify("lib")); } catch (e) {} location.reload(); return; }
 if (MAGIC) { document.body.classList.add("magic-book"); window.LESSONS = MAGIC.lessons; Object.assign(window.DICT, MAGIC.dict); window.CONTENTS = null; }
@@ -1647,7 +1649,8 @@ function switchBook(id) {
 }
 const BOOKS = [
   { id: "history6", title: "Oxford International Primary History 6", sub: "History · Історія", color: "#c8372d", cover: IMG_COVER, ready: true, pages: BOOK_ID === "history6" ? PAGE_RANGE : store.get("range:history6", "3–23") },
-  { id: "geography", title: "Oxford International Primary Geography 6", sub: "Geography · Географія", color: "#1f6fb0", cover: IMG["geo-cover"], ready: !!window.GEO, pages: BOOK_ID === "geography" ? PAGE_RANGE : store.get("range:geography", "3–21") }
+  { id: "geography", title: "Oxford International Primary Geography 6", sub: "Geography · Географія", color: "#1f6fb0", cover: IMG["geo-cover"], ready: !!window.GEO, pages: BOOK_ID === "geography" ? PAGE_RANGE : store.get("range:geography", "3–21") },
+  { id: "science", title: "Science", sub: "Science · Природничі науки", color: "#8a64b8", cover: IMG["sci-cover"], ready: !!(window.SCI && window.SCI.lessons.length), pages: BOOK_ID === "science" ? PAGE_RANGE : store.get("range:science", "1–40") }
 ];
 const GLOBE = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c6 6 6 30 0 36M24 6c-6 6-6 30 0 36"/></svg>';
 const BOOK_ICON = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M10 8h22a6 6 0 0 1 6 6v26H16a6 6 0 0 1-6-6z"/><path d="M10 34a6 6 0 0 1 6-6h22"/></svg>';
@@ -2237,6 +2240,7 @@ if (store.get("view", "lib") === "lib") document.body.classList.add("lib-mode");
 setTimeout(() => owlGreet(true), 900);
 
 if (BOOK_ID === "geography") { $(".top .t b").textContent = "Oxford Primary Geography 6"; $(".top .cover").src = IMG["geo-cover"]; }
+if (BOOK_ID === "science") { $(".top .t b").textContent = "Science"; if (IMG["sci-cover"]) $(".top .cover").src = IMG["sci-cover"]; }
 if (MAGIC) {
   $(".top .t b").textContent = MAGIC.meta.title || "Моя книжка";
   const mc = MAGIC.meta.cover || ((MAGIC.meta.files || []).find(f => /^image\//.test(f.type)) || {}).id;
