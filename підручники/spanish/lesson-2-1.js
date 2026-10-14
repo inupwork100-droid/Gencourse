@@ -1,251 +1,33 @@
 // Урок 2.1 «¿A qué hora quedamos? · A la una comemos» — сторінки 16–17 книжки «Español» (Colega vuelve 3).
 // Кожне речення — [іспанською, українською]. *слово* — жирне ключове слово.
-(window.ESP = window.ESP || { lessons: [], dict: {} }).lessons.push({
-  id: "2.1",
-  unit: "2 ¿A qué hora quedamos?",
-  color: "#e0418f",
-  title: ["2.1 ¿A qué hora quedamos? · A la una comemos", "2.1 О котрій зустрічаємося? · О першій ми обідаємо"],
-  pages: "16–17",
-  blocks: [
-    { type: "h2", page: 16, s: [["Unidad 2. ¿A qué hora quedamos?", "Розділ 2. О котрій зустрічаємося?"]] },
-
-    { type: "h2", s: [["1. Escucha y lee.", "1. Послухай і прочитай."]] },
-    { type: "p", s: [
-      ["¿Dónde *quedamos*?", "Де зустрічаємося?"],
-      ["¿A qué *hora*?", "О котрій годині?"],
-      ["En mi casa.", "У мене вдома."],
-      ["A las *once y media*.", "О пів на дванадцяту (об 11:30)."]
-    ]},
-    { type: "img", src: "s16-quedamos", alt: "П'ятеро друзів домовляються, де і коли зустрітися", s: [
-      ["¿Dónde quedamos? ¿A qué hora?", "Де зустрічаємося? О котрій?"]
-    ]},
-
-    { type: "h2", s: [["2. Observa y escribe la hora.", "2. Подивися й напиши, котра година."]] },
-    { type: "img", src: "s16-que-hora-es", alt: "Великий будильник зі стрілками: en punto, y cuarto, y media, menos cuarto", s: [
-      ["¿Qué hora es?", "Котра година?"]
-    ]},
-    { type: "p", s: [
-      ["*en punto*", "рівно (стрілка на 12)"],
-      ["*y cuarto*", "і чверть (стрілка на 3, 15 хвилин)"],
-      ["*y media*", "і половина (стрілка на 6, 30 хвилин)"],
-      ["*menos cuarto*", "без чверті (стрілка на 9, ще 15 хвилин до наступної години)"]
-    ]},
-    { type: "img", src: "s16-relojes", alt: "Чотири будильники: a — 1:30, b — 3:00, c — 10:15, d — 3:45", s: [
-      ["a. Es la… b. Son las… c. … d. …", "a. Зараз … b. Зараз … c. … d. …"]
-    ]},
-    { type: "box", kind: "activities", title: ["Actividades", "Завдання"], items: [
-      { n: "a", s: [["Es la ____ ____.", "Зараз ____ (подивися на червоний будильник)."]] },
-      { n: "b", s: [["Son las ____ ____.", "Зараз ____ (подивися на зелений будильник)."]] },
-      { n: "c", s: [["____ ____.", "____ (подивися на синій будильник)."]] },
-      { n: "d", s: [["____ ____.", "____ (подивися на жовтий будильник)."]] }
-    ], answers: [
-      { n: "a", q: ["Es la ____ ____.", "Зараз ____."], a: ["Es la una y media.", "Зараз пів на другу (1:30)."] },
-      { n: "b", q: ["Son las ____ ____.", "Зараз ____."], a: ["Son las tres en punto.", "Зараз рівно третя (3:00)."] },
-      { n: "c", q: ["____ ____.", "____."], a: ["Son las diez y cuarto.", "Зараз чверть на одинадцяту (10:15)."] },
-      { n: "d", q: ["____ ____.", "____."], a: ["Son las cuatro menos cuarto.", "Зараз за чверть четверта (3:45)."] }
-    ]},
-
-    { type: "h2", s: [["3. Escucha y canta.", "3. Послухай і заспівай."]] },
-    { type: "p", s: [
-      ["Cuando el reloj marca la una,", "Коли годинник показує першу,"],
-      ["los esqueletos salen de la tumba.", "скелети виходять із могили."],
-      ["Tumbas por aquí,", "Могили тут,"],
-      ["tumbas por allá.", "могили там."],
-      ["¡Tumbas! ¡Tumbas!", "Могили! Могили!"],
-      ["¡Ja, ja, ja, ja, ja!", "Ха-ха-ха-ха-ха!"]
-    ]},
-    { type: "img", src: "s16-esqueleto-1", alt: "Веселий скелет вилазить із могили", s: [
-      ["Los esqueletos salen de la tumba.", "Скелети виходять із могили."]
-    ]},
-    { type: "p", s: [
-      ["Cuando el reloj marca las dos,", "Коли годинник показує другу,"],
-      ["los esqueletos comen arroz.", "скелети їдять рис."],
-      ["Tumbas por aquí…", "Могили тут…"],
-      ["Cuando el reloj marca las tres,", "Коли годинник показує третю,"],
-      ["los esqueletos beben café.", "скелети п'ють каву."],
-      ["Tumbas por aquí…", "Могили тут…"]
-    ]},
-    { type: "p", s: [
-      ["Cuando el reloj marca las cuatro,", "Коли годинник показує четверту,"],
-      ["los esqueletos bailan un rato.", "скелети трохи танцюють."],
-      ["Cuando el reloj marca las cinco,", "Коли годинник показує п'яту,"],
-      ["los esqueletos hablan en chino.", "скелети розмовляють китайською."],
-      ["Cuando el reloj marca las seis,", "Коли годинник показує шосту,"],
-      ["los esqueletos cantan ¡hey!", "скелети співають: «Гей!»"],
-      ["Cuando el reloj marca las siete,", "Коли годинник показує сьому,"],
-      ["los esqueletos se lavan los dientes.", "скелети чистять зуби."],
-      ["Cuando el reloj marca las ocho,", "Коли годинник показує восьму,"],
-      ["los esqueletos limpian el polvo.", "скелети витирають пил."],
-      ["Cuando el reloj marca las nueve,", "Коли годинник показує дев'яту,"],
-      ["los esqueletos a la tumba vuelven.", "скелети повертаються до могили."],
-      ["Tumbas por aquí…", "Могили тут…"]
-    ]},
-    { type: "img", src: "s16-esqueleto-2", alt: "Скелет повертається до могили", s: [
-      ["Los esqueletos a la tumba vuelven.", "Скелети повертаються до могили."]
-    ]},
-
-    { type: "h2", page: 17, s: [["A la una comemos · Lección 1", "О першій ми обідаємо · Урок 1"]] },
-    { type: "h2", s: [["4. Lee y aprende.", "4. Прочитай і вивчи."]] },
-    { type: "p", s: [
-      ["Yo *desayuno* a las ocho y cuarto.", "Я снідаю о чверть на дев'яту (8:15)."],
-      ["*Como* en el colegio a la una.", "Обідаю в школі о першій."],
-      ["*Meriendo* a las cinco.", "Полуднаю (їм підвечірок) о п'ятій."],
-      ["Y a las ocho *ceno*.", "А о восьмій вечеряю."],
-      ["Antes de dormir siempre *leo* un rato o *escribo* en mi diario.", "Перед сном я завжди трохи читаю або пишу в щоденнику."]
-    ]},
-    { type: "img", src: "s17-chico", alt: "Усміхнений хлопчик махає рукою", s: [
-      ["Yo desayuno a las ocho y cuarto.", "Я снідаю о 8:15."]
-    ]},
-    { type: "wordtable", title: [["AR: DESAYUNAR (como hablar)", "AR: DESAYUNAR — снідати (як hablar)"]], head: [["Persona", "Особа"], ["Forma", "Форма"]], rows: [
-      { t: "(yo)", m: ["", "я"], ex: ["*desayuno*", "я снідаю"] },
-      { t: "(tú)", m: ["", "ти"], ex: ["*desayunas*", "ти снідаєш"] },
-      { t: "(él/ella/usted)", m: ["", "він / вона / Ви"], ex: ["*desayuna*", "він / вона снідає, Ви снідаєте"] },
-      { t: "(nosotros/as)", m: ["", "ми"], ex: ["*desayunamos*", "ми снідаємо"] },
-      { t: "(vosotros/as)", m: ["", "ви"], ex: ["*desayunáis*", "ви снідаєте"] },
-      { t: "(ellos/ellas/ustedes)", m: ["", "вони / Ви (багато людей)"], ex: ["*desayunan*", "вони снідають"] }
-    ]},
-    { type: "wordtable", title: [["ER: COMER (como tener)", "ER: COMER — їсти, обідати (як tener)"]], head: [["Persona", "Особа"], ["Forma", "Форма"]], rows: [
-      { t: "(yo)", m: ["", "я"], ex: ["*como*", "я їм / обідаю"] },
-      { t: "(tú)", m: ["", "ти"], ex: ["*comes*", "ти їси"] },
-      { t: "(él/ella/usted)", m: ["", "він / вона / Ви"], ex: ["*come*", "він / вона їсть"] },
-      { t: "(nosotros/as)", m: ["", "ми"], ex: ["*comemos*", "ми їмо"] },
-      { t: "(vosotros/as)", m: ["", "ви"], ex: ["*coméis*", "ви їсте"] },
-      { t: "(ellos/ellas/ustedes)", m: ["", "вони / Ви (багато людей)"], ex: ["*comen*", "вони їдять"] }
-    ]},
-    { type: "wordtable", title: [["IR: ESCRIBIR (como vivir)", "IR: ESCRIBIR — писати (як vivir)"]], head: [["Persona", "Особа"], ["Forma", "Форма"]], rows: [
-      { t: "(yo)", m: ["", "я"], ex: ["*escribo*", "я пишу"] },
-      { t: "(tú)", m: ["", "ти"], ex: ["*escribes*", "ти пишеш"] },
-      { t: "(él/ella/usted)", m: ["", "він / вона / Ви"], ex: ["*escribe*", "він / вона пише"] },
-      { t: "(nosotros/as)", m: ["", "ми"], ex: ["*escribimos*", "ми пишемо"] },
-      { t: "(vosotros/as)", m: ["", "ви"], ex: ["*escribís*", "ви пишете"] },
-      { t: "(ellos/ellas/ustedes)", m: ["", "вони / Ви (багато людей)"], ex: ["*escriben*", "вони пишуть"] }
-    ]},
-    { type: "img", src: "s17-perro", alt: "Песик підказує: дієслова відмінюються як hablar, tener, vivir", s: [
-      ["como hablar · como tener · como vivir", "як hablar · як tener · як vivir"]
-    ]},
-
-    { type: "h2", s: [["5. Ahora, completa el texto con estos verbos.", "5. А тепер доповни текст цими дієсловами."]] },
-    { type: "p", s: [["desayunáis • desayuna • desayuno • cenan • comen", "снідаєте • снідає • снідаю • вечеряють • обідають"]] },
-    { type: "box", kind: "activities", title: ["Actividades", "Завдання"], items: [
-      { n: "a", s: [["Yo siempre ____ a las ocho, pero mi amiga Elena ____ a las ocho y media.", "Я завжди ____ о восьмій, а моя подруга Олена ____ о пів на дев'яту."]] },
-      { n: "b", s: [["¿A qué hora ____ vosotros?", "О котрій ____ ви?"]] },
-      { n: "c", s: [["Mis padres ____ a las dos y ____ a las nueve.", "Мої батьки ____ о другій і ____ о дев'ятій."]] }
-    ], answers: [
-      { n: "a", q: ["Yo siempre ____ a las ocho, pero mi amiga Elena ____ a las ocho y media.", "Я завжди ____ о восьмій, а Олена ____ о пів на дев'яту."], a: ["Yo siempre desayuno a las ocho, pero mi amiga Elena desayuna a las ocho y media.", "Я завжди снідаю о восьмій, а моя подруга Олена снідає о пів на дев'яту."] },
-      { n: "b", q: ["¿A qué hora ____ vosotros?", "О котрій ____ ви?"], a: ["¿A qué hora desayunáis vosotros?", "О котрій ви снідаєте?"] },
-      { n: "c", q: ["Mis padres ____ a las dos y ____ a las nueve.", "Мої батьки ____ о другій і ____ о дев'ятій."], a: ["Mis padres comen a las dos y cenan a las nueve.", "Мої батьки обідають о другій і вечеряють о дев'ятій."] }
-    ]},
-
-    { type: "h2", s: [["6. Y tú, ¿a qué hora desayunas? ¿A qué hora comes? ¿A qué hora cenas?", "6. А ти — о котрій снідаєш? О котрій обідаєш? О котрій вечеряєш?"]] },
-    { type: "box", kind: "activities", title: ["Ahora yo", "Тепер я"], items: [
-      { n: "a", s: [["Yo desayuno ____, como a las ____ y ceno a las ____.", "Я снідаю ____, обідаю о ____ і вечеряю о ____."]] }
-    ], answers: [
-      { n: "a", q: ["Yo desayuno ____, como a las ____ y ceno a las ____.", "Я снідаю ____, обідаю о ____ і вечеряю о ____."], a: ["Yo desayuno a las ocho, como a las dos y ceno a las siete y media.", "Я снідаю о восьмій, обідаю о другій і вечеряю о пів на восьму."] }
-    ]},
-
-    { type: "box", kind: "review", title: ["¡Practica más!", "Потренуйся ще!"],
-      answers: [
-        { n: "1", q: ["Son las ____ (4:30).", "Зараз ____ (4:30)."], a: ["b: Son las cuatro y media.", "b: Зараз пів на п'яту."] },
-        { n: "2", q: ["Es ____ (1:00).", "Зараз ____ (1:00)."], a: ["a: Es la una en punto.", "a: Зараз рівно перша."] },
-        { n: "3", q: ["Nosotros ____ a las dos.", "Ми ____ о другій."], a: ["c: Nosotros comemos a las dos.", "c: Ми обідаємо о другій."] },
-        { n: "4", q: ["¿Tú ____ en tu diario?", "Ти ____ у щоденнику?"], a: ["a: ¿Tú escribes en tu diario?", "a: Ти пишеш у щоденнику?"] },
-        { n: "5", q: ["Vosotros ____ a las ocho.", "Ви ____ о восьмій."], a: ["c: Vosotros desayunáis a las ocho.", "c: Ви снідаєте о восьмій."] },
-        { n: "6", q: ["Son las siete menos cuarto. = ?", "Son las siete menos cuarto. = ?"], a: ["b: 6:45", "b: 6:45 — за чверть сьома."] }
-      ],
-      items: [
-        { n: "1", s: [["Son las ____ (4:30).", "Зараз ____ (4:30)."]] },
-        { n: "a", sub: true, s: [["cuatro y cuarto", "чверть на п'яту"]] },
-        { n: "b", sub: true, ok: true, s: [["cuatro y media", "пів на п'яту"]] },
-        { n: "c", sub: true, s: [["cinco menos cuarto", "за чверть п'ята"]] },
-        { n: "2", s: [["Es ____ (1:00).", "Зараз ____ (1:00)."]] },
-        { n: "a", sub: true, ok: true, s: [["la una en punto", "рівно перша"]] },
-        { n: "b", sub: true, s: [["las una en punto", "(неправильно: las з una)"]] },
-        { n: "c", sub: true, s: [["la uno en punto", "(неправильно: uno)"]] },
-        { n: "3", s: [["Nosotros ____ a las dos.", "Ми ____ о другій."]] },
-        { n: "a", sub: true, s: [["como", "обідаю"]] },
-        { n: "b", sub: true, s: [["coméis", "обідаєте"]] },
-        { n: "c", sub: true, ok: true, s: [["comemos", "обідаємо"]] },
-        { n: "4", s: [["¿Tú ____ en tu diario?", "Ти ____ у своєму щоденнику?"]] },
-        { n: "a", sub: true, ok: true, s: [["escribes", "пишеш"]] },
-        { n: "b", sub: true, s: [["escribe", "пише"]] },
-        { n: "c", sub: true, s: [["escribís", "пишете"]] },
-        { n: "5", s: [["Vosotros ____ a las ocho.", "Ви ____ о восьмій."]] },
-        { n: "a", sub: true, s: [["desayunamos", "снідаємо"]] },
-        { n: "b", sub: true, s: [["desayunan", "снідають"]] },
-        { n: "c", sub: true, ok: true, s: [["desayunáis", "снідаєте"]] },
-        { n: "6", s: [["Son las siete menos cuarto. ¿Qué hora es?", "Son las siete menos cuarto. Котра це година?"]] },
-        { n: "a", sub: true, s: [["7:15", "7:15"]] },
-        { n: "b", sub: true, ok: true, s: [["6:45", "6:45"]] },
-        { n: "c", sub: true, s: [["7:45", "7:45"]] }
-      ]
-    },
-
-    { type: "box", kind: "review", title: ["Check yourself", "Перевір себе"],
-      answers: [
-        { n: "1", q: ["¿Dónde quedan los amigos?", "Де зустрічаються друзі?"], a: ["a: En mi casa.", "a: У мене вдома."] },
-        { n: "2", q: ["¿A qué hora quedan?", "О котрій вони зустрічаються?"], a: ["c: A las once y media.", "c: О пів на дванадцяту."] },
-        { n: "3", q: ["¿Qué hacen los esqueletos a las dos?", "Що роблять скелети о другій?"], a: ["b: Comen arroz.", "b: Їдять рис."] },
-        { n: "4", q: ["¿A qué hora come el chico?", "О котрій обідає хлопчик?"], a: ["b: A la una, en el colegio.", "b: О першій, у школі."] },
-        { n: "5", q: ["¿Qué hace el chico antes de dormir?", "Що робить хлопчик перед сном?"], a: ["c: Lee o escribe en su diario.", "c: Читає або пише в щоденнику."] }
-      ],
-      items: [
-        { n: "1", s: [["¿Dónde quedan los amigos?", "Де зустрічаються друзі?"]] },
-        { n: "a", sub: true, ok: true, s: [["En mi casa.", "У мене вдома."]] },
-        { n: "b", sub: true, s: [["En el colegio.", "У школі."]] },
-        { n: "c", sub: true, s: [["En el parque.", "У парку."]] },
-        { n: "2", s: [["¿A qué hora quedan?", "О котрій вони зустрічаються?"]] },
-        { n: "a", sub: true, s: [["A la una.", "О першій."]] },
-        { n: "b", sub: true, s: [["A las ocho y cuarto.", "О чверть на дев'яту."]] },
-        { n: "c", sub: true, ok: true, s: [["A las once y media.", "О пів на дванадцяту."]] },
-        { n: "3", s: [["En la canción, ¿qué hacen los esqueletos a las dos?", "Що в пісні роблять скелети о другій?"]] },
-        { n: "a", sub: true, s: [["Beben café.", "П'ють каву."]] },
-        { n: "b", sub: true, ok: true, s: [["Comen arroz.", "Їдять рис."]] },
-        { n: "c", sub: true, s: [["Bailan un rato.", "Трохи танцюють."]] },
-        { n: "4", s: [["¿A qué hora come el chico?", "О котрій обідає хлопчик?"]] },
-        { n: "a", sub: true, s: [["A las cinco, en casa.", "О п'ятій, удома."]] },
-        { n: "b", sub: true, ok: true, s: [["A la una, en el colegio.", "О першій, у школі."]] },
-        { n: "c", sub: true, s: [["A las ocho, en el colegio.", "О восьмій, у школі."]] },
-        { n: "5", s: [["¿Qué hace el chico antes de dormir?", "Що робить хлопчик перед сном?"]] },
-        { n: "a", sub: true, s: [["Merienda.", "Полуднає."]] },
-        { n: "b", sub: true, s: [["Canta con los esqueletos.", "Співає зі скелетами."]] },
-        { n: "c", sub: true, ok: true, s: [["Lee o escribe en su diario.", "Читає або пише в щоденнику."]] }
-      ]
-    }
-  ],
-  phrases: [
-    ["¿A qué hora quedamos?", "О котрій зустрічаємося?"],
-    ["¿Dónde quedamos?", "Де зустрічаємося?"],
-    ["En mi casa.", "У мене вдома."],
-    ["¿Qué hora es?", "Котра година?"],
-    ["Es la una.", "Зараз перша година."],
-    ["Son las tres.", "Зараз третя година."],
-    ["a la una", "о першій"],
-    ["a las once y media", "о пів на дванадцяту"],
-    ["en punto", "рівно"],
-    ["y cuarto", "і чверть (15 хвилин)"],
-    ["y media", "і половина (30 хвилин)"],
-    ["menos cuarto", "без чверті"],
-    ["Es la una y media.", "Зараз пів на другу."],
-    ["Son las diez y cuarto.", "Зараз чверть на одинадцяту."],
-    ["Son las cuatro menos cuarto.", "Зараз за чверть четверта."],
-    ["a las ocho y cuarto", "о чверть на дев'яту"],
-    ["a las ocho y media", "о пів на дев'яту"],
-    ["el reloj marca la una", "годинник показує першу"],
-    ["por aquí", "тут, сюди"],
-    ["por allá", "там, туди"],
-    ["un rato", "трохи, якийсь час"],
-    ["hablar en chino", "розмовляти китайською"],
-    ["lavarse los dientes", "чистити зуби"],
-    ["limpiar el polvo", "витирати пил"],
-    ["volver a la tumba", "повертатися до могили"],
-    ["comer en el colegio", "обідати в школі"],
-    ["antes de dormir", "перед сном"],
-    ["escribir en mi diario", "писати в щоденнику"],
-    ["mi amiga Elena", "моя подруга Олена"],
-    ["mis padres", "мої батьки"],
-    ["¿A qué hora desayunas?", "О котрій ти снідаєш?"],
-    ["¿A qué hora comes?", "О котрій ти обідаєш?"],
-    ["¿A qué hora cenas?", "О котрій ти вечеряєш?"],
-    ["Yo desayuno a las ocho.", "Я снідаю о восьмій."]
-  ]
-});
+(window.ESP = window.ESP || { lessons: [], dict: {} }).lessons.push({ "id": "2.1", "unit": "2 ¿A qué hora quedamos?", "color": "#e0418f", "title": [ "2.1 ¿A qué hora quedamos? · A la una comemos", "2.1 О котрій зустрічаємося? · О першій ми обідаємо" ], "pages": "16–17", "blocks": [ 
+  { "type": "h2", "page": 16, "s": [ [ "Unidad 2. ¿A qué hora quedamos?", "Розділ 2. О котрій зустрічаємося?" ] ] }, 
+  { "type": "h2", "s": [ [ "1. Escucha y lee.", "1. Послухай і прочитай." ] ] }, 
+  { "type": "img", "src": "s16-quedamos", "alt": "П'ятеро друзів домовляються, де і коли зустрітися", "s": [ [ "¿Dónde quedamos? ¿A qué hora?", "Де зустрічаємося? О котрій?" ] ] }, 
+  { "type": "p", "s": [ [ "¿Dónde *quedamos*?", "Де зустрічаємося?" ], [ "¿A qué *hora*?", "О котрій годині?" ], [ "En mi casa.", "У мене вдома." ], [ "A las *once y media*.", "О пів на дванадцяту (об 11:30)." ] ], "dlg": true }, 
+  { "type": "h2", "s": [ [ "2. Observa y escribe la hora.", "2. Подивися й напиши, котра година." ] ] }, 
+  { "type": "img", "src": "s16-que-hora-es", "alt": "Великий будильник зі стрілками: en punto, y cuarto, y media, menos cuarto", "s": [ [ "¿Qué hora es?", "Котра година?" ] ], "small": true }, 
+  { "type": "img", "src": "s16-relojes", "alt": "Чотири будильники: a — 1:30, b — 3:00, c — 10:15, d — 3:45", "s": [ [ "a. Es la… b. Son las… c. … d. …", "a. Зараз … b. Зараз … c. … d. …" ] ] }, 
+  { "type": "p", "s": [ [ "*en punto*", "рівно (стрілка на 12)" ], [ "*y cuarto*", "і чверть (стрілка на 3, 15 хвилин)" ], [ "*y media*", "і половина (стрілка на 6, 30 хвилин)" ], [ "*menos cuarto*", "без чверті (стрілка на 9, ще 15 хвилин до наступної години)" ] ], "bar": true }, 
+  { "type": "box", "kind": "activities", "title": [ "Actividades", "Завдання" ], "items": [ { "n": "a", "s": [ [ "Es la ____ ____.", "Зараз ____ (подивися на червоний будильник)." ] ] }, { "n": "b", "s": [ [ "Son las ____ ____.", "Зараз ____ (подивися на зелений будильник)." ] ] }, { "n": "c", "s": [ [ "____ ____.", "____ (подивися на синій будильник)." ] ] }, { "n": "d", "s": [ [ "____ ____.", "____ (подивися на жовтий будильник)." ] ] } ], "answers": [ { "n": "a", "q": [ "Es la ____ ____.", "Зараз ____." ], "a": [ "Es la una y media.", "Зараз пів на другу (1:30)." ] }, { "n": "b", "q": [ "Son las ____ ____.", "Зараз ____." ], "a": [ "Son las tres en punto.", "Зараз рівно третя (3:00)." ] }, { "n": "c", "q": [ "____ ____.", "____." ], "a": [ "Son las diez y cuarto.", "Зараз чверть на одинадцяту (10:15)." ] }, { "n": "d", "q": [ "____ ____.", "____." ], "a": [ "Son las cuatro menos cuarto.", "Зараз за чверть четверта (3:45)." ] } ] }, 
+  { "type": "h2", "s": [ [ "3. Escucha y canta.", "3. Послухай і заспівай." ] ] }, 
+  { "type": "img", "src": "s16-esqueleto-1", "alt": "Веселий скелет вилазить із могили", "s": [ [ "Los esqueletos salen de la tumba.", "Скелети виходять із могили." ] ], "small": true }, 
+  { "type": "img", "src": "s16-esqueleto-2", "alt": "Скелет повертається до могили", "s": [ [ "Los esqueletos a la tumba vuelven.", "Скелети повертаються до могили." ] ], "small": true }, 
+  { "type": "p", "s": [ [ "Cuando el reloj marca la una,", "Коли годинник показує першу," ], [ "los esqueletos salen de la tumba.", "скелети виходять із могили." ], [ "Tumbas por aquí,", "Могили тут," ], [ "tumbas por allá.", "могили там." ], [ "¡Tumbas! ¡Tumbas!", "Могили! Могили!" ], [ "¡Ja, ja, ja, ja, ja!", "Ха-ха-ха-ха-ха!" ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "Cuando el reloj marca las dos,", "Коли годинник показує другу," ], [ "los esqueletos comen arroz.", "скелети їдять рис." ], [ "Tumbas por aquí…", "Могили тут…" ], [ "Cuando el reloj marca las tres,", "Коли годинник показує третю," ], [ "los esqueletos beben café.", "скелети п'ють каву." ], [ "Tumbas por aquí…", "Могили тут…" ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "Cuando el reloj marca las cuatro,", "Коли годинник показує четверту," ], [ "los esqueletos bailan un rato.", "скелети трохи танцюють." ], [ "Cuando el reloj marca las cinco,", "Коли годинник показує п'яту," ], [ "los esqueletos hablan en chino.", "скелети розмовляють китайською." ], [ "Cuando el reloj marca las seis,", "Коли годинник показує шосту," ], [ "los esqueletos cantan ¡hey!", "скелети співають: «Гей!»" ], [ "Cuando el reloj marca las siete,", "Коли годинник показує сьому," ], [ "los esqueletos se lavan los dientes.", "скелети чистять зуби." ], [ "Cuando el reloj marca las ocho,", "Коли годинник показує восьму," ], [ "los esqueletos limpian el polvo.", "скелети витирають пил." ], [ "Cuando el reloj marca las nueve,", "Коли годинник показує дев'яту," ], [ "los esqueletos a la tumba vuelven.", "скелети повертаються до могили." ], [ "Tumbas por aquí…", "Могили тут…" ] ], "bar": true }, 
+  { "type": "h2", "page": 17, "s": [ [ "A la una comemos · Lección 1", "О першій ми обідаємо · Урок 1" ] ] }, 
+  { "type": "h2", "s": [ [ "4. Lee y aprende.", "4. Прочитай і вивчи." ] ] }, 
+  { "type": "img", "src": "s17-chico", "alt": "Усміхнений хлопчик махає рукою", "s": [ [ "Yo desayuno a las ocho y cuarto.", "Я снідаю о 8:15." ] ], "small": true }, 
+  { "type": "p", "s": [ [ "Yo *desayuno* a las ocho y cuarto.", "Я снідаю о чверть на дев'яту (8:15)." ], [ "*Como* en el colegio a la una.", "Обідаю в школі о першій." ], [ "*Meriendo* a las cinco.", "Полуднаю (їм підвечірок) о п'ятій." ], [ "Y a las ocho *ceno*.", "А о восьмій вечеряю." ], [ "Antes de dormir siempre *leo* un rato o *escribo* en mi diario.", "Перед сном я завжди трохи читаю або пишу в щоденнику." ] ], "bar": true }, 
+  { "type": "wordtable", "title": [ [ "AR: DESAYUNAR (como hablar)", "AR: DESAYUNAR — снідати (як hablar)" ] ], "head": [ [ "Persona", "Особа" ], [ "Forma", "Форма" ] ], "rows": [ { "t": "(yo)", "m": [ "", "я" ], "ex": [ "*desayuno*", "я снідаю" ] }, { "t": "(tú)", "m": [ "", "ти" ], "ex": [ "*desayunas*", "ти снідаєш" ] }, { "t": "(él/ella/usted)", "m": [ "", "він / вона / Ви" ], "ex": [ "*desayuna*", "він / вона снідає, Ви снідаєте" ] }, { "t": "(nosotros/as)", "m": [ "", "ми" ], "ex": [ "*desayunamos*", "ми снідаємо" ] }, { "t": "(vosotros/as)", "m": [ "", "ви" ], "ex": [ "*desayunáis*", "ви снідаєте" ] }, { "t": "(ellos/ellas/ustedes)", "m": [ "", "вони / Ви (багато людей)" ], "ex": [ "*desayunan*", "вони снідають" ] } ] }, 
+  { "type": "wordtable", "title": [ [ "ER: COMER (como tener)", "ER: COMER — їсти, обідати (як tener)" ] ], "head": [ [ "Persona", "Особа" ], [ "Forma", "Форма" ] ], "rows": [ { "t": "(yo)", "m": [ "", "я" ], "ex": [ "*como*", "я їм / обідаю" ] }, { "t": "(tú)", "m": [ "", "ти" ], "ex": [ "*comes*", "ти їси" ] }, { "t": "(él/ella/usted)", "m": [ "", "він / вона / Ви" ], "ex": [ "*come*", "він / вона їсть" ] }, { "t": "(nosotros/as)", "m": [ "", "ми" ], "ex": [ "*comemos*", "ми їмо" ] }, { "t": "(vosotros/as)", "m": [ "", "ви" ], "ex": [ "*coméis*", "ви їсте" ] }, { "t": "(ellos/ellas/ustedes)", "m": [ "", "вони / Ви (багато людей)" ], "ex": [ "*comen*", "вони їдять" ] } ] }, 
+  { "type": "wordtable", "title": [ [ "IR: ESCRIBIR (como vivir)", "IR: ESCRIBIR — писати (як vivir)" ] ], "head": [ [ "Persona", "Особа" ], [ "Forma", "Форма" ] ], "rows": [ { "t": "(yo)", "m": [ "", "я" ], "ex": [ "*escribo*", "я пишу" ] }, { "t": "(tú)", "m": [ "", "ти" ], "ex": [ "*escribes*", "ти пишеш" ] }, { "t": "(él/ella/usted)", "m": [ "", "він / вона / Ви" ], "ex": [ "*escribe*", "він / вона пише" ] }, { "t": "(nosotros/as)", "m": [ "", "ми" ], "ex": [ "*escribimos*", "ми пишемо" ] }, { "t": "(vosotros/as)", "m": [ "", "ви" ], "ex": [ "*escribís*", "ви пишете" ] }, { "t": "(ellos/ellas/ustedes)", "m": [ "", "вони / Ви (багато людей)" ], "ex": [ "*escriben*", "вони пишуть" ] } ] }, 
+  { "type": "img", "src": "s17-perro", "alt": "Песик підказує: дієслова відмінюються як hablar, tener, vivir", "s": [ [ "como hablar · como tener · como vivir", "як hablar · як tener · як vivir" ] ], "small": true }, 
+  { "type": "h2", "s": [ [ "5. Ahora, completa el texto con estos verbos.", "5. А тепер доповни текст цими дієсловами." ] ] }, 
+  { "type": "p", "s": [ [ "desayunáis • desayuna • desayuno • cenan • comen", "снідаєте • снідає • снідаю • вечеряють • обідають" ] ] }, 
+  { "type": "box", "kind": "activities", "title": [ "Actividades", "Завдання" ], "items": [ { "n": "a", "s": [ [ "Yo siempre ____ a las ocho, pero mi amiga Elena ____ a las ocho y media.", "Я завжди ____ о восьмій, а моя подруга Олена ____ о пів на дев'яту." ] ] }, { "n": "b", "s": [ [ "¿A qué hora ____ vosotros?", "О котрій ____ ви?" ] ] }, { "n": "c", "s": [ [ "Mis padres ____ a las dos y ____ a las nueve.", "Мої батьки ____ о другій і ____ о дев'ятій." ] ] } ], "answers": [ { "n": "a", "q": [ "Yo siempre ____ a las ocho, pero mi amiga Elena ____ a las ocho y media.", "Я завжди ____ о восьмій, а Олена ____ о пів на дев'яту." ], "a": [ "Yo siempre desayuno a las ocho, pero mi amiga Elena desayuna a las ocho y media.", "Я завжди снідаю о восьмій, а моя подруга Олена снідає о пів на дев'яту." ] }, { "n": "b", "q": [ "¿A qué hora ____ vosotros?", "О котрій ____ ви?" ], "a": [ "¿A qué hora desayunáis vosotros?", "О котрій ви снідаєте?" ] }, { "n": "c", "q": [ "Mis padres ____ a las dos y ____ a las nueve.", "Мої батьки ____ о другій і ____ о дев'ятій." ], "a": [ "Mis padres comen a las dos y cenan a las nueve.", "Мої батьки обідають о другій і вечеряють о дев'ятій." ] } ] }, 
+  { "type": "h2", "s": [ [ "6. Y tú, ¿a qué hora desayunas? ¿A qué hora comes? ¿A qué hora cenas?", "6. А ти — о котрій снідаєш? О котрій обідаєш? О котрій вечеряєш?" ] ] }, 
+  { "type": "box", "kind": "activities", "title": [ "Ahora yo", "Тепер я" ], "items": [ { "n": "a", "s": [ [ "Yo desayuno ____, como a las ____ y ceno a las ____.", "Я снідаю ____, обідаю о ____ і вечеряю о ____." ] ] } ], "answers": [ { "n": "a", "q": [ "Yo desayuno ____, como a las ____ y ceno a las ____.", "Я снідаю ____, обідаю о ____ і вечеряю о ____." ], "a": [ "Yo desayuno a las ocho, como a las dos y ceno a las siete y media.", "Я снідаю о восьмій, обідаю о другій і вечеряю о пів на восьму." ] } ] }, 
+  { "type": "box", "kind": "review", "title": [ "¡Practica más!", "Потренуйся ще!" ], "answers": [ { "n": "1", "q": [ "Son las ____ (4:30).", "Зараз ____ (4:30)." ], "a": [ "b: Son las cuatro y media.", "b: Зараз пів на п'яту." ] }, { "n": "2", "q": [ "Es ____ (1:00).", "Зараз ____ (1:00)." ], "a": [ "a: Es la una en punto.", "a: Зараз рівно перша." ] }, { "n": "3", "q": [ "Nosotros ____ a las dos.", "Ми ____ о другій." ], "a": [ "c: Nosotros comemos a las dos.", "c: Ми обідаємо о другій." ] }, { "n": "4", "q": [ "¿Tú ____ en tu diario?", "Ти ____ у щоденнику?" ], "a": [ "a: ¿Tú escribes en tu diario?", "a: Ти пишеш у щоденнику?" ] }, { "n": "5", "q": [ "Vosotros ____ a las ocho.", "Ви ____ о восьмій." ], "a": [ "c: Vosotros desayunáis a las ocho.", "c: Ви снідаєте о восьмій." ] }, { "n": "6", "q": [ "Son las siete menos cuarto. = ?", "Son las siete menos cuarto. = ?" ], "a": [ "b: 6:45", "b: 6:45 — за чверть сьома." ] } ], "items": [ { "n": "1", "s": [ [ "Son las ____ (4:30).", "Зараз ____ (4:30)." ] ] }, { "n": "a", "sub": true, "s": [ [ "cuatro y cuarto", "чверть на п'яту" ] ] }, { "n": "b", "sub": true, "ok": true, "s": [ [ "cuatro y media", "пів на п'яту" ] ] }, { "n": "c", "sub": true, "s": [ [ "cinco menos cuarto", "за чверть п'ята" ] ] }, { "n": "2", "s": [ [ "Es ____ (1:00).", "Зараз ____ (1:00)." ] ] }, { "n": "a", "sub": true, "ok": true, "s": [ [ "la una en punto", "рівно перша" ] ] }, { "n": "b", "sub": true, "s": [ [ "las una en punto", "(неправильно: las з una)" ] ] }, { "n": "c", "sub": true, "s": [ [ "la uno en punto", "(неправильно: uno)" ] ] }, { "n": "3", "s": [ [ "Nosotros ____ a las dos.", "Ми ____ о другій." ] ] }, { "n": "a", "sub": true, "s": [ [ "como", "обідаю" ] ] }, { "n": "b", "sub": true, "s": [ [ "coméis", "обідаєте" ] ] }, { "n": "c", "sub": true, "ok": true, "s": [ [ "comemos", "обідаємо" ] ] }, { "n": "4", "s": [ [ "¿Tú ____ en tu diario?", "Ти ____ у своєму щоденнику?" ] ] }, { "n": "a", "sub": true, "ok": true, "s": [ [ "escribes", "пишеш" ] ] }, { "n": "b", "sub": true, "s": [ [ "escribe", "пише" ] ] }, { "n": "c", "sub": true, "s": [ [ "escribís", "пишете" ] ] }, { "n": "5", "s": [ [ "Vosotros ____ a las ocho.", "Ви ____ о восьмій." ] ] }, { "n": "a", "sub": true, "s": [ [ "desayunamos", "снідаємо" ] ] }, { "n": "b", "sub": true, "s": [ [ "desayunan", "снідають" ] ] }, { "n": "c", "sub": true, "ok": true, "s": [ [ "desayunáis", "снідаєте" ] ] }, { "n": "6", "s": [ [ "Son las siete menos cuarto. ¿Qué hora es?", "Son las siete menos cuarto. Котра це година?" ] ] }, { "n": "a", "sub": true, "s": [ [ "7:15", "7:15" ] ] }, { "n": "b", "sub": true, "ok": true, "s": [ [ "6:45", "6:45" ] ] }, { "n": "c", "sub": true, "s": [ [ "7:45", "7:45" ] ] } ] }, 
+  { "type": "box", "kind": "review", "title": [ "Check yourself", "Перевір себе" ], "answers": [ { "n": "1", "q": [ "¿Dónde quedan los amigos?", "Де зустрічаються друзі?" ], "a": [ "a: En mi casa.", "a: У мене вдома." ] }, { "n": "2", "q": [ "¿A qué hora quedan?", "О котрій вони зустрічаються?" ], "a": [ "c: A las once y media.", "c: О пів на дванадцяту." ] }, { "n": "3", "q": [ "¿Qué hacen los esqueletos a las dos?", "Що роблять скелети о другій?" ], "a": [ "b: Comen arroz.", "b: Їдять рис." ] }, { "n": "4", "q": [ "¿A qué hora come el chico?", "О котрій обідає хлопчик?" ], "a": [ "b: A la una, en el colegio.", "b: О першій, у школі." ] }, { "n": "5", "q": [ "¿Qué hace el chico antes de dormir?", "Що робить хлопчик перед сном?" ], "a": [ "c: Lee o escribe en su diario.", "c: Читає або пише в щоденнику." ] } ], "items": [ { "n": "1", "s": [ [ "¿Dónde quedan los amigos?", "Де зустрічаються друзі?" ] ] }, { "n": "a", "sub": true, "ok": true, "s": [ [ "En mi casa.", "У мене вдома." ] ] }, { "n": "b", "sub": true, "s": [ [ "En el colegio.", "У школі." ] ] }, { "n": "c", "sub": true, "s": [ [ "En el parque.", "У парку." ] ] }, { "n": "2", "s": [ [ "¿A qué hora quedan?", "О котрій вони зустрічаються?" ] ] }, { "n": "a", "sub": true, "s": [ [ "A la una.", "О першій." ] ] }, { "n": "b", "sub": true, "s": [ [ "A las ocho y cuarto.", "О чверть на дев'яту." ] ] }, { "n": "c", "sub": true, "ok": true, "s": [ [ "A las once y media.", "О пів на дванадцяту." ] ] }, { "n": "3", "s": [ [ "En la canción, ¿qué hacen los esqueletos a las dos?", "Що в пісні роблять скелети о другій?" ] ] }, { "n": "a", "sub": true, "s": [ [ "Beben café.", "П'ють каву." ] ] }, { "n": "b", "sub": true, "ok": true, "s": [ [ "Comen arroz.", "Їдять рис." ] ] }, { "n": "c", "sub": true, "s": [ [ "Bailan un rato.", "Трохи танцюють." ] ] }, { "n": "4", "s": [ [ "¿A qué hora come el chico?", "О котрій обідає хлопчик?" ] ] }, { "n": "a", "sub": true, "s": [ [ "A las cinco, en casa.", "О п'ятій, удома." ] ] }, { "n": "b", "sub": true, "ok": true, "s": [ [ "A la una, en el colegio.", "О першій, у школі." ] ] }, { "n": "c", "sub": true, "s": [ [ "A las ocho, en el colegio.", "О восьмій, у школі." ] ] }, { "n": "5", "s": [ [ "¿Qué hace el chico antes de dormir?", "Що робить хлопчик перед сном?" ] ] }, { "n": "a", "sub": true, "s": [ [ "Merienda.", "Полуднає." ] ] }, { "n": "b", "sub": true, "s": [ [ "Canta con los esqueletos.", "Співає зі скелетами." ] ] }, { "n": "c", "sub": true, "ok": true, "s": [ [ "Lee o escribe en su diario.", "Читає або пише в щоденнику." ] ] } ] } ], "phrases": [ [ "¿A qué hora quedamos?", "О котрій зустрічаємося?" ], [ "¿Dónde quedamos?", "Де зустрічаємося?" ], [ "En mi casa.", "У мене вдома." ], [ "¿Qué hora es?", "Котра година?" ], [ "Es la una.", "Зараз перша година." ], [ "Son las tres.", "Зараз третя година." ], [ "a la una", "о першій" ], [ "a las once y media", "о пів на дванадцяту" ], [ "en punto", "рівно" ], [ "y cuarto", "і чверть (15 хвилин)" ], [ "y media", "і половина (30 хвилин)" ], [ "menos cuarto", "без чверті" ], [ "Es la una y media.", "Зараз пів на другу." ], [ "Son las diez y cuarto.", "Зараз чверть на одинадцяту." ], [ "Son las cuatro menos cuarto.", "Зараз за чверть четверта." ], [ "a las ocho y cuarto", "о чверть на дев'яту" ], [ "a las ocho y media", "о пів на дев'яту" ], [ "el reloj marca la una", "годинник показує першу" ], [ "por aquí", "тут, сюди" ], [ "por allá", "там, туди" ], [ "un rato", "трохи, якийсь час" ], [ "hablar en chino", "розмовляти китайською" ], [ "lavarse los dientes", "чистити зуби" ], [ "limpiar el polvo", "витирати пил" ], [ "volver a la tumba", "повертатися до могили" ], [ "comer en el colegio", "обідати в школі" ], [ "antes de dormir", "перед сном" ], [ "escribir en mi diario", "писати в щоденнику" ], [ "mi amiga Elena", "моя подруга Олена" ], [ "mis padres", "мої батьки" ], [ "¿A qué hora desayunas?", "О котрій ти снідаєш?" ], [ "¿A qué hora comes?", "О котрій ти обідаєш?" ], [ "¿A qué hora cenas?", "О котрій ти вечеряєш?" ], [ "Yo desayuno a las ocho.", "Я снідаю о восьмій." ] ] });

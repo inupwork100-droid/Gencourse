@@ -1,249 +1,36 @@
 // Урок 2.4 «Llegamos a casa de Elena · Estamos en su casa» — сторінки 22–23 підручника «Colega vuelve 3».
 // Кожне речення — [іспанською, українською]. *слово* — жирне ключове слово.
-(window.ESP = window.ESP || { lessons: [], dict: {} }).lessons.push({
-  id: "2.4",
-  unit: "2 ¿A qué hora quedamos?",
-  color: "#e0418f",
-  title: ["2.4 Llegamos a casa de Elena · Estamos en su casa", "2.4 Ми прийшли до Олени · Ми в неї вдома"],
-  pages: "22–23",
-  blocks: [
-    { type: "h2", page: 22, s: [["Unidad 2. Llegamos a casa de Elena", "Розділ 2. Ми прийшли до Олени"]] },
-
-    { type: "h2", s: [["1. Lee y observa.", "1. Прочитай і роздивися."]] },
-    { type: "p", s: [
-      ["Cuarto A.", "Квартира A."],
-      ["Es aquí.", "Це тут."],
-      ["Llama.", "Подзвони."]
-    ]},
-    { type: "img", src: "s22-puerta", alt: "Діти стоять біля дверей квартири A на четвертому поверсі", s: [["Cuarto A. Es aquí.", "Квартира A. Це тут."]] },
-    { type: "p", s: [
-      ["¡Hola, chicos!", "Привіт, друзі!"],
-      ["¡Pasad!", "Заходьте!"],
-      ["Este es el *salón*.", "Це *вітальня*."],
-      ["¡Hola!", "Привіт!"],
-      ["¡Hola!", "Привіт!"]
-    ]},
-    { type: "img", src: "s22-salon", alt: "Вітальня-їдальня: телевізор, картина, крісло, диван, килим і вазон", s: [["El salón comedor", "Вітальня-їдальня"]] },
-    { type: "p", s: [
-      ["*la televisión*, *el cuadro*, *el sillón*, *el sofá*, *la alfombra*, *la planta*", "телевізор, картина, крісло, диван, килим, вазон (рослина)"]
-    ]},
-    { type: "p", s: [
-      ["Este es el *cuarto de baño*.", "Це *ванна кімната*."]
-    ]},
-    { type: "img", src: "s22-bano", alt: "Ванна кімната: дзеркало, ванна, унітаз і умивальник", s: [["El cuarto de baño", "Ванна кімната"]] },
-    { type: "p", s: [
-      ["*el espejo*, *la bañera*, *el váter*, *el lavabo*", "дзеркало, ванна, унітаз, умивальник"]
-    ]},
-    { type: "p", s: [
-      ["Este es mi *dormitorio*.", "Це моя *спальня*."]
-    ]},
-    { type: "img", src: "s22-dormitorio", alt: "Спальня: штори, полиця, стіл, шафа, стілець і ліжко", s: [["El dormitorio", "Спальня"]] },
-    { type: "p", s: [
-      ["*las cortinas*, *la estantería*, *la mesa*, *el armario*, *la silla*, *la cama*", "штори, полиця (стелаж), стіл, шафа, стілець, ліжко"]
-    ]},
-    { type: "wordtable", title: [["La casa: habitaciones y muebles", "Дім: кімнати й меблі"]],
-      note: [["Las palabras *el* y *la* dicen si la palabra es masculina o femenina.", "Слова *el* і *la* показують, чоловічого чи жіночого роду слово."]],
-      head: [["Habitación", "Кімната"], ["Objeto", "Предмет"]], rows: [
-      { t: "el salón comedor", m: ["", "вітальня-їдальня"], ex: ["la televisión", "телевізор"] },
-      { t: "el salón comedor", m: ["", "вітальня-їдальня"], ex: ["el cuadro", "картина"] },
-      { t: "el salón comedor", m: ["", "вітальня-їдальня"], ex: ["el sillón", "крісло"] },
-      { t: "el salón comedor", m: ["", "вітальня-їдальня"], ex: ["el sofá", "диван"] },
-      { t: "el salón comedor", m: ["", "вітальня-їдальня"], ex: ["la alfombra", "килим"] },
-      { t: "el salón comedor", m: ["", "вітальня-їдальня"], ex: ["la planta", "вазон (кімнатна рослина)"] },
-      { t: "el cuarto de baño", m: ["", "ванна кімната"], ex: ["el espejo", "дзеркало"] },
-      { t: "el cuarto de baño", m: ["", "ванна кімната"], ex: ["la bañera", "ванна"] },
-      { t: "el cuarto de baño", m: ["", "ванна кімната"], ex: ["el váter", "унітаз"] },
-      { t: "el cuarto de baño", m: ["", "ванна кімната"], ex: ["el lavabo", "умивальник"] },
-      { t: "el dormitorio", m: ["", "спальня"], ex: ["las cortinas", "штори"] },
-      { t: "el dormitorio", m: ["", "спальня"], ex: ["la estantería", "полиця, стелаж"] },
-      { t: "el dormitorio", m: ["", "спальня"], ex: ["la mesa", "стіл"] },
-      { t: "el dormitorio", m: ["", "спальня"], ex: ["el armario", "шафа"] },
-      { t: "el dormitorio", m: ["", "спальня"], ex: ["la silla", "стілець"] },
-      { t: "el dormitorio", m: ["", "спальня"], ex: ["la cama", "ліжко"] },
-      { t: "la cocina", m: ["", "кухня"], ex: ["el frigorífico", "холодильник"] },
-      { t: "la cocina", m: ["", "кухня"], ex: ["la cocina", "плита"] },
-      { t: "la cocina", m: ["", "кухня"], ex: ["el horno", "духовка"] },
-      { t: "la cocina", m: ["", "кухня"], ex: ["el fregadero", "кухонна мийка"] }
-    ]},
-
-    { type: "h2", s: [["2. Practica con tu compañero.", "2. Потренуйся з однокласником."]] },
-    { type: "p", s: [
-      ["—¿Dónde está la *cama*?", "— Де ліжко?"],
-      ["—En el *dormitorio*.", "— У спальні."]
-    ]},
-    { type: "img", src: "s22-muebles", alt: "Малюнки меблів зі стрілками: диван, шафа, ванна, холодильник, дзеркало, полиця, картина, духовка", s: [["Estudiante A · Estudiante B", "Учень A · Учень B"]] },
-    { type: "box", kind: "activities", title: ["Actividades", "Завдання"], items: [
-      { s: [["Pregunta y contesta: ¿Dónde está…?", "Запитай і дай відповідь: де …?"]] },
-      { n: "a", s: [["Estudiante A: El sofá", "Учень A: диван"]] },
-      { n: "b", s: [["Estudiante A: El armario", "Учень A: шафа"]] },
-      { n: "c", s: [["Estudiante A: La bañera", "Учень A: ванна"]] },
-      { n: "d", s: [["Estudiante A: El frigorífico", "Учень A: холодильник"]] },
-      { n: "e", s: [["Estudiante B: El espejo", "Учень B: дзеркало"]] },
-      { n: "f", s: [["Estudiante B: La estantería", "Учень B: полиця"]] },
-      { n: "g", s: [["Estudiante B: El cuadro", "Учень B: картина"]] },
-      { n: "h", s: [["Estudiante B: El horno", "Учень B: духовка"]] }
-    ], answers: [
-      { n: "a", q: ["¿Dónde está el sofá?", "Де диван?"], a: ["En el salón.", "У вітальні."] },
-      { n: "b", q: ["¿Dónde está el armario?", "Де шафа?"], a: ["En el dormitorio.", "У спальні."] },
-      { n: "c", q: ["¿Dónde está la bañera?", "Де ванна?"], a: ["En el cuarto de baño.", "У ванній кімнаті."] },
-      { n: "d", q: ["¿Dónde está el frigorífico?", "Де холодильник?"], a: ["En la cocina.", "На кухні."] },
-      { n: "e", q: ["¿Dónde está el espejo?", "Де дзеркало?"], a: ["En el cuarto de baño.", "У ванній кімнаті."] },
-      { n: "f", q: ["¿Dónde está la estantería?", "Де полиця?"], a: ["En el dormitorio.", "У спальні."] },
-      { n: "g", q: ["¿Dónde está el cuadro?", "Де картина?"], a: ["En el salón.", "У вітальні."] },
-      { n: "h", q: ["¿Dónde está el horno?", "Де духовка?"], a: ["En la cocina.", "На кухні."] }
-    ]},
-
-    { type: "h2", page: 23, s: [["Estamos en su casa", "Ми в неї вдома"]] },
-    { type: "p", s: [["Lección 4", "Урок 4"]] },
-    { type: "p", s: [
-      ["Esta es la *cocina* y aquí está mi abuela.", "Це кухня, а ось моя бабуся."],
-      ["Umm, ¡qué bien huele!", "Ммм, як смачно пахне!"],
-      ["¡Hola, chicos!", "Привіт, діти!"],
-      ["¿Queréis una *pizza*?", "Хочете піцу?"]
-    ]},
-    { type: "img", src: "s23-cocina", alt: "Кухня: бабуся Олени дістає піцу з духовки, діти дивляться", s: [["La cocina", "Кухня"]] },
-    { type: "p", s: [
-      ["*el frigorífico*, *la cocina*, *el horno*, *el fregadero*", "холодильник, плита, духовка, кухонна мийка"]
-    ]},
-
-    { type: "h2", s: [["El rincón de los sonidos", "Куточок звуків"]] },
-    { type: "h2", s: [["3. Escucha y repite.", "3. Послухай і повтори."]] },
-    { type: "p", s: [
-      ["*za*, *zo*, *zu*, *ce*, *ci*", "за, зо, зу, се, сі (в Іспанії звук як англійське th)"],
-      ["zorro, manzana, zumo", "лис, яблуко, сік"],
-      ["cine, once", "кіно, одинадцять"],
-      ["Celia cena *pizza* y zumo de manzana.", "Селія вечеряє піцою і яблучним соком."]
-    ]},
-    { type: "wordtable", title: [["Z y C", "Літери Z і C"]],
-      note: [["Escribimos *z* antes de a, o, u, y *c* antes de e, i. Suenan igual.", "Перед a, o, u пишемо *z*, а перед e, i — *c*. Звучать вони однаково."]],
-      head: [["Sílaba", "Склад"], ["Palabra", "Слово"]], rows: [
-      { t: "za", m: ["", "z + a"], ex: ["manzana", "яблуко"] },
-      { t: "zo", m: ["", "z + o"], ex: ["zorro", "лис"] },
-      { t: "zu", m: ["", "z + u"], ex: ["zumo", "сік"] },
-      { t: "ce", m: ["", "c + e"], ex: ["once", "одинадцять"] },
-      { t: "ce", m: ["", "c + e"], ex: ["Celia cena", "Селія вечеряє"] },
-      { t: "ci", m: ["", "c + i"], ex: ["cine", "кіно"] }
-    ]},
-    { type: "img", src: "s23-sonidos", alt: "Дошка зі словами zorro, cine, manzana, zumo, once і потяг із вагончиками za, zo, zu, ce, ci", s: [["Celia cena pizza y zumo de manzana.", "Селія вечеряє піцою і яблучним соком."]] },
-
-    { type: "h2", s: [["4. Practica con tu compañero.", "4. Потренуйся з однокласником."]] },
-    { type: "p", s: [
-      ["¿Cómo se escribe *zorro*?", "Як пишеться слово «zorro»?"],
-      ["Zeta, o, erre, erre, o.", "Зета, о, ерре, ерре, о."]
-    ]},
-    { type: "box", kind: "activities", title: ["Actividades", "Завдання"], items: [
-      { s: [["¿Cómo se escribe…? Deletrea las palabras.", "Як пишеться…? Назви слова по літерах."]] },
-      { n: "a", s: [["¿Cómo se escribe manzana?", "Як пишеться «manzana»?"]] },
-      { n: "b", s: [["¿Cómo se escribe zumo?", "Як пишеться «zumo»?"]] },
-      { n: "c", s: [["¿Cómo se escribe cine?", "Як пишеться «cine»?"]] },
-      { n: "d", s: [["¿Cómo se escribe once?", "Як пишеться «once»?"]] },
-      { n: "e", s: [["¿Cómo se escribe cena?", "Як пишеться «cena»?"]] }
-    ], answers: [
-      { n: "a", q: ["¿Cómo se escribe manzana?", "Як пишеться «manzana»?"], a: ["Eme, a, ene, zeta, a, ene, a.", "Еме, а, ене, зета, а, ене, а."] },
-      { n: "b", q: ["¿Cómo se escribe zumo?", "Як пишеться «zumo»?"], a: ["Zeta, u, eme, o.", "Зета, у, еме, о."] },
-      { n: "c", q: ["¿Cómo se escribe cine?", "Як пишеться «cine»?"], a: ["Ce, i, ene, e.", "Се, і, ене, е."] },
-      { n: "d", q: ["¿Cómo se escribe once?", "Як пишеться «once»?"], a: ["O, ene, ce, e.", "О, ене, се, е."] },
-      { n: "e", q: ["¿Cómo se escribe cena?", "Як пишеться «cena»?"], a: ["Ce, e, ene, a.", "Се, е, ене, а."] }
-    ]},
-
-    { type: "box", kind: "review", title: ["¡Practica más!", "Потренуйся ще!"], items: [
-      { n: "1", s: [["¿Dónde está la bañera?", "Де ванна?"]] },
-      { n: "a", sub: true, s: [["En la cocina.", "На кухні."]] },
-      { n: "b", sub: true, ok: true, s: [["En el cuarto de baño.", "У ванній кімнаті."]] },
-      { n: "c", sub: true, s: [["En el salón.", "У вітальні."]] },
-      { n: "2", s: [["Este ____ mi dormitorio.", "Це ____ моя спальня."]] },
-      { n: "a", sub: true, ok: true, s: [["es", "є"]] },
-      { n: "b", sub: true, s: [["está", "знаходиться"]] },
-      { n: "c", sub: true, s: [["son", "є (вони)"]] },
-      { n: "3", s: [["¿Dónde ____ el horno? —En la cocina.", "Де ____ духовка? — На кухні."]] },
-      { n: "a", sub: true, s: [["es", "є"]] },
-      { n: "b", sub: true, s: [["eres", "є (ти)"]] },
-      { n: "c", sub: true, ok: true, s: [["está", "знаходиться"]] },
-      { n: "4", s: [["Duermo en ____ cama.", "Я сплю в ____ ліжку."]] },
-      { n: "a", sub: true, s: [["el", "el"]] },
-      { n: "b", sub: true, ok: true, s: [["la", "la"]] },
-      { n: "c", sub: true, s: [["los", "los"]] },
-      { n: "5", s: [["¿Cómo se escribe cine?", "Як пишеться «cine»?"]] },
-      { n: "a", sub: true, ok: true, s: [["Ce, i, ene, e.", "Се, і, ене, е."]] },
-      { n: "b", sub: true, s: [["Zeta, i, ene, e.", "Зета, і, ене, е."]] },
-      { n: "c", sub: true, s: [["Ese, i, ene, e.", "Есе, і, ене, е."]] },
-      { n: "6", s: [["Lavo los platos en ____.", "Я мию тарілки в ____."]] },
-      { n: "a", sub: true, s: [["la bañera", "ванні"]] },
-      { n: "b", sub: true, s: [["el sofá", "дивані"]] },
-      { n: "c", sub: true, ok: true, s: [["el fregadero", "кухонній мийці"]] }
-    ], answers: [
-      { n: "1", q: ["¿Dónde está la bañera?", "Де ванна?"], a: ["b: En el cuarto de baño.", "b: У ванній кімнаті."] },
-      { n: "2", q: ["Este ____ mi dormitorio.", "Це ____ моя спальня."], a: ["a: Este es mi dormitorio.", "a: Це моя спальня."] },
-      { n: "3", q: ["¿Dónde ____ el horno?", "Де ____ духовка?"], a: ["c: ¿Dónde está el horno? —En la cocina.", "c: Де духовка? — На кухні."] },
-      { n: "4", q: ["Duermo en ____ cama.", "Я сплю в ____ ліжку."], a: ["b: Duermo en la cama.", "b: Я сплю в ліжку (cama — жіночого роду)."] },
-      { n: "5", q: ["¿Cómo se escribe cine?", "Як пишеться «cine»?"], a: ["a: Ce, i, ene, e.", "a: Се, і, ене, е."] },
-      { n: "6", q: ["Lavo los platos en ____.", "Я мию тарілки в ____."], a: ["c: Lavo los platos en el fregadero.", "c: Я мию тарілки в кухонній мийці."] }
-    ]},
-
-    { type: "box", kind: "review", title: ["Check yourself", "Перевір себе"], items: [
-      { n: "1", s: [["¿Qué hay en la cocina?", "Що є на кухні?"]] },
-      { n: "a", sub: true, s: [["la cama", "ліжко"]] },
-      { n: "b", sub: true, s: [["el váter", "унітаз"]] },
-      { n: "c", sub: true, ok: true, s: [["el frigorífico", "холодильник"]] },
-      { n: "2", s: [["¿Qué dice la abuela de Elena?", "Що каже бабуся Олени?"]] },
-      { n: "a", sub: true, ok: true, s: [["¿Queréis una pizza?", "Хочете піцу?"]] },
-      { n: "b", sub: true, s: [["¿Dónde está la cama?", "Де ліжко?"]] },
-      { n: "c", sub: true, s: [["Este es mi dormitorio.", "Це моя спальня."]] },
-      { n: "3", s: [["¿Dónde está el espejo?", "Де дзеркало?"]] },
-      { n: "a", sub: true, s: [["En la cocina.", "На кухні."]] },
-      { n: "b", sub: true, ok: true, s: [["En el cuarto de baño.", "У ванній кімнаті."]] },
-      { n: "c", sub: true, s: [["En el salón comedor.", "У вітальні-їдальні."]] },
-      { n: "4", s: [["¿Qué palabra se escribe con z?", "Яке слово пишеться з z?"]] },
-      { n: "a", sub: true, s: [["cine", "кіно"]] },
-      { n: "b", sub: true, s: [["cena", "вечеря"]] },
-      { n: "c", sub: true, ok: true, s: [["zumo", "сік"]] },
-      { n: "5", s: [["¿Dónde están la televisión y el sillón?", "Де телевізор і крісло?"]] },
-      { n: "a", sub: true, s: [["En el dormitorio.", "У спальні."]] },
-      { n: "b", sub: true, ok: true, s: [["En el salón comedor.", "У вітальні-їдальні."]] },
-      { n: "c", sub: true, s: [["En la cocina.", "На кухні."]] }
-    ], answers: [
-      { n: "1", q: ["¿Qué hay en la cocina?", "Що є на кухні?"], a: ["c: el frigorífico.", "c: холодильник."] },
-      { n: "2", q: ["¿Qué dice la abuela de Elena?", "Що каже бабуся Олени?"], a: ["a: ¿Queréis una pizza?", "a: Хочете піцу?"] },
-      { n: "3", q: ["¿Dónde está el espejo?", "Де дзеркало?"], a: ["b: En el cuarto de baño.", "b: У ванній кімнаті."] },
-      { n: "4", q: ["¿Qué palabra se escribe con z?", "Яке слово пишеться з z?"], a: ["c: zumo.", "c: zumo — сік."] },
-      { n: "5", q: ["¿Dónde están la televisión y el sillón?", "Де телевізор і крісло?"], a: ["b: En el salón comedor.", "b: У вітальні-їдальні."] }
-    ]}
-  ],
-  phrases: [
-    ["Llegamos a casa de Elena.", "Ми прийшли до Олени додому."],
-    ["Estamos en su casa.", "Ми в неї вдома."],
-    ["Es aquí.", "Це тут."],
-    ["¡Pasad!", "Заходьте!"],
-    ["Este es el salón.", "Це вітальня."],
-    ["el salón comedor", "вітальня-їдальня"],
-    ["el cuarto de baño", "ванна кімната"],
-    ["Este es mi dormitorio.", "Це моя спальня."],
-    ["Esta es la cocina.", "Це кухня."],
-    ["Aquí está mi abuela.", "Ось моя бабуся."],
-    ["¡Qué bien huele!", "Як смачно пахне!"],
-    ["¿Queréis una pizza?", "Хочете піцу?"],
-    ["¿Dónde está la cama?", "Де ліжко?"],
-    ["En el dormitorio.", "У спальні."],
-    ["En la cocina.", "На кухні."],
-    ["En el salón.", "У вітальні."],
-    ["En el cuarto de baño.", "У ванній кімнаті."],
-    ["la televisión", "телевізор"],
-    ["el sillón", "крісло"],
-    ["el sofá", "диван"],
-    ["la alfombra", "килим"],
-    ["el espejo", "дзеркало"],
-    ["la bañera", "ванна"],
-    ["el lavabo", "умивальник"],
-    ["las cortinas", "штори"],
-    ["la estantería", "полиця, стелаж"],
-    ["el armario", "шафа"],
-    ["el frigorífico", "холодильник"],
-    ["el horno", "духовка"],
-    ["el fregadero", "кухонна мийка"],
-    ["Practica con tu compañero.", "Потренуйся з однокласником."],
-    ["¿Cómo se escribe zorro?", "Як пишеться «zorro»?"],
-    ["Escucha y repite.", "Послухай і повтори."],
-    ["zumo de manzana", "яблучний сік"],
-    ["El rincón de los sonidos", "Куточок звуків"]
-  ]
-});
+(window.ESP = window.ESP || { lessons: [], dict: {} }).lessons.push({ "id": "2.4", "unit": "2 ¿A qué hora quedamos?", "color": "#e0418f", "title": [ "2.4 Llegamos a casa de Elena · Estamos en su casa", "2.4 Ми прийшли до Олени · Ми в неї вдома" ], "pages": "22–23", "blocks": [ 
+  { "type": "h2", "page": 22, "s": [ [ "Unidad 2. Llegamos a casa de Elena", "Розділ 2. Ми прийшли до Олени" ] ] }, 
+  { "type": "h2", "s": [ [ "1. Lee y observa.", "1. Прочитай і роздивися." ] ] }, 
+  { "type": "img", "src": "s22-puerta", "alt": "Діти стоять біля дверей квартири A на четвертому поверсі", "s": [ [ "Cuarto A. Es aquí.", "Квартира A. Це тут." ] ], "small": true }, 
+  { "type": "img", "src": "s22-salon", "alt": "Вітальня-їдальня: телевізор, картина, крісло, диван, килим і вазон", "s": [ [ "El salón comedor", "Вітальня-їдальня" ] ] }, 
+  { "type": "img", "src": "s22-bano", "alt": "Ванна кімната: дзеркало, ванна, унітаз і умивальник", "s": [ [ "El cuarto de baño", "Ванна кімната" ] ] }, 
+  { "type": "img", "src": "s22-dormitorio", "alt": "Спальня: штори, полиця, стіл, шафа, стілець і ліжко", "s": [ [ "El dormitorio", "Спальня" ] ] }, 
+  { "type": "p", "s": [ [ "Cuarto A.", "Квартира A." ], [ "Es aquí.", "Це тут." ], [ "Llama.", "Подзвони." ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "¡Hola, chicos!", "Привіт, друзі!" ], [ "¡Pasad!", "Заходьте!" ], [ "Este es el *salón*.", "Це *вітальня*." ], [ "¡Hola!", "Привіт!" ], [ "¡Hola!", "Привіт!" ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "*la televisión*, *el cuadro*, *el sillón*, *el sofá*, *la alfombra*, *la planta*", "телевізор, картина, крісло, диван, килим, вазон (рослина)" ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "Este es el *cuarto de baño*.", "Це *ванна кімната*." ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "*el espejo*, *la bañera*, *el váter*, *el lavabo*", "дзеркало, ванна, унітаз, умивальник" ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "Este es mi *dormitorio*.", "Це моя *спальня*." ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "*las cortinas*, *la estantería*, *la mesa*, *el armario*, *la silla*, *la cama*", "штори, полиця (стелаж), стіл, шафа, стілець, ліжко" ] ], "bar": true }, 
+  { "type": "wordtable", "title": [ [ "La casa: habitaciones y muebles", "Дім: кімнати й меблі" ] ], "note": [ [ "Las palabras *el* y *la* dicen si la palabra es masculina o femenina.", "Слова *el* і *la* показують, чоловічого чи жіночого роду слово." ] ], "head": [ [ "Habitación", "Кімната" ], [ "Objeto", "Предмет" ] ], "rows": [ { "t": "el salón comedor", "m": [ "", "вітальня-їдальня" ], "ex": [ "la televisión", "телевізор" ] }, { "t": "el salón comedor", "m": [ "", "вітальня-їдальня" ], "ex": [ "el cuadro", "картина" ] }, { "t": "el salón comedor", "m": [ "", "вітальня-їдальня" ], "ex": [ "el sillón", "крісло" ] }, { "t": "el salón comedor", "m": [ "", "вітальня-їдальня" ], "ex": [ "el sofá", "диван" ] }, { "t": "el salón comedor", "m": [ "", "вітальня-їдальня" ], "ex": [ "la alfombra", "килим" ] }, { "t": "el salón comedor", "m": [ "", "вітальня-їдальня" ], "ex": [ "la planta", "вазон (кімнатна рослина)" ] }, { "t": "el cuarto de baño", "m": [ "", "ванна кімната" ], "ex": [ "el espejo", "дзеркало" ] }, { "t": "el cuarto de baño", "m": [ "", "ванна кімната" ], "ex": [ "la bañera", "ванна" ] }, { "t": "el cuarto de baño", "m": [ "", "ванна кімната" ], "ex": [ "el váter", "унітаз" ] }, { "t": "el cuarto de baño", "m": [ "", "ванна кімната" ], "ex": [ "el lavabo", "умивальник" ] }, { "t": "el dormitorio", "m": [ "", "спальня" ], "ex": [ "las cortinas", "штори" ] }, { "t": "el dormitorio", "m": [ "", "спальня" ], "ex": [ "la estantería", "полиця, стелаж" ] }, { "t": "el dormitorio", "m": [ "", "спальня" ], "ex": [ "la mesa", "стіл" ] }, { "t": "el dormitorio", "m": [ "", "спальня" ], "ex": [ "el armario", "шафа" ] }, { "t": "el dormitorio", "m": [ "", "спальня" ], "ex": [ "la silla", "стілець" ] }, { "t": "el dormitorio", "m": [ "", "спальня" ], "ex": [ "la cama", "ліжко" ] }, { "t": "la cocina", "m": [ "", "кухня" ], "ex": [ "el frigorífico", "холодильник" ] }, { "t": "la cocina", "m": [ "", "кухня" ], "ex": [ "la cocina", "плита" ] }, { "t": "la cocina", "m": [ "", "кухня" ], "ex": [ "el horno", "духовка" ] }, { "t": "la cocina", "m": [ "", "кухня" ], "ex": [ "el fregadero", "кухонна мийка" ] } ] }, 
+  { "type": "h2", "s": [ [ "2. Practica con tu compañero.", "2. Потренуйся з однокласником." ] ] }, 
+  { "type": "img", "src": "s22-muebles", "alt": "Малюнки меблів зі стрілками: диван, шафа, ванна, холодильник, дзеркало, полиця, картина, духовка", "s": [ [ "Estudiante A · Estudiante B", "Учень A · Учень B" ] ] }, 
+  { "type": "p", "s": [ [ "—¿Dónde está la *cama*?", "— Де ліжко?" ], [ "—En el *dormitorio*.", "— У спальні." ] ], "dlg": true }, 
+  { "type": "box", "kind": "activities", "title": [ "Actividades", "Завдання" ], "items": [ { "s": [ [ "Pregunta y contesta: ¿Dónde está…?", "Запитай і дай відповідь: де …?" ] ] }, { "n": "a", "s": [ [ "Estudiante A: El sofá", "Учень A: диван" ] ] }, { "n": "b", "s": [ [ "Estudiante A: El armario", "Учень A: шафа" ] ] }, { "n": "c", "s": [ [ "Estudiante A: La bañera", "Учень A: ванна" ] ] }, { "n": "d", "s": [ [ "Estudiante A: El frigorífico", "Учень A: холодильник" ] ] }, { "n": "e", "s": [ [ "Estudiante B: El espejo", "Учень B: дзеркало" ] ] }, { "n": "f", "s": [ [ "Estudiante B: La estantería", "Учень B: полиця" ] ] }, { "n": "g", "s": [ [ "Estudiante B: El cuadro", "Учень B: картина" ] ] }, { "n": "h", "s": [ [ "Estudiante B: El horno", "Учень B: духовка" ] ] } ], "answers": [ { "n": "a", "q": [ "¿Dónde está el sofá?", "Де диван?" ], "a": [ "En el salón.", "У вітальні." ] }, { "n": "b", "q": [ "¿Dónde está el armario?", "Де шафа?" ], "a": [ "En el dormitorio.", "У спальні." ] }, { "n": "c", "q": [ "¿Dónde está la bañera?", "Де ванна?" ], "a": [ "En el cuarto de baño.", "У ванній кімнаті." ] }, { "n": "d", "q": [ "¿Dónde está el frigorífico?", "Де холодильник?" ], "a": [ "En la cocina.", "На кухні." ] }, { "n": "e", "q": [ "¿Dónde está el espejo?", "Де дзеркало?" ], "a": [ "En el cuarto de baño.", "У ванній кімнаті." ] }, { "n": "f", "q": [ "¿Dónde está la estantería?", "Де полиця?" ], "a": [ "En el dormitorio.", "У спальні." ] }, { "n": "g", "q": [ "¿Dónde está el cuadro?", "Де картина?" ], "a": [ "En el salón.", "У вітальні." ] }, { "n": "h", "q": [ "¿Dónde está el horno?", "Де духовка?" ], "a": [ "En la cocina.", "На кухні." ] } ] }, 
+  { "type": "h2", "page": 23, "s": [ [ "Estamos en su casa", "Ми в неї вдома" ] ] }, 
+  { "type": "img", "src": "s23-cocina", "alt": "Кухня: бабуся Олени дістає піцу з духовки, діти дивляться", "s": [ [ "La cocina", "Кухня" ] ] }, 
+  { "type": "p", "s": [ [ "Lección 4", "Урок 4" ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "Esta es la *cocina* y aquí está mi abuela.", "Це кухня, а ось моя бабуся." ], [ "Umm, ¡qué bien huele!", "Ммм, як смачно пахне!" ], [ "¡Hola, chicos!", "Привіт, діти!" ], [ "¿Queréis una *pizza*?", "Хочете піцу?" ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "*el frigorífico*, *la cocina*, *el horno*, *el fregadero*", "холодильник, плита, духовка, кухонна мийка" ] ], "bar": true }, 
+  { "type": "h2", "s": [ [ "El rincón de los sonidos", "Куточок звуків" ] ] }, 
+  { "type": "h2", "s": [ [ "3. Escucha y repite.", "3. Послухай і повтори." ] ] }, 
+  { "type": "p", "s": [ [ "*za*, *zo*, *zu*, *ce*, *ci*", "за, зо, зу, се, сі (в Іспанії звук як англійське th)" ], [ "zorro, manzana, zumo", "лис, яблуко, сік" ], [ "cine, once", "кіно, одинадцять" ], [ "Celia cena *pizza* y zumo de manzana.", "Селія вечеряє піцою і яблучним соком." ] ], "bar": true }, 
+  { "type": "wordtable", "title": [ [ "Z y C", "Літери Z і C" ] ], "note": [ [ "Escribimos *z* antes de a, o, u, y *c* antes de e, i. Suenan igual.", "Перед a, o, u пишемо *z*, а перед e, i — *c*. Звучать вони однаково." ] ], "head": [ [ "Sílaba", "Склад" ], [ "Palabra", "Слово" ] ], "rows": [ { "t": "za", "m": [ "", "z + a" ], "ex": [ "manzana", "яблуко" ] }, { "t": "zo", "m": [ "", "z + o" ], "ex": [ "zorro", "лис" ] }, { "t": "zu", "m": [ "", "z + u" ], "ex": [ "zumo", "сік" ] }, { "t": "ce", "m": [ "", "c + e" ], "ex": [ "once", "одинадцять" ] }, { "t": "ce", "m": [ "", "c + e" ], "ex": [ "Celia cena", "Селія вечеряє" ] }, { "t": "ci", "m": [ "", "c + i" ], "ex": [ "cine", "кіно" ] } ] }, 
+  { "type": "img", "src": "s23-sonidos", "alt": "Дошка зі словами zorro, cine, manzana, zumo, once і потяг із вагончиками za, zo, zu, ce, ci", "s": [ [ "Celia cena pizza y zumo de manzana.", "Селія вечеряє піцою і яблучним соком." ] ] }, 
+  { "type": "h2", "s": [ [ "4. Practica con tu compañero.", "4. Потренуйся з однокласником." ] ] }, 
+  { "type": "p", "s": [ [ "¿Cómo se escribe *zorro*?", "Як пишеться слово «zorro»?" ], [ "Zeta, o, erre, erre, o.", "Зета, о, ерре, ерре, о." ] ], "dlg": true }, 
+  { "type": "box", "kind": "activities", "title": [ "Actividades", "Завдання" ], "items": [ { "s": [ [ "¿Cómo se escribe…? Deletrea las palabras.", "Як пишеться…? Назви слова по літерах." ] ] }, { "n": "a", "s": [ [ "¿Cómo se escribe manzana?", "Як пишеться «manzana»?" ] ] }, { "n": "b", "s": [ [ "¿Cómo se escribe zumo?", "Як пишеться «zumo»?" ] ] }, { "n": "c", "s": [ [ "¿Cómo se escribe cine?", "Як пишеться «cine»?" ] ] }, { "n": "d", "s": [ [ "¿Cómo se escribe once?", "Як пишеться «once»?" ] ] }, { "n": "e", "s": [ [ "¿Cómo se escribe cena?", "Як пишеться «cena»?" ] ] } ], "answers": [ { "n": "a", "q": [ "¿Cómo se escribe manzana?", "Як пишеться «manzana»?" ], "a": [ "Eme, a, ene, zeta, a, ene, a.", "Еме, а, ене, зета, а, ене, а." ] }, { "n": "b", "q": [ "¿Cómo se escribe zumo?", "Як пишеться «zumo»?" ], "a": [ "Zeta, u, eme, o.", "Зета, у, еме, о." ] }, { "n": "c", "q": [ "¿Cómo se escribe cine?", "Як пишеться «cine»?" ], "a": [ "Ce, i, ene, e.", "Се, і, ене, е." ] }, { "n": "d", "q": [ "¿Cómo se escribe once?", "Як пишеться «once»?" ], "a": [ "O, ene, ce, e.", "О, ене, се, е." ] }, { "n": "e", "q": [ "¿Cómo se escribe cena?", "Як пишеться «cena»?" ], "a": [ "Ce, e, ene, a.", "Се, е, ене, а." ] } ] }, 
+  { "type": "box", "kind": "review", "title": [ "¡Practica más!", "Потренуйся ще!" ], "items": [ { "n": "1", "s": [ [ "¿Dónde está la bañera?", "Де ванна?" ] ] }, { "n": "a", "sub": true, "s": [ [ "En la cocina.", "На кухні." ] ] }, { "n": "b", "sub": true, "ok": true, "s": [ [ "En el cuarto de baño.", "У ванній кімнаті." ] ] }, { "n": "c", "sub": true, "s": [ [ "En el salón.", "У вітальні." ] ] }, { "n": "2", "s": [ [ "Este ____ mi dormitorio.", "Це ____ моя спальня." ] ] }, { "n": "a", "sub": true, "ok": true, "s": [ [ "es", "є" ] ] }, { "n": "b", "sub": true, "s": [ [ "está", "знаходиться" ] ] }, { "n": "c", "sub": true, "s": [ [ "son", "є (вони)" ] ] }, { "n": "3", "s": [ [ "¿Dónde ____ el horno? —En la cocina.", "Де ____ духовка? — На кухні." ] ] }, { "n": "a", "sub": true, "s": [ [ "es", "є" ] ] }, { "n": "b", "sub": true, "s": [ [ "eres", "є (ти)" ] ] }, { "n": "c", "sub": true, "ok": true, "s": [ [ "está", "знаходиться" ] ] }, { "n": "4", "s": [ [ "Duermo en ____ cama.", "Я сплю в ____ ліжку." ] ] }, { "n": "a", "sub": true, "s": [ [ "el", "el" ] ] }, { "n": "b", "sub": true, "ok": true, "s": [ [ "la", "la" ] ] }, { "n": "c", "sub": true, "s": [ [ "los", "los" ] ] }, { "n": "5", "s": [ [ "¿Cómo se escribe cine?", "Як пишеться «cine»?" ] ] }, { "n": "a", "sub": true, "ok": true, "s": [ [ "Ce, i, ene, e.", "Се, і, ене, е." ] ] }, { "n": "b", "sub": true, "s": [ [ "Zeta, i, ene, e.", "Зета, і, ене, е." ] ] }, { "n": "c", "sub": true, "s": [ [ "Ese, i, ene, e.", "Есе, і, ене, е." ] ] }, { "n": "6", "s": [ [ "Lavo los platos en ____.", "Я мию тарілки в ____." ] ] }, { "n": "a", "sub": true, "s": [ [ "la bañera", "ванні" ] ] }, { "n": "b", "sub": true, "s": [ [ "el sofá", "дивані" ] ] }, { "n": "c", "sub": true, "ok": true, "s": [ [ "el fregadero", "кухонній мийці" ] ] } ], "answers": [ { "n": "1", "q": [ "¿Dónde está la bañera?", "Де ванна?" ], "a": [ "b: En el cuarto de baño.", "b: У ванній кімнаті." ] }, { "n": "2", "q": [ "Este ____ mi dormitorio.", "Це ____ моя спальня." ], "a": [ "a: Este es mi dormitorio.", "a: Це моя спальня." ] }, { "n": "3", "q": [ "¿Dónde ____ el horno?", "Де ____ духовка?" ], "a": [ "c: ¿Dónde está el horno? —En la cocina.", "c: Де духовка? — На кухні." ] }, { "n": "4", "q": [ "Duermo en ____ cama.", "Я сплю в ____ ліжку." ], "a": [ "b: Duermo en la cama.", "b: Я сплю в ліжку (cama — жіночого роду)." ] }, { "n": "5", "q": [ "¿Cómo se escribe cine?", "Як пишеться «cine»?" ], "a": [ "a: Ce, i, ene, e.", "a: Се, і, ене, е." ] }, { "n": "6", "q": [ "Lavo los platos en ____.", "Я мию тарілки в ____." ], "a": [ "c: Lavo los platos en el fregadero.", "c: Я мию тарілки в кухонній мийці." ] } ] }, 
+  { "type": "box", "kind": "review", "title": [ "Check yourself", "Перевір себе" ], "items": [ { "n": "1", "s": [ [ "¿Qué hay en la cocina?", "Що є на кухні?" ] ] }, { "n": "a", "sub": true, "s": [ [ "la cama", "ліжко" ] ] }, { "n": "b", "sub": true, "s": [ [ "el váter", "унітаз" ] ] }, { "n": "c", "sub": true, "ok": true, "s": [ [ "el frigorífico", "холодильник" ] ] }, { "n": "2", "s": [ [ "¿Qué dice la abuela de Elena?", "Що каже бабуся Олени?" ] ] }, { "n": "a", "sub": true, "ok": true, "s": [ [ "¿Queréis una pizza?", "Хочете піцу?" ] ] }, { "n": "b", "sub": true, "s": [ [ "¿Dónde está la cama?", "Де ліжко?" ] ] }, { "n": "c", "sub": true, "s": [ [ "Este es mi dormitorio.", "Це моя спальня." ] ] }, { "n": "3", "s": [ [ "¿Dónde está el espejo?", "Де дзеркало?" ] ] }, { "n": "a", "sub": true, "s": [ [ "En la cocina.", "На кухні." ] ] }, { "n": "b", "sub": true, "ok": true, "s": [ [ "En el cuarto de baño.", "У ванній кімнаті." ] ] }, { "n": "c", "sub": true, "s": [ [ "En el salón comedor.", "У вітальні-їдальні." ] ] }, { "n": "4", "s": [ [ "¿Qué palabra se escribe con z?", "Яке слово пишеться з z?" ] ] }, { "n": "a", "sub": true, "s": [ [ "cine", "кіно" ] ] }, { "n": "b", "sub": true, "s": [ [ "cena", "вечеря" ] ] }, { "n": "c", "sub": true, "ok": true, "s": [ [ "zumo", "сік" ] ] }, { "n": "5", "s": [ [ "¿Dónde están la televisión y el sillón?", "Де телевізор і крісло?" ] ] }, { "n": "a", "sub": true, "s": [ [ "En el dormitorio.", "У спальні." ] ] }, { "n": "b", "sub": true, "ok": true, "s": [ [ "En el salón comedor.", "У вітальні-їдальні." ] ] }, { "n": "c", "sub": true, "s": [ [ "En la cocina.", "На кухні." ] ] } ], "answers": [ { "n": "1", "q": [ "¿Qué hay en la cocina?", "Що є на кухні?" ], "a": [ "c: el frigorífico.", "c: холодильник." ] }, { "n": "2", "q": [ "¿Qué dice la abuela de Elena?", "Що каже бабуся Олени?" ], "a": [ "a: ¿Queréis una pizza?", "a: Хочете піцу?" ] }, { "n": "3", "q": [ "¿Dónde está el espejo?", "Де дзеркало?" ], "a": [ "b: En el cuarto de baño.", "b: У ванній кімнаті." ] }, { "n": "4", "q": [ "¿Qué palabra se escribe con z?", "Яке слово пишеться з z?" ], "a": [ "c: zumo.", "c: zumo — сік." ] }, { "n": "5", "q": [ "¿Dónde están la televisión y el sillón?", "Де телевізор і крісло?" ], "a": [ "b: En el salón comedor.", "b: У вітальні-їдальні." ] } ] } ], "phrases": [ [ "Llegamos a casa de Elena.", "Ми прийшли до Олени додому." ], [ "Estamos en su casa.", "Ми в неї вдома." ], [ "Es aquí.", "Це тут." ], [ "¡Pasad!", "Заходьте!" ], [ "Este es el salón.", "Це вітальня." ], [ "el salón comedor", "вітальня-їдальня" ], [ "el cuarto de baño", "ванна кімната" ], [ "Este es mi dormitorio.", "Це моя спальня." ], [ "Esta es la cocina.", "Це кухня." ], [ "Aquí está mi abuela.", "Ось моя бабуся." ], [ "¡Qué bien huele!", "Як смачно пахне!" ], [ "¿Queréis una pizza?", "Хочете піцу?" ], [ "¿Dónde está la cama?", "Де ліжко?" ], [ "En el dormitorio.", "У спальні." ], [ "En la cocina.", "На кухні." ], [ "En el salón.", "У вітальні." ], [ "En el cuarto de baño.", "У ванній кімнаті." ], [ "la televisión", "телевізор" ], [ "el sillón", "крісло" ], [ "el sofá", "диван" ], [ "la alfombra", "килим" ], [ "el espejo", "дзеркало" ], [ "la bañera", "ванна" ], [ "el lavabo", "умивальник" ], [ "las cortinas", "штори" ], [ "la estantería", "полиця, стелаж" ], [ "el armario", "шафа" ], [ "el frigorífico", "холодильник" ], [ "el horno", "духовка" ], [ "el fregadero", "кухонна мийка" ], [ "Practica con tu compañero.", "Потренуйся з однокласником." ], [ "¿Cómo se escribe zorro?", "Як пишеться «zorro»?" ], [ "Escucha y repite.", "Послухай і повтори." ], [ "zumo de manzana", "яблучний сік" ], [ "El rincón de los sonidos", "Куточок звуків" ] ] });

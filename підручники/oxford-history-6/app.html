@@ -364,6 +364,36 @@ a.ext { color: var(--ua); font-weight: 700; }
 .wt-ex { display: block; align-self: start; border: 0; background: transparent; padding: 0; text-align: left; font: inherit; color: inherit; }
 .wt-ex b { font-size: 1.08em; }
 .wt-ex:active b { color: #8a4fe0; }
+/* «Check yourself» is red in every book, «¡Practica más!» orange */
+.box.check { border-color: #e0392b; } .box.check h3 { background: #e0392b; }
+.box.more { border-color: #f08a1c; } .box.more h3 { background: #f08a1c; }
+/* the Spanish book: light lime pages, yellow UA buttons, Lección tabs, dialogue lines */
+body.lang-es { --paper: #f0f8e2; --paper-2: #e3f1cb; }
+body.lang-es .ua-tog { background: #fdf3cf; border-color: #f0dc9a; color: #b8941f; opacity: 1; }
+body.lang-es h2.blk { position: relative; padding-right: 44px; }
+body.lang-es h2.blk.leccion { font-size: 19px; display: inline-block; background: #7b4fc8; color: #fff; margin-left: -40px; padding: 6px 18px 6px 40px; border-radius: 0 14px 14px 0; box-shadow: 0 2px 8px rgba(80, 40, 140, .25); }
+body.lang-es h2.blk.leccion .ua-tog { position: static; margin-left: 10px; vertical-align: middle; }
+body.lang-es h2.blk.leccion .ua { color: #fff; }
+p.blk.dl { margin: 4px 0; }
+p.blk.dl.da { position: relative; padding-left: 20px; }
+p.blk.dl.da::before { content: ""; position: absolute; left: 2px; top: .62em; width: 10px; height: 10px; border-radius: 50%; background: #8fd400; box-shadow: 0 0 6px rgba(143, 212, 0, .6); }
+p.blk.dl.dq + p.blk.dl.dq { margin-top: 2px; }
+p.blk.bar { border-left: 3px solid #3b82f6; padding-left: 12px; margin-left: 2px; }
+figure.blk.small { display: grid; grid-template-columns: 38% 1fr; gap: 14px; align-items: center; }
+figure.blk.small figcaption { margin: 0; }
+figure.blk.small.long { display: block; } figure.blk.small.long img { width: 45%; }
+figure.blk.spread figcaption .en { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 4px 14px; text-align: center; }
+figure.blk.spread figcaption .ua { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 2px 14px; text-align: center; }
+.wt-left { padding-right: 22px; }
+.wt-forms { display: grid; gap: 4px; }
+.wt-forms > span { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: baseline; }
+.wt-row.forms { grid-template-columns: minmax(0, .72fr) minmax(0, 1.28fr); }
+.wt-row.forms b.wt-t { font-size: 1em; }
+.wt-left { padding-right: 24px !important; }
+.wt-forms b { font-size: 1em !important; }
+.wt-forms small { font-size: .8em !important; }
+.wt-forms small { margin: 0 !important; text-align: right; color: #6b625d !important; }
+
 .wt-ex { position: relative; padding-right: 22px; }
 .wt-say { position: absolute; right: -2px; top: 2px; width: 20px; height: 22px; display: grid; place-items: center; color: #c9a227; }
 .wt-say svg { width: 15px; height: 15px; }
@@ -771,6 +801,7 @@ const BOOK_ID = (() => { try { return JSON.parse(localStorage.getItem("vk:book")
 const BUILTIN = { history6: 1, geography: 1, science: 1, english: 1, spanish: 1 };
 // the Spanish book is read with a Spanish voice and its own Spanish → Ukrainian dictionary
 const BOOK_LANG = BOOK_ID === "spanish" ? "es" : "en";
+if (BOOK_LANG === "es") document.body.classList.add("lang-es");
 const MAGIC = !BUILTIN[BOOK_ID] ? await loadMagicBook(BOOK_ID) : null;
 const EXTRA_BOOK = BOOK_ID === "geography" ? window.GEO : BOOK_ID === "science" ? window.SCI : BOOK_ID === "english" ? window.ENG : BOOK_ID === "spanish" ? window.ESP : null;
 if (EXTRA_BOOK) {
@@ -882,12 +913,24 @@ L.blocks.forEach((b, bi) => {
     curPage = b.page; curPgNum = b.page;
     out += `<div class="pagemark" id="page-${b.page}" data-page="${b.page}">Page <b>${b.page}</b></div>`;
   }
-  if (b.type === "lead" || b.type === "p") {
+  if (b.type === "p" && b.dlg) {
+    // a dialogue: every question on its own line, the answer after it on the next line with a lime dot
+    const lines = []; let cur = null;
+    b.s.forEach(pair => {
+      const q = /\?\s*$/.test(pair[0].trim());
+      if (q) { if (!cur || cur.a.s.length) { cur = { q: { q: true, s: [] }, a: { q: false, s: [] } }; lines.push(cur); } cur.q.s.push(pair); }
+      else if (cur && cur.q.s.length) cur.a.s.push(pair);
+      else { cur = { q: { q: true, s: [] }, a: { q: false, s: [pair] } }; lines.push(cur); }
+    });
+    lines.flatMap(l => [l.q, l.a]).filter(l => l.s.length).forEach(ln => { const r = renderSentences(ln.s);
+      out += `<p class="blk p dl ${ln.q ? "dq" : "da"}" data-bi="${li}:${bi}">${r.en}<button class="ua-tog" data-tog aria-label="Переклад">UA</button>${uaHtml(r.sis)}</p>`; });
+  } else if (b.type === "lead" || b.type === "p") {
     const r = renderSentences(b.s);
-    out += `<p class="blk ${b.type}" data-bi="${li}:${bi}">${r.en}<button class="ua-tog" data-tog aria-label="Переклад абзацу">UA</button>${uaHtml(r.sis)}</p>`;
+    out += `<p class="blk ${b.type}${b.bar ? " bar" : ""}" data-bi="${li}:${bi}">${r.en}<button class="ua-tog" data-tog aria-label="Переклад абзацу">UA</button>${uaHtml(r.sis)}</p>`;
   } else if (b.type === "h2") {
     const r = renderSentences(b.s);
-    out += `<h2 class="blk" data-bi="${li}:${bi}">${r.en}${uaHtml(r.sis)}</h2>`;
+    const tab = /^Lecci[oó]n\b/i.test(String(b.s[0][0]));
+    out += `<h2 class="blk${tab ? " leccion" : ""}" data-bi="${li}:${bi}">${r.en}${BOOK_LANG === "es" ? `<button class="ua-tog" data-tog aria-label="Переклад заголовка">UA</button>` : ""}${uaHtml(r.sis)}</h2>`;
   } else if (b.type === "img") {
     const r = renderSentences(b.s);
     let legend = "";
@@ -895,7 +938,7 @@ L.blocks.forEach((b, bi) => {
       legend = `<div class="legend"><span class="lt">${esc(b.legendTitle || "Viking settlements · Viking raids")}</span>` +
         b.legend.map(l => `<span><i style="background:${l[0]}"></i><span class="lg" title="${esc(l[2])}">${tokenSpans(l[1]).html}</span></span>`).join("") + `</div>`;
     }
-    out += `<figure class="blk" data-bi="${li}:${bi}"><img src="${IMG[b.src] || esc(b.src)}" alt="${esc(b.alt)}"><figcaption>${r.en}${uaHtml(r.sis)}</figcaption>${legend}</figure>`;
+    out += `<figure class="blk${b.small ? " small" + (String(b.s.map(x => x[0]).join(" ")).length > 90 ? " long" : "") : ""}${b.spread ? " spread" : ""}" data-bi="${li}:${bi}"><img src="${IMG[b.src] || esc(b.src)}" alt="${esc(b.alt)}"><figcaption>${r.en}${uaHtml(r.sis)}</figcaption>${legend}</figure>`;
   } else if (b.type === "wordtable") {
     // two columns: the word part with its meaning | how a new word is made (tap a row or its speaker to hear it)
     // mark: "prefix" / "suffix" — underline the word part in the new word; "spell" — the studied word shimmers in its sentence
@@ -921,8 +964,8 @@ L.blocks.forEach((b, bi) => {
         tt ? `<h2 class="wt-title">${tt.en}${uaHtml(tt.sis)}</h2>` : "") +
       (nt ? `<p class="wt-note">${nt.en}<button class="ua-tog" data-tog aria-label="Переклад">UA</button>${uaHtml(nt.sis)}</p>` : "") +
       `<div class="wt-head"><span>${esc((hd[0] || [])[1] || "")}</span><span>${esc((hd[1] || [])[1] || "")}</span></div>` +
-      b.rows.map(r => `<div class="wt-row"><div><b class="wt-t${mk === "spell" && String(r.t).length > 11 ? " lw2" : mk === "spell" && String(r.t).length > 9 ? " lw" : ""}">${esc(r.t)}</b><small>${esc((r.m || [])[1] || (r.m || [])[0] || "")}</small></div>` +
-        `<button class="wt-ex" data-say="${esc(String((r.ex || [])[0] || "").replace(/→/g, ","))}"><b>${exHtml(r)}</b><small>${esc((r.ex || [])[1] || "")}</small><span class="wt-say" aria-hidden="true">${SVG.speak}</span></button></div>`).join("") + `</div>`;
+      b.rows.map(r => `<div class="wt-row${/ · /.test(String((r.ex || [])[0])) ? " forms" : ""}">${BOOK_LANG === "es" ? `<button class="wt-ex wt-left" data-say="${esc(String(r.t).replace(/[()]/g, ""))}">` : "<div>"}<b class="wt-t${mk === "spell" && String(r.t).length > 11 ? " lw2" : mk === "spell" && String(r.t).length > 9 ? " lw" : ""}">${esc(r.t)}</b><small>${esc((r.m || [])[1] || (r.m || [])[0] || "")}</small>${BOOK_LANG === "es" ? `<span class="wt-say" aria-hidden="true">${SVG.speak}</span></button>` : "</div>"}` +
+        `<button class="wt-ex" data-say="${esc(String((r.ex || [])[0] || "").replace(/→/g, ","))}">${/ · /.test(String((r.ex || [])[0])) ? `<span class="wt-forms">${String(r.ex[0]).split(" · ").map((f, k) => `<span><small>${esc((String((r.ex || [])[1] || "").split(" · ")[k]) || "")}</small><b>${esc(f)}</b></span>`).join("")}</span>` : `<b>${exHtml(r)}</b><small>${esc((r.ex || [])[1] || "")}</small>`}<span class="wt-say" aria-hidden="true">${SVG.speak}</span></button></div>`).join("") + `</div>`;
   } else if (b.type === "stars") {
     // a star poster: every star is a button; tapping it shows example words as buttons (tap a word to hear it)
     const tt = b.title && b.title.length ? renderSentences(b.title) : null, nt = b.note && b.note.length ? renderSentences(b.note) : null;
@@ -936,7 +979,7 @@ L.blocks.forEach((b, bi) => {
     out += `<div class="gloss blk"><h3><span class="en">${esc(b.title[0])}</span> <span class="h3ua">${esc(b.title[1])}</span></h3><ul>` +
       b.words.map(w => `<li><button data-gloss="${esc(w[0])}">${esc(w[0])}</button></li>`).join("") + `</ul></div>`;
   } else if (b.type === "box") {
-    out += `<div class="box blk ${b.kind}"><h3><span class="en">${esc(b.title[0])}</span><span class="h3ua">${esc(b.title[1])}</span>${b.answers ? `<button class="ansbtn" data-answers="${li}:${bi}" aria-label="Відповіді на запитання" title="Відповіді">${SVG.mail}</button>` : ""}</h3><div class="items">` +
+    out += `<div class="box blk ${b.kind}${b.title[0] === "Check yourself" ? " check" : ""}${/Practica más/.test(b.title[0]) ? " more" : ""}"><h3><span class="en">${esc(b.title[0])}</span><span class="h3ua">${esc(b.title[1])}</span>${b.answers ? `<button class="ansbtn" data-answers="${li}:${bi}" aria-label="Відповіді на запитання" title="Відповіді">${SVG.mail}</button>` : ""}</h3><div class="items">` +
       (() => {
         // answer choices a/b/c under a numbered question become tappable when one of them is marked ok
         let q = null; const groups = {};

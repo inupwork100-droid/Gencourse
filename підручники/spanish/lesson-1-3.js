@@ -1,164 +1,26 @@
 // Урок 1.3 «¿Tenéis mascota? · Tengo, tengo, tengo» — сторінки 8–9 підручника Colega vuelve 3.
 // Кожне речення — [іспанською, українською]. *слово* — жирне ключове слово.
-(window.ESP = window.ESP || { lessons: [], dict: {} }).lessons.push({
-  id: "1.3",
-  unit: "1 Somos la pandilla",
-  color: "#6fb43f",
-  title: ["1.3 ¿Tenéis mascota? · Tengo, tengo, tengo", "1.3 У вас є домашній улюбленець? · Маю, маю, маю"],
-  pages: "8–9",
-  blocks: [
-    { type: "h2", page: 8, s: [["Unidad 1. ¿Tenéis mascota?", "Розділ 1. У вас є домашній улюбленець?"]] },
-
-    { type: "h2", s: [["1. Lee y observa.", "1. Прочитай і подивися."]] },
-    { type: "p", s: [
-      ["Yo *tengo* una tortuga.", "У мене є черепаха."],
-      ["Mi tortuga es verde y marrón y se llama Pancha.", "Моя черепаха зелена й коричнева, і її звати Панча."],
-      ["Pancha es muy tímida.", "Панча дуже сором'язлива."],
-      ["Mis amigos Rubén y Ana *tienen* dos mascotas.", "Мої друзі Рубен і Ана мають двох домашніх улюбленців."]
-    ]},
-    { type: "p", s: [
-      ["Sí, nosotros *tenemos* dos mascotas: yo *tengo* un perro y mi hermano *tiene* una gata.", "Так, у нас є двоє улюбленців: у мене є пес, а в мого брата — кицька."],
-      ["Mi perro se llama Colega y es muy inteligente.", "Мого пса звати Колега, і він дуже розумний."]
-    ]},
-    { type: "img", src: "s08-mascotas", alt: "Хулія з черепахою, Рубен із кицькою та Ана з песиком", s: [
-      ["Julia y su tortuga; Rubén y su gata; Ana y su perro.", "Хулія та її черепаха; Рубен і його кицька; Ана і її пес."]
-    ]},
-    { type: "p", s: [
-      ["Yo *tengo* un pájaro.", "У мене є пташка."],
-      ["Es amarillo y se llama Pío.", "Вона жовта, і її звати Піо."],
-      ["Sabe cantar muy bien.", "Вона дуже гарно вміє співати."],
-      ["Mi amigo Chema *tiene* un ratón blanco que se llama Cito.", "У мого друга Чеми є біла мишка, яку звати Сіто."],
-      ["¿Vosotros *tenéis* mascota?", "А у вас є домашній улюбленець?"]
-    ]},
-    { type: "p", s: [
-      ["Yo *tengo* una gata.", "У мене є кицька."],
-      ["Mi gata se llama Zoa y es blanca y negra.", "Мою кицьку звати Зоа, і вона біло-чорна."],
-      ["Es muy cariñosa.", "Вона дуже лагідна."]
-    ]},
-    { type: "img", src: "s08-elena-chema", alt: "Олена з жовтою пташкою і Чема з білою мишкою на плечі", s: [
-      ["Elena y su pájaro Pío; Chema y su ratón Cito.", "Олена та її пташка Піо; Чема і його мишка Сіто."]
-    ]},
-
-    { type: "h2", s: [["2. Observa y aprende.", "2. Подивися й запам'ятай."]] },
-    { type: "wordtable", title: [["TENER", "TENER — мати"]], head: [["Persona", "Особа"], ["Forma", "Форма"]], rows: [
-      { t: "(yo)", m: ["", "я"], ex: ["tengo", "я маю, у мене є"] },
-      { t: "(tú)", m: ["", "ти"], ex: ["tienes", "ти маєш"] },
-      { t: "(él/ella/usted)", m: ["", "він / вона / Ви"], ex: ["tiene", "він / вона має, Ви маєте"] },
-      { t: "(nosotros/as)", m: ["", "ми"], ex: ["tenemos", "ми маємо"] },
-      { t: "(vosotros/as)", m: ["", "ви"], ex: ["tenéis", "ви маєте"] },
-      { t: "(ellos/ellas/ustedes)", m: ["", "вони / Ви"], ex: ["tienen", "вони мають, Ви маєте"] }
-    ] },
-
-    { type: "h2", page: 9, s: [["Lección 3. Tengo, tengo, tengo", "Урок 3. Маю, маю, маю"]] },
-
-    { type: "h2", s: [["3. Escucha, aprende y canta.", "3. Послухай, вивчи й заспівай."]] },
-    { type: "p", s: [
-      ["Rock, rock, rock de la ovejita,", "Рок, рок, рок овечки,"],
-      ["rock, rock, rock de la ovejita.", "рок, рок, рок овечки."]
-    ]},
-    { type: "p", s: [
-      ["*Tengo*, *tengo*, *tengo*,", "Маю, маю, маю,"],
-      ["tú no *tienes* nada,", "а ти нічого не маєш,"],
-      ["*tengo* tres ovejas", "маю три овечки"],
-      ["en una cabaña.", "у хатинці."]
-    ]},
-    { type: "p", s: [
-      ["Rock, rock, rock de la ovejita,", "Рок, рок, рок овечки,"],
-      ["rock, rock, rock de la ovejita.", "рок, рок, рок овечки."]
-    ]},
-    { type: "p", s: [
-      ["Una me da leche,", "Одна дає мені молоко,"],
-      ["otra me da lana", "друга дає мені вовну,"],
-      ["y otra me da queso", "а третя дає мені сир"],
-      ["para la semana.", "на тиждень."]
-    ]},
-    { type: "p", s: [
-      ["Rock, rock, rock de la ovejita,", "Рок, рок, рок овечки,"],
-      ["rock, rock, rock de la ovejita.", "рок, рок, рок овечки."]
-    ]},
-    { type: "img", src: "s09-cancion", alt: "Пес Колега грає на барабанах, песик співає, дві овечки танцюють", s: [
-      ["El rock de la ovejita.", "Рок овечки."]
-    ]},
-    { type: "img", src: "s09-vocabulario", alt: "Малюнки: молоко, вовна, сир, хатинка", s: [
-      ["*la leche*", "молоко"],
-      ["*la lana*", "вовна"],
-      ["*el queso*", "сир"],
-      ["*la cabaña*", "хатинка"]
-    ]},
-
-    { type: "h2", s: [["4. Completa con el verbo tener.", "4. Доповни дієсловом tener."]] },
-    { type: "box", kind: "activities", title: ["Actividades", "Завдання"], items: [
-      { n: "a", s: [["Ellos ____ una granja.", "Вони ____ ферму."]] },
-      { n: "b", s: [["Yo no ____ hermanos.", "Я не ____ братів і сестер."]] },
-      { n: "c", s: [["¿Vosotros ____ mascota?", "Ви ____ домашнього улюбленця?"]] },
-      { n: "d", s: [["Tú ____ nueve años.", "Тобі ____ дев'ять років."]] },
-      { n: "e", s: [["Nosotros ____ amigos.", "Ми ____ друзів."]] },
-      { n: "f", s: [["Ella ____ un estuche azul.", "Вона ____ синій пенал."]] },
-      { n: "g", s: [["Usted ____ un coche.", "Ви ____ автомобіль."]] },
-      { n: "h", s: [["Él ____ una gata.", "Він ____ кицьку."]] }
-    ], answers: [
-      { n: "a", q: ["Ellos ____ una granja.", "Вони ____ ферму."], a: ["Ellos tienen una granja.", "Вони мають ферму."] },
-      { n: "b", q: ["Yo no ____ hermanos.", "Я не ____ братів і сестер."], a: ["Yo no tengo hermanos.", "У мене немає братів і сестер."] },
-      { n: "c", q: ["¿Vosotros ____ mascota?", "Ви ____ домашнього улюбленця?"], a: ["¿Vosotros tenéis mascota?", "У вас є домашній улюбленець?"] },
-      { n: "d", q: ["Tú ____ nueve años.", "Тобі ____ дев'ять років."], a: ["Tú tienes nueve años.", "Тобі дев'ять років."] },
-      { n: "e", q: ["Nosotros ____ amigos.", "Ми ____ друзів."], a: ["Nosotros tenemos amigos.", "У нас є друзі."] },
-      { n: "f", q: ["Ella ____ un estuche azul.", "Вона ____ синій пенал."], a: ["Ella tiene un estuche azul.", "У неї є синій пенал."] },
-      { n: "g", q: ["Usted ____ un coche.", "Ви ____ автомобіль."], a: ["Usted tiene un coche.", "У Вас є автомобіль."] },
-      { n: "h", q: ["Él ____ una gata.", "Він ____ кицьку."], a: ["Él tiene una gata.", "У нього є кицька."] }
-    ] },
-
-    { type: "box", kind: "review", title: ["¡Practica más!", "Потренуйся ще!"], items: [
-      { n: "1", s: [["Yo ____ un perro.", "У мене є пес."]] },
-      { n: "a", sub: true, ok: true, s: [["tengo", "я маю"]] }, { n: "b", sub: true, s: [["tiene", "він / вона має"]] }, { n: "c", sub: true, s: [["tienes", "ти маєш"]] },
-      { n: "2", s: [["Rubén y Ana ____ dos mascotas.", "Рубен і Ана мають двох улюбленців."]] },
-      { n: "a", sub: true, s: [["tenemos", "ми маємо"]] }, { n: "b", sub: true, s: [["tenéis", "ви маєте"]] }, { n: "c", sub: true, ok: true, s: [["tienen", "вони мають"]] },
-      { n: "3", s: [["¿Vosotros ____ un gato?", "У вас є кіт?"]] },
-      { n: "a", sub: true, s: [["tienen", "вони мають"]] }, { n: "b", sub: true, ok: true, s: [["tenéis", "ви маєте"]] }, { n: "c", sub: true, s: [["tengo", "я маю"]] },
-      { n: "4", s: [["La oveja me da ____.", "Овечка дає мені вовну."]] },
-      { n: "a", sub: true, s: [["leche", "молоко"]] }, { n: "b", sub: true, s: [["queso", "сир"]] }, { n: "c", sub: true, ok: true, s: [["lana", "вовну"]] },
-      { n: "5", s: [["Mi gata es blanca y ____.", "Моя кицька біла й чорна."]] },
-      { n: "a", sub: true, ok: true, s: [["negra", "чорна"]] }, { n: "b", sub: true, s: [["negro", "чорний"]] }, { n: "c", sub: true, s: [["negros", "чорні"]] },
-      { n: "6", s: [["Nosotras ____ una tortuga.", "У нас (дівчат) є черепаха."]] },
-      { n: "a", sub: true, s: [["tiene", "він / вона має"]] }, { n: "b", sub: true, ok: true, s: [["tenemos", "ми маємо"]] }, { n: "c", sub: true, s: [["tenéis", "ви маєте"]] }
-    ], answers: [
-      { n: "1", q: ["Yo ____ un perro.", "У мене є пес."], a: ["a: Yo tengo un perro.", "a: У мене є пес."] },
-      { n: "2", q: ["Rubén y Ana ____ dos mascotas.", "Рубен і Ана мають двох улюбленців."], a: ["c: Rubén y Ana tienen dos mascotas.", "c: Рубен і Ана мають двох улюбленців."] },
-      { n: "3", q: ["¿Vosotros ____ un gato?", "У вас є кіт?"], a: ["b: ¿Vosotros tenéis un gato?", "b: У вас є кіт?"] },
-      { n: "4", q: ["La oveja me da ____.", "Овечка дає мені вовну."], a: ["c: La oveja me da lana.", "c: Овечка дає мені вовну."] },
-      { n: "5", q: ["Mi gata es blanca y ____.", "Моя кицька біла й чорна."], a: ["a: Mi gata es blanca y negra.", "a: Моя кицька біла й чорна."] },
-      { n: "6", q: ["Nosotras ____ una tortuga.", "У нас (дівчат) є черепаха."], a: ["b: Nosotras tenemos una tortuga.", "b: У нас є черепаха."] }
-    ] },
-
-    { type: "box", kind: "review", title: ["Check yourself", "Перевір себе"], items: [
-      { n: "1", s: [["¿Cómo se llama la tortuga de Julia?", "Як звати черепаху Хулії?"]] },
-      { n: "a", sub: true, ok: true, s: [["Pancha", "Панча"]] }, { n: "b", sub: true, s: [["Zoa", "Зоа"]] }, { n: "c", sub: true, s: [["Pío", "Піо"]] },
-      { n: "2", s: [["¿Qué mascota tiene Chema?", "Якого улюбленця має Чема?"]] },
-      { n: "a", sub: true, s: [["un pájaro", "пташку"]] }, { n: "b", sub: true, ok: true, s: [["un ratón blanco", "білу мишку"]] }, { n: "c", sub: true, s: [["una gata", "кицьку"]] },
-      { n: "3", s: [["¿Cómo es Colega, el perro de Ana?", "Який Колега, пес Ани?"]] },
-      { n: "a", sub: true, s: [["muy tímido", "дуже сором'язливий"]] }, { n: "b", sub: true, s: [["amarillo", "жовтий"]] }, { n: "c", sub: true, ok: true, s: [["muy inteligente", "дуже розумний"]] },
-      { n: "4", s: [["Tú ____ nueve años.", "Тобі дев'ять років."]] },
-      { n: "a", sub: true, ok: true, s: [["tienes", "ти маєш"]] }, { n: "b", sub: true, s: [["tengo", "я маю"]] }, { n: "c", sub: true, s: [["tienen", "вони мають"]] },
-      { n: "5", s: [["¿Cuántas ovejas tengo en la canción?", "Скільки овечок у мене в пісні?"]] },
-      { n: "a", sub: true, s: [["dos", "дві"]] }, { n: "b", sub: true, ok: true, s: [["tres", "три"]] }, { n: "c", sub: true, s: [["cuatro", "чотири"]] }
-    ], answers: [
-      { n: "1", q: ["¿Cómo se llama la tortuga de Julia?", "Як звати черепаху Хулії?"], a: ["a: Pancha.", "a: Панча."] },
-      { n: "2", q: ["¿Qué mascota tiene Chema?", "Якого улюбленця має Чема?"], a: ["b: Chema tiene un ratón blanco.", "b: У Чеми є біла мишка."] },
-      { n: "3", q: ["¿Cómo es Colega, el perro de Ana?", "Який Колега, пес Ани?"], a: ["c: Es muy inteligente.", "c: Він дуже розумний."] },
-      { n: "4", q: ["Tú ____ nueve años.", "Тобі дев'ять років."], a: ["a: Tú tienes nueve años.", "a: Тобі дев'ять років."] },
-      { n: "5", q: ["¿Cuántas ovejas tengo en la canción?", "Скільки овечок у мене в пісні?"], a: ["b: tres.", "b: три."] }
-    ] }
-  ],
-  phrases: [
-    ["¿Tenéis mascota?", "У вас є домашній улюбленець?"], ["¿Tienes mascota?", "У тебе є домашній улюбленець?"], ["Yo tengo una tortuga.", "У мене є черепаха."],
-    ["Se llama Pancha.", "Її звати Панча."], ["Es muy tímida.", "Вона дуже сором'язлива."], ["Tienen dos mascotas.", "У них двоє улюбленців."],
-    ["Tengo un perro.", "У мене є пес."], ["mi hermano", "мій брат"], ["Es muy inteligente.", "Він дуже розумний."],
-    ["Tengo un pájaro.", "У мене є пташка."], ["Sabe cantar muy bien.", "Вміє дуже гарно співати."], ["un ratón blanco", "біла мишка"],
-    ["Tengo una gata.", "У мене є кицька."], ["blanca y negra", "біло-чорна"], ["Es muy cariñosa.", "Вона дуже лагідна."],
-    ["verde y marrón", "зелена й коричнева"], ["Lee y observa.", "Прочитай і подивися."], ["Escucha, aprende y canta.", "Послухай, вивчи й заспівай."],
-    ["Completa con el verbo tener.", "Доповни дієсловом tener."], ["Tú no tienes nada.", "Ти нічого не маєш."], ["tres ovejas", "три овечки"],
-    ["en una cabaña", "у хатинці"], ["Una me da leche.", "Одна дає мені молоко."], ["otra me da lana", "друга дає мені вовну"],
-    ["para la semana", "на тиждень"], ["Tengo nueve años.", "Мені дев'ять років."], ["No tengo hermanos.", "У мене немає братів і сестер."],
-    ["un estuche azul", "синій пенал"], ["una granja", "ферма"], ["un coche", "автомобіль"],
-    ["Tengo once años.", "Мені одинадцять років."]
-  ]
-});
+(window.ESP = window.ESP || { lessons: [], dict: {} }).lessons.push({ "id": "1.3", "unit": "1 Somos la pandilla", "color": "#6fb43f", "title": [ "1.3 ¿Tenéis mascota? · Tengo, tengo, tengo", "1.3 У вас є домашній улюбленець? · Маю, маю, маю" ], "pages": "8–9", "blocks": [ 
+  { "type": "h2", "page": 8, "s": [ [ "Unidad 1. ¿Tenéis mascota?", "Розділ 1. У вас є домашній улюбленець?" ] ] }, 
+  { "type": "h2", "s": [ [ "1. Lee y observa.", "1. Прочитай і подивися." ] ] }, 
+  { "type": "img", "src": "s08-mascotas", "alt": "Хулія з черепахою, Рубен із кицькою та Ана з песиком", "s": [ [ "Julia y su tortuga; Rubén y su gata; Ana y su perro.", "Хулія та її черепаха; Рубен і його кицька; Ана і її пес." ] ] }, 
+  { "type": "img", "src": "s08-elena-chema", "alt": "Олена з жовтою пташкою і Чема з білою мишкою на плечі", "s": [ [ "Elena y su pájaro Pío; Chema y su ratón Cito.", "Олена та її пташка Піо; Чема і його мишка Сіто." ] ], "small": true }, 
+  { "type": "p", "s": [ [ "Yo *tengo* una tortuga.", "У мене є черепаха." ], [ "Mi tortuga es verde y marrón y se llama Pancha.", "Моя черепаха зелена й коричнева, і її звати Панча." ], [ "Pancha es muy tímida.", "Панча дуже сором'язлива." ], [ "Mis amigos Rubén y Ana *tienen* dos mascotas.", "Мої друзі Рубен і Ана мають двох домашніх улюбленців." ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "Sí, nosotros *tenemos* dos mascotas: yo *tengo* un perro y mi hermano *tiene* una gata.", "Так, у нас є двоє улюбленців: у мене є пес, а в мого брата — кицька." ], [ "Mi perro se llama Colega y es muy inteligente.", "Мого пса звати Колега, і він дуже розумний." ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "Yo *tengo* un pájaro.", "У мене є пташка." ], [ "Es amarillo y se llama Pío.", "Вона жовта, і її звати Піо." ], [ "Sabe cantar muy bien.", "Вона дуже гарно вміє співати." ], [ "Mi amigo Chema *tiene* un ratón blanco que se llama Cito.", "У мого друга Чеми є біла мишка, яку звати Сіто." ], [ "¿Vosotros *tenéis* mascota?", "А у вас є домашній улюбленець?" ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "Yo *tengo* una gata.", "У мене є кицька." ], [ "Mi gata se llama Zoa y es blanca y negra.", "Мою кицьку звати Зоа, і вона біло-чорна." ], [ "Es muy cariñosa.", "Вона дуже лагідна." ] ], "bar": true }, 
+  { "type": "h2", "s": [ [ "2. Observa y aprende.", "2. Подивися й запам'ятай." ] ] }, 
+  { "type": "wordtable", "title": [ [ "TENER", "TENER — мати" ] ], "head": [ [ "Persona", "Особа" ], [ "Forma", "Форма" ] ], "rows": [ { "t": "(yo)", "m": [ "", "я" ], "ex": [ "tengo", "я маю, у мене є" ] }, { "t": "(tú)", "m": [ "", "ти" ], "ex": [ "tienes", "ти маєш" ] }, { "t": "(él/ella/usted)", "m": [ "", "він / вона / Ви" ], "ex": [ "tiene", "він / вона має, Ви маєте" ] }, { "t": "(nosotros/as)", "m": [ "", "ми" ], "ex": [ "tenemos", "ми маємо" ] }, { "t": "(vosotros/as)", "m": [ "", "ви" ], "ex": [ "tenéis", "ви маєте" ] }, { "t": "(ellos/ellas/ustedes)", "m": [ "", "вони / Ви" ], "ex": [ "tienen", "вони мають, Ви маєте" ] } ] }, 
+  { "type": "h2", "page": 9, "s": [ [ "Lección 3. Tengo, tengo, tengo", "Урок 3. Маю, маю, маю" ] ] }, 
+  { "type": "h2", "s": [ [ "3. Escucha, aprende y canta.", "3. Послухай, вивчи й заспівай." ] ] }, 
+  { "type": "img", "src": "s09-cancion", "alt": "Пес Колега грає на барабанах, песик співає, дві овечки танцюють", "s": [ [ "El rock de la ovejita.", "Рок овечки." ] ] }, 
+  { "type": "img", "src": "s09-vocabulario", "alt": "Малюнки: молоко, вовна, сир, хатинка", "s": [ [ "la leche", "молоко" ], [ "la lana", "вовна" ], [ "el queso", "сир" ], [ "la cabaña", "хатинка" ] ], "spread": true }, 
+  { "type": "p", "s": [ [ "Rock, rock, rock de la ovejita,", "Рок, рок, рок овечки," ], [ "rock, rock, rock de la ovejita.", "рок, рок, рок овечки." ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "*Tengo*, *tengo*, *tengo*,", "Маю, маю, маю," ], [ "tú no *tienes* nada,", "а ти нічого не маєш," ], [ "*tengo* tres ovejas", "маю три овечки" ], [ "en una cabaña.", "у хатинці." ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "Rock, rock, rock de la ovejita,", "Рок, рок, рок овечки," ], [ "rock, rock, rock de la ovejita.", "рок, рок, рок овечки." ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "Una me da leche,", "Одна дає мені молоко," ], [ "otra me da lana", "друга дає мені вовну," ], [ "y otra me da queso", "а третя дає мені сир" ], [ "para la semana.", "на тиждень." ] ], "bar": true }, 
+  { "type": "p", "s": [ [ "Rock, rock, rock de la ovejita,", "Рок, рок, рок овечки," ], [ "rock, rock, rock de la ovejita.", "рок, рок, рок овечки." ] ], "bar": true }, 
+  { "type": "h2", "s": [ [ "4. Completa con el verbo tener.", "4. Доповни дієсловом tener." ] ] }, 
+  { "type": "box", "kind": "activities", "title": [ "Actividades", "Завдання" ], "items": [ { "n": "a", "s": [ [ "Ellos ____ una granja.", "Вони ____ ферму." ] ] }, { "n": "b", "s": [ [ "Yo no ____ hermanos.", "Я не ____ братів і сестер." ] ] }, { "n": "c", "s": [ [ "¿Vosotros ____ mascota?", "Ви ____ домашнього улюбленця?" ] ] }, { "n": "d", "s": [ [ "Tú ____ nueve años.", "Тобі ____ дев'ять років." ] ] }, { "n": "e", "s": [ [ "Nosotros ____ amigos.", "Ми ____ друзів." ] ] }, { "n": "f", "s": [ [ "Ella ____ un estuche azul.", "Вона ____ синій пенал." ] ] }, { "n": "g", "s": [ [ "Usted ____ un coche.", "Ви ____ автомобіль." ] ] }, { "n": "h", "s": [ [ "Él ____ una gata.", "Він ____ кицьку." ] ] } ], "answers": [ { "n": "a", "q": [ "Ellos ____ una granja.", "Вони ____ ферму." ], "a": [ "Ellos tienen una granja.", "Вони мають ферму." ] }, { "n": "b", "q": [ "Yo no ____ hermanos.", "Я не ____ братів і сестер." ], "a": [ "Yo no tengo hermanos.", "У мене немає братів і сестер." ] }, { "n": "c", "q": [ "¿Vosotros ____ mascota?", "Ви ____ домашнього улюбленця?" ], "a": [ "¿Vosotros tenéis mascota?", "У вас є домашній улюбленець?" ] }, { "n": "d", "q": [ "Tú ____ nueve años.", "Тобі ____ дев'ять років." ], "a": [ "Tú tienes nueve años.", "Тобі дев'ять років." ] }, { "n": "e", "q": [ "Nosotros ____ amigos.", "Ми ____ друзів." ], "a": [ "Nosotros tenemos amigos.", "У нас є друзі." ] }, { "n": "f", "q": [ "Ella ____ un estuche azul.", "Вона ____ синій пенал." ], "a": [ "Ella tiene un estuche azul.", "У неї є синій пенал." ] }, { "n": "g", "q": [ "Usted ____ un coche.", "Ви ____ автомобіль." ], "a": [ "Usted tiene un coche.", "У Вас є автомобіль." ] }, { "n": "h", "q": [ "Él ____ una gata.", "Він ____ кицьку." ], "a": [ "Él tiene una gata.", "У нього є кицька." ] } ] }, 
+  { "type": "box", "kind": "review", "title": [ "¡Practica más!", "Потренуйся ще!" ], "items": [ { "n": "1", "s": [ [ "Yo ____ un perro.", "У мене є пес." ] ] }, { "n": "a", "sub": true, "ok": true, "s": [ [ "tengo", "я маю" ] ] }, { "n": "b", "sub": true, "s": [ [ "tiene", "він / вона має" ] ] }, { "n": "c", "sub": true, "s": [ [ "tienes", "ти маєш" ] ] }, { "n": "2", "s": [ [ "Rubén y Ana ____ dos mascotas.", "Рубен і Ана мають двох улюбленців." ] ] }, { "n": "a", "sub": true, "s": [ [ "tenemos", "ми маємо" ] ] }, { "n": "b", "sub": true, "s": [ [ "tenéis", "ви маєте" ] ] }, { "n": "c", "sub": true, "ok": true, "s": [ [ "tienen", "вони мають" ] ] }, { "n": "3", "s": [ [ "¿Vosotros ____ un gato?", "У вас є кіт?" ] ] }, { "n": "a", "sub": true, "s": [ [ "tienen", "вони мають" ] ] }, { "n": "b", "sub": true, "ok": true, "s": [ [ "tenéis", "ви маєте" ] ] }, { "n": "c", "sub": true, "s": [ [ "tengo", "я маю" ] ] }, { "n": "4", "s": [ [ "La oveja me da ____.", "Овечка дає мені вовну." ] ] }, { "n": "a", "sub": true, "s": [ [ "leche", "молоко" ] ] }, { "n": "b", "sub": true, "s": [ [ "queso", "сир" ] ] }, { "n": "c", "sub": true, "ok": true, "s": [ [ "lana", "вовну" ] ] }, { "n": "5", "s": [ [ "Mi gata es blanca y ____.", "Моя кицька біла й чорна." ] ] }, { "n": "a", "sub": true, "ok": true, "s": [ [ "negra", "чорна" ] ] }, { "n": "b", "sub": true, "s": [ [ "negro", "чорний" ] ] }, { "n": "c", "sub": true, "s": [ [ "negros", "чорні" ] ] }, { "n": "6", "s": [ [ "Nosotras ____ una tortuga.", "У нас (дівчат) є черепаха." ] ] }, { "n": "a", "sub": true, "s": [ [ "tiene", "він / вона має" ] ] }, { "n": "b", "sub": true, "ok": true, "s": [ [ "tenemos", "ми маємо" ] ] }, { "n": "c", "sub": true, "s": [ [ "tenéis", "ви маєте" ] ] } ], "answers": [ { "n": "1", "q": [ "Yo ____ un perro.", "У мене є пес." ], "a": [ "a: Yo tengo un perro.", "a: У мене є пес." ] }, { "n": "2", "q": [ "Rubén y Ana ____ dos mascotas.", "Рубен і Ана мають двох улюбленців." ], "a": [ "c: Rubén y Ana tienen dos mascotas.", "c: Рубен і Ана мають двох улюбленців." ] }, { "n": "3", "q": [ "¿Vosotros ____ un gato?", "У вас є кіт?" ], "a": [ "b: ¿Vosotros tenéis un gato?", "b: У вас є кіт?" ] }, { "n": "4", "q": [ "La oveja me da ____.", "Овечка дає мені вовну." ], "a": [ "c: La oveja me da lana.", "c: Овечка дає мені вовну." ] }, { "n": "5", "q": [ "Mi gata es blanca y ____.", "Моя кицька біла й чорна." ], "a": [ "a: Mi gata es blanca y negra.", "a: Моя кицька біла й чорна." ] }, { "n": "6", "q": [ "Nosotras ____ una tortuga.", "У нас (дівчат) є черепаха." ], "a": [ "b: Nosotras tenemos una tortuga.", "b: У нас є черепаха." ] } ] }, 
+  { "type": "box", "kind": "review", "title": [ "Check yourself", "Перевір себе" ], "items": [ { "n": "1", "s": [ [ "¿Cómo se llama la tortuga de Julia?", "Як звати черепаху Хулії?" ] ] }, { "n": "a", "sub": true, "ok": true, "s": [ [ "Pancha", "Панча" ] ] }, { "n": "b", "sub": true, "s": [ [ "Zoa", "Зоа" ] ] }, { "n": "c", "sub": true, "s": [ [ "Pío", "Піо" ] ] }, { "n": "2", "s": [ [ "¿Qué mascota tiene Chema?", "Якого улюбленця має Чема?" ] ] }, { "n": "a", "sub": true, "s": [ [ "un pájaro", "пташку" ] ] }, { "n": "b", "sub": true, "ok": true, "s": [ [ "un ratón blanco", "білу мишку" ] ] }, { "n": "c", "sub": true, "s": [ [ "una gata", "кицьку" ] ] }, { "n": "3", "s": [ [ "¿Cómo es Colega, el perro de Ana?", "Який Колега, пес Ани?" ] ] }, { "n": "a", "sub": true, "s": [ [ "muy tímido", "дуже сором'язливий" ] ] }, { "n": "b", "sub": true, "s": [ [ "amarillo", "жовтий" ] ] }, { "n": "c", "sub": true, "ok": true, "s": [ [ "muy inteligente", "дуже розумний" ] ] }, { "n": "4", "s": [ [ "Tú ____ nueve años.", "Тобі дев'ять років." ] ] }, { "n": "a", "sub": true, "ok": true, "s": [ [ "tienes", "ти маєш" ] ] }, { "n": "b", "sub": true, "s": [ [ "tengo", "я маю" ] ] }, { "n": "c", "sub": true, "s": [ [ "tienen", "вони мають" ] ] }, { "n": "5", "s": [ [ "¿Cuántas ovejas tengo en la canción?", "Скільки овечок у мене в пісні?" ] ] }, { "n": "a", "sub": true, "s": [ [ "dos", "дві" ] ] }, { "n": "b", "sub": true, "ok": true, "s": [ [ "tres", "три" ] ] }, { "n": "c", "sub": true, "s": [ [ "cuatro", "чотири" ] ] } ], "answers": [ { "n": "1", "q": [ "¿Cómo se llama la tortuga de Julia?", "Як звати черепаху Хулії?" ], "a": [ "a: Pancha.", "a: Панча." ] }, { "n": "2", "q": [ "¿Qué mascota tiene Chema?", "Якого улюбленця має Чема?" ], "a": [ "b: Chema tiene un ratón blanco.", "b: У Чеми є біла мишка." ] }, { "n": "3", "q": [ "¿Cómo es Colega, el perro de Ana?", "Який Колега, пес Ани?" ], "a": [ "c: Es muy inteligente.", "c: Він дуже розумний." ] }, { "n": "4", "q": [ "Tú ____ nueve años.", "Тобі дев'ять років." ], "a": [ "a: Tú tienes nueve años.", "a: Тобі дев'ять років." ] }, { "n": "5", "q": [ "¿Cuántas ovejas tengo en la canción?", "Скільки овечок у мене в пісні?" ], "a": [ "b: tres.", "b: три." ] } ] } ], "phrases": [ [ "¿Tenéis mascota?", "У вас є домашній улюбленець?" ], [ "¿Tienes mascota?", "У тебе є домашній улюбленець?" ], [ "Yo tengo una tortuga.", "У мене є черепаха." ], [ "Se llama Pancha.", "Її звати Панча." ], [ "Es muy tímida.", "Вона дуже сором'язлива." ], [ "Tienen dos mascotas.", "У них двоє улюбленців." ], [ "Tengo un perro.", "У мене є пес." ], [ "mi hermano", "мій брат" ], [ "Es muy inteligente.", "Він дуже розумний." ], [ "Tengo un pájaro.", "У мене є пташка." ], [ "Sabe cantar muy bien.", "Вміє дуже гарно співати." ], [ "un ratón blanco", "біла мишка" ], [ "Tengo una gata.", "У мене є кицька." ], [ "blanca y negra", "біло-чорна" ], [ "Es muy cariñosa.", "Вона дуже лагідна." ], [ "verde y marrón", "зелена й коричнева" ], [ "Lee y observa.", "Прочитай і подивися." ], [ "Escucha, aprende y canta.", "Послухай, вивчи й заспівай." ], [ "Completa con el verbo tener.", "Доповни дієсловом tener." ], [ "Tú no tienes nada.", "Ти нічого не маєш." ], [ "tres ovejas", "три овечки" ], [ "en una cabaña", "у хатинці" ], [ "Una me da leche.", "Одна дає мені молоко." ], [ "otra me da lana", "друга дає мені вовну" ], [ "para la semana", "на тиждень" ], [ "Tengo nueve años.", "Мені дев'ять років." ], [ "No tengo hermanos.", "У мене немає братів і сестер." ], [ "un estuche azul", "синій пенал" ], [ "una granja", "ферма" ], [ "un coche", "автомобіль" ], [ "Tengo once años.", "Мені одинадцять років." ] ] });
