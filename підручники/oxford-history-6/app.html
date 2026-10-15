@@ -382,6 +382,13 @@ a.ext { color: var(--ua); font-weight: 700; }
 .figs.letters figcaption { margin: 0; }
 .figs.letters .fl { font-family: var(--f-display); font-size: 26px; color: var(--green); }
 .figs.letters .fua { display: none; }
+
+/* several model answers: arrows to choose which one to read */
+.var-nav { display: grid; grid-template-columns: 48px 1fr 48px; align-items: center; gap: 8px; margin: 4px 0 14px; background: #eef3ff; border-radius: 16px; padding: 8px; }
+.var-arrow { width: 44px; height: 44px; border-radius: 50%; border: 0; background: #2f6fd6; color: #fff; font-size: 28px; line-height: 1; font-weight: 700; display: grid; place-items: center; }
+.var-mid { text-align: center; display: grid; gap: 1px; }
+.var-mid b { font-size: 17px; } .var-mid small { color: #6b625d; font-size: 13px; }
+.var-n { font-size: 12px; font-weight: 800; color: #2f6fd6; }
 /* «Check yourself» is red in every book, «¡Practica más!» orange */
 .box.check { border-color: #e0392b; } .box.check h3 { background: #e0392b; }
 .box.more { border-color: #f08a1c; } .box.more h3 { background: #f08a1c; }
@@ -1517,16 +1524,24 @@ function showSelection(text, sis) {
 }
 
 /* ---------- answers to the Challenge questions (blue window) ---------- */
-function openAnswers(b) {
-  noteTask();
+function openAnswers(b, vi = 0, again = false) {
+  if (!again) noteTask();
   if (playing) pause();
   hidePop();
-  const h = `<div class="head"><div class="word ttl">Відповіді · ${esc(b.title[0])}</div></div>` +
-    b.answers.map((x, i) => `<div class="card ans"><span class="num">${esc(x.n || i + 1)}</span><div style="min-width:0">
+  // b.variants: several model answers to choose from (e.g. a biography of each explorer) — arrows switch them
+  const V = b.variants || null, n = V ? V.length : 0;
+  vi = n ? (vi + n) % n : 0;
+  const answers = V && V[vi].answers ? V[vi].answers : b.answers;
+  const nav = V ? `<div class="var-nav"><button class="var-arrow" data-var="${vi - 1}" aria-label="Попередній варіант">‹</button>
+      <div class="var-mid"><b>${esc(V[vi].label[0])}</b><small>${esc(V[vi].label[1])}</small><span class="var-n">${vi + 1} / ${n}</span></div>
+      <button class="var-arrow" data-var="${vi + 1}" aria-label="Наступний варіант">›</button></div>` : "";
+  const h = `<div class="head"><div class="word ttl">Відповіді · ${esc(b.title[0])}</div></div>` + nav +
+    answers.map((x, i) => `<div class="card ans"><span class="num">${esc(x.n || i + 1)}</span><div style="min-width:0">
       <div class="q">${esc(x.q[0])}</div><div class="qua">${esc(x.q[1])}</div>
       <button class="say-a" data-say="${esc(x.a[0].replace(/\n/g, " "))}">${SVG.speak} Слухати відповідь</button>
       <div class="a">${ansParas(x.a)}</div></div></div>`).join("");
-  openSheet(h, null, b.kind === "activities" || b.kind === "review" ? "yellow" : "blue");
+  openSheet(h, el => { el.querySelectorAll("[data-var]").forEach(x => x.addEventListener("click", e => { e.stopPropagation(); openAnswers(b, +x.dataset.var, true); })); },
+    b.kind === "activities" || b.kind === "review" ? "yellow" : "blue");
 }
 
 /* ---------- saved words sheet + quiz ---------- */
