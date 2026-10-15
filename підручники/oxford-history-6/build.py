@@ -8,7 +8,16 @@ import base64, pathlib, sys
 here = pathlib.Path(__file__).parent
 app = (here / "app.html").read_text(encoding="utf-8")
 import json
-uri = lambda f: "data:image/jpeg;base64," + base64.b64encode(f.read_bytes()).decode()
+import io
+from PIL import Image
+# the published page must stay under 16 MB: every picture is shrunk and re-encoded while inlining (the files stay as they are)
+def uri(f, side=760, q=64):
+    im = Image.open(f)
+    if im.mode != "RGB": im = im.convert("RGB")
+    im.thumbnail((side, side))
+    buf = io.BytesIO(); im.save(buf, "JPEG", quality=q, optimize=True, progressive=True)
+    data = buf.getvalue() if buf.tell() < f.stat().st_size else f.read_bytes()
+    return "data:image/jpeg;base64," + base64.b64encode(data).decode()
 app = app.replace("{{IMG_cover}}", uri(here / "images" / "cover.jpg"))
 images = {f.stem: uri(f) for f in sorted((here / "images").glob("*.jpg")) if f.stem != "cover"}
 # the second built-in textbook: Oxford International Primary Geography 6 (sits next to this folder)
@@ -25,7 +34,7 @@ esp = here.parent / "spanish"
 images.update({f.stem: uri(f) for f in sorted((esp / "images").glob("*.jpg"))})
 app = app.replace("{{IMAGES_JSON}}", json.dumps(images))
 # photos of the textbook spreads the book was made from (shown in the folder's edit sheet)
-app = app.replace("{{PAGES_JSON}}", json.dumps([uri(f) for f in sorted((here / "images" / "pages").glob("*.jpg"))]))
+app = app.replace("{{PAGES_JSON}}", json.dumps([uri(f, 820, 50) for f in sorted((here / "images" / "pages").glob("*.jpg"))]))
 # усі уроки по черзі: lesson-1-1.js, lesson-1-2.js, …
 lessons = sorted(here.glob("lesson-*.js"), key=lambda f: [int(x) for x in f.stem.split("-")[1:]])
 geo_js = sorted(geo.glob("lesson-*.js"), key=lambda f: [int(x) for x in f.stem.split("-")[1:]]) + sorted(geo.glob("dict-*.js")) + [geo / "quiz.js", geo / "contents.js"]
