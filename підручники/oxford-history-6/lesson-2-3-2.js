@@ -127,7 +127,6 @@
     ["Long-distance voyages", "далекі морські подорожі"],
     ["borrow money from", "позичити гроші в"],
     ["lend money for", "позичити гроші на"],
-    ["pay for", "платити за"],
     ["agreed to", "погодилася"],
     ["set off", "вирушив"],
     ["went well", "минала добре"],
