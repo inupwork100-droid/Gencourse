@@ -85,10 +85,10 @@
       { n: "•", s: [["The rainbow shows that Elizabeth is bringing peace after stormy times.", "Веселка показує, що Єлизавета приносить мир після буремних часів."]] },
       { n: "•", s: [["A snake was a symbol of intelligence and good judgment.", "Змія була символом розуму й мудрих рішень."]] }
     ]},
-    { type: "h2", s: [["Controlling the paintings", "Під контролем королеви"]] },
+    { type: "h2", s: [["Controlling the paintings", "Як королева керувала картинами"]] },
     { type: "p", s: [
       ["Elizabeth wanted the paintings of herself to impress people.", "Єлизавета хотіла, щоб її портрети вражали людей."],
-      ["She took a great interest in the paintings and always told the artist to change a painting if she was unhappy with any of the details.", "Вона дуже цікавилася картинами й завжди звеліла художникові переробити картину, якщо їй не подобалася якась деталь."],
+      ["She took a great interest in the paintings and always told the artist to change a painting if she was unhappy with any of the details.", "Вона дуже цікавилася картинами й завжди веліла художникові переробити картину, якщо їй не подобалася якась деталь."],
       ["No paintings of the queen were allowed unless she approved them.", "Жодна картина з королевою не дозволялася, якщо вона її не схвалила."]
     ]},
     { type: "glossary", title: ["Glossary word", "Слово з глосарію"], words: [
