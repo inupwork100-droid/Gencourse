@@ -38,7 +38,8 @@ app = app.replace("{{SCI_JS}}", "\n".join(f.read_text(encoding="utf-8") for f in
 app = app.replace("{{GEO_JS}}", "\n".join(f.read_text(encoding="utf-8") for f in geo_js if f.exists()))
 app = app.replace("{{LESSON_JS}}", "\n".join(f.read_text(encoding="utf-8") for f in lessons))
 app = app.replace("{{CONTENTS_JS}}", (here / "contents.js").read_text(encoding="utf-8"))
-app = app.replace("{{DICT_JS}}", (here / "dictionary.js").read_text(encoding="utf-8"))
+# the main dictionary plus the extra word files written for later lessons (dict-*.js add to window.DICT)
+app = app.replace("{{DICT_JS}}", "\n".join(f.read_text(encoding="utf-8") for f in [here / "dictionary.js"] + sorted(here.glob("dict-*.js"))))
 
 if "--artifact" in sys.argv:
     out = pathlib.Path(sys.argv[sys.argv.index("--artifact") + 1]) if len(sys.argv) > 2 else here / "artifact.html"
