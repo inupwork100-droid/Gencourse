@@ -11,7 +11,19 @@ import json
 import io
 from PIL import Image
 # the published page must stay under 16 MB: every picture is shrunk and re-encoded while inlining (the files stay as they are)
+# for the published Artifact the pictures are separate files next to the page (img/…), so the page itself stays small
+# and the phone only downloads a picture when it is about to be shown; index.html keeps them inline (works offline)
+ART = pathlib.Path(sys.argv[sys.argv.index("--artifact") + 1]) if "--artifact" in sys.argv and len(sys.argv) > 2 else None
+IMG_DIR = ART.parent / "site" / "img" if ART else None
+if IMG_DIR:
+    import shutil
+    shutil.rmtree(IMG_DIR, ignore_errors=True); IMG_DIR.mkdir(parents=True)
 def uri(f, side=760, q=64):
+    if IMG_DIR:
+        name = (f.parent.name + "-" if f.parent.name == "pages" else "") + f.stem + ".jpg"
+        im = Image.open(f).convert("RGB"); im.thumbnail((side, side))
+        im.save(IMG_DIR / name, "JPEG", quality=q, optimize=True, progressive=True)
+        return "img/" + name
     im = Image.open(f)
     if im.mode != "RGB": im = im.convert("RGB")
     im.thumbnail((side, side))
@@ -51,8 +63,9 @@ app = app.replace("{{CONTENTS_JS}}", (here / "contents.js").read_text(encoding="
 app = app.replace("{{DICT_JS}}", "\n".join(f.read_text(encoding="utf-8") for f in [here / "dictionary.js"] + sorted(here.glob("dict-*.js"))))
 
 if "--artifact" in sys.argv:
-    out = pathlib.Path(sys.argv[sys.argv.index("--artifact") + 1]) if len(sys.argv) > 2 else here / "artifact.html"
+    out = ART or here / "artifact.html"
     out.write_text(app, encoding="utf-8")
+    if IMG_DIR: print("pictures:", len(list(IMG_DIR.iterdir())), "files in", IMG_DIR)
 else:
     head = ('<!doctype html>\n<html lang="uk">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n'

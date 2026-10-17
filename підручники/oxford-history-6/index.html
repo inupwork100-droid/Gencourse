@@ -136,7 +136,7 @@ button:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid
 .figs figcaption { font-size: 15px; margin-top: 6px; display: grid; line-height: 1.3; }
 .figs .fl { font-weight: 700; }
 .figs .fua { color: var(--ua); font-size: 13px; }
-.page { max-width: 720px; margin: 0 auto; background: var(--paper); border-radius: 6px 14px 14px 6px; box-shadow: var(--shadow);
+.page { content-visibility: auto; contain-intrinsic-size: auto 2400px; max-width: 720px; margin: 0 auto; background: var(--paper); border-radius: 6px 14px 14px 6px; box-shadow: var(--shadow);
   padding: 22px 22px 28px; position: relative; overflow: hidden; }
 .page::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 10px;
   background: linear-gradient(90deg, rgba(0,0,0,.08), transparent); }
@@ -18559,7 +18559,7 @@ L.blocks.forEach((b, bi) => {
       legend = `<div class="legend"><span class="lt">${esc(b.legendTitle || "Viking settlements · Viking raids")}</span>` +
         b.legend.map(l => `<span><i style="background:${l[0]}"></i><span class="lg" title="${esc(l[2])}">${tokenSpans(l[1]).html}</span></span>`).join("") + `</div>`;
     }
-    out += `<figure class="blk${b.small ? " small" + (String(b.s.map(x => x[0]).join(" ")).length > 90 ? " long" : "") : ""}${b.spread ? " spread" : ""}" data-bi="${li}:${bi}"><img src="${IMG[b.src] || esc(b.src)}" alt="${esc(b.alt)}">${r ? `<figcaption>${r.en}${uaHtml(r.sis)}</figcaption>` : ""}${legend}</figure>`;
+    out += `<figure class="blk${b.small ? " small" + (String(b.s.map(x => x[0]).join(" ")).length > 90 ? " long" : "") : ""}${b.spread ? " spread" : ""}" data-bi="${li}:${bi}"><img loading="lazy" decoding="async" src="${IMG[b.src] || esc(b.src)}" alt="${esc(b.alt)}">${r ? `<figcaption>${r.en}${uaHtml(r.sis)}</figcaption>` : ""}${legend}</figure>`;
   } else if (b.type === "wordtable") {
     // two columns: the word part with its meaning | how a new word is made (tap a row or its speaker to hear it)
     // mark: "prefix" / "suffix" — underline the word part in the new word; "spell" — the studied word shimmers in its sentence
@@ -18595,7 +18595,7 @@ L.blocks.forEach((b, bi) => {
       `</div><div class="st-words" hidden></div>` + (nt ? `<p class="st-foot">${nt.en}<button class="ua-tog" data-tog aria-label="Переклад">UA</button>${uaHtml(nt.sis)}</p>` : "") + `</div>`;
   } else if (b.type === "figs") {
     out += `<div class="figs blk n${b.items.length}${b.letters ? " letters" : ""}">` + b.items.map(f =>
-      `<figure><img src="${IMG[f.src] || esc(f.src)}" alt="${esc(f.label[1])}"><figcaption><span class="fl">${tokenSpans(f.label[0]).html}</span><span class="fua">${esc(f.label[1])}</span></figcaption></figure>`).join("") + `</div>`;
+      `<figure><img loading="lazy" decoding="async" src="${IMG[f.src] || esc(f.src)}" alt="${esc(f.label[1])}"><figcaption><span class="fl">${tokenSpans(f.label[0]).html}</span><span class="fua">${esc(f.label[1])}</span></figcaption></figure>`).join("") + `</div>`;
   } else if (b.type === "glossary") {
     out += `<div class="gloss blk"><h3><span class="en">${esc(b.title[0])}</span> <span class="h3ua">${esc(b.title[1])}</span></h3><ul>` +
       b.words.map(w => `<li><button data-gloss="${esc(w[0])}">${esc(w[0])}</button></li>`).join("") + `</ul></div>`;
@@ -19200,8 +19200,15 @@ function goPage(p, smooth, sync = true) {
   const el = pageTarget(p); if (!el) return;
   if (sync) readFrom(p);
   const head = $(".top").getBoundingClientRect().bottom;
-  scrollTo({ top: el.getBoundingClientRect().top + scrollY - head - 8, behavior: smooth && !matchMedia("(prefers-reduced-motion: reduce)").matches ? "smooth" : "auto" });
+  const soft = smooth && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+  scrollTo({ top: el.getBoundingClientRect().top + scrollY - head - 8, behavior: soft ? "smooth" : "auto" });
+  // pages off screen are only estimated (content-visibility), so once they are drawn the target may shift — correct it
+  const tok = ++goTok;
+  const settle = n => requestAnimationFrame(() => { if (tok !== goTok) return; const d = el.getBoundingClientRect().top - head - 8;
+    if (Math.abs(d) > 3) { scrollBy(0, d); if (n > 0) settle(n - 1); } });
+  if (soft) setTimeout(() => settle(8), 700); else settle(8);
 }
+let goTok = 0;
 const nearest = p => PAGES.reduce((a, b) => Math.abs(b - p) < Math.abs(a - p) ? b : a, PAGES[0]);
 let curPg = 0;
 function placeThumb(p, keepInView) {
@@ -19458,7 +19465,7 @@ function folderHtml(b) {
   const pct = b.ready ? pctOf(b.id) : 0;
   return `<button class="folder" data-book="${esc(b.id)}" style="--f:${esc(b.color || "#5b6fa8")}" aria-label="${esc(b.title)}, прочитано ${pct}%">
     <span class="tab">${esc(tab)}</span><span class="pct">${pct}%</span>
-    <span class="fbody"><span class="paper"></span><span class="photo">${cov ? `<img src="${esc(cov)}" alt="">` : `<span class="ph-empty">${b.id === "geography" ? GLOBE : BOOK_ICON}Обкладинку ще не додано</span>`}</span></span>
+    <span class="fbody"><span class="paper"></span><span class="photo">${cov ? `<img loading="lazy" decoding="async" src="${esc(cov)}" alt="">` : `<span class="ph-empty">${b.id === "geography" ? GLOBE : BOOK_ICON}Обкладинку ще не додано</span>`}</span></span>
     <span class="ft">${esc(b.title)}</span></button>`;
 }
 function allBooks() {
@@ -19548,7 +19555,7 @@ function openEditFolder(b) {
     <input type="file" id="edFile" accept="image/*" hidden>
     ${b.id === "history6" ? `<div class="ed-files">
       <div class="lbl">Сторінки, з яких зроблено книжку: ${SPREAD_PHOTOS.length}</div>
-      <div class="up-files">${SPREAD_PHOTOS.map((src, i) => `<button type="button" class="ftile pview" data-pview="${i}"><img src="${src}" alt="Сторінка ${i + 1}"><span class="fnum">${i + 1}</span></button>`).join("")}</div>
+      <div class="up-files">${SPREAD_PHOTOS.map((src, i) => `<button type="button" class="ftile pview" data-pview="${i}"><img loading="lazy" decoding="async" src="${src}" alt="Сторінка ${i + 1}"><span class="fnum">${i + 1}</span></button>`).join("")}</div>
     </div>` : `<div class="ed-files">
       <div class="lbl">Файли в папці: <span data-fcount="${esc(b.id)}">${nf}</span></div>
       ${nf ? `<p class="hint">Потримай фото — з'явиться «Видалити». Потримай і посунь — зміниш порядок.</p>${fileTiles(doc, b.id)}` : ""}
